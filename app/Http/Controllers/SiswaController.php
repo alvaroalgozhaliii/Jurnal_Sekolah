@@ -14,6 +14,13 @@ class SiswaController extends Controller
         return view('siswa.index', compact('siswa'));
     }
 
+    public function trash()
+    {
+        $siswa = Siswa::onlyTrashed()->get();
+
+        return view('siswa.trash', compact('siswa'));
+    }
+
     public function show($id)
     {
         $siswa = Siswa::findOrFail($id);
@@ -28,8 +35,6 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
-
         Siswa::create([
             'nis' => $request->nis,
             'nama' => $request->nama,
@@ -73,11 +78,25 @@ class SiswaController extends Controller
 
     public function destroy($id)
     {
-        $siswa = Siswa::findOrFail($id);
-
-        $siswa->delete();
+        Siswa::findOrFail($id)->delete();
 
         return redirect()->route('siswa.index')
             ->with('success', 'Data siswa berhasil dihapus');
+    }
+
+    public function restore($id)
+    {
+        Siswa::withTrashed()->findOrFail($id)->restore();
+
+        return redirect()->route('siswa.trash')
+            ->with('success', 'Data siswa berhasil direstore');
+    }
+
+    public function forceDelete($id)
+    {
+        Siswa::withTrashed()->findOrFail($id)->forceDelete();
+
+        return redirect()->route('siswa.trash')
+            ->with('success', 'Data siswa berhasil dihapus permanen');
     }
 }
