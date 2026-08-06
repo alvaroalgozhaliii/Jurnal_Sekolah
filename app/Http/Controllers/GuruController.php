@@ -29,7 +29,7 @@ class GuruController extends Controller
         ]);
 
         return redirect()->route('guru.index')
-            ->with('success','Data guru berhasil ditambahkan');
+            ->with('success', 'Data guru berhasil ditambahkan');
     }
 
     public function show($id)
@@ -58,14 +58,36 @@ class GuruController extends Controller
         ]);
 
         return redirect()->route('guru.index')
-            ->with('success','Data berhasil diupdate');
+            ->with('success', 'Data berhasil diupdate');
     }
 
     public function destroy($id)
     {
-        Guru::destroy($id);
+        $guru = Guru::findOrFail($id);
+
+        $guru->delete();
 
         return redirect()->route('guru.index')
-            ->with('success','Data berhasil dihapus');
+            ->with('success', 'Data berhasil dihapus');
+    }
+
+    public function restore($id)
+    {
+        Guru::withTrashed()
+            ->findOrFail($id)
+            ->restore();
+
+        return redirect()->route('guru.index')
+            ->with('success', 'Data berhasil direstore');
+    }
+
+    public function forceDelete($id)
+    {
+        Guru::withTrashed()
+            ->findOrFail($id)
+            ->forceDelete();
+
+        return redirect()->route('guru.index')
+            ->with('success', 'Data berhasil dihapus permanen');
     }
 }
