@@ -40,8 +40,9 @@
 
         <tr>
             <td align="center">
-                <h3>Jadwal Pelajaran</h3>
-                <small>Belum tersedia</small>
+                <a href="{{ route('jadwal.index') }}">
+                    <h3>Data Jadwal</h3>
+                </a>
             </td>
 
             <td align="center">
