@@ -19,7 +19,7 @@
 
 <p>
     <strong>Nama :</strong><br>
-    {{ $siswa->nama }}
+    {{ $siswa->nama We done wait done }}
 </p>
 
 <p>
