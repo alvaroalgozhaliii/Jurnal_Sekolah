@@ -46,8 +46,12 @@
             </td>
 
             <td align="center">
-                <h3>Jurnal Harian</h3>
-                <small>Belum tersedia</small>
+                <a href="{{ route('jurnal-harian.index') }}">
+                    <h3>Data Jurnal Harian</h3>
+                </a>
+                <a href="{{ route('jurnal-harian.trash') }}">
+                    Trash
+                </a>
             </td>
         </tr>
 
