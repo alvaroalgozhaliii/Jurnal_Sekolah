@@ -1,48 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Data Siswa</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Data Siswa</h1>
+@section('content')
+<h2>Data Siswa</h2>
+<a href="{{ route('siswa.create') }}">+ Tambah Siswa</a>
+&nbsp;|&nbsp;
+<a href="{{ route('siswa.trash') }}">Lihat Trash</a>
+<br><br>
 
-<a href="{{ route('siswa.create') }}">Tambah Siswa</a>
-
-@if(session('success'))
-    <p>{{ session('success') }}</p>
-@endif
-
-<table border="1" cellpadding="8">
+<table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead>
+        <tr><th>No</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>JK</th><th>Status</th><th>Aksi</th></tr>
+    </thead>
+    <tbody>
+    @forelse($siswa as $item)
     <tr>
-        <th>ID</th>
-        <th>NIS</th>
-        <th>Nama</th>
-        <th>Kelas</th>
-        <th>Aksi</th>
-    </tr>
-
-    @foreach($siswa as $s)
-    <tr>
-        <td>{{ $s->id_siswa }}</td>
-        <td>{{ $s->nis }}</td>
-        <td>{{ $s->nama }}</td>
-        <td>{{ $s->id_kelas }}</td>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{ $item->nis }}</td>
+        <td>{{ $item->nama }}</td>
+        <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
+        <td>{{ $item->jenis_kelamin ?? '-' }}</td>
+        <td>{{ $item->aktif ? 'Aktif' : 'Tidak Aktif' }}</td>
         <td>
-            <a href="{{ route('siswa.show',$s->id_siswa) }}">Detail</a> |
-            <a href="{{ route('siswa.edit',$s->id_siswa) }}">Edit</a> |
-
-            <form action="{{ route('siswa.destroy',$s->id_siswa) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Hapus</button>
+            <a href="{{ route('siswa.show', $item->id_siswa) }}">Detail</a> |
+            <a href="{{ route('siswa.edit', $item->id_siswa) }}">Edit</a> |
+            <form action="{{ route('siswa.destroy', $item->id_siswa) }}" method="POST" style="display:inline;">
+                @csrf @method('DELETE')
+                <button type="submit" onclick="return confirm('Hapus data siswa ini?')">Hapus</button>
             </form>
-
         </td>
     </tr>
-    @endforeach
-
+    @empty
+    <tr><td colspan="7" style="text-align:center;">Belum ada data siswa.</td></tr>
+    @endforelse
+    </tbody>
 </table>
-
-</body>
-</html>
+@endsection

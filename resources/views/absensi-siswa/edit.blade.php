@@ -1,148 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Absensi Siswa</title>
-</head>
-<body>
+@extends('layouts.app')
 
-    <h2>Edit Absensi Siswa</h2>
+@section('content')
+<h2>Edit Absensi Siswa</h2>
+<a href="{{ route('absensi-siswa.index') }}">&#8592; Kembali</a><br><br>
 
-    <a href="{{ route('absensi-siswa.index') }}">
-        Kembali
-    </a>
+<p><strong>Siswa:</strong> {{ $absensi->siswa->nama ?? '-' }}</p>
+<p><strong>Jurnal:</strong> {{ $absensi->jurnal->tanggal ?? '-' }} - {{ $absensi->jurnal->mapel ?? '-' }}</p>
 
-    <br><br>
-
-    @if ($errors->any())
-        <div style="color:red;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('absensi-siswa.update', $absensi->id_absensi) }}" method="POST">
-
-        @csrf
-        @method('PUT')
-
-        <table>
-
-            <tr>
-                <td>Jurnal Harian</td>
-                <td>
-
-                    <select name="id_jurnal" required>
-
-                        <option value="">-- Pilih Jurnal --</option>
-
-                        @foreach($jurnal as $j)
-
-                            <option
-                                value="{{ $j->id_jurnal }}"
-                                {{ $absensi->id_jurnal == $j->id_jurnal ? 'selected' : '' }}
-                            >
-                                {{ $j->tanggal }} - {{ $j->mata_pelajaran }}
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </td>
-            </tr>
-
-            <tr>
-                <td>Siswa</td>
-                <td>
-
-                    <select name="id_siswa" required>
-
-                        <option value="">-- Pilih Siswa --</option>
-
-                        @foreach($siswa as $s)
-
-                            <option
-                                value="{{ $s->id_siswa }}"
-                                {{ $absensi->id_siswa == $s->id_siswa ? 'selected' : '' }}
-                            >
-                                {{ $s->nama }}
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </td>
-            </tr>
-
-            <tr>
-                <td>Status</td>
-                <td>
-
-                    <select name="status" required>
-
-                        <option value="Hadir"
-                            {{ $absensi->status == 'Hadir' ? 'selected' : '' }}>
-                            Hadir
-                        </option>
-
-                        <option value="Izin"
-                            {{ $absensi->status == 'Izin' ? 'selected' : '' }}>
-                            Izin
-                        </option>
-
-                        <option value="Sakit"
-                            {{ $absensi->status == 'Sakit' ? 'selected' : '' }}>
-                            Sakit
-                        </option>
-
-                        <option value="Alpha"
-                            {{ $absensi->status == 'Alpha' ? 'selected' : '' }}>
-                            Alpha
-                        </option>
-
-                    </select>
-
-                </td>
-            </tr>
-
-            <tr>
-                <td>Keterangan</td>
-                <td>
-
-                    <textarea
-                        name="keterangan"
-                        rows="4"
-                        cols="40"
-                    >{{ $absensi->keterangan }}</textarea>
-
-                </td>
-            </tr>
-
-            <tr>
-
-                <td></td>
-
-                <td>
-
-                    <button type="submit">
-                        Update
-                    </button>
-
-                    <button type="reset">
-                        Reset
-                    </button>
-
-                </td>
-
-            </tr>
-
-        </table>
-
-    </form>
-
-</body>
-</html>
+<form action="{{ route('absensi-siswa.update', $absensi->id_absensi) }}" method="POST">
+    @csrf @method('PUT')
+    <table>
+        <tr><td><label>Status *</label></td><td>
+            <select name="status" required style="padding:5px;">
+                <option value="hadir" {{ $absensi->status == 'hadir' ? 'selected' : '' }}>Hadir</option>
+                <option value="sakit" {{ $absensi->status == 'sakit' ? 'selected' : '' }}>Sakit</option>
+                <option value="izin" {{ $absensi->status == 'izin' ? 'selected' : '' }}>Izin</option>
+                <option value="alpa" {{ $absensi->status == 'alpa' ? 'selected' : '' }}>Alpa</option>
+                <option value="terlambat" {{ $absensi->status == 'terlambat' ? 'selected' : '' }}>Terlambat</option>
+            </select>
+        </td></tr>
+        <tr><td><label>Keterangan</label></td><td><input type="text" name="keterangan" value="{{ old('keterangan', $absensi->keterangan) }}" style="width:300px; padding:5px;"></td></tr>
+        <tr><td></td><td><button type="submit" style="padding:8px 20px; margin-top:10px;">UPDATE</button></td></tr>
+    </table>
+</form>
+@endsection
