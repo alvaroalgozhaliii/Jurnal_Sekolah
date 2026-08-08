@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Kelas extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'kelas';
-
     protected $primaryKey = 'id_kelas';
-
-    public $incrementing = true;
-
-    protected $keyType = 'int';
 
     public $timestamps = false;
 
@@ -22,5 +19,21 @@ class Kelas extends Model
         'tingkat',
         'id_jurusan',
         'wali_kelas',
+        'deleted_at',
     ];
+
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
+    }
+
+    public function siswa()
+    {
+        return $this->hasMany(Siswa::class, 'id_kelas', 'id_kelas');
+    }
+
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class, 'id_kelas', 'id_kelas');
+    }
 }

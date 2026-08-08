@@ -1,122 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<h2>Tambah Jurnal Harian</h2>
+<a href="{{ route('jurnal-harian.index') }}">&#8592; Kembali</a><br><br>
 
-    <h2>Tambah Jurnal Harian</h2>
-
-    @if ($errors->any())
-        <div style="color:red;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('jurnal-harian.store') }}" method="POST">
-        @csrf
-
-        <div>
-            <label>Guru</label><br>
-            <select name="id_guru" required>
-                <option value="">-- Pilih Guru --</option>
-                @foreach ($guru as $g)
-                    <option value="{{ $g->id_guru }}">
-                        {{ $g->nama }}
-                    </option>
+<form action="{{ route('jurnal-harian.store') }}" method="POST">
+    @csrf
+    <table>
+        <tr><td><label>Pilih Jadwal *</label></td><td>
+            <select name="id_jadwal" required style="width:400px; padding:5px;">
+                <option value="">-- Pilih Jadwal Mengajar --</option>
+                @foreach($jadwalList as $j)
+                <option value="{{ $j->id_jadwal }}" {{ (old('id_jadwal') == $j->id_jadwal || request('id_jadwal') == $j->id_jadwal) ? 'selected' : '' }}>
+                    {{ $j->hari }} | Jam {{ $j->jam_ke }} | {{ $j->kelas->nama_kelas ?? '-' }} | {{ $j->mapel }} ({{ $j->waktu_mulai }}-{{ $j->waktu_selesai }})
+                </option>
                 @endforeach
             </select>
-        </div>
-
-        <br>
-
-        <div>
-            <label>Kelas</label><br>
-            <select name="id_kelas" required>
-                <option value="">-- Pilih Kelas --</option>
-                @foreach ($kelas as $k)
-                    <option value="{{ $k->id_kelas }}">
-                        {{ $k->nama_kelas }}
-                    </option>
-                @endforeach
+        </td></tr>
+        <tr><td><label>Tanggal *</label></td><td><input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" required style="padding:5px;"></td></tr>
+        <tr><td><label>Materi *</label></td><td><input type="text" name="materi" value="{{ old('materi') }}" required style="width:400px; padding:5px;"></td></tr>
+        <tr><td><label>Sub Materi</label></td><td><input type="text" name="sub_materi" value="{{ old('sub_materi') }}" style="width:400px; padding:5px;"></td></tr>
+        <tr><td><label>Catatan Pengajaran</label></td><td><textarea name="catatan_pengajaran" rows="4" style="width:400px; padding:5px;">{{ old('catatan_pengajaran') }}</textarea></td></tr>
+        <tr><td><label>Status Keterlaksanaan</label></td><td>
+            <select name="status_keterlaksanaan" style="padding:5px;">
+                <option value="terlaksana" {{ old('status_keterlaksanaan') == 'terlaksana' ? 'selected' : '' }}>Terlaksana</option>
+                <option value="tidak_terlaksana" {{ old('status_keterlaksanaan') == 'tidak_terlaksana' ? 'selected' : '' }}>Tidak Terlaksana</option>
+                <option value="kosong" {{ old('status_keterlaksanaan') == 'kosong' ? 'selected' : '' }}>Kosong</option>
+                <option value="pengganti" {{ old('status_keterlaksanaan') == 'pengganti' ? 'selected' : '' }}>Pengganti</option>
             </select>
-        </div>
-
-        <br>
-
-        <div>
-            <label>Tanggal</label><br>
-            <input
-                type="date"
-                name="tanggal"
-                value="{{ old('tanggal') }}"
-                required>
-        </div>
-
-        <br>
-
-        <div>
-            <label>Mata Pelajaran</label><br>
-            <input
-                type="text"
-                name="mata_pelajaran"
-                value="{{ old('mata_pelajaran') }}"
-                required>
-        </div>
-
-        <br>
-
-        <div>
-            <label>Materi</label><br>
-            <textarea
-                name="materi"
-                rows="4"
-                required>{{ old('materi') }}</textarea>
-        </div>
-
-        <br>
-
-        <div>
-            <label>Kegiatan</label><br>
-            <textarea
-                name="kegiatan"
-                rows="5"
-                required>{{ old('kegiatan') }}</textarea>
-        </div>
-
-        <br>
-
-        <div>
-            <label>Catatan</label><br>
-            <textarea
-                name="catatan"
-                rows="4">{{ old('catatan') }}</textarea>
-        </div>
-
-        <br>
-
-        <div>
-            <label>Status</label><br>
-
-            <select name="aktif">
-                <option value="1" selected>Aktif</option>
-                <option value="0">Tidak Aktif</option>
-            </select>
-        </div>
-
-        <br>
-
-        <button type="submit">
-            Simpan
-        </button>
-
-        <a href="{{ route('jurnal-harian.index') }}">
-            Batal
-        </a>
-
-    </form>
-
-</div>
+        </td></tr>
+        <tr><td></td><td><button type="submit" style="padding:8px 20px; margin-top:10px;">SIMPAN JURNAL</button></td></tr>
+    </table>
+</form>
 @endsection

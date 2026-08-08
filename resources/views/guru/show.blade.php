@@ -1,45 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Detail Guru</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Detail Guru</h1>
+@section('content')
+<h2>Detail Guru: {{ $guru->nama }}</h2>
+<a href="{{ route('guru.index') }}">&#8592; Kembali</a> | <a href="{{ route('guru.edit', $guru->id_guru) }}">Edit</a>
+<br><br>
 
-<p>
-    <b>Nama</b>
-    <br>
-    {{ $guru->nama }}
-</p>
+<table border="1" cellpadding="8" style="border-collapse:collapse;">
+    <tr><th>Nama</th><td>{{ $guru->nama }}</td></tr>
+    <tr><th>NIP</th><td>{{ $guru->nip ?? '-' }}</td></tr>
+    <tr><th>Bidang Studi</th><td>{{ $guru->bidang_studi ?? '-' }}</td></tr>
+    <tr><th>No Telepon</th><td>{{ $guru->no_telp ?? '-' }}</td></tr>
+    <tr><th>Akun User</th><td>{{ $guru->user->username ?? 'Belum ada akun' }}</td></tr>
+    <tr><th>Dibuat</th><td>{{ $guru->created_at }}</td></tr>
+</table>
 
-<p>
-    <b>NIP</b>
-    <br>
-    {{ $guru->nip }}
-</p>
-
-<p>
-    <b>Bidang Studi</b>
-    <br>
-    {{ $guru->bidang_studi }}
-</p>
-
-<p>
-    <b>No Telepon</b>
-    <br>
-    {{ $guru->no_telp }}
-</p>
-
-<p>
-    <b>Dibuat</b>
-    <br>
-    {{ $guru->created_at }}
-</p>
-
-<a href="{{ route('guru.index') }}">
-    Kembali
-</a>
-
-</body>
-</html>
+<h3>Jadwal Mengajar</h3>
+@if($guru->jadwal && $guru->jadwal->count() > 0)
+<table border="1" cellpadding="8" style="border-collapse:collapse;">
+    <tr><th>Hari</th><th>Jam Ke</th><th>Waktu</th><th>Kelas</th><th>Mapel</th><th>Ruang</th></tr>
+    @foreach($guru->jadwal as $j)
+    <tr>
+        <td>{{ $j->hari }}</td>
+        <td>{{ $j->jam_ke }}</td>
+        <td>{{ $j->waktu_mulai }} - {{ $j->waktu_selesai }}</td>
+        <td>{{ $j->kelas->nama_kelas ?? '-' }}</td>
+        <td>{{ $j->mapel }}</td>
+        <td>{{ $j->ruang ?? '-' }}</td>
+    </tr>
+    @endforeach
+</table>
+@else
+<p>Belum ada jadwal mengajar.</p>
+@endif
+@endsection
