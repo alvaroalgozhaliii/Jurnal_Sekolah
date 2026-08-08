@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Jadwal extends Model
 {
-    protected $table = 'jadwal';
+    use SoftDeletes;
 
+    protected $table = 'jadwal';
     protected $primaryKey = 'id_jadwal';
 
     public $timestamps = false;
@@ -22,6 +23,22 @@ class Jadwal extends Model
         'ruang',
         'waktu_mulai',
         'waktu_selesai',
-        'aktif'
+        'aktif',
+        'deleted_at',
     ];
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas', 'id_kelas');
+    }
+
+    public function guru()
+    {
+        return $this->belongsTo(Guru::class, 'id_guru', 'id_guru');
+    }
+
+    public function jurnalHarian()
+    {
+        return $this->hasMany(JurnalHarian::class, 'id_jadwal', 'id_jadwal');
+    }
 }

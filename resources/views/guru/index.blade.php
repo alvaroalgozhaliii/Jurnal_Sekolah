@@ -1,79 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Data Guru</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Data Guru</h1>
-
-<a href="{{ route('guru.create') }}">Tambah Guru</a>
-
-<br><br>
+@section('content')
+<h2>Data Guru</h2>
 
 @if(session('success'))
-    <p>{{ session('success') }}</p>
+    <p style="color:green; font-weight:bold;">{{ session('success') }}</p>
+@endif
+@if(session('error'))
+    <p style="color:red; font-weight:bold;">{{ session('error') }}</p>
 @endif
 
-<table border="1" cellpadding="8">
+<a href="{{ route('guru.create') }}">+ Tambah Guru</a>
+&nbsp;|&nbsp;
+<a href="{{ route('guru.trash') }}">Lihat Trash</a>
+<br><br>
 
-    <tr>
-        <th>No</th>
-        <th>Nama</th>
-        <th>NIP</th>
-        <th>Bidang Studi</th>
-        <th>No Telepon</th>
-        <th>Aksi</th>
-    </tr>
-
-    @foreach($guru as $item)
-
-    <tr>
-
-        <td>{{ $loop->iteration }}</td>
-
-        <td>{{ $item->nama }}</td>
-
-        <td>{{ $item->nip }}</td>
-
-        <td>{{ $item->bidang_studi }}</td>
-
-        <td>{{ $item->no_telp }}</td>
-
-        <td>
-
-            <a href="{{ route('guru.show',$item->id_guru) }}">
-                Detail
-            </a>
-
-            |
-
-            <a href="{{ route('guru.edit',$item->id_guru) }}">
-                Edit
-            </a>
-
-            |
-
-            <form action="{{ route('guru.destroy',$item->id_guru) }}"
-                  method="POST"
-                  style="display:inline">
-
-                @csrf
-                @method('DELETE')
-
-                <button type="submit">
-                    Hapus
-                </button>
-
-            </form>
-
-        </td>
-
-    </tr>
-
-    @endforeach
-
+<table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>NIP</th>
+            <th>Bidang Studi</th>
+            <th>No Telp</th>
+            <th>Akun User</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($guru as $item)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $item->nama }}</td>
+            <td>{{ $item->nip ?? '-' }}</td>
+            <td>{{ $item->bidang_studi ?? '-' }}</td>
+            <td>{{ $item->no_telp ?? '-' }}</td>
+            <td>{{ $item->user->username ?? 'Belum ada akun' }}</td>
+            <td>
+                <a href="{{ route('guru.show', $item->id_guru) }}">Detail</a>
+                &nbsp;|&nbsp;
+                <a href="{{ route('guru.edit', $item->id_guru) }}">Edit</a>
+                &nbsp;|&nbsp;
+                <form action="{{ route('guru.destroy', $item->id_guru) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="return confirm('Hapus data guru ini?')">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="7" style="text-align:center;">Belum ada data guru.</td>
+        </tr>
+        @endforelse
+    </tbody>
 </table>
-
-</body>
-</html>
+@endsection

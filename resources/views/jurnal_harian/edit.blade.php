@@ -1,116 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Jurnal Harian</title>
-</head>
-<body>
+@extends('layouts.app')
 
-
+@section('content')
 <h2>Edit Jurnal Harian</h2>
+<a href="{{ route('jurnal-harian.index') }}">&#8592; Kembali</a><br><br>
 
+<p><strong>Jadwal:</strong> {{ $jurnal_harian->jadwal->hari ?? '-' }} | Jam {{ $jurnal_harian->jadwal->jam_ke ?? '-' }} | {{ $jurnal_harian->jadwal->kelas->nama_kelas ?? '-' }} | {{ $jurnal_harian->mapel }}</p>
+<p><strong>Tanggal:</strong> {{ $jurnal_harian->tanggal }}</p>
+<p><strong>Guru:</strong> {{ $jurnal_harian->guru->nama ?? '-' }}</p>
 
-<form action="{{ route('jurnal_harian.update',$jurnal_harian->id_jurnal) }}"
-method="POST">
-
-@csrf
-@method('PUT')
-
-
-<label>Tanggal</label>
-<br>
-
-<input type="date"
-name="tanggal"
-value="{{ $jurnal_harian->tanggal }}">
-
-
-<br><br>
-
-
-<label>Guru</label>
-<br>
-
-<select name="id_guru">
-
-
-@foreach($guru as $g)
-
-<option value="{{ $g->id_guru }}"
-{{ $jurnal_harian->id_guru==$g->id_guru?'selected':'' }}>
-
-{{ $g->nama_guru }}
-
-</option>
-
-@endforeach
-
-
-</select>
-
-
-<br><br>
-
-
-<label>Kelas</label>
-<br>
-
-<select name="id_kelas">
-
-
-@foreach($kelas as $k)
-
-<option value="{{ $k->id_kelas }}"
-{{ $jurnal_harian->id_kelas==$k->id_kelas?'selected':'' }}>
-
-{{ $k->nama_kelas }}
-
-</option>
-
-@endforeach
-
-
-</select>
-
-
-<br><br>
-
-
-<label>Mata Pelajaran</label>
-<br>
-
-<input type="text"
-name="mata_pelajaran"
-value="{{ $jurnal_harian->mata_pelajaran }}">
-
-
-<br><br>
-
-
-<label>Materi</label>
-<br>
-
-<textarea name="materi">{{ $jurnal_harian->materi }}</textarea>
-
-
-<br><br>
-
-
-<label>Keterangan</label>
-<br>
-
-<textarea name="keterangan">{{ $jurnal_harian->keterangan }}</textarea>
-
-
-<br><br>
-
-
-<button type="submit">
-Update
-</button>
-
-
+<form action="{{ route('jurnal-harian.update', $jurnal_harian->id_jurnal) }}" method="POST">
+    @csrf @method('PUT')
+    <table>
+        <tr><td><label>Materi *</label></td><td><input type="text" name="materi" value="{{ old('materi', $jurnal_harian->materi) }}" required style="width:400px; padding:5px;"></td></tr>
+        <tr><td><label>Sub Materi</label></td><td><input type="text" name="sub_materi" value="{{ old('sub_materi', $jurnal_harian->sub_materi) }}" style="width:400px; padding:5px;"></td></tr>
+        <tr><td><label>Catatan Pengajaran</label></td><td><textarea name="catatan_pengajaran" rows="4" style="width:400px; padding:5px;">{{ old('catatan_pengajaran', $jurnal_harian->catatan_pengajaran) }}</textarea></td></tr>
+        <tr><td><label>Status Keterlaksanaan</label></td><td>
+            <select name="status_keterlaksanaan" style="padding:5px;">
+                <option value="terlaksana" {{ $jurnal_harian->status_keterlaksanaan == 'terlaksana' ? 'selected' : '' }}>Terlaksana</option>
+                <option value="tidak_terlaksana" {{ $jurnal_harian->status_keterlaksanaan == 'tidak_terlaksana' ? 'selected' : '' }}>Tidak Terlaksana</option>
+                <option value="kosong" {{ $jurnal_harian->status_keterlaksanaan == 'kosong' ? 'selected' : '' }}>Kosong</option>
+                <option value="pengganti" {{ $jurnal_harian->status_keterlaksanaan == 'pengganti' ? 'selected' : '' }}>Pengganti</option>
+            </select>
+        </td></tr>
+        <tr><td></td><td><button type="submit" style="padding:8px 20px; margin-top:10px;">UPDATE JURNAL</button></td></tr>
+    </table>
 </form>
-
-
-</body>
-</html>
+@endsection
