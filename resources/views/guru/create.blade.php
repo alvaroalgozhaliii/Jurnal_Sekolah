@@ -1,56 +1,69 @@
 @extends('layouts.app')
 
+@section('title', 'Tambah Guru Baru — Jurnal Sekolah')
+@section('page-title', 'Tambah Guru Baru')
+
 @section('content')
-<h2>Tambah Guru Baru</h2>
-
-@if($errors->any())
-    <div style="color:red; border:1px solid red; padding:10px; margin-bottom:15px;">
-        <ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Tambah Guru Baru</h1>
+        <p class="page-subtitle">Formulir Pendaftaran Data Guru & Akun User</p>
     </div>
-@endif
+    <div class="page-actions">
+        <a href="{{ route('guru.index') }}" class="btn btn-secondary">&larr; Kembali</a>
+    </div>
+</div>
 
-<a href="{{ route('guru.index') }}">&#8592; Kembali</a><br><br>
+<div class="card" style="max-width: 650px;">
+    <div class="card-header">
+        <h3 class="card-title">Formulir Data Guru</h3>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('guru.store') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label class="form-label" for="nama">Nama Lengkap <span class="req">*</span></label>
+                <input type="text" id="nama" name="nama" value="{{ old('nama') }}" class="form-control" placeholder="Contoh: Drs. Ahmad Wijaya" required>
+            </div>
 
-<form action="{{ route('guru.store') }}" method="POST">
-    @csrf
-    <table>
-        <tr>
-            <td><label>Nama Lengkap *</label></td>
-            <td><input type="text" name="nama" value="{{ old('nama') }}" required style="width:300px; padding:5px;"></td>
-        </tr>
-        <tr>
-            <td><label>NIP</label></td>
-            <td><input type="text" name="nip" value="{{ old('nip') }}" style="width:300px; padding:5px;"></td>
-        </tr>
-        <tr>
-            <td><label>Bidang Studi</label></td>
-            <td><input type="text" name="bidang_studi" value="{{ old('bidang_studi') }}" style="width:300px; padding:5px;"></td>
-        </tr>
-        <tr>
-            <td><label>No Telepon</label></td>
-            <td><input type="text" name="no_telp" value="{{ old('no_telp') }}" style="width:300px; padding:5px;"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><hr><strong>Buat Akun User (Opsional)</strong></td>
-        </tr>
-        <tr>
-            <td><label>Username</label></td>
-            <td>
-                <input type="text" name="username" value="{{ old('username') }}" style="width:300px; padding:5px;">
-                <br><small>Kosongkan jika tidak perlu akun</small>
-            </td>
-        </tr>
-        <tr>
-            <td><label>Password</label></td>
-            <td>
-                <input type="password" name="password" style="width:300px; padding:5px;">
-                <br><small>Default: guru123 jika tidak diisi</small>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><button type="submit" style="padding:8px 20px; margin-top:10px;">SIMPAN</button></td>
-        </tr>
-    </table>
-</form>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="nip">NIP</label>
+                    <input type="text" id="nip" name="nip" value="{{ old('nip') }}" class="form-control" placeholder="NIP (Opsional)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="bidang_studi">Bidang Studi</label>
+                    <input type="text" id="bidang_studi" name="bidang_studi" value="{{ old('bidang_studi') }}" class="form-control" placeholder="Contoh: Matematika">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="no_telp">No Telepon</label>
+                <input type="text" id="no_telp" name="no_telp" value="{{ old('no_telp') }}" class="form-control" placeholder="Nomor WhatsApp / HP">
+            </div>
+
+            <hr style="border:none; border-top: 1px solid var(--border); margin: 20px 0;">
+
+            <h4 style="font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 12px;">Akun User Login (Opsional)</h4>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input type="text" id="username" name="username" value="{{ old('username') }}" class="form-control" placeholder="Username login">
+                    <small class="text-muted">Kosongkan jika tidak ingin membuat akun login</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password akun">
+                    <small class="text-muted">Default: guru123 jika diisi kosong</small>
+                </div>
+            </div>
+
+            <div class="d-flex gap-8 mt-24">
+                <button type="submit" class="btn btn-primary">SIMPAN DATA GURU</button>
+                <a href="{{ route('guru.index') }}" class="btn btn-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

@@ -7,10 +7,13 @@ use App\Models\Guru;
 use App\Models\Siswa;
 use App\Models\Kelas;
 use App\Models\Jurusan;
+use App\Models\Mapel;
 use App\Models\Jadwal;
 use App\Models\JurnalHarian;
 use App\Models\PresensiMasuk;
 use App\Models\AbsensiSiswa;
+use App\Models\PengajuanIzin;
+use App\Models\User;
 use App\Models\TahunPelajaran;
 use Carbon\Carbon;
 
@@ -24,13 +27,27 @@ class AdminDashboardController extends Controller
         $jumlahSiswa = Siswa::count();
         $jumlahKelas = Kelas::count();
         $jumlahJurusan = Jurusan::count();
-        $jumlahMapel = Jadwal::distinct('mapel')->count('mapel');
+        $jumlahMapel = Mapel::count();
+        $jumlahUser = User::count();
 
         $kehadiranGuruHariIni = PresensiMasuk::where('tanggal', $today)->count();
-        $kehadiranSiswaHariIni = AbsensiSiswa::whereDate('created_at', $today)
-            ->where('status', 'hadir')
-            ->count();
+        $kehadiranSiswaHariIni = AbsensiSiswa::whereHas('jurnal', function($q) use ($today) {
+            $q->where('tanggal', $today);
+        })->where('status', 'hadir')->count();
+        
         $jurnalHariIni = JurnalHarian::where('tanggal', $today)->count();
+
+        // Chart Data 1: Rekap Status Kehadiran Siswa
+        $siswaHadir = AbsensiSiswa::where('status', 'hadir')->count();
+        $siswaSakit = AbsensiSiswa::where('status', 'sakit')->count();
+        $siswaIzin = AbsensiSiswa::where('status', 'izin')->count();
+        $siswaAlpa = AbsensiSiswa::where('status', 'alpa')->count();
+        $siswaDispen = PengajuanIzin::where('kategori', 'dispensasi')->whereIn('status', ['completed', 'verified', 'disetujui_waka'])->count();
+
+        // Chart Data 2: Sebaran Pengguna System (Guru, Siswa, Ortu, Staff/Piket/Admin)
+        $userGuru = User::where('role', 'guru')->count();
+        $userOrtu = User::where('role', 'ortu')->orWhere('role', 'siswa')->count();
+        $userKaryawan = User::whereNotIn('role', ['guru', 'ortu', 'siswa'])->count();
 
         $tahunAktif = TahunPelajaran::where('aktif', 1)->first();
 
@@ -40,9 +57,18 @@ class AdminDashboardController extends Controller
             'jumlahKelas',
             'jumlahJurusan',
             'jumlahMapel',
+            'jumlahUser',
             'kehadiranGuruHariIni',
             'kehadiranSiswaHariIni',
             'jurnalHariIni',
+            'siswaHadir',
+            'siswaSakit',
+            'siswaIzin',
+            'siswaAlpa',
+            'siswaDispen',
+            'userGuru',
+            'userOrtu',
+            'userKaryawan',
             'tahunAktif'
         ));
     }

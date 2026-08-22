@@ -1,58 +1,63 @@
 @extends('layouts.app')
 
+@section('title', 'Data Guru — Jurnal Sekolah')
+@section('page-title', 'Data Guru')
+
 @section('content')
-<h2>Data Guru</h2>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Data Guru</h1>
+        <p class="page-subtitle">Kelola Master Data Guru Sekolah</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ route('guru.create') }}" class="btn btn-primary">+ Tambah Guru</a>
+        <a href="{{ route('guru.trash') }}" class="btn btn-secondary">Lihat Trash</a>
+    </div>
+</div>
 
-@if(session('success'))
-    <p style="color:green; font-weight:bold;">{{ session('success') }}</p>
-@endif
-@if(session('error'))
-    <p style="color:red; font-weight:bold;">{{ session('error') }}</p>
-@endif
-
-<a href="{{ route('guru.create') }}">+ Tambah Guru</a>
-&nbsp;|&nbsp;
-<a href="{{ route('guru.trash') }}">Lihat Trash</a>
-<br><br>
-
-<table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>NIP</th>
-            <th>Bidang Studi</th>
-            <th>No Telp</th>
-            <th>Akun User</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse($guru as $item)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $item->nama }}</td>
-            <td>{{ $item->nip ?? '-' }}</td>
-            <td>{{ $item->bidang_studi ?? '-' }}</td>
-            <td>{{ $item->no_telp ?? '-' }}</td>
-            <td>{{ $item->user->username ?? 'Belum ada akun' }}</td>
-            <td>
-                <a href="{{ route('guru.show', $item->id_guru) }}">Detail</a>
-                &nbsp;|&nbsp;
-                <a href="{{ route('guru.edit', $item->id_guru) }}">Edit</a>
-                &nbsp;|&nbsp;
-                <form action="{{ route('guru.destroy', $item->id_guru) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="return confirm('Hapus data guru ini?')">Hapus</button>
-                </form>
-            </td>
-        </tr>
-        @empty
-        <tr>
-            <td colspan="7" style="text-align:center;">Belum ada data guru.</td>
-        </tr>
-        @endforelse
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-body" style="padding:0;">
+        <div class="table-wrapper" style="border:none; border-radius:0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="no-col">No</th>
+                        <th>Nama Lengkap</th>
+                        <th>NIP</th>
+                        <th>Bidang Studi</th>
+                        <th>No Telepon</th>
+                        <th>Akun User</th>
+                        <th class="action-col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($guru as $item)
+                    <tr>
+                        <td class="no-col">{{ $loop->iteration }}</td>
+                        <td class="fw-bold text-navy">{{ $item->nama }}</td>
+                        <td class="text-muted">{{ $item->nip ?? '-' }}</td>
+                        <td>{{ $item->bidang_studi ?? '-' }}</td>
+                        <td>{{ $item->no_telp ?? '-' }}</td>
+                        <td>
+                            @if($item->user)
+                                <span class="badge badge-success">{{ $item->user->username }}</span>
+                            @else
+                                <span class="badge badge-gray">Belum ada akun</span>
+                            @endif
+                        </td>
+                        <td class="action-col">
+                            <a href="{{ route('guru.show', $item->id_guru) }}" class="btn btn-secondary btn-sm">Detail</a>
+                            <a href="{{ route('guru.edit', $item->id_guru) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <form action="{{ route('guru.destroy', $item->id_guru) }}" method="POST" style="display:inline;">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus data guru ini?')">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 @endsection

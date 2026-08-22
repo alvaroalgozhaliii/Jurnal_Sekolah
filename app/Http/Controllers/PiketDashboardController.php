@@ -8,6 +8,7 @@ use App\Models\AbsensiSiswa;
 use App\Models\Guru;
 use App\Models\Jadwal;
 use App\Models\AbsensiGuruPiket;
+use App\Models\PengajuanIzin;
 use Carbon\Carbon;
 
 class PiketDashboardController extends Controller
@@ -43,13 +44,11 @@ class PiketDashboardController extends Controller
         // Guru yang belum presensi masuk hari ini
         $guruBelumHadir = Guru::whereNotIn('id_user', $guruHadirUserIds)->get();
 
-        // Peringatan Kelas Kosong (jadwal saat ini tapi guru belum presensi / absensi_guru_piket menyatakan tidak_hadir/kosong)
+        // Peringatan Kelas Kosong
         $currentTime = Carbon::now()->format('H:i:s');
         $kelasKosong = [];
         foreach ($jadwalHariIni as $j) {
-            // Check if class is ongoing right now or past start time
             if ($j->waktu_mulai && $currentTime >= $j->waktu_mulai && $currentTime <= ($j->waktu_selesai ?? '23:59:59')) {
-                // Check if teacher has logged presensi masuk or piket recorded teacher absent
                 $guruUser = $j->guru?->id_user;
                 $hasPresensi = $guruUser ? in_array($guruUser, $guruHadirUserIds) : false;
                 $piketRecord = AbsensiGuruPiket::where('id_jadwal', $j->id_jadwal)->where('tanggal', $todayDate)->first();
@@ -63,13 +62,25 @@ class PiketDashboardController extends Controller
             }
         }
 
+        // Statistik Dispen
+        $totalPendingWaka = PengajuanIzin::where('status', 'pending_waka')->count();
+        $totalDisetujuiWaka = PengajuanIzin::where('status', 'disetujui_waka')->count();
+        $totalVerifiedSatpam = PengajuanIzin::whereIn('status', ['verified', 'completed'])->count();
+        $totalDitolak = PengajuanIzin::where(function ($q) {
+            $q->where('status', 'like', 'ditolak_%')->orWhere('status', 'like', 'rejected_%');
+        })->count();
+
         return view('piket.dashboard', compact(
             'jumlahGuruHadir',
             'jumlahSiswaHadir',
             'jumlahSiswaTidakHadir',
             'jadwalHariIni',
             'guruBelumHadir',
-            'kelasKosong'
+            'kelasKosong',
+            'totalPendingWaka',
+            'totalDisetujuiWaka',
+            'totalVerifiedSatpam',
+            'totalDitolak'
         ));
     }
 }

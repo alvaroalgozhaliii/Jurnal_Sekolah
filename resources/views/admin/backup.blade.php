@@ -1,25 +1,50 @@
 @extends('layouts.app')
 
-@section('content')
-<h2>Backup & Restore Database</h2>
+@section('title', 'Backup & Restore — Jurnal Sekolah')
+@section('page-title', 'Backup & Restore Database')
 
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <h3>1. Backup Database</h3>
-    <p>Unduh data cadangan seluruh tabel sistem Jurnal_Sekolah dalam format JSON yang aman.</p>
-    <a href="{{ route('admin.backup.export') }}">
-        <button style="background-color: green; color: white; padding: 10px 15px;">UNDUH BACKUP DATABASE</button>
-    </a>
+@section('content')
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Backup & Restore Database</h1>
+        <p class="page-subtitle">Pemeliharaan & Cadangan Data Sistem Sekolah</p>
+    </div>
 </div>
 
-<div style="border: 1px solid #ccc; padding: 15px;">
-    <h3>2. Restore Database</h3>
-    <p>Pilih file backup (format <code>.json</code>) untuk memulihkan data database.</p>
-    
-    <form action="{{ route('admin.backup.restore') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="backup_file">File Backup JSON:</label><br>
-        <input type="file" id="backup_file" name="backup_file" accept=".json" required><br><br>
-        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin memulihkan database? Data akan digabungkan/diperbarui secara aman.')" style="background-color: orange; color: black; padding: 8px 15px;">RESTORE DATABASE</button>
-    </form>
+<div class="grid-2">
+    <!-- BACKUP DATABASE CARD -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">1. Backup Database</h3>
+        </div>
+        <div class="card-body">
+            <p class="mb-16 text-muted">Unduh file cadangan database sistem dalam format JSON secara aman.</p>
+            <a href="{{ route('admin.backup.download') }}" class="btn btn-primary btn-lg">
+                Unduh Backup Database (.JSON)
+            </a>
+        </div>
+    </div>
+
+    <!-- RESTORE DATABASE CARD -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">2. Restore Database</h3>
+        </div>
+        <div class="card-body">
+            <p class="mb-16 text-muted">Unggah file backup JSON untuk memulihkan seluruh data sistem.</p>
+            
+            <form action="{{ route('admin.backup.restore') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label class="form-label" for="json_file">Pilih File Backup (.json)</label>
+                    <input type="file" id="json_file" name="json_file" accept=".json" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-danger btn-lg mt-16" onclick="return confirm('PERINGATAN: Memulihkan database akan menimpa data yang ada. Lanjutkan?')">
+                    Restore Database Sekarang
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection

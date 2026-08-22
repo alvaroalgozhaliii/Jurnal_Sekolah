@@ -1,40 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login Siswa</title>
-</head>
-<body>
+@extends('layouts.guest')
 
-<h2>Login Siswa</h2>
+@section('title', 'Login Ortu / Siswa — Jurnal Sekolah')
 
-@if(session('error'))
-    <p style="color:red">{{ session('error') }}</p>
-@endif
+@section('content')
+<div class="login-card">
+    <div class="login-header">
+        <div class="login-logo">
+            <svg class="svg-icon" viewBox="0 0 24 24" stroke-width="2" style="width: 32px; height: 32px; color: #ffffff;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+        </div>
+        <div class="login-title">PORTAL ORANG TUA / SISWA</div>
+        <div class="login-subtitle">Jurnal Sekolah & Informasi Presensi</div>
+    </div>
 
-<form action="{{ route('siswa.login.proses') }}" method="POST">
-    @csrf
+    @if(session('error'))
+        <div class="alert alert-danger mb-16">
+            <div>{{ session('error') }}</div>
+        </div>
+    @endif
 
-    <table>
+    <form action="{{ route('login.proses') }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label class="form-label" for="username">Username / NIS</label>
+            <input type="text" id="username" name="username" value="{{ old('username') }}" class="form-control" placeholder="Username / NIS" required autofocus>
+        </div>
 
-        <tr>
-            <td>NIS</td>
-            <td>
-                <input type="text" name="nis">
-            </td>
-        </tr>
+        <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
 
-        <tr>
-            <td></td>
-            <td>
-                <button type="submit">
-                    Login
-                </button>
-            </td>
-        </tr>
-
-    </table>
-
-</form>
-
-</body>
-</html>
+        <button type="submit" class="btn btn-primary btn-lg mt-16" style="width: 100%;">
+            Masuk Portal
+        </button>
+    </form>
+</div>
+@endsection

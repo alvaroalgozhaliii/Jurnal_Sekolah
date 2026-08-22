@@ -10,8 +10,8 @@ class PenggunaController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        return view('pengguna.index', compact('users'));
+        $pengguna = User::with(['guru', 'siswa.kelas'])->get();
+        return view('pengguna.index', compact('pengguna'));
     }
 
     public function create()
@@ -25,8 +25,8 @@ class PenggunaController extends Controller
             'nama' => 'required|string|max:150',
             'username' => 'required|string|max:50|unique:users,username',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:admin,guru,piket,siswa',
-            'nip' => 'nullable|string|max:30|unique:users,nip',
+            'role' => 'required|in:admin,guru,piket,ortu,siswa,walikelas,wali_kelas,waka_kesiswaan,waka_sdm,kepala_sekolah,satpam',
+            'no_hp' => 'nullable|string|max:25',
         ]);
 
         User::create([
@@ -34,9 +34,8 @@ class PenggunaController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'nip' => $request->nip,
-            'aktif' => $request->has('aktif') ? 1 : 0,
-            'created_at' => now(),
+            'no_hp' => $request->no_hp,
+            'aktif' => 1,
         ]);
 
         return redirect()->route('pengguna.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
@@ -44,25 +43,25 @@ class PenggunaController extends Controller
 
     public function show($id)
     {
-        $user = User::findOrFail($id);
-        return view('pengguna.show', compact('user'));
+        $pengguna = User::with(['guru', 'siswa.kelas'])->findOrFail($id);
+        return view('pengguna.show', compact('pengguna'));
     }
 
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        return view('pengguna.edit', compact('user'));
+        $pengguna = User::findOrFail($id);
+        return view('pengguna.edit', compact('pengguna'));
     }
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $pengguna = User::findOrFail($id);
 
         $request->validate([
             'nama' => 'required|string|max:150',
             'username' => 'required|string|max:50|unique:users,username,' . $id . ',id_user',
-            'role' => 'required|in:admin,guru,piket,siswa',
-            'nip' => 'nullable|string|max:30|unique:users,nip,' . $id . ',id_user',
+            'role' => 'required|in:admin,guru,piket,ortu,siswa,walikelas,wali_kelas,waka_kesiswaan,waka_sdm,kepala_sekolah,satpam',
+            'no_hp' => 'nullable|string|max:25',
             'password' => 'nullable|string|min:6',
         ]);
 
@@ -70,26 +69,25 @@ class PenggunaController extends Controller
             'nama' => $request->nama,
             'username' => $request->username,
             'role' => $request->role,
-            'nip' => $request->nip,
-            'aktif' => $request->has('aktif') ? 1 : 0,
+            'no_hp' => $request->no_hp,
         ];
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
-        $user->update($data);
+        $pengguna->update($data);
 
-        return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil diupdate.');
+        return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        if ($user->id_user === auth()->id()) {
+        $pengguna = User::findOrFail($id);
+        if ($pengguna->id_user === auth()->id()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
-        $user->delete();
+        $pengguna->delete();
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 }
