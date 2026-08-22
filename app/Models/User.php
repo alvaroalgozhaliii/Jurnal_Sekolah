@@ -12,46 +12,23 @@ class User extends Authenticatable
 
     protected $table = 'users';
     protected $primaryKey = 'id_user';
-
     public $timestamps = false;
 
     protected $fillable = [
         'nama',
-        'nip',
         'username',
         'password',
         'role',
+        'no_hp',
         'aktif',
-        'created_at',
     ];
 
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-            'aktif' => 'boolean',
-        ];
-    }
-
-    public function guru()
-    {
-        return $this->hasOne(Guru::class, 'id_user', 'id_user');
-    }
-
-    public function siswa()
-    {
-        return $this->hasOne(Siswa::class, 'id_user', 'id_user');
-    }
-
-    public function presensiMasuk()
-    {
-        return $this->hasMany(PresensiMasuk::class, 'id_user', 'id_user');
-    }
-
+    // Role helper checks
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
@@ -67,8 +44,59 @@ class User extends Authenticatable
         return $this->role === 'piket';
     }
 
+    public function isOrtu(): bool
+    {
+        return in_array($this->role, ['ortu', 'siswa']);
+    }
+
     public function isSiswa(): bool
     {
-        return $this->role === 'siswa';
+        return in_array($this->role, ['siswa', 'ortu']);
+    }
+
+    public function isWaliKelas(): bool
+    {
+        return in_array($this->role, ['walikelas', 'wali_kelas']);
+    }
+
+    public function isWakaKesiswaan(): bool
+    {
+        return $this->role === 'waka_kesiswaan';
+    }
+
+    public function isWakaSdm(): bool
+    {
+        return $this->role === 'waka_sdm';
+    }
+
+    public function isWaka(): bool
+    {
+        return in_array($this->role, ['waka_kesiswaan', 'waka_sdm']);
+    }
+
+    public function isKepalaSekolah(): bool
+    {
+        return $this->role === 'kepala_sekolah';
+    }
+
+    public function isSatpam(): bool
+    {
+        return $this->role === 'satpam';
+    }
+
+    // Relationships
+    public function guru()
+    {
+        return $this->hasOne(Guru::class, 'id_user', 'id_user');
+    }
+
+    public function siswa()
+    {
+        return $this->hasOne(Siswa::class, 'id_user', 'id_user');
+    }
+
+    public function anakList()
+    {
+        return $this->belongsToMany(Siswa::class, 'ortu_siswa', 'id_user', 'id_siswa');
     }
 }

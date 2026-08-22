@@ -7,6 +7,7 @@ use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\Jadwal;
 use App\Models\Pengaturan;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -18,12 +19,10 @@ class JurnalHarianController extends Controller
         $user = Auth::user();
         $query = JurnalHarian::with(['guru', 'jadwal.kelas']);
 
-        // Role filtering
-        if ($user->isGuru()) {
+        if ($user->isGuru() && !$user->isAdmin()) {
             $guru = $user->guru;
             $query->where('id_guru', $guru ? $guru->id_guru : 0);
         } else {
-            // Admin & Piket can filter
             if ($request->filled('id_guru')) {
                 $query->where('id_guru', $request->id_guru);
             }
@@ -45,11 +44,19 @@ class JurnalHarianController extends Controller
         return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $user = Auth::user();
+        $now = Carbon::now();
+        $todayDate = $now->toDateString();
 
-        if ($user->isGuru()) {
+        $days = [
+            'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+        ];
+        $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+
+        if ($user->isGuru() && !$user->isAdmin()) {
             $guru = $user->guru;
             if (!$guru) {
                 return back()->with('error', 'Profil guru Anda tidak ditemukan.');
@@ -62,31 +69,44 @@ class JurnalHarianController extends Controller
             $jadwalList = Jadwal::with(['kelas', 'guru'])->where('aktif', 1)->get();
         }
 
+        // Attach active status for schedule filling eligibility
+        foreach ($jadwalList as $j) {
+            $j->is_active_now = $this->isScheduleActiveNow($j, $currentDayIndo, $now);
+            $j->active_message = $this->getScheduleTimeMessage($j, $currentDayIndo, $now);
+        }
+
         return view('jurnal_harian.create', compact('jadwalList'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'id_jadwal' => 'required',
+            'id_jadwal' => 'required|exists:jadwal,id_jadwal',
             'tanggal' => 'required|date',
             'materi' => 'required|string',
         ]);
 
         $jadwal = Jadwal::findOrFail($request->id_jadwal);
         $user = Auth::user();
+        $now = Carbon::now();
 
-        // Enforce time limit for Guru
-        if ($user->isGuru()) {
-            $checkTime = $this->isJournalTimeExpired($jadwal, $request->tanggal);
-            if ($checkTime['expired']) {
-                return back()->with('error', $checkTime['message']);
+        $days = [
+            'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+        ];
+        $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+
+        // Enforce teaching schedule time restriction for Guru
+        if ($user->isGuru() && !$user->isAdmin()) {
+            if (!$this->isScheduleActiveNow($jadwal, $currentDayIndo, $now, $request->tanggal)) {
+                $msg = $this->getScheduleTimeMessage($jadwal, $currentDayIndo, $now, $request->tanggal);
+                return back()->with('error', 'Tidak dapat mengisi jurnal: ' . $msg);
             }
         }
 
         $idGuru = $user->isGuru() ? ($user->guru->id_guru ?? $jadwal->id_guru) : $jadwal->id_guru;
 
-        JurnalHarian::create([
+        $jurnal = JurnalHarian::create([
             'id_jadwal' => $jadwal->id_jadwal,
             'tanggal' => $request->tanggal,
             'id_guru' => $idGuru,
@@ -98,7 +118,7 @@ class JurnalHarianController extends Controller
             'created_by' => $user->id_user,
         ]);
 
-        return redirect()->route('jurnal-harian.index')->with('success', 'Jurnal harian berhasil disimpan.');
+        return redirect()->route('absensi-siswa.create', ['id_jurnal' => $jurnal->id_jurnal])->with('success', 'Jurnal harian disimpan. Silakan lanjutkan mengisi absensi siswa.');
     }
 
     public function show($id)
@@ -112,15 +132,8 @@ class JurnalHarianController extends Controller
         $jurnal_harian = JurnalHarian::with('jadwal.kelas')->findOrFail($id);
         $user = Auth::user();
 
-        if ($user->isGuru() && $jurnal_harian->id_guru !== $user->guru?->id_guru) {
+        if ($user->isGuru() && !$user->isAdmin() && $jurnal_harian->id_guru !== $user->guru?->id_guru) {
             abort(403, 'Anda hanya dapat mengedit jurnal milik Anda sendiri.');
-        }
-
-        if ($user->isGuru()) {
-            $checkTime = $this->isJournalTimeExpired($jurnal_harian->jadwal, $jurnal_harian->tanggal);
-            if ($checkTime['expired']) {
-                return redirect()->route('jurnal-harian.index')->with('error', $checkTime['message']);
-            }
         }
 
         return view('jurnal_harian.edit', compact('jurnal_harian'));
@@ -131,15 +144,8 @@ class JurnalHarianController extends Controller
         $jurnal_harian = JurnalHarian::with('jadwal')->findOrFail($id);
         $user = Auth::user();
 
-        if ($user->isGuru() && $jurnal_harian->id_guru !== $user->guru?->id_guru) {
+        if ($user->isGuru() && !$user->isAdmin() && $jurnal_harian->id_guru !== $user->guru?->id_guru) {
             abort(403, 'Anda hanya dapat mengedit jurnal milik Anda sendiri.');
-        }
-
-        if ($user->isGuru()) {
-            $checkTime = $this->isJournalTimeExpired($jurnal_harian->jadwal, $jurnal_harian->tanggal);
-            if ($checkTime['expired']) {
-                return back()->with('error', $checkTime['message']);
-            }
         }
 
         $request->validate([
@@ -161,7 +167,7 @@ class JurnalHarianController extends Controller
         $jurnal_harian = JurnalHarian::findOrFail($id);
         $user = Auth::user();
 
-        if ($user->isGuru() && $jurnal_harian->id_guru !== $user->guru?->id_guru) {
+        if ($user->isGuru() && !$user->isAdmin() && $jurnal_harian->id_guru !== $user->guru?->id_guru) {
             abort(403, 'Anda hanya dapat menghapus jurnal milik Anda sendiri.');
         }
 
@@ -187,36 +193,53 @@ class JurnalHarianController extends Controller
         return redirect()->route('jurnal-harian.trash')->with('success', 'Jurnal harian berhasil dihapus permanen.');
     }
 
-    private function isJournalTimeExpired($jadwal, $tanggal)
+    private function isScheduleActiveNow($jadwal, $currentDayIndo, $now, $inputTanggal = null)
     {
-        if (!$jadwal || !$jadwal->waktu_selesai) {
-            return ['expired' => false];
-        }
+        $targetDate = $inputTanggal ?? $now->toDateString();
+        $todayDate = $now->toDateString();
 
-        $batasMenit = (int) Pengaturan::getVal('batas_waktu_jurnal_menit', 15, 'admin');
-        
-        $journalDate = Carbon::parse($tanggal)->toDateString();
-        $today = Carbon::today()->toDateString();
+        // If for future date, not active yet
+        if ($targetDate > $todayDate) return false;
 
-        // If journal is for a past day, it's expired for Guru
-        if ($journalDate < $today) {
-            return [
-                'expired' => true,
-                'message' => 'Waktu pengisian jurnal untuk tanggal ' . $tanggal . ' telah berakhir.'
-            ];
-        }
+        // If for past date, check grace period setting (e.g. 15-60 mins)
+        $batasMenit = (int) Pengaturan::getVal('batas_waktu_jurnal_menit', 60, 'admin');
 
-        // If journal is for today, check end time + grace period
-        if ($journalDate === $today) {
-            $endTimeWithGrace = Carbon::parse($today . ' ' . $jadwal->waktu_selesai)->addMinutes($batasMenit);
-            if (Carbon::now()->greaterThan($endTimeWithGrace)) {
-                return [
-                    'expired' => true,
-                    'message' => "Waktu pengisian jurnal telah berakhir pada " . $endTimeWithGrace->format('H:i') . " (Batas toleransi: {$batasMenit} menit setelah jam pelajaran berakhir)."
-                ];
+        if ($targetDate === $todayDate) {
+            if ($jadwal->hari !== $currentDayIndo) return false;
+
+            if ($jadwal->waktu_mulai && $jadwal->waktu_selesai) {
+                $startTime = Carbon::parse($todayDate . ' ' . $jadwal->waktu_mulai);
+                $endTimeWithGrace = Carbon::parse($todayDate . ' ' . $jadwal->waktu_selesai)->addMinutes($batasMenit);
+
+                return $now->greaterThanOrEqualTo($startTime) && $now->lessThanOrEqualTo($endTimeWithGrace);
             }
         }
 
-        return ['expired' => false];
+        return true;
+    }
+
+    private function getScheduleTimeMessage($jadwal, $currentDayIndo, $now, $inputTanggal = null)
+    {
+        $targetDate = $inputTanggal ?? $now->toDateString();
+        $todayDate = $now->toDateString();
+
+        if ($targetDate === $todayDate) {
+            if ($jadwal->hari !== $currentDayIndo) {
+                return 'Hari ini bukan jadwal mengajar (' . $jadwal->hari . ').';
+            }
+            if ($jadwal->waktu_mulai && $jadwal->waktu_selesai) {
+                $startTime = Carbon::parse($todayDate . ' ' . $jadwal->waktu_mulai);
+                if ($now->lessThan($startTime)) {
+                    return 'Belum waktunya (Waktu mengajar: ' . $jadwal->waktu_mulai . ' - ' . $jadwal->waktu_selesai . ').';
+                }
+                $batasMenit = (int) Pengaturan::getVal('batas_waktu_jurnal_menit', 60, 'admin');
+                $endTimeWithGrace = Carbon::parse($todayDate . ' ' . $jadwal->waktu_selesai)->addMinutes($batasMenit);
+                if ($now->greaterThan($endTimeWithGrace)) {
+                    return 'Waktu pengisian jurnal telah berakhir (Batas: ' . $endTimeWithGrace->format('H:i') . ').';
+                }
+            }
+        }
+
+        return 'Waktu mengajar aktif.';
     }
 }

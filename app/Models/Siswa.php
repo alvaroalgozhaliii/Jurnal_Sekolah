@@ -32,6 +32,11 @@ class Siswa extends Model
         return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
+    public function ortu()
+    {
+        return $this->belongsToMany(User::class, 'ortu_siswa', 'id_siswa', 'id_user');
+    }
+
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'id_kelas', 'id_kelas');
@@ -40,5 +45,10 @@ class Siswa extends Model
     public function absensi()
     {
         return $this->hasMany(AbsensiSiswa::class, 'id_siswa', 'id_siswa');
+    }
+
+    public function pengajuanIzin()
+    {
+        return $this->hasMany(PengajuanIzin::class, 'id_siswa', 'id_siswa');
     }
 }

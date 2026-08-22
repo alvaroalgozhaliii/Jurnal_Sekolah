@@ -1,98 +1,150 @@
 @extends('layouts.app')
 
-@section('content')
-<h2>Pengaturan {{ strtoupper($role) }}</h2>
+@section('title', 'Pengaturan Aplikasi — Jurnal Sekolah')
+@section('page-title', 'Pengaturan Aplikasi')
 
+@section('content')
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Pengaturan {{ strtoupper($role) }}</h1>
+        <p class="page-subtitle">Konfigurasi & Preferensi Sistem Pengaturan Role</p>
+    </div>
+</div>
+
+<div class="card" style="max-width:700px;">
 @if($role === 'admin')
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-        <h3>1. Hak Akses & Batas Waktu Pengisian Jurnal</h3>
+    <div class="card-header">
+        <h3 class="card-title">Konfigurasi Sistem (Admin)</h3>
+    </div>
+    <div class="card-body">
         <form action="{{ route('admin.pengaturan.update') }}" method="POST">
             @csrf
-            <p>
-                <label>Batas Waktu Pengisian Jurnal (Menit setelah mata pelajaran selesai):</label><br>
-                <input type="number" name="batas_waktu_jurnal_menit" value="{{ $batasWaktuJurnal }}" min="0" required style="padding: 5px; width: 100px;"> menit
-            </p>
             
-            <h3>2. Pengaturan Jam Pelajaran</h3>
-            <p>
-                <label>Jam Masuk:</label><br>
-                <input type="time" name="jam_masuk" value="{{ $jamMasuk }}" required style="padding: 5px;">
-            </p>
-            <p>
-                <label>Jam Pulang:</label><br>
-                <input type="time" name="jam_pulang" value="{{ $jamPulang }}" required style="padding: 5px;">
-            </p>
-            <p>
-                <label>Durasi per Jam Pelajaran (Menit):</label><br>
-                <input type="number" name="durasi_pelajaran_menit" value="{{ $durasiPelajaran }}" min="1" required style="padding: 5px; width: 100px;"> menit
-            </p>
+            <h4 class="text-navy mb-12">1. Hak Akses & Batas Waktu Pengisian Jurnal</h4>
+            <div class="form-group">
+                <label class="form-label" for="batas_waktu_jurnal_menit">Batas Waktu Pengisian Jurnal (Menit setelah KBM selesai)</label>
+                <div class="d-flex align-center gap-8">
+                    <input type="number" id="batas_waktu_jurnal_menit" name="batas_waktu_jurnal_menit" value="{{ $batasWaktuJurnal }}" min="0" required class="form-control" style="width: 120px;">
+                    <span class="text-muted fw-bold">menit</span>
+                </div>
+            </div>
 
-            <button type="submit">SIMPAN PENGATURAN ADMIN</button>
+            <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
+            
+            <h4 class="text-navy mb-12">2. Pengaturan Jam Pelajaran</h4>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="jam_masuk">Jam Masuk Sekolah</label>
+                    <input type="time" id="jam_masuk" name="jam_masuk" value="{{ $jamMasuk }}" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="jam_pulang">Jam Pulang Sekolah</label>
+                    <input type="time" id="jam_pulang" name="jam_pulang" value="{{ $jamPulang }}" required class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="durasi_pelajaran_menit">Durasi per Jam Pelajaran (Menit)</label>
+                <div class="d-flex align-center gap-8">
+                    <input type="number" id="durasi_pelajaran_menit" name="durasi_pelajaran_menit" value="{{ $durasiPelajaran }}" min="1" required class="form-control" style="width: 120px;">
+                    <span class="text-muted fw-bold">menit</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg mt-16">
+                SIMPAN PENGATURAN ADMIN
+            </button>
         </form>
     </div>
 @elseif($role === 'guru')
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-        <h3>Notifikasi & Preferensi Guru</h3>
+    <div class="card-header">
+        <h3 class="card-title">Notifikasi & Preferensi Guru</h3>
+    </div>
+    <div class="card-body">
         <form action="{{ route('guru.pengaturan.update') }}" method="POST">
             @csrf
-            <p>
-                <input type="checkbox" id="notif_jurnal" name="notif_jurnal" value="1" {{ $notifJurnal ? 'checked' : '' }}>
-                <label for="notif_jurnal">Aktifkan pengingat mengisi jurnal harian</label>
-            </p>
-            <p>
-                <input type="checkbox" id="notif_presensi_masuk" name="notif_presensi_masuk" value="1" {{ $notifPresensiMasuk ? 'checked' : '' }}>
-                <label for="notif_presensi_masuk">Aktifkan pengingat presensi masuk</label>
-            </p>
-            <p>
-                <input type="checkbox" id="notif_presensi_keluar" name="notif_presensi_keluar" value="1" {{ $notifPresensiKeluar ? 'checked' : '' }}>
-                <label for="notif_presensi_keluar">Aktifkan pengingat presensi keluar</label>
-            </p>
+            <div class="form-group">
+                <label class="d-flex align-center gap-8" style="cursor:pointer;">
+                    <input type="checkbox" id="notif_jurnal" name="notif_jurnal" value="1" {{ $notifJurnal ? 'checked' : '' }} style="width:18px; height:18px;">
+                    <span class="fw-bold">Aktifkan pengingat mengisi jurnal harian</span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="d-flex align-center gap-8" style="cursor:pointer;">
+                    <input type="checkbox" id="notif_presensi_masuk" name="notif_presensi_masuk" value="1" {{ $notifPresensiMasuk ? 'checked' : '' }} style="width:18px; height:18px;">
+                    <span class="fw-bold">Aktifkan pengingat presensi masuk</span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="d-flex align-center gap-8" style="cursor:pointer;">
+                    <input type="checkbox" id="notif_presensi_keluar" name="notif_presensi_keluar" value="1" {{ $notifPresensiKeluar ? 'checked' : '' }} style="width:18px; height:18px;">
+                    <span class="fw-bold">Aktifkan pengingat presensi keluar</span>
+                </label>
+            </div>
 
-            <h3>Tampilan</h3>
-            <p>
-                <label>Pilihan Tema:</label><br>
-                <select name="tema_tampilan" style="padding: 5px;">
-                    <option value="light" {{ $temaTampilan == 'light' ? 'selected' : '' }}>Light Mode</option>
+            <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
+
+            <div class="form-group">
+                <label class="form-label" for="tema_tampilan">Pilihan Tema Tampilan</label>
+                <select id="tema_tampilan" name="tema_tampilan" class="form-control" style="max-width:250px;">
+                    <option value="light" {{ $temaTampilan == 'light' ? 'selected' : '' }}>Light Mode (Default Navy)</option>
                     <option value="dark" {{ $temaTampilan == 'dark' ? 'selected' : '' }}>Dark Mode</option>
                 </select>
-            </p>
+            </div>
 
-            <button type="submit">SIMPAN PREFERENSI GURU</button>
+            <button type="submit" class="btn btn-primary btn-lg mt-16">
+                SIMPAN PREFERENSI GURU
+            </button>
         </form>
     </div>
 @elseif($role === 'piket')
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-        <h3>Preferensi Piket</h3>
+    <div class="card-header">
+        <h3 class="card-title">Preferensi Petugas Piket</h3>
+    </div>
+    <div class="card-body">
         <form action="{{ route('piket.pengaturan.update') }}" method="POST">
             @csrf
-            <p>
-                <label>Toleransi Peringatan Kelas Kosong (Menit setelah jadwal dimulai):</label><br>
-                <input type="number" name="toleransi_kelas_kosong_menit" value="{{ $toleransiPiket }}" min="0" required style="padding: 5px; width: 100px;"> menit
-            </p>
-            <button type="submit">SIMPAN PREFERENSI PIKET</button>
+            <div class="form-group">
+                <label class="form-label" for="toleransi_kelas_kosong_menit">Toleransi Peringatan Kelas Kosong (Menit setelah KBM dimulai)</label>
+                <div class="d-flex align-center gap-8">
+                    <input type="number" id="toleransi_kelas_kosong_menit" name="toleransi_kelas_kosong_menit" value="{{ $toleransiPiket }}" min="0" required class="form-control" style="width: 120px;">
+                    <span class="text-muted fw-bold">menit</span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg mt-16">
+                SIMPAN PREFERENSI PIKET
+            </button>
         </form>
     </div>
 @elseif($role === 'siswa')
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-        <h3>Notifikasi & Preferensi Siswa</h3>
+    <div class="card-header">
+        <h3 class="card-title">Notifikasi & Preferensi Ortu / Siswa</h3>
+    </div>
+    <div class="card-body">
         <form action="{{ route('siswa.pengaturan.update') }}" method="POST">
             @csrf
-            <p>
-                <input type="checkbox" id="notif_jurnal" name="notif_jurnal" value="1" {{ $notifJurnal ? 'checked' : '' }}>
-                <label for="notif_jurnal">Aktifkan notifikasi jadwal & presensi</label>
-            </p>
+            <div class="form-group">
+                <label class="d-flex align-center gap-8" style="cursor:pointer;">
+                    <input type="checkbox" id="notif_jurnal" name="notif_jurnal" value="1" {{ $notifJurnal ? 'checked' : '' }} style="width:18px; height:18px;">
+                    <span class="fw-bold">Aktifkan notifikasi jadwal & presensi</span>
+                </label>
+            </div>
 
-            <h3>Tampilan</h3>
-            <p>
-                <label>Pilihan Tema:</label><br>
-                <select name="tema_tampilan" style="padding: 5px;">
-                    <option value="light" {{ $temaTampilan == 'light' ? 'selected' : '' }}>Light Mode</option>
+            <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
+
+            <div class="form-group">
+                <label class="form-label" for="tema_tampilan">Pilihan Tema Tampilan</label>
+                <select id="tema_tampilan" name="tema_tampilan" class="form-control" style="max-width:250px;">
+                    <option value="light" {{ $temaTampilan == 'light' ? 'selected' : '' }}>Light Mode (Default Navy)</option>
                     <option value="dark" {{ $temaTampilan == 'dark' ? 'selected' : '' }}>Dark Mode</option>
                 </select>
-            </p>
+            </div>
 
-            <button type="submit">SIMPAN PREFERENSI SISWA</button>
+            <button type="submit" class="btn btn-primary btn-lg mt-16">
+                SIMPAN PREFERENSI SISWA
+            </button>
         </form>
     </div>
 @endif
+</div>
 @endsection

@@ -1,35 +1,94 @@
 @extends('layouts.app')
 
-@section('content')
-<h2>Tambah Jurnal Harian</h2>
-<a href="{{ route('jurnal-harian.index') }}">&#8592; Kembali</a><br><br>
+@section('title', 'Isi Jurnal Harian — Jurnal Sekolah')
+@section('page-title', 'Isi Jurnal Harian')
 
-<form action="{{ route('jurnal-harian.store') }}" method="POST">
-    @csrf
-    <table>
-        <tr><td><label>Pilih Jadwal *</label></td><td>
-            <select name="id_jadwal" required style="width:400px; padding:5px;">
-                <option value="">-- Pilih Jadwal Mengajar --</option>
+@section('content')
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Formulir Jurnal Harian KBM</h1>
+        <p class="page-subtitle">Pilih jadwal mengajar dan lengkapi catatan KBM</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary">&larr; Kembali</a>
+    </div>
+</div>
+
+<div class="card mb-24">
+    <div class="card-body">
+        <form action="{{ route('jurnal-harian.create') }}" method="GET" class="d-flex align-center gap-12 flex-wrap">
+            <label for="id_jadwal" class="form-label" style="margin:0; white-space:nowrap;">Pilih Jadwal Mengajar:</label>
+            <select id="id_jadwal" name="id_jadwal" onchange="this.form.submit()" class="form-control" style="max-width:500px;">
+                <option value="">-- Pilih Jadwal KBM Hari Ini --</option>
                 @foreach($jadwalList as $j)
-                <option value="{{ $j->id_jadwal }}" {{ (old('id_jadwal') == $j->id_jadwal || request('id_jadwal') == $j->id_jadwal) ? 'selected' : '' }}>
-                    {{ $j->hari }} | Jam {{ $j->jam_ke }} | {{ $j->kelas->nama_kelas ?? '-' }} | {{ $j->mapel }} ({{ $j->waktu_mulai }}-{{ $j->waktu_selesai }})
+                <option value="{{ $j->id_jadwal }}" {{ ($jadwalSelected && $jadwalSelected->id_jadwal == $j->id_jadwal) ? 'selected' : '' }}>
+                    {{ $j->hari }} | Jam ke-{{ $j->jam_ke }} ({{ $j->waktu_mulai }}-{{ $j->waktu_selesai }}) | Kelas {{ $j->kelas->nama_kelas ?? '-' }} | {{ $j->mapel }}
                 </option>
                 @endforeach
             </select>
-        </td></tr>
-        <tr><td><label>Tanggal *</label></td><td><input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" required style="padding:5px;"></td></tr>
-        <tr><td><label>Materi *</label></td><td><input type="text" name="materi" value="{{ old('materi') }}" required style="width:400px; padding:5px;"></td></tr>
-        <tr><td><label>Sub Materi</label></td><td><input type="text" name="sub_materi" value="{{ old('sub_materi') }}" style="width:400px; padding:5px;"></td></tr>
-        <tr><td><label>Catatan Pengajaran</label></td><td><textarea name="catatan_pengajaran" rows="4" style="width:400px; padding:5px;">{{ old('catatan_pengajaran') }}</textarea></td></tr>
-        <tr><td><label>Status Keterlaksanaan</label></td><td>
-            <select name="status_keterlaksanaan" style="padding:5px;">
-                <option value="terlaksana" {{ old('status_keterlaksanaan') == 'terlaksana' ? 'selected' : '' }}>Terlaksana</option>
-                <option value="tidak_terlaksana" {{ old('status_keterlaksanaan') == 'tidak_terlaksana' ? 'selected' : '' }}>Tidak Terlaksana</option>
-                <option value="kosong" {{ old('status_keterlaksanaan') == 'kosong' ? 'selected' : '' }}>Kosong</option>
-                <option value="pengganti" {{ old('status_keterlaksanaan') == 'pengganti' ? 'selected' : '' }}>Pengganti</option>
-            </select>
-        </td></tr>
-        <tr><td></td><td><button type="submit" style="padding:8px 20px; margin-top:10px;">SIMPAN JURNAL</button></td></tr>
-    </table>
-</form>
+        </form>
+    </div>
+</div>
+
+@if($jadwalSelected)
+<div class="card mb-24" style="max-width: 750px;">
+    <div class="card-header">
+        <h3 class="card-title">Informasi Jadwal Terpilih</h3>
+    </div>
+    <div class="card-body">
+        <div class="grid-3">
+            <div><span class="text-muted">Kelas:</span> <strong><span class="badge badge-navy">{{ $jadwalSelected->kelas->nama_kelas ?? '-' }}</span></strong></div>
+            <div><span class="text-muted">Mata Pelajaran:</span> <strong>{{ $jadwalSelected->mapel }}</strong></div>
+            <div><span class="text-muted">Waktu KBM:</span> <strong>{{ $jadwalSelected->waktu_mulai }} - {{ $jadwalSelected->waktu_selesai }}</strong></div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="max-width: 750px;">
+    <div class="card-header">
+        <h3 class="card-title">Formulir Catatan Jurnal</h3>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('jurnal-harian.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="id_jadwal" value="{{ $jadwalSelected->id_jadwal }}">
+            <input type="hidden" name="tanggal" value="{{ date('Y-m-d') }}">
+
+            <div class="form-group">
+                <label class="form-label" for="materi">Materi Pelajaran Utam <span class="req">*</span></label>
+                <input type="text" id="materi" name="materi" value="{{ old('materi') }}" class="form-control" placeholder="Contoh: Bab 3 Persamaan Kuadrat" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="sub_materi">Sub Materi / Pokok Bahasan</label>
+                <input type="text" id="sub_materi" name="sub_materi" value="{{ old('sub_materi') }}" class="form-control" placeholder="Contoh: Rumus ABC dan Diskriminan">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="catatan_pengajaran">Catatan Pengajaran & Evaluasi Kelas</label>
+                <textarea id="catatan_pengajaran" name="catatan_pengajaran" class="form-control" rows="4" placeholder="Catatan respon siswa, keaktifan, atau tugas KBM">{{ old('catatan_pengajaran') }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="status_keterlaksanaan">Status Keterlaksanaan <span class="req">*</span></label>
+                <select id="status_keterlaksanaan" name="status_keterlaksanaan" class="form-control" required>
+                    <option value="terlaksana" {{ old('status_keterlaksanaan') == 'terlaksana' ? 'selected' : '' }}>Terlaksana</option>
+                    <option value="tidak_terlaksana" {{ old('status_keterlaksanaan') == 'tidak_terlaksana' ? 'selected' : '' }}>Tidak Terlaksana</option>
+                    <option value="kosong" {{ old('status_keterlaksanaan') == 'kosong' ? 'selected' : '' }}>Kosong</option>
+                    <option value="pengganti" {{ old('status_keterlaksanaan') == 'pengganti' ? 'selected' : '' }}>Pengganti</option>
+                </select>
+            </div>
+
+            <div class="d-flex gap-8 mt-24">
+                <button type="submit" class="btn btn-primary btn-lg">SIMPAN JURNAL & LANJUT ABSENSI SISWA</button>
+                <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary btn-lg">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
+@else
+<div class="alert alert-info">
+    <div>Silakan pilih jadwal mengajar terlebih dahulu dari dropdown di atas.</div>
+</div>
+@endif
 @endsection

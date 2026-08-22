@@ -1,55 +1,212 @@
 @extends('layouts.app')
 
+@section('title', 'Profil Pengguna — Jurnal Sekolah')
+@section('page-title', 'Profil Pengguna')
+
 @section('content')
-<h2>Profil {{ strtoupper($user->role) }}</h2>
-
-<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <h3>Data Profil</h3>
-    <form action="{{ route('profil.update') }}" method="POST">
-        @csrf
-        
-        <p><label>Nama Lengkap:</label><br>
-        <input type="text" name="nama" value="{{ old('nama', $user->nama) }}" required style="width: 300px; padding: 5px;"></p>
-
-        <p><label>Username:</label><br>
-        <input type="text" name="username" value="{{ old('username', $user->username) }}" required style="width: 300px; padding: 5px;"></p>
-
-        @if($user->isGuru() && $user->guru)
-            <p><label>NIP:</label><br>
-            <input type="text" value="{{ $user->guru->nip }}" readonly style="width: 300px; padding: 5px; background: #eee;"></p>
-
-            <p><label>Bidang Studi:</label><br>
-            <input type="text" value="{{ $user->guru->bidang_studi }}" readonly style="width: 300px; padding: 5px; background: #eee;"></p>
-
-            <p><label>No Telepon:</label><br>
-            <input type="text" name="no_telp" value="{{ old('no_telp', $user->guru->no_telp) }}" style="width: 300px; padding: 5px;"></p>
-        @elseif($user->isSiswa() && $user->siswa)
-            <p><label>NIS:</label><br>
-            <input type="text" value="{{ $user->siswa->nis }}" readonly style="width: 300px; padding: 5px; background: #eee;"></p>
-
-            <p><label>Kelas:</label><br>
-            <input type="text" value="{{ $user->siswa->kelas->nama_kelas ?? '-' }}" readonly style="width: 300px; padding: 5px; background: #eee;"></p>
-        @endif
-
-        <button type="submit">SIMPAN PROFIL</button>
-    </form>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Profil {{ strtoupper($user->role) }}</h1>
+        <p class="page-subtitle">Pengaturan Profil & Keamanan Akun Anda</p>
+    </div>
 </div>
 
-<div style="border: 1px solid #ccc; padding: 15px;">
-    <h3>Keamanan / Ubah Password</h3>
-    <form action="{{ route('profil.password') }}" method="POST">
-        @csrf
+<div class="grid-2">
 
-        <p><label>Password Lama:</label><br>
-        <input type="password" name="password_lama" required style="width: 300px; padding: 5px;"></p>
+    {{-- DATA PROFIL --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Data Profil</h3>
+        </div>
 
-        <p><label>Password Baru:</label><br>
-        <input type="password" name="password_baru" required style="width: 300px; padding: 5px;"></p>
+        <div class="card-body">
+            <form action="{{ route('profil.update') }}" method="POST">
+                @csrf
 
-        <p><label>Konfirmasi Password Baru:</label><br>
-        <input type="password" name="password_baru_confirmation" required style="width: 300px; padding: 5px;"></p>
+                <div class="form-group">
+                    <label class="form-label" for="nama">
+                        Nama Lengkap <span class="req">*</span>
+                    </label>
 
-        <button type="submit">UBAH PASSWORD</button>
-    </form>
+                    <input
+                        type="text"
+                        id="nama"
+                        name="nama"
+                        value="{{ old('nama', $user->nama) }}"
+                        class="form-control"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="username">
+                        Username <span class="req">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value="{{ old('username', $user->username) }}"
+                        class="form-control"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="no_telp">
+                        No WhatsApp / HP Aktif
+                    </label>
+
+                    <input
+                        type="text"
+                        id="no_telp"
+                        name="no_telp"
+                        value="{{ old('no_telp', $user->no_hp ?? ($user->guru->no_telp ?? '')) }}"
+                        class="form-control"
+                        placeholder="Contoh: 085707300240"
+                    >
+                    <small class="text-muted">Nomor ini digunakan sistem untuk mengirimkan notifikasi WhatsApp otomatis.</small>
+                </div>
+                @if($user->isGuru() && $user->guru)
+
+                    <div class="form-group">
+                        <label class="form-label">NIP</label>
+
+                        <input
+                            type="text"
+                            value="{{ $user->guru->nip }}"
+                            class="form-control"
+                            readonly
+                            style="background:var(--bg-card-header);"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Bidang Studi</label>
+
+                        <input
+                            type="text"
+                            value="{{ $user->guru->bidang_studi }}"
+                            class="form-control"
+                            readonly
+                            style="background:var(--bg-card-header);"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="no_telp">
+                            No Telepon
+                        </label>
+
+                        <input
+                            type="text"
+                            id="no_telp"
+                            name="no_telp"
+                            value="{{ old('no_telp', $user->guru->no_telp) }}"
+                            class="form-control"
+                        >
+                    </div>
+
+                {{-- PROFIL SISWA --}}
+                @elseif($user->isSiswa() && $user->siswa)
+
+                    <div class="form-group">
+                        <label class="form-label">NIS</label>
+
+                        <input
+                            type="text"
+                            value="{{ $user->siswa->nis }}"
+                            class="form-control"
+                            readonly
+                            style="background:var(--bg-card-header);"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Kelas</label>
+
+                        <input
+                            type="text"
+                            value="{{ $user->siswa->kelas->nama_kelas ?? '-' }}"
+                            class="form-control"
+                            readonly
+                            style="background:var(--bg-card-header);"
+                        >
+                    </div>
+
+                @endif
+
+                <button type="submit" class="btn btn-primary mt-16">
+                    SIMPAN PROFIL
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+
+    {{-- UBAH PASSWORD --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                Keamanan / Ubah Password
+            </h3>
+        </div>
+
+        <div class="card-body">
+            <form action="{{ route('profil.password') }}" method="POST">
+                @csrf
+
+                <div class="form-group">
+                    <label class="form-label" for="password_lama">
+                        Password Lama <span class="req">*</span>
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password_lama"
+                        name="password_lama"
+                        class="form-control"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password_baru">
+                        Password Baru <span class="req">*</span>
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password_baru"
+                        name="password_baru"
+                        class="form-control"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password_baru_confirmation">
+                        Konfirmasi Password Baru <span class="req">*</span>
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password_baru_confirmation"
+                        name="password_baru_confirmation"
+                        class="form-control"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-amber mt-16">
+                    UBAH PASSWORD
+                </button>
+
+            </form>
+        </div>
+    </div>
+
 </div>
 @endsection

@@ -28,6 +28,7 @@ class ProfilController extends Controller
         $user->update([
             'nama' => $request->nama,
             'username' => $request->username,
+            'no_hp' => $request->no_telp ?? $request->no_hp,
         ]);
 
         // If user is linked to Guru

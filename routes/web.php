@@ -7,11 +7,19 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\GuruDashboardController;
 use App\Http\Controllers\PiketDashboardController;
-use App\Http\Controllers\SiswaDashboardController;
+use App\Http\Controllers\OrtuDashboardController;
+use App\Http\Controllers\WaliKelasController;
+use App\Http\Controllers\WakaDashboardController;
+use App\Http\Controllers\KepalaSekolahController;
+use App\Http\Controllers\SatpamController;
+use App\Http\Controllers\PengajuanIzinController;
+use App\Http\Controllers\NotifikasiController;
+
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\MapelController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JurnalHarianController;
 use App\Http\Controllers\AbsensiSiswaController;
@@ -34,7 +42,11 @@ Route::get('/', function () {
             'admin' => redirect()->route('admin.dashboard'),
             'guru' => redirect()->route('guru.dashboard'),
             'piket' => redirect()->route('piket.dashboard'),
-            'siswa' => redirect()->route('siswa.dashboard'),
+            'ortu', 'siswa' => redirect()->route('ortu.dashboard'),
+            'wali_kelas' => redirect()->route('walikelas.dashboard'),
+            'waka_kesiswaan', 'waka_sdm' => redirect()->route('waka.dashboard'),
+            'kepala_sekolah' => redirect()->route('kepala.dashboard'),
+            'satpam' => redirect()->route('satpam.dashboard'),
             default => redirect()->route('login'),
         };
     }
@@ -51,12 +63,28 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ======================================================
 
 Route::middleware(['auth'])->group(function () {
-
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
     Route::post('/profil/update', [ProfilController::class, 'updateProfil'])->name('profil.update');
     Route::post('/profil/password', [ProfilController::class, 'updatePassword'])->name('profil.password');
 
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+
+    // Notifikasi
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+    Route::get('/notifikasi/{id}/read', [NotifikasiController::class, 'read'])->name('notifikasi.read');
+    Route::post('/notifikasi/read-all', [NotifikasiController::class, 'readAll'])->name('notifikasi.read-all');
+
+    // Pengajuan Izin / Dispensasi (Shared View & Create)
+    Route::get('/pengajuan-izin', [PengajuanIzinController::class, 'index'])->name('pengajuan.index');
+    Route::get('/pengajuan-izin/buat', [PengajuanIzinController::class, 'create'])->name('pengajuan.create');
+    Route::post('/pengajuan-izin', [PengajuanIzinController::class, 'store'])->name('pengajuan.store');
+    Route::get('/pengajuan-izin/{id}', [PengajuanIzinController::class, 'show'])->name('pengajuan.show');
+
+    // Approvals
+    Route::post('/pengajuan-izin/{id}/approve-piket', [PengajuanIzinController::class, 'approvePiket'])->name('pengajuan.approve.piket');
+    Route::post('/pengajuan-izin/{id}/approve-waka', [PengajuanIzinController::class, 'approveWaka'])->name('pengajuan.approve.waka');
+    Route::post('/pengajuan-izin/{id}/approve-kepala', [PengajuanIzinController::class, 'approveKepala'])->name('pengajuan.approve.kepala');
+    Route::post('/pengajuan-izin/{id}/resend-wa', [PengajuanIzinController::class, 'resendWa'])->name('pengajuan.resend-wa');
 });
 
 
@@ -86,10 +114,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
 
 // ======================================================
-// GURU ROLE ROUTES (ADMIN & GURU)
+// GURU ROLE ROUTES
 // ======================================================
 
-Route::middleware(['auth', 'role:admin,guru'])->prefix('guru-area')->group(function () {
+Route::middleware(['auth', 'role:admin,guru,wali_kelas'])->prefix('guru-area')->group(function () {
     Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('guru.dashboard');
     Route::get('/presensi-saya', [PresensiGuruController::class, 'index'])->name('guru.presensi-saya');
     Route::post('/presensi-masuk', [PresensiGuruController::class, 'presensiMasuk'])->name('guru.presensi-masuk');
@@ -99,37 +127,91 @@ Route::middleware(['auth', 'role:admin,guru'])->prefix('guru-area')->group(funct
 
 
 // ======================================================
-// PIKET ROLE ROUTES (ADMIN & PIKET)
+// PIKET ROLE ROUTES
 // ======================================================
 
 Route::middleware(['auth', 'role:admin,piket'])->prefix('piket-area')->group(function () {
     Route::get('/dashboard', [PiketDashboardController::class, 'index'])->name('piket.dashboard');
     Route::get('/presensi', [PresensiPiketController::class, 'index'])->name('piket.presensi');
     Route::post('/presensi-guru', [PresensiPiketController::class, 'storeGuru'])->name('piket.presensi-guru.store');
+    Route::get('/anak-sakit', [PengajuanIzinController::class, 'anakSakitPiket'])->name('piket.anak-sakit');
+    Route::post('/anak-sakit', [PengajuanIzinController::class, 'storeAnakSakitPiket'])->name('piket.anak-sakit.store');
     Route::post('/pengaturan', [PengaturanController::class, 'updatePiketSettings'])->name('piket.pengaturan.update');
 });
 
 
 // ======================================================
-// SISWA ROLE ROUTES
+// ORTU / SISWA ROLE ROUTES
 // ======================================================
 
-Route::middleware(['auth', 'role:siswa'])->prefix('siswa-area')->group(function () {
-    Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('siswa.dashboard');
-    Route::get('/jadwal-pelajaran', [SiswaDashboardController::class, 'jadwal'])->name('siswa.jadwal-pelajaran');
-    Route::get('/presensi-saya', [SiswaDashboardController::class, 'presensi'])->name('siswa.presensi-saya');
-    Route::get('/kelas-info', [SiswaDashboardController::class, 'kelas'])->name('siswa.kelas-info');
-    Route::post('/pengaturan', [PengaturanController::class, 'updateSiswaSettings'])->name('siswa.pengaturan.update');
+Route::middleware(['auth', 'role:admin,ortu,siswa'])->prefix('ortu-area')->group(function () {
+    Route::get('/dashboard', [OrtuDashboardController::class, 'index'])->name('ortu.dashboard');
+    Route::get('/data-anak', [OrtuDashboardController::class, 'dataAnak'])->name('ortu.data-anak');
+    Route::get('/jadwal-anak', [OrtuDashboardController::class, 'jadwal'])->name('ortu.jadwal-anak');
+    Route::get('/presensi-anak', [OrtuDashboardController::class, 'presensi'])->name('ortu.presensi');
+    Route::get('/rekap-bulanan', [OrtuDashboardController::class, 'rekapBulanan'])->name('ortu.rekap-bulanan');
+    Route::get('/notifikasi-ortu', [OrtuDashboardController::class, 'notifikasi'])->name('ortu.notifikasi');
+    Route::get('/pesan-ortu', [OrtuDashboardController::class, 'pesan'])->name('ortu.pesan');
+    
+    // Alias route names for compatibility
+    Route::get('/jadwal-pelajaran', [OrtuDashboardController::class, 'jadwal'])->name('siswa.jadwal-pelajaran');
+    Route::get('/presensi-saya', [OrtuDashboardController::class, 'presensi'])->name('siswa.presensi-saya');
+    Route::get('/kelas-info', [OrtuDashboardController::class, 'dataAnak'])->name('siswa.kelas-info');
+    Route::get('/siswa-dashboard', [OrtuDashboardController::class, 'index'])->name('siswa.dashboard');
 });
 
 
 // ======================================================
-// MASTER DATA & FEATURE ROUTES (ADMIN, GURU, PIKET)
+// WALI KELAS ROLE ROUTES
 // ======================================================
 
-Route::middleware(['auth', 'role:admin,guru,piket'])->group(function () {
+Route::middleware(['auth', 'role:admin,guru,wali_kelas'])->prefix('walikelas-area')->group(function () {
+    Route::get('/dashboard', [WaliKelasController::class, 'index'])->name('walikelas.dashboard');
+    Route::get('/data-kelas', [WaliKelasController::class, 'dataKelas'])->name('walikelas.data-kelas');
+    Route::get('/rekap-presensi', [WaliKelasController::class, 'rekapPresensi'])->name('walikelas.rekap-presensi');
+    Route::get('/jurnal', [WaliKelasController::class, 'jurnal'])->name('walikelas.jurnal');
+});
 
-    // TRASH ROUTES (Must be defined BEFORE resource routes)
+
+// ======================================================
+// WAKA ROLE ROUTES (KESISWAAN & SDM)
+// ======================================================
+
+Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm'])->prefix('waka-area')->group(function () {
+    Route::get('/dashboard', [WakaDashboardController::class, 'index'])->name('waka.dashboard');
+    Route::get('/persetujuan', [WakaDashboardController::class, 'daftarPersetujuan'])->name('waka.persetujuan.index');
+    Route::get('/persetujuan/{id}', [WakaDashboardController::class, 'show'])->name('waka.persetujuan.show');
+    Route::post('/persetujuan/{id}/proses', [WakaDashboardController::class, 'prosesKeputusan'])->name('waka.persetujuan.proses');
+});
+
+
+// ======================================================
+// KEPALA SEKOLAH ROLE ROUTES
+// ======================================================
+
+Route::middleware(['auth', 'role:admin,kepala_sekolah'])->prefix('kepala-area')->group(function () {
+    Route::get('/dashboard', [KepalaSekolahController::class, 'index'])->name('kepala.dashboard');
+});
+
+
+// ======================================================
+// SATPAM ROLE ROUTES
+// ======================================================
+
+Route::middleware(['auth', 'role:admin,satpam'])->prefix('satpam-area')->group(function () {
+    Route::get('/dashboard', [SatpamController::class, 'index'])->name('satpam.dashboard');
+    Route::get('/periksa/{id}', [SatpamController::class, 'show'])->name('satpam.show');
+    Route::post('/verifikasi/{id}', [SatpamController::class, 'verifikasi'])->name('satpam.verifikasi');
+});
+
+
+// ======================================================
+// MASTER DATA & FEATURE ROUTES (ADMIN, GURU, PIKET, WALI KELAS)
+// ======================================================
+
+Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka_sdm,kepala_sekolah'])->group(function () {
+
+    // TRASH ROUTES
     Route::get('/guru/trash', [GuruController::class, 'trash'])->name('guru.trash');
     Route::put('/guru/{id}/restore', [GuruController::class, 'restore'])->name('guru.restore');
     Route::delete('/guru/{id}/force-delete', [GuruController::class, 'forceDelete'])->name('guru.forceDelete');
@@ -146,6 +228,10 @@ Route::middleware(['auth', 'role:admin,guru,piket'])->group(function () {
     Route::put('/jurusan/{id}/restore', [JurusanController::class, 'restore'])->name('jurusan.restore');
     Route::delete('/jurusan/{id}/force-delete', [JurusanController::class, 'forceDelete'])->name('jurusan.forceDelete');
 
+    Route::get('/mapel/trash', [MapelController::class, 'trash'])->name('mapel.trash');
+    Route::put('/mapel/{id}/restore', [MapelController::class, 'restore'])->name('mapel.restore');
+    Route::delete('/mapel/{id}/force-delete', [MapelController::class, 'forceDelete'])->name('mapel.forceDelete');
+
     Route::get('/jadwal/trash', [JadwalController::class, 'trash'])->name('jadwal.trash');
     Route::put('/jadwal/{id}/restore', [JadwalController::class, 'restore'])->name('jadwal.restore');
     Route::delete('/jadwal/{id}/force-delete', [JadwalController::class, 'forceDelete'])->name('jadwal.forceDelete');
@@ -159,6 +245,7 @@ Route::middleware(['auth', 'role:admin,guru,piket'])->group(function () {
     Route::resource('siswa', SiswaController::class);
     Route::resource('kelas', KelasController::class);
     Route::resource('jurusan', JurusanController::class);
+    Route::resource('mapel', MapelController::class);
     Route::resource('jadwal', JadwalController::class);
     Route::resource('jurnal-harian', JurnalHarianController::class);
 

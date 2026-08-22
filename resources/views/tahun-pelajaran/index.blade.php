@@ -1,55 +1,93 @@
 @extends('layouts.app')
 
-@section('content')
-<h2>Tahun Pelajaran</h2>
+@section('title', 'Tahun Pelajaran — Jurnal Sekolah')
+@section('page-title', 'Tahun Pelajaran')
 
-<div style="border:1px solid #ccc; padding:15px; margin-bottom:20px; max-width:500px;">
-<h3>Tambah Tahun Pelajaran</h3>
-<form action="{{ route('tahun-pelajaran.store') }}" method="POST">
-    @csrf
-    <table>
-        <tr><td><label>Tahun Pelajaran *</label></td><td><input type="text" name="tahun" placeholder="Contoh: 2025/2026" required style="width:200px; padding:5px;"></td></tr>
-        <tr><td><label>Semester *</label></td><td>
-            <select name="semester" required style="padding:5px;">
-                <option value="Ganjil">Ganjil</option>
-                <option value="Genap">Genap</option>
-            </select>
-        </td></tr>
-        <tr><td><label>Jadikan Aktif</label></td><td><input type="checkbox" name="aktif" value="1"></td></tr>
-        <tr><td></td><td><button type="submit" style="padding:8px 20px; margin-top:10px;">SIMPAN</button></td></tr>
-    </table>
-</form>
+@section('content')
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Master Tahun Pelajaran</h1>
+        <p class="page-subtitle">Kelola Tahun Pelajaran & Semester Aktif Sekolah</p>
+    </div>
 </div>
 
-<h3>Daftar Tahun Pelajaran</h3>
-@if($tahun->count() > 0)
-<table border="1" cellpadding="8" style="border-collapse:collapse; max-width:600px;">
-    <thead><tr><th>No</th><th>Tahun</th><th>Semester</th><th>Status</th><th>Aksi</th></tr></thead>
-    <tbody>
-    @foreach($tahun as $tp)
-    <tr>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $tp->tahun }}</td>
-        <td>{{ $tp->semester }}</td>
-        <td>{{ $tp->aktif ? '✅ AKTIF' : 'Tidak Aktif' }}</td>
-        <td>
-            @if(!$tp->aktif)
-            <form action="{{ route('tahun-pelajaran.set-aktif', $tp->id_tahun_pelajaran) }}" method="POST" style="display:inline;">
+<div class="grid-2">
+    <!-- TAMPILAN ATAU FORM SEKARANG -->
+    <div class="card mb-24">
+        <div class="card-header">
+            <h3 class="card-title">Atur Tahun Pelajaran Aktif</h3>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('tahun-pelajaran.store') }}" method="POST">
                 @csrf
-                <button type="submit" style="color:green;">Aktifkan</button>
+                <div class="form-group">
+                    <label class="form-label" for="tahun_pelajaran">Tahun Pelajaran <span class="req">*</span></label>
+                    <input type="text" id="tahun_pelajaran" name="tahun_pelajaran" placeholder="Contoh: 2025/2026" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="semester">Semester <span class="req">*</span></label>
+                    <select id="semester" name="semester" class="form-control" required>
+                        <option value="Ganjil">Ganjil</option>
+                        <option value="Genap">Genap</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg mt-16">
+                    SIMPAN & SET AKTIF
+                </button>
             </form>
-            | 
+        </div>
+    </div>
+
+    <!-- RIWAYAT TAHUN PELAJARAN -->
+    <div class="card mb-24">
+        <div class="card-header">
+            <h3 class="card-title">Daftar Tahun Pelajaran</h3>
+        </div>
+        <div class="card-body" style="padding:0;">
+            @if($tahunPelajaran->count() > 0)
+            <div class="table-wrapper" style="border:none; border-radius:0;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tahun Pelajaran</th>
+                            <th>Semester</th>
+                            <th>Status</th>
+                            <th class="action-col">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($tahunPelajaran as $tp)
+                        <tr>
+                            <td class="fw-bold text-navy">{{ $tp->tahun_pelajaran }}</td>
+                            <td>{{ $tp->semester }}</td>
+                            <td>
+                                @if($tp->aktif)
+                                    <span class="badge badge-success">Aktif</span>
+                                @else
+                                    <span class="badge badge-gray">Nonaktif</span>
+                                @endif
+                            </td>
+                            <td class="action-col">
+                                @if(!$tp->aktif)
+                                <form action="{{ route('tahun-pelajaran.set-aktif', $tp->id_tp) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm">Aktifkan</button>
+                                </form>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @else
+            <div class="empty-state">
+                <div class="empty-state-text">Belum ada data tahun pelajaran.</div>
+            </div>
             @endif
-            <form action="{{ route('tahun-pelajaran.destroy', $tp->id_tahun_pelajaran) }}" method="POST" style="display:inline;">
-                @csrf @method('DELETE')
-                <button type="submit" style="color:red;" onclick="return confirm('Hapus tahun pelajaran ini?')">Hapus</button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
-    </tbody>
-</table>
-@else
-<p>Belum ada data tahun pelajaran.</p>
-@endif
+        </div>
+    </div>
+</div>
 @endsection
