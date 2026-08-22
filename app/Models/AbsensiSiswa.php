@@ -15,6 +15,8 @@ class AbsensiSiswa extends Model
         'id_jurnal',
         'id_siswa',
         'status',
+        'jam_masuk',
+        'menit_terlambat',
         'keterangan',
         'dicatat_oleh',
         'created_at',

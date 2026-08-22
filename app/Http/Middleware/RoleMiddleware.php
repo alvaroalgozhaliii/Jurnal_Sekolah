@@ -9,12 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     * @param  string  ...$roles
-     */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         if (!Auth::check()) {
@@ -30,7 +24,24 @@ class RoleMiddleware
             return redirect()->route('login')->with('error', 'Akun Anda tidak aktif.');
         }
 
-        if (!in_array($user->role, $roles)) {
+        // Always allow admin on general management routes unless specifically restricted
+        if ($user->role === 'admin') {
+            return $next($request);
+        }
+
+        // Map 'siswa' requirement to 'ortu'
+        $allowedRoles = [];
+        foreach ($roles as $r) {
+            $allowedRoles[] = $r;
+            if ($r === 'siswa') {
+                $allowedRoles[] = 'ortu';
+            }
+            if ($r === 'ortu') {
+                $allowedRoles[] = 'siswa';
+            }
+        }
+
+        if (!in_array($user->role, $allowedRoles)) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
 

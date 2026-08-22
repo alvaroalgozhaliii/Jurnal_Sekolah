@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\AbsensiSiswa;
 use App\Models\JurnalHarian;
 use App\Models\Siswa;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AbsensiSiswaController extends Controller
 {
@@ -15,9 +17,10 @@ class AbsensiSiswaController extends Controller
         $user = Auth::user();
         $query = AbsensiSiswa::with(['jurnal.jadwal.kelas', 'siswa', 'user']);
 
-        if ($user->isSiswa() && $user->siswa) {
-            $query->where('id_siswa', $user->siswa->id_siswa);
-        } elseif ($user->isGuru() && $user->guru) {
+        if ($user->isOrtu()) {
+            $anakIds = $user->anakList->pluck('id_siswa');
+            $query->whereIn('id_siswa', $anakIds);
+        } elseif ($user->isGuru() && !$user->isAdmin() && $user->guru) {
             $guruId = $user->guru->id_guru;
             $query->whereHas('jurnal', function ($q) use ($guruId) {
                 $q->where('id_guru', $guruId);
@@ -30,6 +33,7 @@ class AbsensiSiswaController extends Controller
 
     public function create(Request $request)
     {
+        $user = Auth::user();
         $idJurnal = $request->get('id_jurnal');
         $jurnalSelected = null;
         $siswaList = collect();
@@ -39,36 +43,91 @@ class AbsensiSiswaController extends Controller
             if ($jurnalSelected && $jurnalSelected->jadwal && $jurnalSelected->jadwal->kelas) {
                 $siswaList = Siswa::where('id_kelas', $jurnalSelected->jadwal->id_kelas)->get();
             }
+        } else {
+            // Auto pick latest active journal for teacher
+            if ($user->isGuru() && $user->guru) {
+                $jurnalSelected = JurnalHarian::with(['jadwal.kelas.siswa'])
+                    ->where('id_guru', $user->guru->id_guru)
+                    ->orderBy('tanggal', 'desc')
+                    ->first();
+                if ($jurnalSelected && $jurnalSelected->jadwal) {
+                    $siswaList = Siswa::where('id_kelas', $jurnalSelected->jadwal->id_kelas)->get();
+                }
+            }
         }
 
-        $jurnalList = JurnalHarian::with('jadwal.kelas')->orderBy('tanggal', 'desc')->get();
+        if ($user->isGuru() && $user->guru) {
+            $jurnalList = JurnalHarian::with('jadwal.kelas')
+                ->where('id_guru', $user->guru->id_guru)
+                ->orderBy('tanggal', 'desc')
+                ->get();
+        } else {
+            $jurnalList = JurnalHarian::with('jadwal.kelas')->orderBy('tanggal', 'desc')->get();
+        }
+
         return view('absensi-siswa.create', compact('jurnalList', 'jurnalSelected', 'siswaList'));
     }
 
     public function storeBatch(Request $request)
     {
         $request->validate([
-            'id_jurnal' => 'required',
+            'id_jurnal' => 'required|exists:jurnal_harian,id_jurnal',
             'absensi' => 'required|array', // [id_siswa => status]
         ]);
 
         $idJurnal = $request->id_jurnal;
+        $jurnal = JurnalHarian::findOrFail($idJurnal);
 
         foreach ($request->absensi as $idSiswa => $status) {
             $keterangan = $request->keterangan[$idSiswa] ?? null;
+            $jamMasuk = $request->jam_masuk[$idSiswa] ?? null;
+            $menitTerlambat = $request->menit_terlambat[$idSiswa] ?? null;
 
-            AbsensiSiswa::updateOrCreate(
+            if ($status === 'terlambat' && !$jamMasuk) {
+                $jamMasuk = Carbon::now()->format('H:i');
+            }
+
+            $record = AbsensiSiswa::updateOrCreate(
                 [
                     'id_jurnal' => $idJurnal,
                     'id_siswa' => $idSiswa,
                 ],
                 [
                     'status' => $status,
+                    'jam_masuk' => $jamMasuk,
+                    'menit_terlambat' => $menitTerlambat,
                     'keterangan' => $keterangan,
                     'dicatat_oleh' => Auth::id(),
                     'created_at' => now(),
                 ]
             );
+
+            // Send notification to Ortu if ALPA
+            if ($status === 'alpa') {
+                $siswa = Siswa::with('ortu')->find($idSiswa);
+                if ($siswa) {
+                    // Send to linked ortu accounts
+                    foreach ($siswa->ortu as $ortuUser) {
+                        Notifikasi::kirim(
+                            $ortuUser->id_user,
+                            'Pemberitahuan ALPA Siswa',
+                            'Anak Anda, ' . $siswa->nama . ', tercatat ALPA pada tanggal ' . $jurnal->tanggal . ' (' . $jurnal->mapel . ').',
+                            route('ortu.presensi'),
+                            'alpa'
+                        );
+                    }
+                    // Fallback to direct id_user if pivot empty
+                    if ($siswa->ortu->isEmpty() && $siswa->id_user) {
+                        Notifikasi::kirim(
+                            $siswa->id_user,
+                            'Pemberitahuan ALPA Siswa',
+                            'Anak Anda, ' . $siswa->nama . ', tercatat ALPA pada tanggal ' . $jurnal->tanggal . ' (' . $jurnal->mapel . ').',
+                            route('ortu.presensi'),
+                            'alpa'
+                        );
+                    }
+                }
+            }
         }
 
         return redirect()->route('absensi-siswa.index')->with('success', 'Absensi siswa berhasil dicatat.');
@@ -90,14 +149,33 @@ class AbsensiSiswaController extends Controller
     {
         $request->validate([
             'status' => 'required|in:hadir,sakit,izin,alpa,terlambat',
+            'jam_masuk' => 'nullable',
+            'menit_terlambat' => 'nullable|integer',
         ]);
 
-        $absensi = AbsensiSiswa::findOrFail($id);
+        $absensi = AbsensiSiswa::with('jurnal.jadwal')->findOrFail($id);
         $absensi->update([
             'status' => $request->status,
+            'jam_masuk' => $request->jam_masuk,
+            'menit_terlambat' => $request->menit_terlambat,
             'keterangan' => $request->keterangan,
             'dicatat_oleh' => Auth::id(),
         ]);
+
+        if ($request->status === 'alpa') {
+            $siswa = Siswa::with('ortu')->find($absensi->id_siswa);
+            if ($siswa) {
+                foreach ($siswa->ortu as $ortuUser) {
+                    Notifikasi::kirim(
+                        $ortuUser->id_user,
+                        'Pemberitahuan ALPA Siswa',
+                        'Anak Anda, ' . $siswa->nama . ', tercatat ALPA pada tanggal ' . ($absensi->jurnal?->tanggal ?? date('Y-m-d')) . '.',
+                        route('ortu.presensi'),
+                        'alpa'
+                    );
+                }
+            }
+        }
 
         return redirect()->route('absensi-siswa.index')->with('success', 'Data absensi siswa berhasil diubah.');
     }

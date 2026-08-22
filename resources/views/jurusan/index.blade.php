@@ -1,34 +1,57 @@
 @extends('layouts.app')
 
-@section('content')
-<h2>Data Jurusan</h2>
-<a href="{{ route('jurusan.create') }}">+ Tambah Jurusan</a>
-&nbsp;|&nbsp;
-<a href="{{ route('jurusan.trash') }}">Lihat Trash</a>
-<br><br>
+@section('title', 'Data Jurusan — Jurnal Sekolah')
+@section('page-title', 'Data Jurusan')
 
-<table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
-    <thead><tr><th>No</th><th>Nama Jurusan</th><th>Kode Rombel</th><th>Maks Rombel</th><th>Jumlah Kelas</th><th>Aksi</th></tr></thead>
-    <tbody>
-    @forelse($jurusan as $item)
-    <tr>
-        <td>{{ $loop->iteration }}</td>
-        <td>{{ $item->nama_jurusan }}</td>
-        <td>{{ $item->rombel }}</td>
-        <td>{{ $item->maks_rombel }}</td>
-        <td>{{ $item->kelas ? $item->kelas->count() : 0 }}</td>
-        <td>
-            <a href="{{ route('jurusan.show', $item->id_jurusan) }}">Detail</a> |
-            <a href="{{ route('jurusan.edit', $item->id_jurusan) }}">Edit</a> |
-            <form action="{{ route('jurusan.destroy', $item->id_jurusan) }}" method="POST" style="display:inline;">
-                @csrf @method('DELETE')
-                <button type="submit" onclick="return confirm('Hapus jurusan ini?')">Hapus</button>
-            </form>
-        </td>
-    </tr>
-    @empty
-    <tr><td colspan="6" style="text-align:center;">Belum ada data jurusan.</td></tr>
-    @endforelse
-    </tbody>
-</table>
+@section('content')
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Data Jurusan</h1>
+        <p class="page-subtitle">Kelola Master Program Keahlian / Jurusan Sekolah</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ route('jurusan.create') }}" class="btn btn-primary">+ Tambah Jurusan</a>
+        <a href="{{ route('jurusan.trash') }}" class="btn btn-secondary">Lihat Trash</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body" style="padding:0;">
+        @if($jurusan->count() > 0)
+        <div class="table-wrapper" style="border:none; border-radius:0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="no-col">No</th>
+                        <th>Kode Jurusan</th>
+                        <th>Nama Jurusan</th>
+                        <th class="action-col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($jurusan as $item)
+                    <tr>
+                        <td class="no-col">{{ $loop->iteration }}</td>
+                        <td class="text-muted fw-bold">{{ $item->kode_jurusan ?? '-' }}</td>
+                        <td class="fw-bold text-navy">{{ $item->nama_jurusan }}</td>
+                        <td class="action-col">
+                            <a href="{{ route('jurusan.show', $item->id_jurusan) }}" class="btn btn-secondary btn-sm">Detail</a>
+                            <a href="{{ route('jurusan.edit', $item->id_jurusan) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <form action="{{ route('jurusan.destroy', $item->id_jurusan) }}" method="POST" style="display:inline;">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus jurusan ini?')">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @else
+        <div class="empty-state">
+            <div class="empty-state-text">Tidak ada data jurusan.</div>
+        </div>
+        @endif
+    </div>
+</div>
 @endsection

@@ -56,6 +56,13 @@ class GuruDashboardController extends Controller
             ->where('tanggal', $todayDate)
             ->first();
 
+        // Statistik Mengajar Guru untuk Grafik Analytics
+        $allJurnalGuru = JurnalHarian::where('id_guru', $guru->id_guru)->get();
+        $jurnalTerlaksana = $allJurnalGuru->where('status_keterlaksanaan', 'terlaksana')->count();
+        $jurnalPengganti = $allJurnalGuru->where('status_keterlaksanaan', 'pengganti')->count();
+        $jurnalTidakTerlaksana = $allJurnalGuru->whereIn('status_keterlaksanaan', ['tidak_terlaksana', 'kosong'])->count();
+        $totalJurnalGuru = $allJurnalGuru->count();
+
         // Pengingat Jurnal
         $pengingatJurnal = [];
         foreach ($jadwalHariIni as $j) {
@@ -69,7 +76,11 @@ class GuruDashboardController extends Controller
             'jadwalHariIni',
             'jurnalHariIni',
             'presensiHariIni',
-            'pengingatJurnal'
+            'pengingatJurnal',
+            'jurnalTerlaksana',
+            'jurnalPengganti',
+            'jurnalTidakTerlaksana',
+            'totalJurnalGuru'
         ));
     }
 }

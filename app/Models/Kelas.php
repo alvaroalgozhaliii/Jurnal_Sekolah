@@ -19,12 +19,18 @@ class Kelas extends Model
         'tingkat',
         'id_jurusan',
         'wali_kelas',
+        'id_guru_walikelas',
         'deleted_at',
     ];
 
     public function jurusan()
     {
         return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
+    }
+
+    public function guruWaliKelas()
+    {
+        return $this->belongsTo(Guru::class, 'id_guru_walikelas', 'id_guru');
     }
 
     public function siswa()
