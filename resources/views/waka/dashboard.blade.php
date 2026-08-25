@@ -129,7 +129,7 @@
                     @php
                         $st = strtolower($r->status);
                         $badgeCls = match($st) {
-                            'verified', 'disetujui_waka', 'completed' => 'badge-success',
+                            'verified', 'disetujui_waka', 'completed', 'selesai' => 'badge-success',
                             default => 'badge-danger'
                         };
                     @endphp

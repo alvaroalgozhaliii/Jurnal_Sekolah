@@ -14,12 +14,12 @@ class SatpamController extends Controller
     {
         $izinList = PengajuanIzin::with(['siswa.kelas.jurusan', 'guru', 'pengaju', 'wakaApprover'])
             ->where('butuh_satpam', true)
-            ->whereIn('status', ['disetujui_waka', 'pending_satpam', 'verified', 'ditolak_satpam', 'completed'])
+            ->whereIn('status', ['menunggu_satpam', 'disetujui_waka', 'pending_satpam', 'verified', 'ditolak_satpam', 'completed'])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $antreanVerifikasi = $izinList->where('status', 'disetujui_waka');
-        $riwayatVerifikasi = $izinList->whereIn('status', ['verified', 'ditolak_satpam', 'completed']);
+        $antreanVerifikasi = $izinList->whereIn('status', ['menunggu_satpam', 'disetujui_waka']);
+        $riwayatVerifikasi = $izinList->whereIn('status', ['verified', 'ditolak_satpam', 'completed', 'selesai']);
 
         return view('satpam.dashboard', compact('izinList', 'antreanVerifikasi', 'riwayatVerifikasi'));
     }
@@ -58,12 +58,12 @@ class SatpamController extends Controller
 
         $pengajuan = PengajuanIzin::findOrFail($id);
 
-        if (!in_array($pengajuan->status, ['disetujui_waka', 'pending_satpam', 'completed'])) {
+        if (!in_array($pengajuan->status, ['menunggu_satpam', 'disetujui_waka', 'pending_satpam'])) {
             return redirect()->back()->with('error', 'Pengajuan ini belum disetujui oleh Waka sehingga belum dapat diverifikasi.');
         }
 
         $statusSebelum = $pengajuan->status;
-        $statusSesudah = ($request->status_satpam === 'valid') ? 'verified' : 'ditolak_satpam';
+        $statusSesudah = ($request->status_satpam === 'valid') ? 'selesai' : 'ditolak_satpam';
 
         $pengajuan->update([
             'status' => $statusSesudah,

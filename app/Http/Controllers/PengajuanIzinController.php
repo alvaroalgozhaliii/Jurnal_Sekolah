@@ -120,7 +120,7 @@ class PengajuanIzinController extends Controller
         // Tentukan status awal & alur approval
         // Dispen Guru: langsung PENDING_WAKA (Waka SDM), butuh_satpam = 0 (Tanpa Satpam)
         // Dispen Siswa: langsung PENDING_WAKA (Waka Kesiswaan), butuh_satpam = 1
-        $statusAwal = 'pending_waka';
+        $statusAwal = $isPiket ? 'menunggu_waka' : 'pending_waka';
         $butuhSatpam = !$isGuruDispen && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk']);
 
         $pengajuan = PengajuanIzin::create([
@@ -205,7 +205,7 @@ class PengajuanIzinController extends Controller
         $isPiketFlow = (bool) $pengajuan->id_waka_tujuan;
 
         if ($request->keputusan === 'setujui') {
-            $statusSesudah = 'disetujui_waka';
+            $statusSesudah = $isPiketFlow ? 'menunggu_satpam' : 'disetujui_waka';
             $pengajuan->update([
                 'status' => $statusSesudah,
                 'id_waka_approver' => $user->id_user,

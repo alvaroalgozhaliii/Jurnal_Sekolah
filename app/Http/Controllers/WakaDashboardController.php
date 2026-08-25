@@ -40,11 +40,11 @@ class WakaDashboardController extends Controller
             });
         }
 
-        $pengajuanPending = (clone $pengajuanQuery)->where('status', 'pending_waka')->get();
-        $pengajuanRiwayat = (clone $pengajuanQuery)->where('status', '!=', 'pending_waka')->orderBy('created_at', 'desc')->take(10)->get();
+        $pengajuanPending = (clone $pengajuanQuery)->whereIn('status', ['pending_waka', 'menunggu_waka'])->get();
+        $pengajuanRiwayat = (clone $pengajuanQuery)->whereNotIn('status', ['pending_waka', 'menunggu_waka'])->orderBy('created_at', 'desc')->take(10)->get();
 
         $totalPending = $pengajuanPending->count();
-        $totalDisetujui = (clone $pengajuanQuery)->whereIn('status', ['disetujui_waka', 'pending_kepala', 'disetujui_kepala', 'verified', 'completed'])->count();
+        $totalDisetujui = (clone $pengajuanQuery)->whereIn('status', ['disetujui_waka', 'pending_kepala', 'menunggu_satpam', 'disetujui_kepala', 'verified', 'completed', 'selesai'])->count();
         $totalDitolak = (clone $pengajuanQuery)->where('status', 'like', 'ditolak_%')->count();
 
         return view('waka.dashboard', compact(
@@ -76,7 +76,7 @@ class WakaDashboardController extends Controller
             });
         }
 
-        $pendingList = (clone $query)->where('status', 'pending_waka')->orderBy('created_at', 'desc')->get();
+        $pendingList = (clone $query)->whereIn('status', ['pending_waka', 'menunggu_waka'])->orderBy('created_at', 'desc')->get();
         $disetujuiList = (clone $query)->whereIn('status', ['disetujui_waka', 'pending_kepala', 'disetujui_kepala', 'verified', 'completed'])->orderBy('created_at', 'desc')->get();
         $ditolakList = (clone $query)->where('status', 'like', 'ditolak_%')->orderBy('created_at', 'desc')->get();
 
@@ -111,7 +111,7 @@ class WakaDashboardController extends Controller
         $user = Auth::user();
         $pengajuan = PengajuanIzin::findOrFail($id);
 
-        if (!$this->canProcess($user, $pengajuan) || $pengajuan->status !== 'pending_waka') {
+        if (!$this->canProcess($user, $pengajuan) || !in_array($pengajuan->status, ['pending_waka', 'menunggu_waka'])) {
             abort(403);
         }
 
@@ -128,7 +128,9 @@ class WakaDashboardController extends Controller
         if ($request->keputusan === 'setujui') {
             // JIKA DISPEN GURU -> Diteruskan ke Kepala Sekolah (BUKAN Satpam)
             // JIKA DISPEN SISWA -> Diteruskan ke Satpam
-            $statusSesudah = $isGuru && !$isPiketFlow ? 'pending_kepala' : 'disetujui_waka';
+            $statusSesudah = $isPiketFlow
+                ? 'menunggu_satpam'
+                : ($isGuru ? 'pending_kepala' : 'disetujui_waka');
 
             $pengajuan->update([
                 'status' => $statusSesudah,

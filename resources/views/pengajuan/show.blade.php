@@ -27,9 +27,9 @@
             @php
                 $st = strtolower($pengajuan->status);
                 $badgeCls = match($st) {
-                    'verified', 'disetujui_satpam', 'completed' => 'badge-success',
-                    'disetujui_waka', 'pending_satpam' => 'badge-info',
-                    'pending_waka', 'pending_piket' => 'badge-warning',
+                    'verified', 'disetujui_satpam', 'completed', 'selesai' => 'badge-success',
+                    'disetujui_waka', 'menunggu_satpam', 'pending_satpam' => 'badge-info',
+                    'pending_waka', 'menunggu_waka', 'pending_piket' => 'badge-warning',
                     default => 'badge-danger'
                 };
             @endphp
