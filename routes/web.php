@@ -138,6 +138,7 @@ Route::middleware(['auth', 'role:admin,piket'])->prefix('piket-area')->group(fun
     Route::post('/presensi-guru', [PresensiPiketController::class, 'storeGuru'])->name('piket.presensi-guru.store');
     Route::get('/anak-sakit', [PengajuanIzinController::class, 'anakSakitPiket'])->name('piket.anak-sakit');
     Route::post('/anak-sakit', [PengajuanIzinController::class, 'storeAnakSakitPiket'])->name('piket.anak-sakit.store');
+    Route::get('/pengajuan-dispen', [PengajuanIzinController::class, 'create'])->name('piket.pengajuan.create');
     Route::post('/pengaturan', [PengaturanController::class, 'updatePiketSettings'])->name('piket.pengaturan.update');
 });
 

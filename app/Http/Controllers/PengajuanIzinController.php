@@ -71,6 +71,7 @@ class PengajuanIzinController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+        $isPiket = $user->isPiket();
 
         // Fallback jika kategori tidak terkirim dari form
         if (!$request->filled('kategori')) {
@@ -82,8 +83,10 @@ class PengajuanIzinController extends Controller
         }
 
         $request->validate([
-            'kategori' => 'required|in:dispensasi,izin_masuk,izin_keluar,sakit,izin_guru',
-            'id_siswa' => 'nullable|exists:siswa,id_siswa',
+            'kategori' => $isPiket
+                ? 'required|in:dispensasi,izin_masuk,izin_keluar,sakit'
+                : 'required|in:dispensasi,izin_masuk,izin_keluar,sakit,izin_guru',
+            'id_siswa' => $isPiket ? 'required|exists:siswa,id_siswa' : 'nullable|exists:siswa,id_siswa',
             'id_guru' => 'nullable|exists:guru,id_guru',
             'tanggal' => 'required|date',
             'jam_mulai' => 'nullable',
@@ -96,7 +99,7 @@ class PengajuanIzinController extends Controller
         ]);
 
         $wakaTujuan = null;
-        if ($user->isPiket()) {
+        if ($isPiket) {
             $wakaTujuan = JadwalWaka::wakaBertugasPada($request->tanggal);
             if (!$wakaTujuan || !$wakaTujuan->waka) {
                 return back()->withInput()->with('error', 'Pengajuan tidak dapat dikirim karena belum ada Waka yang dijadwalkan pada tanggal tersebut.');
@@ -148,7 +151,7 @@ class PengajuanIzinController extends Controller
             'Pengajuan ' . strtoupper(str_replace('_', ' ', $request->kategori)) . ' dibuat oleh ' . $user->nama
         );
 
-        if (!$user->isPiket()) {
+        if (!$isPiket) {
             $targetRole = ($request->kategori === 'izin_guru') ? 'waka_sdm' : 'waka_kesiswaan';
             Notifikasi::kirimKeRole(
                 $targetRole,
@@ -159,7 +162,7 @@ class PengajuanIzinController extends Controller
             );
         }
 
-        $flashMessage = $user->isPiket()
+        $flashMessage = $isPiket
             ? 'Pengajuan dispen berhasil dibuat dan diarahkan ke ' . $wakaTujuan->waka->nama . '.'
             : 'Pengajuan dispensasi/izin berhasil dibuat dan diteruskan ke Waka.';
 

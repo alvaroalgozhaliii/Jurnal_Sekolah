@@ -42,9 +42,11 @@
             <button type="button" id="btn-tab-siswa" onclick="setSubjekType('siswa')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'siswa' ? 'background:#1e3a8a; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
                 👨‍🎓 Dispensasi Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)
             </button>
-            <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
-                👨‍🏫 Dispensasi Guru (Alur: Piket &rarr; Waka SDM &rarr; Kepsek)
-            </button>
+            @if(!Auth::user()->isPiket())
+                <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
+                    👨‍🏫 Dispensasi Guru (Alur: Piket &rarr; Waka SDM &rarr; Kepsek)
+                </button>
+            @endif
         </div>
         @endif
 
