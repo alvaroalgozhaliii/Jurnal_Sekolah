@@ -193,7 +193,10 @@ Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm'])->prefix('waka-
 
 Route::middleware(['auth', 'role:admin,waka_kurikulum'])->prefix('waka-kurikulum-area')->group(function () {
     Route::get('/dashboard', [WakaKurikulumController::class, 'index'])->name('waka-kurikulum.dashboard');
+    Route::get('/jadwal-waka', [WakaKurikulumController::class, 'index'])->name('waka-kurikulum.index');
+    Route::get('/jadwal-waka/create', [WakaKurikulumController::class, 'create'])->name('waka-kurikulum.jadwal.create');
     Route::post('/jadwal-waka', [WakaKurikulumController::class, 'store'])->name('waka-kurikulum.jadwal.store');
+    Route::get('/jadwal-waka/{id}', [WakaKurikulumController::class, 'show'])->name('waka-kurikulum.jadwal.show');
     Route::get('/jadwal-waka/{id}/edit', [WakaKurikulumController::class, 'edit'])->name('waka-kurikulum.jadwal.edit');
     Route::put('/jadwal-waka/{id}', [WakaKurikulumController::class, 'update'])->name('waka-kurikulum.jadwal.update');
     Route::delete('/jadwal-waka/{id}', [WakaKurikulumController::class, 'destroy'])->name('waka-kurikulum.jadwal.destroy');
