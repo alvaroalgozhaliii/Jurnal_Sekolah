@@ -131,12 +131,18 @@
 
         <!-- WHATSAPP NOTIFICATION TRIGGER BOX -->
         @php
+            $isGuruDispen = ($pengajuan->kategori === 'izin_guru');
             $wakaUser = \App\Models\User::whereIn('role', ['waka_kesiswaan', 'waka_sdm'])->whereNotNull('no_hp')->first();
             $satpamUser = \App\Models\User::where('role', 'satpam')->whereNotNull('no_hp')->first();
+            $kepalaUser = \App\Models\User::where('role', 'kepala_sekolah')->whereNotNull('no_hp')->first();
+
             $wakaNoHp = $wakaUser->no_hp ?? '085707300240';
             $satpamNoHp = $satpamUser->no_hp ?? '081359472399';
+            $kepalaNoHp = $kepalaUser->no_hp ?? '085707300240';
+
             $waLinkWaka = \App\Services\WhatsAppService::getDirectWaLinkWaka($pengajuan, $wakaNoHp);
             $waLinkSatpam = \App\Services\WhatsAppService::getDirectWaLinkSatpam($pengajuan, $satpamNoHp);
+            $waLinkKepala = \App\Services\WhatsAppService::getDirectWaLinkKepala($pengajuan, $kepalaNoHp);
         @endphp
 
         <div class="card">
@@ -149,13 +155,18 @@
             <div class="card-body">
                 <div class="mb-16">
                     <strong class="d-block mb-4" style="font-size:12.5px;">1. Buka Chat WhatsApp Langsung (1-Klik):</strong>
-                    <p class="text-muted mb-8" style="font-size:11.5px;">Buka WhatsApp Web / HP dengan format pesan dan link approval resmi yang sudah terisi otomatis:</p>
+                    <p class="text-muted mb-8" style="font-size:11.5px;">Buka WhatsApp dengan format pesan dan link approval resmi yang sudah terisi otomatis:</p>
                     <div class="d-flex gap-8 flex-wrap">
                         <a href="{{ $waLinkWaka }}" target="_blank" class="btn btn-success btn-sm">
                             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             Kirim WA ke Waka ({{ $wakaNoHp }})
                         </a>
-                        @if($pengajuan->isDisetujuiWaka())
+                        @if($isGuruDispen && in_array($pengajuan->status, ['pending_kepala', 'disetujui_kepala', 'completed']))
+                        <a href="{{ $waLinkKepala }}" target="_blank" class="btn btn-success btn-sm">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            Kirim WA ke Kepala Sekolah ({{ $kepalaNoHp }})
+                        </a>
+                        @elseif(!$isGuruDispen && $pengajuan->isDisetujuiWaka())
                         <a href="{{ $waLinkSatpam }}" target="_blank" class="btn btn-success btn-sm">
                             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             Kirim WA ke Satpam ({{ $satpamNoHp }})
@@ -168,14 +179,20 @@
 
                 <div>
                     <strong class="d-block mb-4" style="font-size:12.5px;">2. Kirim Ulang via Gateway Server (Otomatis):</strong>
-                    <p class="text-muted mb-8" style="font-size:11.5px;">Kirim otomatis via API Gateway (memerlukan API key aktif di .env):</p>
+                    <p class="text-muted mb-8" style="font-size:11.5px;">Kirim otomatis via API Gateway Fonnte:</p>
                     <div class="d-flex gap-8 flex-wrap">
                         <form action="{{ route('pengajuan.resend-wa', $pengajuan->id_pengajuan) }}" method="POST">
                             @csrf
                             <input type="hidden" name="target" value="waka">
                             <button type="submit" class="btn btn-secondary btn-sm">Trigger API WA Waka</button>
                         </form>
-                        @if($pengajuan->isDisetujuiWaka())
+                        @if($isGuruDispen && in_array($pengajuan->status, ['pending_kepala', 'disetujui_kepala', 'completed']))
+                        <form action="{{ route('pengajuan.resend-wa', $pengajuan->id_pengajuan) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="target" value="kepala">
+                            <button type="submit" class="btn btn-secondary btn-sm">Trigger API WA Kepsek</button>
+                        </form>
+                        @elseif(!$isGuruDispen && $pengajuan->isDisetujuiWaka())
                         <form action="{{ route('pengajuan.resend-wa', $pengajuan->id_pengajuan) }}" method="POST">
                             @csrf
                             <input type="hidden" name="target" value="satpam">

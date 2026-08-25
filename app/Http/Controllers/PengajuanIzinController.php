@@ -56,6 +56,7 @@ class PengajuanIzinController extends Controller
     {
         $user = Auth::user();
         $siswas = collect();
+        $gurus = \App\Models\Guru::orderBy('nama', 'asc')->get();
 
         if ($user->isOrtu()) {
             $siswas = $user->anakList;
@@ -63,16 +64,26 @@ class PengajuanIzinController extends Controller
             $siswas = Siswa::with('kelas')->where('aktif', 1)->orderBy('nama', 'asc')->get();
         }
 
-        return view('pengajuan.create', compact('siswas'));
+        return view('pengajuan.create', compact('siswas', 'gurus'));
     }
 
     public function store(Request $request)
     {
         $user = Auth::user();
 
+        // Fallback jika kategori tidak terkirim dari form
+        if (!$request->filled('kategori')) {
+            if ($request->filled('id_guru') || $user->isGuru()) {
+                $request->merge(['kategori' => 'izin_guru']);
+            } else {
+                $request->merge(['kategori' => 'dispensasi']);
+            }
+        }
+
         $request->validate([
             'kategori' => 'required|in:dispensasi,izin_masuk,izin_keluar,sakit,izin_guru',
             'id_siswa' => 'nullable|exists:siswa,id_siswa',
+            'id_guru' => 'nullable|exists:guru,id_guru',
             'tanggal' => 'required|date',
             'jam_mulai' => 'nullable',
             'jam_selesai' => 'nullable',
@@ -90,15 +101,15 @@ class PengajuanIzinController extends Controller
             $fotoPath = $file->storeAs('uploads/bukti_sakit', $filename, 'public');
         }
 
-        $idGuru = $user->isGuru() ? $user->guru?->id_guru : null;
-        $idSiswa = $request->id_siswa;
+        $isGuruDispen = ($request->kategori === 'izin_guru');
+        $idGuru = $isGuruDispen ? ($request->id_guru ?? ($user->isGuru() ? $user->guru?->id_guru : null)) : null;
+        $idSiswa = $isGuruDispen ? null : $request->id_siswa;
 
         // Tentukan status awal & alur approval
-        // Jika Piket membuat dispen untuk siswa -> langsung PENDING_WAKA
-        // Jika Guru membuat dispen guru -> langsung PENDING_WAKA
-        // Jika Ortu membuat izin umum -> PENDING_WAKA
+        // Dispen Guru: langsung PENDING_WAKA (Waka SDM), butuh_satpam = 0 (Tanpa Satpam)
+        // Dispen Siswa: langsung PENDING_WAKA (Waka Kesiswaan), butuh_satpam = 1
         $statusAwal = 'pending_waka';
-        $butuhSatpam = in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk', 'izin_guru']);
+        $butuhSatpam = !$isGuruDispen && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk']);
 
         $pengajuan = PengajuanIzin::create([
             'kategori' => $request->kategori,
@@ -284,6 +295,8 @@ class PengajuanIzinController extends Controller
 
         if ($target === 'waka') {
             $res = $this->waService->kirimNotifDispenKeWaka($pengajuan);
+        } elseif ($target === 'kepala') {
+            $res = $this->waService->kirimNotifDispenKeKepala($pengajuan);
         } else {
             $res = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
         }
