@@ -54,8 +54,8 @@ class WhatsAppService
         }
 
         // Cek apakah API gateway sudah dikonfigurasi di .env
-        if (empty($this->apiUrl)) {
-            Log::info("WhatsApp (Simulasi - API_URL belum diatur): Kirim ke {$target}\nPesan:\n{$pesan}");
+        if (empty($this->apiUrl) || empty($this->apiKey)) {
+            Log::warning('WhatsApp belum dikonfigurasi; pesan tidak dikirim.', ['target' => $target]);
             return [
                 'success' => false,
                 'message' => 'WhatsApp Gateway API belum diisi di .env (WHATSAPP_API_URL).'
@@ -70,7 +70,6 @@ class WhatsAppService
             ];
 
             $response = Http::asForm()
-                ->withoutVerifying()
                 ->withHeaders([
                     'Authorization' => $this->apiKey,
                 ])
@@ -120,14 +119,14 @@ class WhatsAppService
         return "{$judul}\n\n"
              . "Ada pengajuan dispensasi/izin baru menunggu persetujuan Waka.\n\n"
              . "• *Nama:* {$nama}\n"
-             . "• *Status:* {$identitas}\n"
+             . "• *Identitas:* {$identitas}\n"
              . "• *Keperluan:* {$jenis}\n"
              . "• *Tanggal:* {$tanggal}\n"
              . "• *Waktu:* {$jam}\n"
              . "• *Alasan:* {$alasan}\n\n"
              . "Klik link di bawah ini untuk melihat detail dan memberikan persetujuan:\n"
              . "{$linkApproval}\n\n"
-             . "_Status: Menunggu Persetujuan Waka_";
+             . "_Status Pengajuan: {$pengajuan->status}_";
     }
 
     /**
@@ -175,12 +174,13 @@ class WhatsAppService
         $linkSatpam = $baseUrl . '/satpam-area/periksa/' . $pengajuan->id_pengajuan;
 
         return "*[JURNAL SEKOLAH - VERIFIKASI GERBANG SATPAM]*\n\n"
-             . "Dispen siswa telah *DISETUJUI OLEH WAKA KESISWAAN*.\n\n"
+             . "Dispen siswa telah *DISETUJUI OLEH WAKA*.\n\n"
              . "• *Nama Siswa:* {$nama}\n"
              . "• *NIS / Kelas:* {$nis} / {$kelas}\n"
              . "• *Tanggal:* {$tanggal}\n"
              . "• *Jam Keluar:* {$jam}\n"
              . "• *Keperluan:* {$jenis}\n\n"
+             . "_Status Pengajuan: {$pengajuan->status}_\n\n"
              . "Petugas Satpam harap mencocokkan Kartu Pelajar siswa saat melewati gerbang melalui link:\n"
              . "{$linkSatpam}";
     }
@@ -205,6 +205,21 @@ class WhatsAppService
              . "Lihat dokumen izin resmi Anda di:\n"
              . "{$linkDetail}\n\n"
              . "Terima kasih.";
+    }
+
+    public static function getPesanDitolakWaka(PengajuanIzin $pengajuan): string
+    {
+        $nama = $pengajuan->siswa?->nama ?? $pengajuan->guru?->nama ?? $pengajuan->pengaju?->nama ?? 'Pemohon';
+        $alasan = $pengajuan->alasan_penolakan ?: $pengajuan->catatan_waka ?: '-';
+        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $linkDetail = $baseUrl . '/pengajuan-izin/' . $pengajuan->id_pengajuan;
+
+        return "*[JURNAL SEKOLAH - PENGAJUAN DITOLAK]*\n\n"
+            . "Pengajuan dispen {$nama} telah ditolak oleh Waka.\n"
+            . "• *Tanggal:* {$pengajuan->tanggal}\n"
+            . "• *Alasan penolakan:* {$alasan}\n"
+            . "• *Status Pengajuan:* {$pengajuan->status}\n\n"
+            . "Lihat detail: {$linkDetail}";
     }
 
     /**
@@ -244,27 +259,49 @@ class WhatsAppService
     {
         $pesan = self::getPesanWaka($pengajuan);
 
+        if ($pengajuan->id_waka_tujuan) {
+            $waka = User::where('id_user', $pengajuan->id_waka_tujuan)
+                ->where('aktif', 1)
+                ->whereNotNull('no_hp')
+                ->where('no_hp', '!=', '')
+                ->first();
+
+            return $waka
+                ? $this->hasilKirim([$this->kirim($waka->no_hp, $pesan)], 'Waka')
+                : ['success' => false, 'message' => 'Nomor WhatsApp Waka tujuan belum tersedia.'];
+        }
+
         $targetRole = ($pengajuan->kategori === 'izin_guru') ? 'waka_sdm' : 'waka_kesiswaan';
-        $wakas = User::whereIn('role', [$targetRole, 'waka_kesiswaan', 'waka_sdm'])
+        $wakas = User::where('role', $targetRole)
             ->where('aktif', 1)
             ->whereNotNull('no_hp')
             ->where('no_hp', '!=', '')
             ->get();
 
-        if ($wakas->isEmpty()) {
-            // Fallback nomor contoh jika belum ada user di database
-            return $this->kirim('085707300240', $pesan);
-        }
+        if ($wakas->isEmpty()) return ['success' => false, 'message' => 'Nomor WhatsApp Waka belum tersedia.'];
 
         $results = [];
         foreach ($wakas as $waka) {
             $results[] = $this->kirim($waka->no_hp, $pesan);
         }
 
+        return $this->hasilKirim($results, 'Waka');
+    }
+
+    public function kirimNotifPenolakanWaka(PengajuanIzin $pengajuan): array
+    {
+        $nomor = $pengajuan->pengaju?->no_hp;
+        return $nomor
+            ? $this->kirim($nomor, self::getPesanDitolakWaka($pengajuan))
+            : ['success' => false, 'message' => 'Nomor WhatsApp pengaju belum tersedia.'];
+    }
+
+    private function hasilKirim(array $results, string $penerima): array
+    {
         $anySuccess = collect($results)->contains('success', true);
         return [
             'success' => $anySuccess,
-            'message' => $anySuccess ? 'Notifikasi WhatsApp berhasil dikirim ke Waka.' : ($results[0]['message'] ?? 'Gagal mengirim WhatsApp.')
+            'message' => $anySuccess ? "Notifikasi WhatsApp berhasil dikirim ke {$penerima}." : ($results[0]['message'] ?? 'Gagal mengirim WhatsApp.')
         ];
     }
 
@@ -281,21 +318,14 @@ class WhatsAppService
             ->where('no_hp', '!=', '')
             ->get();
 
-        if ($kepalas->isEmpty()) {
-            // Fallback nomor contoh untuk testing
-            return $this->kirim('085707300240', $pesan);
-        }
+        if ($kepalas->isEmpty()) return ['success' => false, 'message' => 'Nomor WhatsApp Kepala Sekolah belum tersedia.'];
 
         $results = [];
         foreach ($kepalas as $kepala) {
             $results[] = $this->kirim($kepala->no_hp, $pesan);
         }
 
-        $anySuccess = collect($results)->contains('success', true);
-        return [
-            'success' => $anySuccess,
-            'message' => $anySuccess ? 'Notifikasi WhatsApp berhasil dikirim ke Kepala Sekolah.' : ($results[0]['message'] ?? 'Gagal mengirim WhatsApp.')
-        ];
+        return $this->hasilKirim($results, 'Kepala Sekolah');
     }
 
     /**
@@ -311,20 +341,14 @@ class WhatsAppService
             ->where('no_hp', '!=', '')
             ->get();
 
-        if ($satpams->isEmpty()) {
-            return $this->kirim('081359472399', $pesan);
-        }
+        if ($satpams->isEmpty()) return ['success' => false, 'message' => 'Nomor WhatsApp Satpam belum tersedia.'];
 
         $results = [];
         foreach ($satpams as $satpam) {
             $results[] = $this->kirim($satpam->no_hp, $pesan);
         }
 
-        $anySuccess = collect($results)->contains('success', true);
-        return [
-            'success' => $anySuccess,
-            'message' => $anySuccess ? 'Notifikasi WhatsApp berhasil dikirim ke Satpam.' : ($results[0]['message'] ?? 'Gagal mengirim WhatsApp.')
-        ];
+        return $this->hasilKirim($results, 'Satpam');
     }
 
     /**
@@ -337,10 +361,7 @@ class WhatsAppService
         // Ambil nomor HP guru yang bersangkutan atau pemohon
         $nomor = $pengajuan->guru?->no_telp ?? $pengajuan->pengaju?->no_hp;
 
-        if (!$nomor) {
-            // Fallback nomor waka contoh
-            $nomor = '085707300240';
-        }
+        if (!$nomor) return ['success' => false, 'message' => 'Nomor WhatsApp Guru belum tersedia.'];
 
         return $this->kirim($nomor, $pesan);
     }
