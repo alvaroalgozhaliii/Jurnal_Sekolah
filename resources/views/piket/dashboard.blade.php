@@ -10,7 +10,7 @@
         <p class="page-subtitle">Monitoring Jam Pelajaran, Kehadiran Guru, Kelas Kosong & Pengajuan Dispensasi</p>
     </div>
     <div class="page-actions" style="display:flex; gap:8px;">
-        <a href="{{ route('pengajuan.create') }}?tipe=siswa" class="btn btn-primary" style="background:#1e3a8a; color:#ffffff; font-weight:600;">+ Input Dispen Siswa</a>
+        <a href="{{ route('piket.pengajuan.create') }}" class="btn btn-primary" style="background:#1e3a8a; color:#ffffff; font-weight:600;">+ Input Dispen Siswa</a>
         <a href="{{ route('pengajuan.create') }}?tipe=guru" class="btn" style="background:#d97706; color:#ffffff; font-weight:600; padding:7px 14px; border-radius:6px; border:none;">+ Input Dispen Guru</a>
         <a href="{{ route('piket.anak-sakit') }}" class="btn btn-secondary" style="font-weight:600;">Catat Anak Sakit</a>
     </div>

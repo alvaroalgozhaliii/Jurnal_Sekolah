@@ -75,6 +75,12 @@
                         <th>Tanggal Pengajuan</th>
                         <td class="fw-bold">{{ $pengajuan->tanggal }}</td>
                     </tr>
+                    @if($pengajuan->wakaTujuan)
+                    <tr>
+                        <th>Waka Tujuan</th>
+                        <td class="fw-bold text-navy">{{ $pengajuan->wakaTujuan->nama }} ({{ strtoupper(str_replace('_', ' ', $pengajuan->wakaTujuan->role)) }})</td>
+                    </tr>
+                    @endif
                     <tr>
                         <th>Jam Keluar / Mulai</th>
                         <td>{{ $pengajuan->jam_mulai ? $pengajuan->jam_mulai : 'Seharian' }}</td>
