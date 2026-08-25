@@ -45,8 +45,11 @@ Route::get('/', function () {
             'piket' => redirect()->route('piket.dashboard'),
             'ortu', 'siswa' => redirect()->route('ortu.dashboard'),
             'wali_kelas' => redirect()->route('walikelas.dashboard'),
-            'waka_kesiswaan', 'waka_sdm' => redirect()->route('waka.dashboard'),
+            'waka_sdm' => redirect()->route('waka.dashboard'),
+            'waka_kesiswaan' => redirect()->route('waka.monitoring-siswa'),
             'waka_kurikulum' => redirect()->route('waka-kurikulum.dashboard'),
+            'waka_sarpras' => redirect()->route('waka.sarpras'),
+            'waka_humas' => redirect()->route('waka.humas'),
             'kepala_sekolah' => redirect()->route('kepala.dashboard'),
             'satpam' => redirect()->route('satpam.dashboard'),
             default => redirect()->route('login'),
@@ -177,23 +180,25 @@ Route::middleware(['auth', 'role:admin,guru,wali_kelas'])->prefix('walikelas-are
 
 
 // ======================================================
-// WAKA ROLE ROUTES (KESISWAAN & SDM)
+// WAKA ROLE ROUTES (KESISWAAN, SDM, KURIKULUM, SARPRAS, HUMAS)
 // ======================================================
 
-Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm,waka_kurikulum'])->prefix('waka-area')->group(function () {
+Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm,waka_kurikulum,waka_sarpras,waka_humas'])->prefix('waka-area')->group(function () {
     Route::get('/dashboard', [WakaDashboardController::class, 'index'])->name('waka.dashboard');
     Route::get('/persetujuan', [WakaDashboardController::class, 'daftarPersetujuan'])->name('waka.persetujuan.index');
     Route::get('/persetujuan/{id}', [WakaDashboardController::class, 'show'])->name('waka.persetujuan.show');
     Route::post('/persetujuan/{id}/proses', [WakaDashboardController::class, 'prosesKeputusan'])->name('waka.persetujuan.proses');
-    Route::get('/monitoring-siswa', [WakaDashboardController::class, 'monitoringSiswa'])->middleware('role:admin,waka_kesiswaan')->name('waka.monitoring-siswa');
+    Route::get('/monitoring-siswa', [WakaDashboardController::class, 'monitoringSiswa'])->name('waka.monitoring-siswa');
+    Route::get('/sarpras', [WakaDashboardController::class, 'sarpras'])->name('waka.sarpras');
+    Route::get('/humas', [WakaDashboardController::class, 'humas'])->name('waka.humas');
 });
 
 // ======================================================
-// WAKA KURIKULUM ROLE ROUTES
+// WAKA KURIKULUM ROLE ROUTES (MANAJEMEN JADWAL PIKET)
 // ======================================================
 
 Route::middleware(['auth', 'role:admin,waka_kurikulum'])->prefix('waka-kurikulum-area')->group(function () {
-    Route::get('/dashboard', [WakaKurikulumController::class, 'index'])->name('waka-kurikulum.dashboard');
+    Route::get('/dashboard', [WakaKurikulumController::class, 'dashboard'])->name('waka-kurikulum.dashboard');
     Route::get('/jadwal-waka', [WakaKurikulumController::class, 'index'])->name('waka-kurikulum.index');
     Route::get('/jadwal-waka/create', [WakaKurikulumController::class, 'create'])->name('waka-kurikulum.jadwal.create');
     Route::post('/jadwal-waka', [WakaKurikulumController::class, 'store'])->name('waka-kurikulum.jadwal.store');
@@ -231,7 +236,7 @@ Route::middleware(['auth', 'role:admin,satpam'])->prefix('satpam-area')->group(f
 // MASTER DATA & FEATURE ROUTES (ADMIN, GURU, PIKET, WALI KELAS)
 // ======================================================
 
-Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka_sdm,kepala_sekolah'])->group(function () {
+Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka_sdm,waka_kurikulum,waka_sarpras,waka_humas,kepala_sekolah'])->group(function () {
 
     // TRASH ROUTES
     Route::get('/guru/trash', [GuruController::class, 'trash'])->name('guru.trash');
