@@ -25,6 +25,7 @@
                         <th>Kategori</th>
                         <th>Subjek / Pemohon</th>
                         <th>Tanggal</th>
+                        <th>Waka Tujuan</th>
                         <th>Waktu Keluar</th>
                         <th>Alasan</th>
                         <th>Status Saat Ini</th>
@@ -50,6 +51,7 @@
                             {{ $p->siswa ? $p->siswa->nama . ' (Kelas ' . ($p->siswa->kelas->nama_kelas ?? '-') . ')' : ($p->guru ? $p->guru->nama . ' (Guru)' : ($p->pengaju->nama ?? '-')) }}
                         </td>
                         <td>{{ $p->tanggal }}</td>
+                        <td>{{ $p->wakaTujuan->nama ?? 'Ditentukan berdasarkan alur' }}</td>
                         <td>
                             {{ $p->jam_mulai ? $p->jam_mulai : 'Seharian' }}
                             @if($p->perkiraan_kembali)
