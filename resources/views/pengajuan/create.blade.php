@@ -33,6 +33,17 @@
     </div>
     <div class="card-body">
         
+        @if(isset($wakaHariIni) && $wakaHariIni && $wakaHariIni->waka)
+        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px;">
+            <div>
+                🛡️ <strong>Waka Bertugas Hari Ini:</strong> {{ $wakaHariIni->waka->nama }} ({{ strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) }})
+            </div>
+            @if($wakaHariIni->waka->no_hp)
+                <span style="color:#059669; font-weight:600;">WA Aktif: {{ $wakaHariIni->waka->no_hp }}</span>
+            @endif
+        </div>
+        @endif
+
         @if(Auth::user()->isPiket() || Auth::user()->isAdmin())
         <!-- TAB PILIH JENIS SUBJEK KHUSUS PIKET -->
         @php
@@ -42,11 +53,9 @@
             <button type="button" id="btn-tab-siswa" onclick="setSubjekType('siswa')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'siswa' ? 'background:#1e3a8a; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
                 👨‍🎓 Dispensasi Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)
             </button>
-            @if(!Auth::user()->isPiket())
-                <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
-                    👨‍🏫 Dispensasi Guru (Alur: Piket &rarr; Waka SDM &rarr; Kepsek)
-                </button>
-            @endif
+            <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
+                👨‍🏫 Dispensasi Guru (Alur: Piket &rarr; Waka SDM/Piket &rarr; Kepsek)
+            </button>
         </div>
         @endif
 

@@ -70,7 +70,10 @@ class PiketDashboardController extends Controller
             $q->where('status', 'like', 'ditolak_%')->orWhere('status', 'like', 'rejected_%');
         })->count();
 
+        $wakaHariIni = \App\Models\JadwalWaka::wakaBertugasPada($todayDate);
+
         return view('piket.dashboard', compact(
+            'wakaHariIni',
             'jumlahGuruHadir',
             'jumlahSiswaHadir',
             'jumlahSiswaTidakHadir',

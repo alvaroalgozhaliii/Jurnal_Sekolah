@@ -4,22 +4,50 @@ namespace App\Http\Controllers;
 
 use App\Models\JadwalWaka;
 use App\Models\User;
+use App\Models\Guru;
+use App\Models\Jadwal;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class WakaKurikulumController extends Controller
 {
-    public function index()
+    public function dashboard()
     {
-        $jadwal = $this->jadwal();
+        $today = date('Y-m-d');
+        $jadwalHariIni = JadwalWaka::with(['waka', 'guruPiket'])->whereDate('tanggal', $today)->first();
+        $totalJadwal = JadwalWaka::count();
+        $jadwalMendatang = JadwalWaka::with(['waka', 'guruPiket'])
+            ->whereDate('tanggal', '>=', $today)
+            ->orderBy('tanggal')
+            ->take(5)
+            ->get();
+        $totalPelajaran = Jadwal::where('aktif', 1)->count();
         $wakas = $this->wakas();
 
-        return view('waka-kurikulum.index', compact('jadwal', 'wakas'));
+        return view('waka-kurikulum.dashboard', compact(
+            'jadwalHariIni',
+            'totalJadwal',
+            'jadwalMendatang',
+            'totalPelajaran',
+            'wakas'
+        ));
+    }
+
+    public function index()
+    {
+        $jadwal = JadwalWaka::with(['waka', 'guruPiket'])->orderBy('tanggal', 'desc')->paginate(15);
+        $wakas = $this->wakas();
+        $gurus = $this->gurus();
+
+        return view('waka-kurikulum.index', compact('jadwal', 'wakas', 'gurus'));
     }
 
     public function create()
     {
-        return view('waka-kurikulum.create', ['wakas' => $this->wakas()]);
+        return view('waka-kurikulum.create', [
+            'wakas' => $this->wakas(),
+            'gurus' => $this->gurus(),
+        ]);
     }
 
     public function store(Request $request)
@@ -27,12 +55,12 @@ class WakaKurikulumController extends Controller
         $data = $this->validated($request);
         JadwalWaka::create($data);
 
-        return redirect()->route('waka-kurikulum.index')->with('success', 'Jadwal Waka berhasil dibuat.');
+        return redirect()->route('waka-kurikulum.index')->with('success', 'Jadwal Piket & Waka Bertugas berhasil dibuat.');
     }
 
     public function show($id)
     {
-        $jadwalWaka = JadwalWaka::with('waka')->findOrFail($id);
+        $jadwalWaka = JadwalWaka::with(['waka', 'guruPiket'])->findOrFail($id);
 
         return view('waka-kurikulum.show', compact('jadwalWaka'));
     }
@@ -44,6 +72,7 @@ class WakaKurikulumController extends Controller
         return view('waka-kurikulum.edit', [
             'jadwalWaka' => $jadwalWaka,
             'wakas' => $this->wakas(),
+            'gurus' => $this->gurus(),
         ]);
     }
 
@@ -52,14 +81,14 @@ class WakaKurikulumController extends Controller
         $jadwal = JadwalWaka::findOrFail($id);
         $jadwal->update($this->validated($request, $id));
 
-        return redirect()->route('waka-kurikulum.index')->with('success', 'Jadwal Waka berhasil diubah.');
+        return redirect()->route('waka-kurikulum.index')->with('success', 'Jadwal Piket & Waka Bertugas berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         JadwalWaka::findOrFail($id)->delete();
 
-        return redirect()->route('waka-kurikulum.index')->with('success', 'Jadwal Waka berhasil dihapus.');
+        return redirect()->route('waka-kurikulum.index')->with('success', 'Jadwal Piket & Waka Bertugas berhasil dihapus.');
     }
 
     private function validated(Request $request, ?int $id = null): array
@@ -72,23 +101,40 @@ class WakaKurikulumController extends Controller
                 'required',
                 'integer',
                 Rule::exists('users', 'id_user')->where(fn ($query) => $query
-                    ->whereIn('role', ['waka_sdm', 'waka_kesiswaan', 'waka_kurikulum'])
+                    ->whereIn('role', [
+                        'waka_kurikulum',
+                        'waka_kesiswaan',
+                        'waka_sdm',
+                        'waka_sarpras',
+                        'waka_humas'
+                    ])
                     ->where('aktif', 1)),
+            ],
+            'id_guru_piket' => [
+                'nullable',
+                'integer',
+                'exists:guru,id_guru',
             ],
             'keterangan' => ['nullable', 'string', 'max:255'],
         ]);
     }
 
-    private function jadwal()
-    {
-        return JadwalWaka::with('waka')->orderBy('tanggal')->get();
-    }
-
     private function wakas()
     {
-        return User::whereIn('role', ['waka_sdm', 'waka_kesiswaan', 'waka_kurikulum'])
-            ->where('aktif', 1)
-            ->orderBy('nama')
-            ->get();
+        return User::whereIn('role', [
+            'waka_kurikulum',
+            'waka_kesiswaan',
+            'waka_sdm',
+            'waka_sarpras',
+            'waka_humas'
+        ])
+        ->where('aktif', 1)
+        ->orderBy('nama')
+        ->get();
+    }
+
+    private function gurus()
+    {
+        return Guru::orderBy('nama')->get();
     }
 }

@@ -65,13 +65,14 @@ class PengajuanIzinController extends Controller
             $siswas = Siswa::with('kelas')->where('aktif', 1)->orderBy('nama', 'asc')->get();
         }
 
-        return view('pengajuan.create', compact('siswas', 'gurus'));
+        $wakaHariIni = JadwalWaka::wakaBertugasPada(date('Y-m-d'));
+
+        return view('pengajuan.create', compact('siswas', 'gurus', 'wakaHariIni'));
     }
 
     public function store(Request $request)
     {
         $user = Auth::user();
-        $isPiket = $user->isPiket();
 
         // Fallback jika kategori tidak terkirim dari form
         if (!$request->filled('kategori')) {
@@ -83,10 +84,8 @@ class PengajuanIzinController extends Controller
         }
 
         $request->validate([
-            'kategori' => $isPiket
-                ? 'required|in:dispensasi,izin_masuk,izin_keluar,sakit'
-                : 'required|in:dispensasi,izin_masuk,izin_keluar,sakit,izin_guru',
-            'id_siswa' => $isPiket ? 'required|exists:siswa,id_siswa' : 'nullable|exists:siswa,id_siswa',
+            'kategori' => 'required|in:dispensasi,izin_masuk,izin_keluar,sakit,izin_guru',
+            'id_siswa' => 'nullable|exists:siswa,id_siswa',
             'id_guru' => 'nullable|exists:guru,id_guru',
             'tanggal' => 'required|date',
             'jam_mulai' => 'nullable',
@@ -98,12 +97,21 @@ class PengajuanIzinController extends Controller
             'lampiran_foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $wakaTujuan = null;
-        if ($isPiket) {
-            $wakaTujuan = JadwalWaka::wakaBertugasPada($request->tanggal);
-            if (!$wakaTujuan || !$wakaTujuan->waka) {
-                return back()->withInput()->with('error', 'Pengajuan tidak dapat dikirim karena belum ada Waka yang dijadwalkan pada tanggal tersebut.');
-            }
+        $isGuruDispen = ($request->kategori === 'izin_guru');
+        $idGuru = $isGuruDispen ? ($request->id_guru ?? ($user->isGuru() ? $user->guru?->id_guru : null)) : null;
+        $idSiswa = $isGuruDispen ? null : $request->id_siswa;
+
+        // Cari Waka Bertugas dari Jadwal yang diatur oleh Waka Kurikulum
+        $jadwalHariIni = JadwalWaka::wakaBertugasPada($request->tanggal);
+        $wakaTujuanUser = $jadwalHariIni?->waka;
+
+        // Fallback jika belum ada jadwal khusus pada tanggal tersebut
+        if (!$wakaTujuanUser) {
+            $fallbackRole = $isGuruDispen ? 'waka_sdm' : 'waka_kesiswaan';
+            $wakaTujuanUser = User::where('role', $fallbackRole)->where('aktif', 1)->first()
+                           ?? User::where('role', 'waka_sdm')->where('aktif', 1)->first()
+                           ?? User::where('role', 'waka_kurikulum')->where('aktif', 1)->first()
+                           ?? User::where('role', 'waka_kesiswaan')->where('aktif', 1)->first();
         }
 
         $fotoPath = null;
@@ -113,14 +121,10 @@ class PengajuanIzinController extends Controller
             $fotoPath = $file->storeAs('uploads/bukti_sakit', $filename, 'public');
         }
 
-        $isGuruDispen = ($request->kategori === 'izin_guru');
-        $idGuru = $isGuruDispen ? ($request->id_guru ?? ($user->isGuru() ? $user->guru?->id_guru : null)) : null;
-        $idSiswa = $isGuruDispen ? null : $request->id_siswa;
-
         // Tentukan status awal & alur approval
-        // Dispen Guru: langsung PENDING_WAKA (Waka SDM), butuh_satpam = 0 (Tanpa Satpam)
-        // Dispen Siswa: langsung PENDING_WAKA (Waka Kesiswaan), butuh_satpam = 1
-        $statusAwal = $isPiket ? 'menunggu_waka' : 'pending_waka';
+        // Dispen Guru: langsung PENDING_WAKA, butuh_satpam = 0 (Tanpa Satpam, lanjut ke Kepsek)
+        // Dispen Siswa: langsung PENDING_WAKA, butuh_satpam = 1 (Lanjut ke Satpam)
+        $statusAwal = 'pending_waka';
         $butuhSatpam = !$isGuruDispen && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk']);
 
         $pengajuan = PengajuanIzin::create([
@@ -138,7 +142,7 @@ class PengajuanIzinController extends Controller
             'lampiran_foto' => $fotoPath,
             'status' => $statusAwal,
             'butuh_satpam' => $butuhSatpam,
-            'id_waka_tujuan' => $wakaTujuan?->waka?->id_user,
+            'id_waka_tujuan' => $wakaTujuanUser?->id_user,
         ]);
 
         // Catat Log Riwayat
@@ -151,27 +155,28 @@ class PengajuanIzinController extends Controller
             'Pengajuan ' . strtoupper(str_replace('_', ' ', $request->kategori)) . ' dibuat oleh ' . $user->nama
         );
 
-        $waResult = $isPiket ? $this->waService->kirimNotifDispenKeWaka($pengajuan->load(['siswa.kelas', 'guru', 'pengaju'])) : null;
+        // Kirim WhatsApp ke Waka Bertugas
+        $waResult = $this->waService->kirimNotifDispenKeWaka($pengajuan->load(['siswa.kelas', 'guru', 'pengaju', 'wakaTujuan']));
 
-        if (!$isPiket) {
-            $targetRole = ($request->kategori === 'izin_guru') ? 'waka_sdm' : 'waka_kesiswaan';
-            Notifikasi::kirimKeRole(
-                $targetRole,
-                'Pengajuan Dispen Baru',
-                'Ada pengajuan dispen/izin baru dari ' . $user->nama . ' menunggu persetujuan Waka.',
-                route('pengajuan.show', $pengajuan->id_pengajuan),
-                'dispen'
-            );
+        // Kirim Notifikasi Sistem Internal
+        if ($wakaTujuanUser) {
+            Notifikasi::create([
+                'id_user' => $wakaTujuanUser->id_user,
+                'judul' => 'Pengajuan Dispen Baru (' . ($isGuruDispen ? 'Guru' : 'Siswa') . ')',
+                'pesan' => 'Ada pengajuan ' . ($isGuruDispen ? 'dispen guru' : 'dispen siswa') . ' baru menunggu persetujuan Anda.',
+                'link' => route('waka.persetujuan.show', $pengajuan->id_pengajuan),
+                'tipe' => 'dispen',
+                'dibaca' => false,
+            ]);
         }
 
-        $flashMessage = $isPiket
-            ? 'Pengajuan dispen berhasil dibuat dan diarahkan ke ' . $wakaTujuan->waka->nama . '.'
-            : 'Pengajuan dispensasi/izin berhasil dibuat dan diteruskan ke Waka.';
+        $wakaNama = $wakaTujuanUser ? $wakaTujuanUser->nama : 'Waka';
+        $flashMessage = "Pengajuan dispensasi/izin berhasil dibuat dan diteruskan ke {$wakaNama}.";
         if ($waResult && !$waResult['success']) {
-            $flashMessage .= ' WhatsApp: ' . $waResult['message'];
+            $flashMessage .= ' (WhatsApp: ' . $waResult['message'] . ')';
         }
 
-        return redirect()->route('pengajuan.index')->with('success', $flashMessage);
+        return redirect()->route('pengajuan.show', $pengajuan->id_pengajuan)->with('success', $flashMessage);
     }
 
     public function show($id)

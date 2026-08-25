@@ -1,75 +1,118 @@
 @extends('layouts.app')
 
-@section('title', 'Jadwal Waka Bertugas — Jurnal Sekolah')
-@section('page-title', 'Jadwal Waka Bertugas')
+@section('title', 'Dashboard Waka Kurikulum — Jurnal Sekolah')
+@section('page-title', 'Dashboard Waka Kurikulum')
 
 @section('content')
 <div class="page-header">
     <div>
         <h1 class="page-title">Dashboard Waka Kurikulum</h1>
-        <p class="page-subtitle">Mengatur Waka yang bertugas berdasarkan tanggal</p>
+        <p class="page-subtitle">Manajemen Jadwal Piket Harian, Waka Bertugas, dan Monitoring KBM</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ route('waka-kurikulum.jadwal.create') }}" class="btn btn-primary" style="font-weight:600;">+ Buat Jadwal Piket</a>
+        <a href="{{ route('jadwal.index') }}" class="btn btn-secondary">Lihat Jadwal KBM</a>
     </div>
 </div>
 
-<div class="card mb-24">
-    <div class="card-header">
-        <h3 class="card-title">{{ isset($jadwalEdit) ? 'Ubah Jadwal Waka' : 'Tambah Jadwal Waka' }}</h3>
+<!-- STAT CARDS -->
+<div class="stats-grid mb-24">
+    <div class="stat-card">
+        <div class="stat-icon bg-navy-light text-navy">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ $totalJadwal }}</div>
+            <div class="stat-label">Total Hari Terjadwal</div>
+        </div>
     </div>
-    <div class="card-body">
-        <form action="{{ isset($jadwalEdit) ? route('waka-kurikulum.jadwal.update', $jadwalEdit->id_jadwal_waka) : route('waka-kurikulum.jadwal.store') }}" method="POST">
-            @csrf
-            @if(isset($jadwalEdit)) @method('PUT') @endif
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="tanggal">Tanggal <span class="req">*</span></label>
-                    <input class="form-control" type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', isset($jadwalEdit) ? $jadwalEdit->tanggal->format('Y-m-d') : '') }}" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="id_user_waka">Waka Bertugas <span class="req">*</span></label>
-                    <select class="form-control" id="id_user_waka" name="id_user_waka" required>
-                        <option value="">Pilih Waka</option>
-                        @foreach($wakas as $waka)
-                            <option value="{{ $waka->id_user }}" {{ old('id_user_waka', $jadwalEdit->id_user_waka ?? '') == $waka->id_user ? 'selected' : '' }}>{{ $waka->nama }} ({{ strtoupper(str_replace('_', ' ', $waka->role)) }})</option>
-                        @endforeach
-                    </select>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#fef3c7; color:#d97706;">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ count($wakas) }}</div>
+            <div class="stat-label">Waka Aktif</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-success-light text-success">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <div>
+            <div class="stat-value">{{ $totalPelajaran }}</div>
+            <div class="stat-label">Jadwal Mapel KBM</div>
+        </div>
+    </div>
+</div>
+
+<!-- TODAY DUTY CARD -->
+<div class="card mb-24" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color:#fff; border:none;">
+    <div class="card-body" style="padding:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div>
+                <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; font-size:11px; margin-bottom:8px;">PENUGASAN HARI INI</span>
+                <h2 style="margin:0 0 6px 0; font-size:20px; color:#fff;">
+                    {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+                </h2>
+                <div style="font-size:14px; opacity:0.9;">
+                    @if($jadwalHariIni)
+                        Waka Bertugas: <strong>{{ $jadwalHariIni->waka->nama ?? '-' }} ({{ strtoupper(str_replace('_', ' ', $jadwalHariIni->waka->role ?? '-')) }})</strong>
+                        @if($jadwalHariIni->guruPiket)
+                            &bull; Guru Piket: <strong>{{ $jadwalHariIni->guruPiket->nama }}</strong>
+                        @endif
+                    @else
+                        <span style="color:#fef08a;">⚠️ Belum ada Waka yang dijadwalkan bertugas untuk hari ini.</span>
+                    @endif
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label" for="keterangan">Keterangan</label>
-                <input class="form-control" type="text" id="keterangan" name="keterangan" value="{{ old('keterangan', $jadwalEdit->keterangan ?? '') }}" maxlength="255">
-            </div>
-            <div class="d-flex gap-8 mt-16">
-                <button type="submit" class="btn btn-primary">{{ isset($jadwalEdit) ? 'UPDATE JADWAL' : 'SIMPAN JADWAL' }}</button>
-                @if(isset($jadwalEdit))
-                    <a href="{{ route('waka-kurikulum.dashboard') }}" class="btn btn-secondary">Batal</a>
+            <div>
+                @if(!$jadwalHariIni)
+                    <a href="{{ route('waka-kurikulum.jadwal.create') }}" class="btn" style="background:#f59e0b; color:#fff; font-weight:700;">+ Tentukan Waka Hari Ini</a>
+                @else
+                    <a href="{{ route('waka-kurikulum.jadwal.edit', $jadwalHariIni->id_jadwal_waka) }}" class="btn" style="background:rgba(255,255,255,0.2); color:#fff; font-weight:600;">Edit Penugasan Hari Ini</a>
                 @endif
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
+<!-- UPCOMING SCHEDULE TABLE -->
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Jadwal Tugas Waka</h3>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">
+            <svg class="svg-icon text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            Jadwal Penugasan Terdekat
+        </h3>
+        <a href="{{ route('waka-kurikulum.index') }}" class="btn btn-secondary btn-sm">Lihat Semua Jadwal &rarr;</a>
     </div>
     <div class="card-body" style="padding:0;">
-        @if($jadwal->count())
+        @if($jadwalMendatang->count())
         <div class="table-wrapper" style="border:none; border-radius:0;">
             <table class="table">
-                <thead><tr><th>No</th><th>Tanggal</th><th>Waka Bertugas</th><th>Keterangan</th><th class="action-col">Aksi</th></tr></thead>
-                <tbody>
-                @foreach($jadwal as $index => $item)
+                <thead>
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item->tanggal->format('d-m-Y') }}</td>
-                        <td class="fw-bold text-navy">{{ $item->waka->nama ?? '-' }}<br><span class="text-muted" style="font-size:11px;">{{ strtoupper(str_replace('_', ' ', $item->waka->role ?? '-')) }}</span></td>
+                        <th>Tanggal</th>
+                        <th>Waka Bertugas</th>
+                        <th>Guru Piket</th>
+                        <th>Keterangan</th>
+                        <th class="action-col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($jadwalMendatang as $item)
+                    <tr>
+                        <td class="fw-bold">{{ $item->tanggal ? $item->tanggal->translatedFormat('l, d F Y') : '-' }}</td>
+                        <td>
+                            <strong class="text-navy">{{ $item->waka->nama ?? '-' }}</strong>
+                            <div class="text-muted" style="font-size:11.5px;">{{ strtoupper(str_replace('_', ' ', $item->waka->role ?? '-')) }}</div>
+                        </td>
+                        <td>{{ $item->guruPiket->nama ?? '-' }}</td>
                         <td>{{ $item->keterangan ?? '-' }}</td>
                         <td class="action-col">
-                            <a href="{{ route('waka-kurikulum.jadwal.edit', $item->id_jadwal_waka) }}" class="btn btn-secondary btn-sm">Ubah</a>
-                            <form action="{{ route('waka-kurikulum.jadwal.destroy', $item->id_jadwal_waka) }}" method="POST" style="display:inline;" onsubmit="return confirm('Hapus jadwal ini?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
+                            <a href="{{ route('waka-kurikulum.jadwal.edit', $item->id_jadwal_waka) }}" class="btn btn-secondary btn-sm">Edit</a>
                         </td>
                     </tr>
                 @endforeach
@@ -77,7 +120,10 @@
             </table>
         </div>
         @else
-            <div class="empty-state"><div class="empty-state-text">Belum ada jadwal Waka bertugas.</div></div>
+            <div class="empty-state" style="padding:30px; text-align:center;">
+                <p class="text-muted">Belum ada jadwal mendatang yang dibuat.</p>
+                <a href="{{ route('waka-kurikulum.jadwal.create') }}" class="btn btn-primary btn-sm">+ Buat Jadwal</a>
+            </div>
         @endif
     </div>
 </div>

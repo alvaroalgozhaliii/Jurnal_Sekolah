@@ -69,7 +69,8 @@ class WhatsAppService
                 'countryCode' => '62',
             ];
 
-            $response = Http::asForm()
+            $response = Http::withoutVerifying()
+                ->asForm()
                 ->withHeaders([
                     'Authorization' => $this->apiKey,
                 ])
@@ -126,7 +127,8 @@ class WhatsAppService
              . "• *Alasan:* {$alasan}\n\n"
              . "Klik link di bawah ini untuk melihat detail dan memberikan persetujuan:\n"
              . "{$linkApproval}\n\n"
-             . "_Status Pengajuan: {$pengajuan->status}_";
+             . "_Status Pengajuan: {$pengajuan->status}_\n"
+             . "_(Jika link belum berwarna biru, balas chat ini dengan 'OK' atau simpan kontak ini)_";
     }
 
     /**
@@ -156,7 +158,8 @@ class WhatsAppService
              . "• *Catatan Waka SDM:* {$catatanWaka}\n\n"
              . "Silakan klik link berikut untuk memproses persetujuan:\n"
              . "{$linkApproval}\n\n"
-             . "_Status: Menunggu Persetujuan Kepala Sekolah_";
+             . "_Status: Menunggu Persetujuan Kepala Sekolah_\n"
+             . "_(Jika link belum berwarna biru, balas chat ini dengan 'OK' atau simpan kontak ini)_";
     }
 
     /**
