@@ -64,6 +64,7 @@ class AuthController extends Controller
             'ortu', 'siswa' => 'ortu.dashboard',
             'wali_kelas' => 'walikelas.dashboard',
             'waka_kesiswaan', 'waka_sdm' => 'waka.dashboard',
+            'waka_kurikulum' => 'waka-kurikulum.dashboard',
             'kepala_sekolah' => 'kepala.dashboard',
             'satpam' => 'satpam.dashboard',
             default => 'login',

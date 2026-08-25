@@ -8,7 +8,9 @@ use App\Models\PengajuanIzin;
 use App\Models\DispenLog;
 use App\Models\Notifikasi;
 use App\Models\User;
+use App\Models\AbsensiSiswa;
 use App\Services\WhatsAppService;
+use Carbon\Carbon;
 
 class WakaDashboardController extends Controller
 {
@@ -83,7 +85,11 @@ class WakaDashboardController extends Controller
             'logs.user'
         ])->findOrFail($id);
 
-        $isSdm = $user->isWakaSdm() || $pengajuan->kategori === 'izin_guru';
+        if (!$this->canProcess($user, $pengajuan)) {
+            abort(403);
+        }
+
+        $isSdm = $user->isWakaSdm();
 
         return view('waka.show', compact('pengajuan', 'isSdm'));
     }
@@ -92,6 +98,10 @@ class WakaDashboardController extends Controller
     {
         $user = Auth::user();
         $pengajuan = PengajuanIzin::findOrFail($id);
+
+        if (!$this->canProcess($user, $pengajuan) || $pengajuan->status !== 'pending_waka') {
+            abort(403);
+        }
 
         $request->validate([
             'catatan' => 'nullable|string',
@@ -216,5 +226,41 @@ class WakaDashboardController extends Controller
 
             return redirect()->route('waka.persetujuan.show', $pengajuan->id_pengajuan)->with('success', "Pengajuan dispensasi {$namaSubjek} telah DITOLAK.");
         }
+    }
+
+    public function monitoringSiswa(Request $request)
+    {
+        $tanggal = $request->get('tanggal', Carbon::today()->toDateString());
+        $absensi = AbsensiSiswa::with(['siswa.kelas', 'jurnal'])
+            ->whereHas('jurnal', fn ($query) => $query->where('tanggal', $tanggal))
+            ->get();
+
+        $pengajuan = PengajuanIzin::with(['siswa.kelas', 'pengaju'])
+            ->whereDate('tanggal', $tanggal)
+            ->where('kategori', '!=', 'izin_guru')
+            ->whereNotIn('status', ['ditolak_waka', 'ditolak_kepala', 'ditolak_satpam'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $ringkasan = [
+            'hadir' => $absensi->where('status', 'hadir')->count(),
+            'izin' => $absensi->where('status', 'izin')->count(),
+            'sakit' => $absensi->where('status', 'sakit')->count(),
+            'alpa' => $absensi->where('status', 'alpa')->count(),
+            'terlambat' => $absensi->filter(fn ($item) => $item->status === 'terlambat' || (int) $item->menit_terlambat > 0)->count(),
+            'dispen' => $pengajuan->where('kategori', 'dispensasi')->count(),
+        ];
+
+        return view('waka.monitoring-siswa', compact('tanggal', 'absensi', 'pengajuan', 'ringkasan'));
+    }
+
+    private function canProcess(User $user, PengajuanIzin $pengajuan): bool
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return ($user->isWakaSdm() && $pengajuan->kategori === 'izin_guru')
+            || ($user->isWakaKesiswaan() && $pengajuan->kategori !== 'izin_guru');
     }
 }
