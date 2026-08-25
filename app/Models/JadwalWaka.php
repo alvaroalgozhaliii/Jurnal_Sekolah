@@ -13,6 +13,7 @@ class JadwalWaka extends Model
     protected $fillable = [
         'tanggal',
         'id_user_waka',
+        'id_guru_piket',
         'keterangan',
     ];
 
@@ -25,6 +26,11 @@ class JadwalWaka extends Model
         return $this->belongsTo(User::class, 'id_user_waka', 'id_user');
     }
 
+    public function guruPiket()
+    {
+        return $this->belongsTo(Guru::class, 'id_guru_piket', 'id_guru');
+    }
+
     public function scopeUntukTanggal(Builder $query, string $tanggal): Builder
     {
         return $query->whereDate('tanggal', $tanggal);
@@ -32,6 +38,6 @@ class JadwalWaka extends Model
 
     public static function wakaBertugasPada(string $tanggal): ?self
     {
-        return static::with('waka')->untukTanggal($tanggal)->first();
+        return static::with(['waka', 'guruPiket'])->untukTanggal($tanggal)->first();
     }
 }

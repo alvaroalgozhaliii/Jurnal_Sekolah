@@ -74,9 +74,25 @@ class User extends Authenticatable
         return $this->role === 'waka_kurikulum';
     }
 
+    public function isWakaSarpras(): bool
+    {
+        return $this->role === 'waka_sarpras';
+    }
+
+    public function isWakaHumas(): bool
+    {
+        return $this->role === 'waka_humas';
+    }
+
     public function isWaka(): bool
     {
-        return in_array($this->role, ['waka_kesiswaan', 'waka_sdm', 'waka_kurikulum']);
+        return in_array($this->role, [
+            'waka_kesiswaan',
+            'waka_sdm',
+            'waka_kurikulum',
+            'waka_sarpras',
+            'waka_humas',
+        ]);
     }
 
     public function isKepalaSekolah(): bool

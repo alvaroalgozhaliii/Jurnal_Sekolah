@@ -9,6 +9,9 @@ use App\Models\DispenLog;
 use App\Models\Notifikasi;
 use App\Models\User;
 use App\Models\AbsensiSiswa;
+use App\Models\Kelas;
+use App\Models\Jadwal;
+use App\Models\JadwalWaka;
 use App\Services\WhatsAppService;
 use Carbon\Carbon;
 
@@ -25,6 +28,19 @@ class WakaDashboardController extends Controller
     {
         $user = Auth::user();
         $isSdm = $user->isWakaSdm();
+
+        if ($user->isWakaKurikulum()) {
+            return redirect()->route('waka-kurikulum.dashboard');
+        }
+        if ($user->isWakaKesiswaan()) {
+            return redirect()->route('waka.monitoring-siswa');
+        }
+        if ($user->isWakaSarpras()) {
+            return redirect()->route('waka.sarpras');
+        }
+        if ($user->isWakaHumas()) {
+            return redirect()->route('waka.humas');
+        }
 
         $pengajuanQuery = PengajuanIzin::with(['siswa.kelas.jurusan', 'guru', 'pengaju', 'wakaApprover']);
 
@@ -62,17 +78,18 @@ class WakaDashboardController extends Controller
         $user = Auth::user();
         $isSdm = $user->isWakaSdm();
 
-        $query = PengajuanIzin::with(['siswa.kelas.jurusan', 'guru', 'pengaju', 'wakaApprover']);
+        $query = PengajuanIzin::with(['siswa.kelas.jurusan', 'guru', 'pengaju', 'wakaApprover', 'wakaTujuan']);
 
-        if ($isSdm) {
-            $query->where('kategori', 'izin_guru');
-        } else {
-            $query->where('kategori', '!=', 'izin_guru');
-        }
         if (!$user->isAdmin()) {
-            $query->where(function ($builder) use ($user) {
-                $builder->where('id_waka_tujuan', $user->id_user)
-                    ->orWhereNull('id_waka_tujuan');
+            $query->where(function ($builder) use ($user, $isSdm) {
+                $builder->where('id_waka_tujuan', $user->id_user);
+                if ($isSdm) {
+                    $builder->orWhere('kategori', 'izin_guru');
+                }
+                if ($user->isWakaKesiswaan()) {
+                    $builder->orWhere('kategori', '!=', 'izin_guru');
+                }
+                $builder->orWhereNull('id_waka_tujuan');
             });
         }
 
@@ -92,16 +109,17 @@ class WakaDashboardController extends Controller
             'pengaju',
             'piketApprover',
             'wakaApprover',
+            'wakaTujuan',
             'kepalaApprover',
             'satpam',
             'logs.user'
         ])->findOrFail($id);
 
         if (!$this->canProcess($user, $pengajuan)) {
-            abort(403);
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk memproses pengajuan ini.');
         }
 
-        $isSdm = $user->isWakaSdm();
+        $isSdm = $user->isWakaSdm() || ($pengajuan->kategori === 'izin_guru');
 
         return view('waka.show', compact('pengajuan', 'isSdm'));
     }
@@ -112,7 +130,7 @@ class WakaDashboardController extends Controller
         $pengajuan = PengajuanIzin::findOrFail($id);
 
         if (!$this->canProcess($user, $pengajuan) || !in_array($pengajuan->status, ['pending_waka', 'menunggu_waka'])) {
-            abort(403);
+            abort(403, 'Akses ditolak atau pengajuan sudah diproses sebelumnya.');
         }
 
         $request->validate([
@@ -122,15 +140,12 @@ class WakaDashboardController extends Controller
 
         $statusSebelum = $pengajuan->status;
         $isGuru = ($pengajuan->kategori === 'izin_guru');
-        $isPiketFlow = (bool) $pengajuan->id_waka_tujuan;
         $namaSubjek = $pengajuan->guru?->nama ?? $pengajuan->siswa?->nama ?? $pengajuan->pengaju?->nama ?? 'Siswa/Guru';
 
         if ($request->keputusan === 'setujui') {
             // JIKA DISPEN GURU -> Diteruskan ke Kepala Sekolah (BUKAN Satpam)
             // JIKA DISPEN SISWA -> Diteruskan ke Satpam
-            $statusSesudah = $isPiketFlow
-                ? 'menunggu_satpam'
-                : ($isGuru ? 'pending_kepala' : 'disetujui_waka');
+            $statusSesudah = $isGuru ? 'pending_kepala' : 'disetujui_waka';
 
             $pengajuan->update([
                 'status' => $statusSesudah,
@@ -147,101 +162,90 @@ class WakaDashboardController extends Controller
                 $user->role,
                 $statusSebelum,
                 $statusSesudah,
-                $request->catatan ?? ($isGuru ? 'Disetujui Waka SDM & diteruskan ke Kepala Sekolah' : 'Disetujui Waka Kesiswaan & diteruskan ke Satpam')
+                $request->catatan ?? ($isGuru ? 'Disetujui Waka & diteruskan ke Kepala Sekolah' : 'Disetujui Waka & diteruskan ke Satpam')
             );
 
-            if ($isGuru && !$isPiketFlow) {
-                // Notifikasi In-App ke Kepala Sekolah
+            // Jika DISPEN GURU -> Notifikasi WhatsApp ke Kepala Sekolah
+            // Jika DISPEN SISWA -> Notifikasi WhatsApp ke Satpam
+            if ($isGuru) {
+                $waResult = $this->waService->kirimNotifDispenKeKepala($pengajuan->load(['guru', 'pengaju', 'wakaApprover']));
+
                 Notifikasi::kirimKeRole(
                     'kepala_sekolah',
                     'Dispen Guru Menunggu Persetujuan Final',
-                    "Pengajuan dispen guru {$namaSubjek} telah disetujui Waka SDM dan menunggu persetujuan final Kepala Sekolah.",
+                    "Dispensasi guru {$namaSubjek} telah disetujui Waka dan menunggu persetujuan final Kepala Sekolah.",
                     route('kepala.persetujuan.show', $pengajuan->id_pengajuan),
                     'dispen'
                 );
-
-                // Notifikasi In-App ke Pengaju
-                Notifikasi::kirim(
-                    $pengajuan->id_user_pengaju,
-                    'Dispen Guru Disetujui Waka SDM',
-                    "Pengajuan dispen Anda telah disetujui Waka SDM dan sedang menunggu persetujuan final Kepala Sekolah.",
-                    route('pengajuan.show', $pengajuan->id_pengajuan),
-                    'dispen'
-                );
-
-                // Kirim WhatsApp ke Kepala Sekolah
-                $waResult = $this->waService->kirimNotifDispenKeKepala($pengajuan);
-                $pesan = "Pengajuan dispen guru {$namaSubjek} BERHASIL DISETUJUI dan diteruskan ke Kepala Sekolah.";
             } else {
-                // Notifikasi In-App ke Piket
+                $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan->load(['siswa.kelas', 'pengaju', 'wakaApprover']));
+
                 Notifikasi::kirimKeRole(
-                    'piket',
-                    'Dispen Disetujui Waka',
-                    "Pengajuan dispen siswa {$namaSubjek} telah disetujui Waka dan diteruskan ke Satpam.",
-                    route('waka.persetujuan.show', $pengajuan->id_pengajuan),
+                    'satpam',
+                    'Dispen Siswa Disetujui Waka',
+                    "Dispen siswa {$namaSubjek} telah disetujui Waka. Harap verifikasi kartu pelajar saat di gerbang.",
+                    route('satpam.show', $pengajuan->id_pengajuan),
                     'dispen'
                 );
-
-                // Notifikasi In-App ke Pengaju / Ortu
-                Notifikasi::kirim(
-                    $pengajuan->id_user_pengaju,
-                    'Pengajuan Dispen Disetujui Waka',
-                    "Pengajuan dispen Anda telah disetujui Waka. Silakan periksa ke petugas Satpam saat keluar gerbang.",
-                    route('pengajuan.show', $pengajuan->id_pengajuan),
-                    'dispen'
-                );
-
-                // Notifikasi In-App & WhatsApp ke Satpam
-                if ($pengajuan->butuh_satpam) {
-                    Notifikasi::kirimKeRole(
-                        'satpam',
-                        'Verifikasi Dispen Baru (Acc Waka)',
-                        "Dispen {$namaSubjek} telah disetujui Waka. Menunggu verifikasi fisik kartu identitas.",
-                        route('satpam.show', $pengajuan->id_pengajuan),
-                        'satpam'
-                    );
-
-                    $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
-                }
-
-                $pesan = "Pengajuan dispensasi siswa {$namaSubjek} BERHASIL DISETUJUI dan diteruskan ke Satpam.";
             }
+
+            // Notifikasi ke Pengaju
+            if ($pengajuan->id_user_pengaju) {
+                $pesanPengaju = $isGuru
+                    ? "Pengajuan dispen Anda telah disetujui oleh {$user->nama} dan diteruskan ke Kepala Sekolah."
+                    : "Pengajuan dispen Anda telah disetujui oleh {$user->nama}. Silakan tunjukkan ke Satpam di gerbang.";
+
+                Notifikasi::create([
+                    'id_user' => $pengajuan->id_user_pengaju,
+                    'judul' => 'Pengajuan Dispen Disetujui Waka',
+                    'pesan' => $pesanPengaju,
+                    'link' => route('pengajuan.show', $pengajuan->id_pengajuan),
+                    'tipe' => 'dispen',
+                    'dibaca' => false,
+                ]);
+            }
+
+            $pesanSukses = $isGuru
+                ? "Pengajuan dispensasi {$namaSubjek} BERHASIL DISETUJUI dan diteruskan ke Kepala Sekolah."
+                : "Pengajuan dispensasi {$namaSubjek} BERHASIL DISETUJUI dan diteruskan ke Satpam.";
 
             if (isset($waResult) && !$waResult['success']) {
-                $pesan .= ' (' . $waResult['message'] . ')';
+                $pesanSukses .= ' (WhatsApp: ' . $waResult['message'] . ')';
             }
 
-            return redirect()->route('waka.persetujuan.show', $pengajuan->id_pengajuan)->with('success', $pesan);
+            return redirect()->route('waka.persetujuan.show', $pengajuan->id_pengajuan)->with('success', $pesanSukses);
+
         } else {
+            // DITOLAK OLEH WAKA
             $statusSesudah = 'ditolak_waka';
+
             $pengajuan->update([
                 'status' => $statusSesudah,
                 'id_waka_approver' => $user->id_user,
-                'catatan_waka' => $request->catatan,
                 'alasan_penolakan' => $request->catatan,
+                'catatan_waka' => $request->catatan,
                 'tgl_waka' => now(),
             ]);
 
-            $waResult = $this->waService->kirimNotifPenolakanWaka($pengajuan->load(['siswa', 'guru', 'pengaju']));
-
-            // Catat log audit
             DispenLog::catat(
                 $pengajuan->id_pengajuan,
                 $user->id_user,
                 $user->role,
                 $statusSebelum,
                 $statusSesudah,
-                $request->catatan ?? 'Ditolak oleh Waka'
+                'Ditolak Waka. Alasan: ' . ($request->catatan ?? '-')
             );
 
-            // Notifikasi In-App ke Pengaju
-            Notifikasi::kirim(
-                $pengajuan->id_user_pengaju,
-                'Pengajuan Dispen Ditolak Waka',
-                "Pengajuan dispen {$namaSubjek} telah ditolak oleh Waka. Catatan: " . ($request->catatan ?? '-'),
-                route('pengajuan.show', $pengajuan->id_pengajuan),
-                'dispen'
-            );
+            if ($pengajuan->id_user_pengaju) {
+                Notifikasi::create([
+                    'id_user' => $pengajuan->id_user_pengaju,
+                    'judul' => 'Pengajuan Dispen Ditolak Waka',
+                    'pesan' => "Pengajuan dispen Anda ditolak oleh {$user->nama}. Alasan: " . ($request->catatan ?? '-'),
+                    'link' => route('pengajuan.show', $pengajuan->id_pengajuan),
+                    'tipe' => 'dispen',
+                    'dibaca' => false,
+                ]);
+            }
 
             return redirect()->route('waka.persetujuan.show', $pengajuan->id_pengajuan)->with('success', "Pengajuan dispensasi {$namaSubjek} telah DITOLAK.");
         }
@@ -273,21 +277,58 @@ class WakaDashboardController extends Controller
         return view('waka.monitoring-siswa', compact('tanggal', 'absensi', 'pengajuan', 'ringkasan'));
     }
 
+    public function sarpras(Request $request)
+    {
+        $kelasList = Kelas::with('jurusan')->orderBy('tingkat')->orderBy('nama_kelas')->get();
+        $jadwalAktif = Jadwal::with(['guru', 'kelas'])->where('aktif', 1)->orderBy('hari')->orderBy('jam_ke')->get();
+        
+        $ruangList = $jadwalAktif->pluck('ruang')->filter()->unique()->values();
+
+        return view('waka.sarpras', compact('kelasList', 'jadwalAktif', 'ruangList'));
+    }
+
+    public function humas(Request $request)
+    {
+        $dinasLuar = PengajuanIzin::with(['guru', 'pengaju', 'wakaApprover', 'kepalaApprover'])
+            ->where('kategori', 'izin_guru')
+            ->orderBy('tanggal', 'desc')
+            ->paginate(15);
+
+        return view('waka.humas', compact('dinasLuar'));
+    }
+
     private function canProcess(User $user, PengajuanIzin $pengajuan): bool
     {
         if ($user->isAdmin()) {
             return true;
         }
 
-        if ($pengajuan->id_waka_tujuan && (int) $pengajuan->id_waka_tujuan !== (int) $user->id_user) {
-            return false;
-        }
-
-        if ($pengajuan->id_waka_tujuan) {
+        // Jika user adalah Waka yang ditargetkan secara langsung
+        if ($pengajuan->id_waka_tujuan && (int) $pengajuan->id_waka_tujuan === (int) $user->id_user) {
             return true;
         }
 
-        return ($user->isWakaSdm() && $pengajuan->kategori === 'izin_guru')
-            || ($user->isWakaKesiswaan() && $pengajuan->kategori !== 'izin_guru');
+        // Jika user adalah Waka yang bertugas pada tanggal pengajuan
+        $jadwal = JadwalWaka::wakaBertugasPada($pengajuan->tanggal);
+        if ($jadwal && (int) $jadwal->id_user_waka === (int) $user->id_user) {
+            return true;
+        }
+
+        // Waka SDM memiliki hak otorisasi untuk semua izin guru
+        if ($user->isWakaSdm() && $pengajuan->kategori === 'izin_guru') {
+            return true;
+        }
+
+        // Waka Kesiswaan memiliki hak otorisasi untuk semua dispen siswa
+        if ($user->isWakaKesiswaan() && $pengajuan->kategori !== 'izin_guru') {
+            return true;
+        }
+
+        // Jika user adalah Waka manapun dan id_waka_tujuan belum diset
+        if ($user->isWaka() && is_null($pengajuan->id_waka_tujuan)) {
+            return true;
+        }
+
+        return false;
     }
 }

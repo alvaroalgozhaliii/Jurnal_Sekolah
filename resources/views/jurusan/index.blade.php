@@ -23,8 +23,9 @@
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
-                        <th>Kode Jurusan</th>
+                        <th>Kode</th>
                         <th>Nama Jurusan</th>
+                        <th>Maks Rombel</th>
                         <th class="action-col">Aksi</th>
                     </tr>
                 </thead>
@@ -32,8 +33,9 @@
                     @foreach($jurusan as $item)
                     <tr>
                         <td class="no-col">{{ $loop->iteration }}</td>
-                        <td class="text-muted fw-bold">{{ $item->kode_jurusan ?? '-' }}</td>
+                        <td class="text-muted fw-bold">{{ $item->rombel ?? '-' }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama_jurusan }}</td>
+                        <td>{{ $item->maks_rombel ?? '-' }} kelas</td>
                         <td class="action-col">
                             <a href="{{ route('jurusan.show', $item->id_jurusan) }}" class="btn btn-secondary btn-sm">Detail</a>
                             <a href="{{ route('jurusan.edit', $item->id_jurusan) }}" class="btn btn-primary btn-sm">Edit</a>
