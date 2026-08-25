@@ -42,7 +42,15 @@ class RoleMiddleware
         }
 
         if (!in_array($user->role, $allowedRoles)) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
+            $targetRoleName = ucwords(str_replace('_', ' ', implode(' / ', $roles)));
+            $currentRoleName = ucwords(str_replace('_', ' ', $user->role));
+            
+            // Simpan intended URL agar setelah login langsung ke halaman tujuan
+            session()->put('url.intended', $request->fullUrl());
+            Auth::logout();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->with('info', "Halaman ini memerlukan login sebagai {$targetRoleName}. Anda sebelumnya login sebagai {$currentRoleName}. Silakan login dengan akun {$targetRoleName}.");
         }
 
         return $next($request);

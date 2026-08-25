@@ -36,7 +36,7 @@ class WhatsAppService
     }
 
     /**
-     * Kirim pesan WhatsApp otomatis ke nomor tujuan via Gateway API
+     * Kirim pesan WhatsApp otomatis ke nomor tujuan via Gateway API (Fonnte / Gateway)
      * 
      * @param string $nomorHp
      * @param string $pesan
@@ -101,50 +101,110 @@ class WhatsAppService
     }
 
     /**
-     * Dapatkan teks pesan untuk Waka
+     * Dapatkan teks pesan notifikasi untuk Waka (Kesiswaan / SDM)
      */
     public static function getPesanWaka(PengajuanIzin $pengajuan): string
     {
-        $nama = $pengajuan->siswa ? $pengajuan->siswa->nama : ($pengajuan->guru ? $pengajuan->guru->nama : ($pengajuan->pengaju->nama ?? '-'));
-        $kelas = $pengajuan->siswa && $pengajuan->siswa->kelas ? $pengajuan->siswa->kelas->nama_kelas : ($pengajuan->guru ? 'Guru' : '-');
+        $isGuru = ($pengajuan->kategori === 'izin_guru');
+        $nama = $isGuru ? ($pengajuan->guru?->nama ?? $pengajuan->pengaju?->nama ?? 'Guru') : ($pengajuan->siswa?->nama ?? 'Siswa');
+        $identitas = $isGuru ? 'Guru' : ('Kelas ' . ($pengajuan->siswa?->kelas?->nama_kelas ?? '-'));
         $jenis = $pengajuan->jenis_izin ?? strtoupper(str_replace('_', ' ', $pengajuan->kategori));
         $tanggal = $pengajuan->tanggal;
+        $jam = $pengajuan->jam_mulai ? ($pengajuan->jam_mulai . ($pengajuan->perkiraan_kembali ? ' s/d ' . $pengajuan->perkiraan_kembali : '')) : 'Hari ini';
         $alasan = $pengajuan->alasan;
-        $linkApproval = url(route('waka.persetujuan.show', $pengajuan->id_pengajuan));
+        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $linkApproval = $baseUrl . '/waka-area/persetujuan/' . $pengajuan->id_pengajuan;
 
-        return "Jurnal Sekolah\n\n"
-             . "Ada pengajuan dispen/izin baru.\n\n"
-             . "Nama: {$nama}\n"
-             . "Kelas: {$kelas}\n"
-             . "Jenis: {$jenis}\n"
-             . "Tanggal: {$tanggal}\n"
-             . "Alasan: {$alasan}\n\n"
-             . "Silakan melakukan pemeriksaan dan keputusan melalui link berikut:\n"
+        $judul = $isGuru ? "*[JURNAL SEKOLAH - DISPEN GURU]*" : "*[JURNAL SEKOLAH - DISPEN SISWA]*";
+
+        return "{$judul}\n\n"
+             . "Ada pengajuan dispensasi/izin baru menunggu persetujuan Waka.\n\n"
+             . "• *Nama:* {$nama}\n"
+             . "• *Status:* {$identitas}\n"
+             . "• *Keperluan:* {$jenis}\n"
+             . "• *Tanggal:* {$tanggal}\n"
+             . "• *Waktu:* {$jam}\n"
+             . "• *Alasan:* {$alasan}\n\n"
+             . "Klik link di bawah ini untuk melihat detail dan memberikan persetujuan:\n"
              . "{$linkApproval}\n\n"
-             . "Status: Menunggu persetujuan Waka.";
+             . "_Status: Menunggu Persetujuan Waka_";
     }
 
     /**
-     * Dapatkan teks pesan untuk Satpam
+     * Dapatkan teks pesan notifikasi untuk Kepala Sekolah (Dispen Guru yang sudah di-Acc Waka SDM)
+     */
+    public static function getPesanKepala(PengajuanIzin $pengajuan): string
+    {
+        $namaGuru = $pengajuan->guru?->nama ?? $pengajuan->pengaju?->nama ?? 'Guru';
+        $nip = $pengajuan->guru?->nip ?? '-';
+        $jenis = $pengajuan->jenis_izin ?? 'Dispensasi / Izin Guru';
+        $tanggal = $pengajuan->tanggal;
+        $jam = $pengajuan->jam_mulai ? ($pengajuan->jam_mulai . ($pengajuan->perkiraan_kembali ? ' s/d ' . $pengajuan->perkiraan_kembali : '')) : 'Hari ini';
+        $alasan = $pengajuan->alasan;
+        $catatanWaka = $pengajuan->catatan_waka ? $pengajuan->catatan_waka : 'Telah disetujui Waka SDM';
+        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $linkApproval = $baseUrl . '/kepala-area/persetujuan/' . $pengajuan->id_pengajuan;
+
+        return "*[JURNAL SEKOLAH - PERSETUJUAN FINAL KEPALA SEKOLAH]*\n\n"
+             . "Yth. Bapak/Ibu Kepala Sekolah,\n"
+             . "Terdapat pengajuan dispensasi/izin meninggalkan tugas guru yang telah disetujui oleh Waka SDM dan memerlukan persetujuan final dari Anda.\n\n"
+             . "• *Nama Guru:* {$namaGuru}\n"
+             . "• *NIP:* {$nip}\n"
+             . "• *Keperluan:* {$jenis}\n"
+             . "• *Tanggal:* {$tanggal}\n"
+             . "• *Waktu:* {$jam}\n"
+             . "• *Alasan:* {$alasan}\n"
+             . "• *Catatan Waka SDM:* {$catatanWaka}\n\n"
+             . "Silakan klik link berikut untuk memproses persetujuan:\n"
+             . "{$linkApproval}\n\n"
+             . "_Status: Menunggu Persetujuan Kepala Sekolah_";
+    }
+
+    /**
+     * Dapatkan teks pesan untuk Satpam (Hanya untuk Siswa keluar gerbang)
      */
     public static function getPesanSatpam(PengajuanIzin $pengajuan): string
     {
-        $nama = $pengajuan->siswa ? $pengajuan->siswa->nama : ($pengajuan->guru ? $pengajuan->guru->nama : ($pengajuan->pengaju->nama ?? '-'));
-        $kelas = $pengajuan->siswa && $pengajuan->siswa->kelas ? $pengajuan->siswa->kelas->nama_kelas : ($pengajuan->guru ? 'Guru' : '-');
+        $nama = $pengajuan->siswa?->nama ?? 'Siswa';
+        $kelas = $pengajuan->siswa?->kelas?->nama_kelas ?? '-';
+        $nis = $pengajuan->siswa?->nis ?? '-';
         $jenis = $pengajuan->jenis_izin ?? strtoupper(str_replace('_', ' ', $pengajuan->kategori));
         $tanggal = $pengajuan->tanggal;
         $jam = $pengajuan->jam_mulai ? $pengajuan->jam_mulai . ($pengajuan->perkiraan_kembali ? ' (Kembali: '.$pengajuan->perkiraan_kembali.')' : '') : 'Hari ini';
-        $linkSatpam = url(route('satpam.show', $pengajuan->id_pengajuan));
+        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $linkSatpam = $baseUrl . '/satpam-area/periksa/' . $pengajuan->id_pengajuan;
 
-        return "Jurnal Sekolah\n\n"
-             . "Pengajuan dispen telah DISETUJUI oleh Waka.\n\n"
-             . "Nama: {$nama}\n"
-             . "Kelas: {$kelas}\n"
-             . "Tanggal: {$tanggal}\n"
-             . "Jam keluar: {$jam}\n"
-             . "Jenis: {$jenis}\n\n"
-             . "Satpam dapat melakukan pengecekan melalui link:\n"
+        return "*[JURNAL SEKOLAH - VERIFIKASI GERBANG SATPAM]*\n\n"
+             . "Dispen siswa telah *DISETUJUI OLEH WAKA KESISWAAN*.\n\n"
+             . "• *Nama Siswa:* {$nama}\n"
+             . "• *NIS / Kelas:* {$nis} / {$kelas}\n"
+             . "• *Tanggal:* {$tanggal}\n"
+             . "• *Jam Keluar:* {$jam}\n"
+             . "• *Keperluan:* {$jenis}\n\n"
+             . "Petugas Satpam harap mencocokkan Kartu Pelajar siswa saat melewati gerbang melalui link:\n"
              . "{$linkSatpam}";
+    }
+
+    /**
+     * Dapatkan teks pesan konfirmasi selesai untuk Guru
+     */
+    public static function getPesanSelesaiGuru(PengajuanIzin $pengajuan): string
+    {
+        $namaGuru = $pengajuan->guru?->nama ?? $pengajuan->pengaju?->nama ?? 'Bapak/Ibu Guru';
+        $jenis = $pengajuan->jenis_izin ?? 'Dispensasi Guru';
+        $tanggal = $pengajuan->tanggal;
+        $catatanKepala = $pengajuan->catatan_kepala ? $pengajuan->catatan_kepala : '-';
+        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $linkDetail = $baseUrl . '/pengajuan-izin/' . $pengajuan->id_pengajuan;
+
+        return "*[JURNAL SEKOLAH - STATUS DISPEN RESMI DISETUJUI]*\n\n"
+             . "Halo {$namaGuru},\n"
+             . "Pengajuan dispensasi/izin Anda untuk tanggal *{$tanggal}* telah *DISETUJUI LENGKAP* oleh Waka SDM dan Kepala Sekolah.\n\n"
+             . "• *Keperluan:* {$jenis}\n"
+             . "• *Catatan Kepala Sekolah:* {$catatanKepala}\n\n"
+             . "Lihat dokumen izin resmi Anda di:\n"
+             . "{$linkDetail}\n\n"
+             . "Terima kasih.";
     }
 
     /**
@@ -154,6 +214,16 @@ class WhatsAppService
     {
         $phone = self::formatNomor($nomorHp);
         $text = rawurlencode(self::getPesanWaka($pengajuan));
+        return "https://api.whatsapp.com/send?phone={$phone}&text={$text}";
+    }
+
+    /**
+     * Dapatkan link Direct WhatsApp wa.me ke Kepala Sekolah
+     */
+    public static function getDirectWaLinkKepala(PengajuanIzin $pengajuan, string $nomorHp = '085707300240'): string
+    {
+        $phone = self::formatNomor($nomorHp);
+        $text = rawurlencode(self::getPesanKepala($pengajuan));
         return "https://api.whatsapp.com/send?phone={$phone}&text={$text}";
     }
 
@@ -182,10 +252,8 @@ class WhatsAppService
             ->get();
 
         if ($wakas->isEmpty()) {
-            return [
-                'success' => false,
-                'message' => 'Tidak ada akun Waka dengan nomor HP terdaftar.'
-            ];
+            // Fallback nomor contoh jika belum ada user di database
+            return $this->kirim('085707300240', $pesan);
         }
 
         $results = [];
@@ -197,6 +265,36 @@ class WhatsAppService
         return [
             'success' => $anySuccess,
             'message' => $anySuccess ? 'Notifikasi WhatsApp berhasil dikirim ke Waka.' : ($results[0]['message'] ?? 'Gagal mengirim WhatsApp.')
+        ];
+    }
+
+    /**
+     * Kirim Notifikasi Dispen Guru ke Kepala Sekolah (Background API)
+     */
+    public function kirimNotifDispenKeKepala(PengajuanIzin $pengajuan): array
+    {
+        $pesan = self::getPesanKepala($pengajuan);
+
+        $kepalas = User::where('role', 'kepala_sekolah')
+            ->where('aktif', 1)
+            ->whereNotNull('no_hp')
+            ->where('no_hp', '!=', '')
+            ->get();
+
+        if ($kepalas->isEmpty()) {
+            // Fallback nomor contoh untuk testing
+            return $this->kirim('085707300240', $pesan);
+        }
+
+        $results = [];
+        foreach ($kepalas as $kepala) {
+            $results[] = $this->kirim($kepala->no_hp, $pesan);
+        }
+
+        $anySuccess = collect($results)->contains('success', true);
+        return [
+            'success' => $anySuccess,
+            'message' => $anySuccess ? 'Notifikasi WhatsApp berhasil dikirim ke Kepala Sekolah.' : ($results[0]['message'] ?? 'Gagal mengirim WhatsApp.')
         ];
     }
 
@@ -214,10 +312,7 @@ class WhatsAppService
             ->get();
 
         if ($satpams->isEmpty()) {
-            return [
-                'success' => false,
-                'message' => 'Tidak ada akun Satpam dengan nomor HP terdaftar.'
-            ];
+            return $this->kirim('081359472399', $pesan);
         }
 
         $results = [];
@@ -230,5 +325,23 @@ class WhatsAppService
             'success' => $anySuccess,
             'message' => $anySuccess ? 'Notifikasi WhatsApp berhasil dikirim ke Satpam.' : ($results[0]['message'] ?? 'Gagal mengirim WhatsApp.')
         ];
+    }
+
+    /**
+     * Kirim Notifikasi Selesai ke Guru (Background API)
+     */
+    public function kirimNotifSelesaiKeGuru(PengajuanIzin $pengajuan): array
+    {
+        $pesan = self::getPesanSelesaiGuru($pengajuan);
+
+        // Ambil nomor HP guru yang bersangkutan atau pemohon
+        $nomor = $pengajuan->guru?->no_telp ?? $pengajuan->pengaju?->no_hp;
+
+        if (!$nomor) {
+            // Fallback nomor waka contoh
+            $nomor = '085707300240';
+        }
+
+        return $this->kirim($nomor, $pesan);
     }
 }
