@@ -89,12 +89,12 @@ class PengajuanIzin extends Model
     // Status Helpers
     public function isPendingWaka(): bool
     {
-        return in_array($this->status, ['pending_waka', 'pending_piket']);
+        return in_array($this->status, ['pending_waka', 'menunggu_waka', 'pending_piket']);
     }
 
     public function isDisetujuiWaka(): bool
     {
-        return in_array($this->status, ['disetujui_waka', 'pending_kepala', 'completed']);
+        return in_array($this->status, ['disetujui_waka', 'pending_kepala', 'menunggu_satpam', 'completed', 'selesai']);
     }
 
     public function isDitolak(): bool
