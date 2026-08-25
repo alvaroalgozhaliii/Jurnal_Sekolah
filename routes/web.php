@@ -191,6 +191,9 @@ Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm'])->prefix('waka-
 
 Route::middleware(['auth', 'role:admin,kepala_sekolah'])->prefix('kepala-area')->group(function () {
     Route::get('/dashboard', [KepalaSekolahController::class, 'index'])->name('kepala.dashboard');
+    Route::get('/persetujuan', [KepalaSekolahController::class, 'daftarPersetujuan'])->name('kepala.persetujuan.index');
+    Route::get('/persetujuan/{id}', [KepalaSekolahController::class, 'show'])->name('kepala.persetujuan.show');
+    Route::post('/persetujuan/{id}/proses', [KepalaSekolahController::class, 'prosesKeputusan'])->name('kepala.persetujuan.proses');
 });
 
 

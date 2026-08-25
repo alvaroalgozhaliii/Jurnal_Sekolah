@@ -40,8 +40,11 @@ class JurnalHarianController extends Controller
         $jurnal_harian = $query->orderBy('tanggal', 'desc')->get();
         $guruList = Guru::all();
         $kelasList = Kelas::all();
+        $tanggal = $request->input('tanggal');
+        $id_guru = $request->input('id_guru');
+        $id_kelas = $request->input('id_kelas');
 
-        return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList'));
+        return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList', 'tanggal', 'id_guru', 'id_kelas'));
     }
 
     public function create(Request $request)
@@ -75,7 +78,12 @@ class JurnalHarianController extends Controller
             $j->active_message = $this->getScheduleTimeMessage($j, $currentDayIndo, $now);
         }
 
-        return view('jurnal_harian.create', compact('jadwalList'));
+        $jadwalSelected = null;
+        if ($request->filled('id_jadwal')) {
+            $jadwalSelected = $jadwalList->firstWhere('id_jadwal', (int) $request->id_jadwal);
+        }
+
+        return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected'));
     }
 
     public function store(Request $request)

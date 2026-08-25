@@ -137,10 +137,17 @@
                     </div>
 
                     <div class="d-flex gap-12 mt-16">
+                        @if($isSdm || $pengajuan->kategori === 'izin_guru')
                         <button type="submit" name="keputusan" value="setujui" class="btn btn-success btn-lg" style="flex:1;">
                             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            SETUJUI DISPEN
+                            SETUJUI (TERUSKAN KE KEPALA SEKOLAH)
                         </button>
+                        @else
+                        <button type="submit" name="keputusan" value="setujui" class="btn btn-success btn-lg" style="flex:1;">
+                            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            SETUJUI (TERUSKAN KE SATPAM)
+                        </button>
+                        @endif
                         <button type="submit" name="keputusan" value="tolak" class="btn btn-danger btn-lg" onclick="return confirm('Yakin ingin menolak pengajuan dispensasi ini?')" style="flex:1;">
                             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                             TOLAK DISPEN

@@ -33,7 +33,8 @@ class AuthController extends Controller
             }
 
             $request->session()->regenerate();
-            return $this->redirectBasedOnRole($user->role);
+            $defaultRoute = $this->getDashboardRouteName($user->role);
+            return redirect()->intended(route($defaultRoute));
         }
 
         return back()->with('error', 'Username atau password salah.');
@@ -50,16 +51,22 @@ class AuthController extends Controller
 
     protected function redirectBasedOnRole(string $role)
     {
+        $routeName = $this->getDashboardRouteName($role);
+        return redirect()->route($routeName);
+    }
+
+    protected function getDashboardRouteName(string $role): string
+    {
         return match ($role) {
-            'admin' => redirect()->route('admin.dashboard'),
-            'guru' => redirect()->route('guru.dashboard'),
-            'piket' => redirect()->route('piket.dashboard'),
-            'ortu', 'siswa' => redirect()->route('ortu.dashboard'),
-            'wali_kelas' => redirect()->route('walikelas.dashboard'),
-            'waka_kesiswaan', 'waka_sdm' => redirect()->route('waka.dashboard'),
-            'kepala_sekolah' => redirect()->route('kepala.dashboard'),
-            'satpam' => redirect()->route('satpam.dashboard'),
-            default => redirect()->route('login'),
+            'admin' => 'admin.dashboard',
+            'guru' => 'guru.dashboard',
+            'piket' => 'piket.dashboard',
+            'ortu', 'siswa' => 'ortu.dashboard',
+            'wali_kelas' => 'walikelas.dashboard',
+            'waka_kesiswaan', 'waka_sdm' => 'waka.dashboard',
+            'kepala_sekolah' => 'kepala.dashboard',
+            'satpam' => 'satpam.dashboard',
+            default => 'login',
         };
     }
 }

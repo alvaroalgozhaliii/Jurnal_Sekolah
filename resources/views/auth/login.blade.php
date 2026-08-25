@@ -18,6 +18,12 @@
         </div>
     @endif
 
+    @if(session('info'))
+        <div class="alert mb-16" style="background:#eff6ff; border:1px solid #3b82f6; color:#1e3a8a; padding:12px 16px; border-radius:8px; font-size:13px; line-height:1.5;">
+            <div>ℹ️ {{ session('info') }}</div>
+        </div>
+    @endif
+
     @if($errors->any())
         <div class="alert alert-danger mb-16">
             <div>Username atau password salah.</div>
