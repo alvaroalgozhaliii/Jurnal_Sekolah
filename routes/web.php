@@ -179,7 +179,7 @@ Route::middleware(['auth', 'role:admin,guru,wali_kelas'])->prefix('walikelas-are
 // WAKA ROLE ROUTES (KESISWAAN & SDM)
 // ======================================================
 
-Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm'])->prefix('waka-area')->group(function () {
+Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm,waka_kurikulum'])->prefix('waka-area')->group(function () {
     Route::get('/dashboard', [WakaDashboardController::class, 'index'])->name('waka.dashboard');
     Route::get('/persetujuan', [WakaDashboardController::class, 'daftarPersetujuan'])->name('waka.persetujuan.index');
     Route::get('/persetujuan/{id}', [WakaDashboardController::class, 'show'])->name('waka.persetujuan.show');

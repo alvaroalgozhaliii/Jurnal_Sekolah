@@ -11,6 +11,7 @@ use App\Models\Guru;
 use App\Models\User;
 use App\Models\Notifikasi;
 use App\Models\DispenLog;
+use App\Models\JadwalWaka;
 use App\Services\WhatsAppService;
 
 class PengajuanIzinController extends Controller
@@ -94,6 +95,14 @@ class PengajuanIzinController extends Controller
             'lampiran_foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $wakaTujuan = null;
+        if ($user->isPiket()) {
+            $wakaTujuan = JadwalWaka::wakaBertugasPada($request->tanggal);
+            if (!$wakaTujuan || !$wakaTujuan->waka) {
+                return back()->withInput()->with('error', 'Pengajuan tidak dapat dikirim karena belum ada Waka yang dijadwalkan pada tanggal tersebut.');
+            }
+        }
+
         $fotoPath = null;
         if ($request->hasFile('lampiran_foto')) {
             $file = $request->file('lampiran_foto');
@@ -126,6 +135,7 @@ class PengajuanIzinController extends Controller
             'lampiran_foto' => $fotoPath,
             'status' => $statusAwal,
             'butuh_satpam' => $butuhSatpam,
+            'id_waka_tujuan' => $wakaTujuan?->waka?->id_user,
         ]);
 
         // Catat Log Riwayat
@@ -138,23 +148,20 @@ class PengajuanIzinController extends Controller
             'Pengajuan ' . strtoupper(str_replace('_', ' ', $request->kategori)) . ' dibuat oleh ' . $user->nama
         );
 
-        // Notifikasi In-App ke Waka
-        $targetRole = ($request->kategori === 'izin_guru') ? 'waka_sdm' : 'waka_kesiswaan';
-        Notifikasi::kirimKeRole(
-            $targetRole,
-            'Pengajuan Dispen Baru',
-            'Ada pengajuan dispen/izin baru dari ' . $user->nama . ' menunggu persetujuan Waka.',
-            route('pengajuan.show', $pengajuan->id_pengajuan),
-            'dispen'
-        );
-
-        // Kirim Notifikasi WhatsApp ke Waka
-        $waResult = $this->waService->kirimNotifDispenKeWaka($pengajuan);
-
-        $flashMessage = 'Pengajuan dispensasi/izin berhasil dibuat dan diteruskan ke Waka.';
-        if (!$waResult['success']) {
-            $flashMessage .= ' (' . $waResult['message'] . ')';
+        if (!$user->isPiket()) {
+            $targetRole = ($request->kategori === 'izin_guru') ? 'waka_sdm' : 'waka_kesiswaan';
+            Notifikasi::kirimKeRole(
+                $targetRole,
+                'Pengajuan Dispen Baru',
+                'Ada pengajuan dispen/izin baru dari ' . $user->nama . ' menunggu persetujuan Waka.',
+                route('pengajuan.show', $pengajuan->id_pengajuan),
+                'dispen'
+            );
         }
+
+        $flashMessage = $user->isPiket()
+            ? 'Pengajuan dispen berhasil dibuat dan diarahkan ke ' . $wakaTujuan->waka->nama . '.'
+            : 'Pengajuan dispensasi/izin berhasil dibuat dan diteruskan ke Waka.';
 
         return redirect()->route('pengajuan.index')->with('success', $flashMessage);
     }
@@ -183,12 +190,16 @@ class PengajuanIzinController extends Controller
         }
 
         $pengajuan = PengajuanIzin::findOrFail($id);
+        if ($pengajuan->id_waka_tujuan && (int) $pengajuan->id_waka_tujuan !== (int) $user->id_user && !$user->isAdmin()) {
+            return redirect()->back()->with('error', 'Pengajuan ini ditujukan kepada Waka yang bertugas pada tanggal pengajuan.');
+        }
         $request->validate([
-            'catatan' => 'nullable|string',
+            'catatan' => 'nullable|string|required_if:keputusan,tolak',
             'keputusan' => 'required|in:setujui,tolak'
         ]);
 
         $statusSebelum = $pengajuan->status;
+        $isPiketFlow = (bool) $pengajuan->id_waka_tujuan;
 
         if ($request->keputusan === 'setujui') {
             $statusSesudah = 'disetujui_waka';
@@ -196,6 +207,7 @@ class PengajuanIzinController extends Controller
                 'status' => $statusSesudah,
                 'id_waka_approver' => $user->id_user,
                 'catatan_waka' => $request->catatan,
+                'alasan_penolakan' => null,
                 'tgl_waka' => now(),
             ]);
 
@@ -228,7 +240,7 @@ class PengajuanIzinController extends Controller
             );
 
             // Notifikasi in-app ke Satpam jika butuh satpam
-            if ($pengajuan->butuh_satpam) {
+            if ($pengajuan->butuh_satpam && !$isPiketFlow) {
                 Notifikasi::kirimKeRole(
                     'satpam',
                     'Verifikasi Dispen Baru (Acc Waka)',
@@ -253,6 +265,7 @@ class PengajuanIzinController extends Controller
                 'status' => $statusSesudah,
                 'id_waka_approver' => $user->id_user,
                 'catatan_waka' => $request->catatan,
+                'alasan_penolakan' => $request->catatan,
                 'tgl_waka' => now(),
             ]);
 

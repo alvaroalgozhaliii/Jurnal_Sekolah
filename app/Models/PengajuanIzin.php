@@ -27,7 +27,9 @@ class PengajuanIzin extends Model
         'catatan_piket',
         'tgl_piket',
         'id_waka_approver',
+        'id_waka_tujuan',
         'catatan_waka',
+        'alasan_penolakan',
         'tgl_waka',
         'id_kepala_approver',
         'catatan_kepala',
@@ -62,6 +64,11 @@ class PengajuanIzin extends Model
     public function wakaApprover()
     {
         return $this->belongsTo(User::class, 'id_waka_approver', 'id_user');
+    }
+
+    public function wakaTujuan()
+    {
+        return $this->belongsTo(User::class, 'id_waka_tujuan', 'id_user');
     }
 
     public function kepalaApprover()

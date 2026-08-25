@@ -33,6 +33,12 @@ class WakaDashboardController extends Controller
         } else {
             $pengajuanQuery->where('kategori', '!=', 'izin_guru');
         }
+        if (!$user->isAdmin()) {
+            $pengajuanQuery->where(function ($query) use ($user) {
+                $query->where('id_waka_tujuan', $user->id_user)
+                    ->orWhereNull('id_waka_tujuan');
+            });
+        }
 
         $pengajuanPending = (clone $pengajuanQuery)->where('status', 'pending_waka')->get();
         $pengajuanRiwayat = (clone $pengajuanQuery)->where('status', '!=', 'pending_waka')->orderBy('created_at', 'desc')->take(10)->get();
@@ -62,6 +68,12 @@ class WakaDashboardController extends Controller
             $query->where('kategori', 'izin_guru');
         } else {
             $query->where('kategori', '!=', 'izin_guru');
+        }
+        if (!$user->isAdmin()) {
+            $query->where(function ($builder) use ($user) {
+                $builder->where('id_waka_tujuan', $user->id_user)
+                    ->orWhereNull('id_waka_tujuan');
+            });
         }
 
         $pendingList = (clone $query)->where('status', 'pending_waka')->orderBy('created_at', 'desc')->get();
@@ -104,23 +116,25 @@ class WakaDashboardController extends Controller
         }
 
         $request->validate([
-            'catatan' => 'nullable|string',
+            'catatan' => 'nullable|string|required_if:keputusan,tolak',
             'keputusan' => 'required|in:setujui,tolak'
         ]);
 
         $statusSebelum = $pengajuan->status;
         $isGuru = ($pengajuan->kategori === 'izin_guru');
+        $isPiketFlow = (bool) $pengajuan->id_waka_tujuan;
         $namaSubjek = $pengajuan->guru?->nama ?? $pengajuan->siswa?->nama ?? $pengajuan->pengaju?->nama ?? 'Siswa/Guru';
 
         if ($request->keputusan === 'setujui') {
             // JIKA DISPEN GURU -> Diteruskan ke Kepala Sekolah (BUKAN Satpam)
             // JIKA DISPEN SISWA -> Diteruskan ke Satpam
-            $statusSesudah = $isGuru ? 'pending_kepala' : 'disetujui_waka';
+            $statusSesudah = $isGuru && !$isPiketFlow ? 'pending_kepala' : 'disetujui_waka';
 
             $pengajuan->update([
                 'status' => $statusSesudah,
                 'id_waka_approver' => $user->id_user,
                 'catatan_waka' => $request->catatan,
+                'alasan_penolakan' => null,
                 'tgl_waka' => now(),
             ]);
 
@@ -134,7 +148,7 @@ class WakaDashboardController extends Controller
                 $request->catatan ?? ($isGuru ? 'Disetujui Waka SDM & diteruskan ke Kepala Sekolah' : 'Disetujui Waka Kesiswaan & diteruskan ke Satpam')
             );
 
-            if ($isGuru) {
+            if ($isGuru && !$isPiketFlow) {
                 // Notifikasi In-App ke Kepala Sekolah
                 Notifikasi::kirimKeRole(
                     'kepala_sekolah',
@@ -185,7 +199,9 @@ class WakaDashboardController extends Controller
                         'satpam'
                     );
 
-                    $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
+                    if (!$pengajuan->id_waka_tujuan) {
+                        $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
+                    }
                 }
 
                 $pesan = "Pengajuan dispensasi siswa {$namaSubjek} BERHASIL DISETUJUI dan diteruskan ke Satpam.";
@@ -202,6 +218,7 @@ class WakaDashboardController extends Controller
                 'status' => $statusSesudah,
                 'id_waka_approver' => $user->id_user,
                 'catatan_waka' => $request->catatan,
+                'alasan_penolakan' => $request->catatan,
                 'tgl_waka' => now(),
             ]);
 
@@ -257,6 +274,14 @@ class WakaDashboardController extends Controller
     private function canProcess(User $user, PengajuanIzin $pengajuan): bool
     {
         if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($pengajuan->id_waka_tujuan && (int) $pengajuan->id_waka_tujuan !== (int) $user->id_user) {
+            return false;
+        }
+
+        if ($pengajuan->id_waka_tujuan) {
             return true;
         }
 
