@@ -10,6 +10,7 @@ use App\Http\Controllers\PiketDashboardController;
 use App\Http\Controllers\OrtuDashboardController;
 use App\Http\Controllers\WaliKelasController;
 use App\Http\Controllers\WakaDashboardController;
+use App\Http\Controllers\WakaKurikulumController;
 use App\Http\Controllers\KepalaSekolahController;
 use App\Http\Controllers\SatpamController;
 use App\Http\Controllers\PengajuanIzinController;
@@ -45,6 +46,7 @@ Route::get('/', function () {
             'ortu', 'siswa' => redirect()->route('ortu.dashboard'),
             'wali_kelas' => redirect()->route('walikelas.dashboard'),
             'waka_kesiswaan', 'waka_sdm' => redirect()->route('waka.dashboard'),
+            'waka_kurikulum' => redirect()->route('waka-kurikulum.dashboard'),
             'kepala_sekolah' => redirect()->route('kepala.dashboard'),
             'satpam' => redirect()->route('satpam.dashboard'),
             default => redirect()->route('login'),
@@ -182,6 +184,19 @@ Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm'])->prefix('waka-
     Route::get('/persetujuan', [WakaDashboardController::class, 'daftarPersetujuan'])->name('waka.persetujuan.index');
     Route::get('/persetujuan/{id}', [WakaDashboardController::class, 'show'])->name('waka.persetujuan.show');
     Route::post('/persetujuan/{id}/proses', [WakaDashboardController::class, 'prosesKeputusan'])->name('waka.persetujuan.proses');
+    Route::get('/monitoring-siswa', [WakaDashboardController::class, 'monitoringSiswa'])->middleware('role:admin,waka_kesiswaan')->name('waka.monitoring-siswa');
+});
+
+// ======================================================
+// WAKA KURIKULUM ROLE ROUTES
+// ======================================================
+
+Route::middleware(['auth', 'role:admin,waka_kurikulum'])->prefix('waka-kurikulum-area')->group(function () {
+    Route::get('/dashboard', [WakaKurikulumController::class, 'index'])->name('waka-kurikulum.dashboard');
+    Route::post('/jadwal-waka', [WakaKurikulumController::class, 'store'])->name('waka-kurikulum.jadwal.store');
+    Route::get('/jadwal-waka/{id}/edit', [WakaKurikulumController::class, 'edit'])->name('waka-kurikulum.jadwal.edit');
+    Route::put('/jadwal-waka/{id}', [WakaKurikulumController::class, 'update'])->name('waka-kurikulum.jadwal.update');
+    Route::delete('/jadwal-waka/{id}', [WakaKurikulumController::class, 'destroy'])->name('waka-kurikulum.jadwal.destroy');
 });
 
 

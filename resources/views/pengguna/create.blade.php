@@ -41,6 +41,7 @@
                         <option value="walikelas" {{ old('role') == 'walikelas' ? 'selected' : '' }}>Wali Kelas</option>
                         <option value="waka_kesiswaan" {{ old('role') == 'waka_kesiswaan' ? 'selected' : '' }}>Waka Kesiswaan</option>
                         <option value="waka_sdm" {{ old('role') == 'waka_sdm' ? 'selected' : '' }}>Waka SDM</option>
+                        <option value="waka_kurikulum" {{ old('role') == 'waka_kurikulum' ? 'selected' : '' }}>Waka Kurikulum</option>
                         <option value="kepala_sekolah" {{ old('role') == 'kepala_sekolah' ? 'selected' : '' }}>Kepala Sekolah</option>
                         <option value="satpam" {{ old('role') == 'satpam' ? 'selected' : '' }}>Satpam</option>
                     </select>

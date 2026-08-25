@@ -25,7 +25,7 @@ class PenggunaController extends Controller
             'nama' => 'required|string|max:150',
             'username' => 'required|string|max:50|unique:users,username',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:admin,guru,piket,ortu,siswa,walikelas,wali_kelas,waka_kesiswaan,waka_sdm,kepala_sekolah,satpam',
+            'role' => 'required|in:admin,guru,piket,ortu,siswa,walikelas,wali_kelas,waka_kesiswaan,waka_sdm,waka_kurikulum,kepala_sekolah,satpam',
             'no_hp' => 'nullable|string|max:25',
         ]);
 
@@ -60,7 +60,7 @@ class PenggunaController extends Controller
         $request->validate([
             'nama' => 'required|string|max:150',
             'username' => 'required|string|max:50|unique:users,username,' . $id . ',id_user',
-            'role' => 'required|in:admin,guru,piket,ortu,siswa,walikelas,wali_kelas,waka_kesiswaan,waka_sdm,kepala_sekolah,satpam',
+            'role' => 'required|in:admin,guru,piket,ortu,siswa,walikelas,wali_kelas,waka_kesiswaan,waka_sdm,waka_kurikulum,kepala_sekolah,satpam',
             'no_hp' => 'nullable|string|max:25',
             'password' => 'nullable|string|min:6',
         ]);
