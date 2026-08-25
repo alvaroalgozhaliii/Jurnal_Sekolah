@@ -151,6 +151,8 @@ class PengajuanIzinController extends Controller
             'Pengajuan ' . strtoupper(str_replace('_', ' ', $request->kategori)) . ' dibuat oleh ' . $user->nama
         );
 
+        $waResult = $isPiket ? $this->waService->kirimNotifDispenKeWaka($pengajuan->load(['siswa.kelas', 'guru', 'pengaju'])) : null;
+
         if (!$isPiket) {
             $targetRole = ($request->kategori === 'izin_guru') ? 'waka_sdm' : 'waka_kesiswaan';
             Notifikasi::kirimKeRole(
@@ -165,6 +167,9 @@ class PengajuanIzinController extends Controller
         $flashMessage = $isPiket
             ? 'Pengajuan dispen berhasil dibuat dan diarahkan ke ' . $wakaTujuan->waka->nama . '.'
             : 'Pengajuan dispensasi/izin berhasil dibuat dan diteruskan ke Waka.';
+        if ($waResult && !$waResult['success']) {
+            $flashMessage .= ' WhatsApp: ' . $waResult['message'];
+        }
 
         return redirect()->route('pengajuan.index')->with('success', $flashMessage);
     }
@@ -256,6 +261,10 @@ class PengajuanIzinController extends Controller
                 $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
             }
 
+            if ($pengajuan->butuh_satpam && $isPiketFlow) {
+                $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan->load(['siswa.kelas', 'guru', 'pengaju']));
+            }
+
             $msg = 'Pengajuan berhasil DISETUJUI oleh Waka.';
             if (isset($waResult) && !$waResult['success']) {
                 $msg .= ' (Notifikasi WA Satpam: ' . $waResult['message'] . ')';
@@ -271,6 +280,8 @@ class PengajuanIzinController extends Controller
                 'alasan_penolakan' => $request->catatan,
                 'tgl_waka' => now(),
             ]);
+
+            $waResult = $this->waService->kirimNotifPenolakanWaka($pengajuan->load(['siswa', 'guru', 'pengaju']));
 
             // Catat log
             DispenLog::catat(
@@ -300,7 +311,9 @@ class PengajuanIzinController extends Controller
                 'dispen'
             );
 
-            return redirect()->route('pengajuan.index')->with('success', 'Pengajuan DITOLAK oleh Waka.');
+            $message = 'Pengajuan DITOLAK oleh Waka.';
+            if (!$waResult['success']) $message .= ' WhatsApp: ' . $waResult['message'];
+            return redirect()->route('pengajuan.index')->with('success', $message);
         }
     }
 

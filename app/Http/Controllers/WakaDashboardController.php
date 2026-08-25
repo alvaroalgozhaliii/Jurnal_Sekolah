@@ -201,9 +201,7 @@ class WakaDashboardController extends Controller
                         'satpam'
                     );
 
-                    if (!$pengajuan->id_waka_tujuan) {
-                        $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
-                    }
+                    $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
                 }
 
                 $pesan = "Pengajuan dispensasi siswa {$namaSubjek} BERHASIL DISETUJUI dan diteruskan ke Satpam.";
@@ -223,6 +221,8 @@ class WakaDashboardController extends Controller
                 'alasan_penolakan' => $request->catatan,
                 'tgl_waka' => now(),
             ]);
+
+            $waResult = $this->waService->kirimNotifPenolakanWaka($pengajuan->load(['siswa', 'guru', 'pengaju']));
 
             // Catat log audit
             DispenLog::catat(
