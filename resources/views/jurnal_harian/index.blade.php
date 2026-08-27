@@ -5,6 +5,8 @@
 
 @if(Auth::user()->isAdmin() || Auth::user()->isPiket())
 <form action="{{ route('jurnal-harian.index') }}" method="GET" style="margin-bottom:15px;">
+    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari mapel, materi, guru, kelas..." style="padding:4px; width:200px;">
+    @if(Auth::user()->isAdmin() || Auth::user()->isPiket())
     <label>Filter Tanggal:</label> <input type="date" name="tanggal" value="{{ request('tanggal') }}">
     <label>Guru:</label>
     <select name="id_guru" style="padding:4px;">
@@ -20,7 +22,8 @@
         <option value="{{ $k->id_kelas }}" {{ request('id_kelas') == $k->id_kelas ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>
         @endforeach
     </select>
-    <button type="submit">Filter</button>
+    @endif
+    <button type="submit">Cari / Filter</button>
     <a href="{{ route('jurnal-harian.index') }}">Reset</a>
 </form>
 @endif

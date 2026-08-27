@@ -15,6 +15,14 @@
 <a href="{{ route('guru.trash') }}">Lihat Trash</a>
 <br><br>
 
+<form action="{{ route('guru.index') }}" method="GET" style="margin-bottom:15px;">
+    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama, NIP, atau bidang studi..." style="padding:5px; width:250px;">
+    <button type="submit">Cari</button>
+    @if(!empty($search))
+        <a href="{{ route('guru.index') }}">Reset</a>
+    @endif
+</form>
+
 <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
     <thead>
         <tr>

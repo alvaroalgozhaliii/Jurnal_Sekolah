@@ -7,10 +7,18 @@ use Illuminate\Http\Request;
 
 class JurusanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $jurusan = Jurusan::all();
-        return view('jurusan.index', compact('jurusan'));
+        $search = $request->get('search');
+        $query = Jurusan::query();
+
+        if ($search) {
+            $query->where('nama_jurusan', 'like', "%{$search}%")
+                  ->orWhere('rombel', 'like', "%{$search}%");
+        }
+
+        $jurusan = $query->orderBy('nama_jurusan', 'asc')->get();
+        return view('jurusan.index', compact('jurusan', 'search'));
     }
 
     public function create()
