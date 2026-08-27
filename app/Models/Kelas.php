@@ -36,4 +36,9 @@ class Kelas extends Model
     {
         return $this->hasMany(Jadwal::class, 'id_kelas', 'id_kelas');
     }
+
+    public function mataPelajaran()
+    {
+        return $this->belongsToMany(MataPelajaran::class, 'kelas_mapel', 'id_kelas', 'id_mapel');
+    }
 }

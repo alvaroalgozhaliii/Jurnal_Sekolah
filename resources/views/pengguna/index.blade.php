@@ -4,6 +4,14 @@
 <h2>Manajemen Pengguna (User)</h2>
 <a href="{{ route('pengguna.create') }}">+ Tambah Pengguna</a><br><br>
 
+<form action="{{ route('pengguna.index') }}" method="GET" style="margin-bottom:15px;">
+    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama, username, NIP, role..." style="padding:5px; width:250px;">
+    <button type="submit">Cari</button>
+    @if(!empty($search))
+        <a href="{{ route('pengguna.index') }}">Reset</a>
+    @endif
+</form>
+
 <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
     <thead><tr><th>No</th><th>Nama</th><th>Username</th><th>NIP</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead>
     <tbody>

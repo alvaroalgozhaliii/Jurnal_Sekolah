@@ -72,6 +72,7 @@
                 <a href="{{ route('siswa.index') }}">Siswa</a> |
                 <a href="{{ route('kelas.index') }}">Kelas</a> |
                 <a href="{{ route('jurusan.index') }}">Jurusan</a> |
+                <a href="{{ route('mapel.index') }}">Mata Pelajaran</a> |
                 <a href="{{ route('jadwal.index') }}">Jadwal</a> |
                 <a href="{{ route('jurnal-harian.index') }}">Jurnal Harian</a> |
                 <a href="{{ route('piket.presensi') }}">Presensi Piket</a> |
@@ -87,6 +88,8 @@
                 <a href="{{ route('guru.presensi-saya') }}">Presensi Saya</a> |
             @elseif(Auth::user()->isPiket())
                 <a href="{{ route('piket.dashboard') }}">Dashboard</a> |
+                <a href="{{ route('piket.dispen-guru.index') }}">Dispen Guru</a> |
+                <a href="{{ route('piket.absen-siswa') }}">Absen Siswa</a> |
                 <a href="{{ route('jadwal.index') }}">Jadwal</a> |
                 <a href="{{ route('kelas.index') }}">Kelas</a> |
                 <a href="{{ route('siswa.index') }}">Siswa</a> |

@@ -22,6 +22,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\TahunPelajaranController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\MataPelajaranController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -106,6 +107,10 @@ Route::middleware(['auth', 'role:admin,piket'])->prefix('piket-area')->group(fun
     Route::get('/dashboard', [PiketDashboardController::class, 'index'])->name('piket.dashboard');
     Route::get('/presensi', [PresensiPiketController::class, 'index'])->name('piket.presensi');
     Route::post('/presensi-guru', [PresensiPiketController::class, 'storeGuru'])->name('piket.presensi-guru.store');
+    Route::get('/dispen-guru', [PresensiPiketController::class, 'dispenGuruIndex'])->name('piket.dispen-guru.index');
+    Route::post('/dispen-guru', [PresensiPiketController::class, 'dispenGuruStore'])->name('piket.dispen-guru.store');
+    Route::get('/absen-siswa', [PresensiPiketController::class, 'absenSiswaIndex'])->name('piket.absen-siswa');
+    Route::post('/absen-siswa', [PresensiPiketController::class, 'absenSiswaStore'])->name('piket.absen-siswa.store');
     Route::post('/pengaturan', [PengaturanController::class, 'updatePiketSettings'])->name('piket.pengaturan.update');
 });
 
@@ -158,8 +163,11 @@ Route::middleware(['auth', 'role:admin,guru,piket'])->group(function () {
     Route::resource('guru', GuruController::class);
     Route::resource('siswa', SiswaController::class);
     Route::resource('kelas', KelasController::class);
+    Route::post('/kelas/{id}/attach-mapel', [KelasController::class, 'attachMapel'])->name('kelas.attach-mapel');
+    Route::delete('/kelas/{id}/detach-mapel/{id_mapel}', [KelasController::class, 'detachMapel'])->name('kelas.detach-mapel');
     Route::resource('jurusan', JurusanController::class);
     Route::resource('jadwal', JadwalController::class);
+    Route::resource('mapel', MataPelajaranController::class);
     Route::resource('jurnal-harian', JurnalHarianController::class);
 
     // ABSENSI SISWA BATCH

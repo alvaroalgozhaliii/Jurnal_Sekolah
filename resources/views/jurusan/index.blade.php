@@ -7,6 +7,14 @@
 <a href="{{ route('jurusan.trash') }}">Lihat Trash</a>
 <br><br>
 
+<form action="{{ route('jurusan.index') }}" method="GET" style="margin-bottom:15px;">
+    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama jurusan atau kode rombel..." style="padding:5px; width:250px;">
+    <button type="submit">Cari</button>
+    @if(!empty($search))
+        <a href="{{ route('jurusan.index') }}">Reset</a>
+    @endif
+</form>
+
 <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
     <thead><tr><th>No</th><th>Nama Jurusan</th><th>Kode Rombel</th><th>Maks Rombel</th><th>Jumlah Kelas</th><th>Aksi</th></tr></thead>
     <tbody>

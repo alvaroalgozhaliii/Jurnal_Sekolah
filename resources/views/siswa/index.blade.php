@@ -7,6 +7,14 @@
 <a href="{{ route('siswa.trash') }}">Lihat Trash</a>
 <br><br>
 
+<form action="{{ route('siswa.index') }}" method="GET" style="margin-bottom:15px;">
+    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama, NIS, atau kelas..." style="padding:5px; width:250px;">
+    <button type="submit">Cari</button>
+    @if(!empty($search))
+        <a href="{{ route('siswa.index') }}">Reset</a>
+    @endif
+</form>
+
 <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
     <thead>
         <tr><th>No</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>JK</th><th>Status</th><th>Aksi</th></tr>

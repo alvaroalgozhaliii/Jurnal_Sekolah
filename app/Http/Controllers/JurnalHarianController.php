@@ -16,6 +16,7 @@ class JurnalHarianController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $search = $request->get('search');
         $query = JurnalHarian::with(['guru', 'jadwal.kelas']);
 
         // Role filtering
@@ -38,11 +39,26 @@ class JurnalHarianController extends Controller
             }
         }
 
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('mapel', 'like', "%{$search}%")
+                  ->orWhere('materi', 'like', "%{$search}%")
+                  ->orWhere('sub_materi', 'like', "%{$search}%")
+                  ->orWhere('tanggal', 'like', "%{$search}%")
+                  ->orWhereHas('guru', function($qg) use ($search) {
+                      $qg->where('nama', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('jadwal.kelas', function($qk) use ($search) {
+                      $qk->where('nama_kelas', 'like', "%{$search}%");
+                  });
+            });
+        }
+
         $jurnal_harian = $query->orderBy('tanggal', 'desc')->get();
         $guruList = Guru::all();
         $kelasList = Kelas::all();
 
-        return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList'));
+        return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList', 'search'));
     }
 
     public function create()
