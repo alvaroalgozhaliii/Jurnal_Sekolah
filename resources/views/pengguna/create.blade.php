@@ -33,7 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="role">Role / Peran <span class="req">*</span></label>
-                    <select id="role" name="role" class="form-control" required>
+                    <select id="role" name="role" class="form-control select-search" required placeholder="Ketik / Pilih Role...">
                         <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="guru" {{ old('role') == 'guru' ? 'selected' : '' }}>Guru</option>
                         <option value="piket" {{ old('role') == 'piket' ? 'selected' : '' }}>Piket</option>

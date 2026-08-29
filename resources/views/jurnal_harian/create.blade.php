@@ -18,11 +18,11 @@
     <div class="card-body">
         <form action="{{ route('jurnal-harian.create') }}" method="GET" class="d-flex align-center gap-12 flex-wrap">
             <label for="id_jadwal" class="form-label" style="margin:0; white-space:nowrap;">Pilih Jadwal Mengajar:</label>
-            <select id="id_jadwal" name="id_jadwal" onchange="this.form.submit()" class="form-control" style="max-width:500px;">
+            <select id="id_jadwal" name="id_jadwal" onchange="this.form.submit()" class="form-control select-search" style="min-width:450px;" placeholder="Ketik / Cari Jadwal Mengajar KBM...">
                 <option value="">-- Pilih Jadwal KBM Hari Ini --</option>
                 @foreach($jadwalList as $j)
                 <option value="{{ $j->id_jadwal }}" {{ ($jadwalSelected && $jadwalSelected->id_jadwal == $j->id_jadwal) ? 'selected' : '' }}>
-                    {{ $j->hari }} | Jam ke-{{ $j->jam_ke }} ({{ $j->waktu_mulai }}-{{ $j->waktu_selesai }}) | Kelas {{ $j->kelas->nama_kelas ?? '-' }} | {{ $j->mapel }}
+                    {{ $j->hari }} | Jam {{ $j->jam_ke }} ({{ \App\Services\KbmService::getLabelWaktu($j->hari, $j->jam_ke) }}) | Kelas {{ $j->kelas->nama_kelas ?? '-' }} | {{ $j->mapel }}
                 </option>
                 @endforeach
             </select>
@@ -39,7 +39,7 @@
         <div class="grid-3">
             <div><span class="text-muted">Kelas:</span> <strong><span class="badge badge-navy">{{ $jadwalSelected->kelas->nama_kelas ?? '-' }}</span></strong></div>
             <div><span class="text-muted">Mata Pelajaran:</span> <strong>{{ $jadwalSelected->mapel }}</strong></div>
-            <div><span class="text-muted">Waktu KBM:</span> <strong>{{ $jadwalSelected->waktu_mulai }} - {{ $jadwalSelected->waktu_selesai }}</strong></div>
+            <div><span class="text-muted">Jam Pembelajaran:</span> <strong>Jam {{ $jadwalSelected->jam_ke }} — {{ \App\Services\KbmService::getLabelWaktu($jadwalSelected->hari, $jadwalSelected->jam_ke) ?: ($jadwalSelected->waktu_mulai . ' - ' . $jadwalSelected->waktu_selesai) }}</strong></div>
         </div>
     </div>
 </div>

@@ -9,10 +9,21 @@ use Illuminate\Support\Facades\Hash;
 
 class GuruController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $guru = Guru::with('user')->get();
-        return view('guru.index', compact('guru'));
+        $search = $request->get('search');
+        $query = Guru::with('user');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('nip', 'like', "%{$search}%")
+                  ->orWhere('bidang_studi', 'like', "%{$search}%");
+            });
+        }
+
+        $guru = $query->orderBy('nama', 'asc')->get();
+        return view('guru.index', compact('guru', 'search'));
     }
 
     public function create()

@@ -8,10 +8,21 @@ use Illuminate\Support\Facades\Hash;
 
 class PenggunaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengguna = User::with(['guru', 'siswa.kelas'])->get();
-        return view('pengguna.index', compact('pengguna'));
+        $search = $request->get('search');
+        $query = User::query();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('role', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->orderBy('nama', 'asc')->get();
+        return view('pengguna.index', compact('users', 'search'));
     }
 
     public function create()

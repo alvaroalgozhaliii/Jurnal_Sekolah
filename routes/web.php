@@ -31,6 +31,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\TahunPelajaranController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\MataPelajaranController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -55,7 +56,8 @@ Route::get('/', function () {
             default => redirect()->route('login'),
         };
     }
-    return redirect()->route('login');
+
+    return view('auth.login');
 })->name('dashboard');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -142,6 +144,10 @@ Route::middleware(['auth', 'role:admin,piket'])->prefix('piket-area')->group(fun
     Route::get('/anak-sakit', [PengajuanIzinController::class, 'anakSakitPiket'])->name('piket.anak-sakit');
     Route::post('/anak-sakit', [PengajuanIzinController::class, 'storeAnakSakitPiket'])->name('piket.anak-sakit.store');
     Route::get('/pengajuan-dispen', [PengajuanIzinController::class, 'create'])->name('piket.pengajuan.create');
+    Route::get('/dispen-guru', [PresensiPiketController::class, 'dispenGuruIndex'])->name('piket.dispen-guru.index');
+    Route::post('/dispen-guru', [PresensiPiketController::class, 'dispenGuruStore'])->name('piket.dispen-guru.store');
+    Route::get('/absen-siswa', [PresensiPiketController::class, 'absenSiswaIndex'])->name('piket.absen-siswa');
+    Route::post('/absen-siswa', [PresensiPiketController::class, 'absenSiswaStore'])->name('piket.absen-siswa.store');
     Route::post('/pengaturan', [PengaturanController::class, 'updatePiketSettings'])->name('piket.pengaturan.update');
 });
 
@@ -255,9 +261,9 @@ Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka
     Route::put('/jurusan/{id}/restore', [JurusanController::class, 'restore'])->name('jurusan.restore');
     Route::delete('/jurusan/{id}/force-delete', [JurusanController::class, 'forceDelete'])->name('jurusan.forceDelete');
 
-    Route::get('/mapel/trash', [MapelController::class, 'trash'])->name('mapel.trash');
-    Route::put('/mapel/{id}/restore', [MapelController::class, 'restore'])->name('mapel.restore');
-    Route::delete('/mapel/{id}/force-delete', [MapelController::class, 'forceDelete'])->name('mapel.forceDelete');
+    Route::get('/mapel/trash', [MataPelajaranController::class, 'trash'])->name('mapel.trash');
+    Route::put('/mapel/{id}/restore', [MataPelajaranController::class, 'restore'])->name('mapel.restore');
+    Route::delete('/mapel/{id}/force-delete', [MataPelajaranController::class, 'forceDelete'])->name('mapel.forceDelete');
 
     Route::get('/jadwal/trash', [JadwalController::class, 'trash'])->name('jadwal.trash');
     Route::put('/jadwal/{id}/restore', [JadwalController::class, 'restore'])->name('jadwal.restore');
@@ -271,9 +277,11 @@ Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka
     Route::resource('guru', GuruController::class);
     Route::resource('siswa', SiswaController::class);
     Route::resource('kelas', KelasController::class);
+    Route::post('/kelas/{id}/attach-mapel', [KelasController::class, 'attachMapel'])->name('kelas.attach-mapel');
+    Route::delete('/kelas/{id}/detach-mapel/{id_mapel}', [KelasController::class, 'detachMapel'])->name('kelas.detach-mapel');
     Route::resource('jurusan', JurusanController::class);
-    Route::resource('mapel', MapelController::class);
     Route::resource('jadwal', JadwalController::class);
+    Route::resource('mapel', MataPelajaranController::class);
     Route::resource('jurnal-harian', JurnalHarianController::class);
 
     // ABSENSI SISWA BATCH

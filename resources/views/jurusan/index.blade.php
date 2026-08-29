@@ -15,6 +15,19 @@
     </div>
 </div>
 
+{{-- Search --}}
+<div class="card mb-16">
+    <div class="card-body" style="padding:12px 16px;">
+        <form method="GET" action="{{ route('jurusan.index') }}" class="d-flex gap-8" style="align-items:center;">
+            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama jurusan, rombel..." class="form-control" style="max-width:420px;">
+            <button type="submit" class="btn btn-primary btn-sm">Cari</button>
+            @if($search ?? false)
+                <a href="{{ route('jurusan.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+            @endif
+        </form>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-body" style="padding:0;">
         @if($jurusan->count() > 0)

@@ -121,8 +121,8 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="no-col">Jam</th>
-                        <th>Waktu</th>
+                        <th style="width:90px;">Jam Ke</th>
+                        <th style="width:160px;">Jam Pembelajaran</th>
                         <th>Kelas</th>
                         <th>Mata Pelajaran</th>
                         <th>Ruang</th>
@@ -134,8 +134,10 @@
                     @foreach($jadwalHariIni as $j)
                     @php $sudahIsi = $jurnalHariIni->has($j->id_jadwal); @endphp
                     <tr>
-                        <td class="no-col fw-bold">{{ $j->jam_ke }}</td>
-                        <td>{{ $j->waktu_mulai }} - {{ $j->waktu_selesai }}</td>
+                        <td class="fw-bold text-center">Jam {{ $j->jam_ke }}</td>
+                        <td class="fw-bold" style="color:#1e3a8a;">
+                            {{ \App\Services\KbmService::getLabelWaktu($j->hari, $j->jam_ke) ?: ($j->waktu_mulai . ' - ' . $j->waktu_selesai) }}
+                        </td>
                         <td><span class="badge badge-navy">{{ $j->kelas->nama_kelas ?? '-' }}</span></td>
                         <td class="fw-bold text-navy">{{ $j->mapel }}</td>
                         <td>{{ $j->ruang ?? '-' }}</td>
@@ -150,7 +152,7 @@
                             @if($sudahIsi)
                                 <a href="{{ route('jurnal-harian.show', $jurnalHariIni[$j->id_jadwal]->id_jurnal) }}" class="btn btn-secondary btn-sm">Lihat Jurnal</a>
                             @else
-                                <a href="{{ route('jurnal-harian.create', ['id_jadwal' => $j->id_jadwal]) }}" class="btn btn-primary btn-sm">Isi Jurnal Now</a>
+                                <a href="{{ route('jurnal-harian.create', ['id_jadwal' => $j->id_jadwal]) }}" class="btn btn-primary btn-sm">Isi Jurnal</a>
                             @endif
                         </td>
                     </tr>

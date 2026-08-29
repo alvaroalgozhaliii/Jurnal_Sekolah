@@ -14,9 +14,22 @@
     </div>
 </div>
 
+{{-- Search --}}
+<div class="card mb-16">
+    <div class="card-body" style="padding:12px 16px;">
+        <form method="GET" action="{{ route('pengguna.index') }}" class="d-flex gap-8" style="align-items:center;">
+            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama, username, role..." class="form-control" style="max-width:420px;">
+            <button type="submit" class="btn btn-primary btn-sm">Cari</button>
+            @if($search ?? false)
+                <a href="{{ route('pengguna.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+            @endif
+        </form>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-body" style="padding:0;">
-        @if($pengguna->count() > 0)
+        @if($users->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
             <table class="table">
                 <thead>
@@ -30,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($pengguna as $item)
+                    @foreach($users as $item)
                     <tr>
                         <td class="no-col">{{ $loop->iteration }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
