@@ -12,13 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Modify users role column to include 'siswa'
-        DB::statement("ALTER TABLE `users` MODIFY COLUMN `role` ENUM('admin','guru','piket','siswa') NOT NULL");
+        if (DB::getDriverName() !== 'sqlite') {
+            // 1. Modify users role column to include 'siswa'
+            DB::statement("ALTER TABLE `users` MODIFY COLUMN `role` ENUM('admin','guru','piket','siswa') NOT NULL");
+        }
 
         // 2. Add id_user to siswa table if not exists
         if (!Schema::hasColumn('siswa', 'id_user')) {
             Schema::table('siswa', function (Blueprint $table) {
-                $table->integer('id_user')->unsigned()->nullable()->after('id_siswa');
+                $table->unsignedBigInteger('id_user')->nullable()->after('id_siswa');
                 $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
             });
         }
@@ -35,6 +37,9 @@ return new class extends Migration
                 $table->dropColumn('id_user');
             });
         }
-        DB::statement("ALTER TABLE `users` MODIFY COLUMN `role` ENUM('admin','guru','piket') NOT NULL");
+
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE `users` MODIFY COLUMN `role` ENUM('admin','guru','piket') NOT NULL");
+        }
     }
 };

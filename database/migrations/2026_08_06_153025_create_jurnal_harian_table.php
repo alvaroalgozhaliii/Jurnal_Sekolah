@@ -8,18 +8,23 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('jurnal_harian', function (Blueprint $table) {
-            $table->id('id_jurnal');
-            $table->unsignedBigInteger('id_guru');
-            $table->unsignedBigInteger('id_kelas');
-            $table->date('tanggal');
-            $table->string('mata_pelajaran');
-            $table->text('materi');
-            $table->text('kegiatan');
-            $table->text('catatan')->nullable();
-            $table->boolean('aktif')->default(1);
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('jurnal_harian')) {
+            Schema::create('jurnal_harian', function (Blueprint $table) {
+                $table->id('id_jurnal');
+                $table->unsignedBigInteger('id_jadwal')->nullable();
+                $table->unsignedBigInteger('id_guru')->nullable();
+                $table->date('tanggal');
+                $table->string('mapel')->nullable();
+                $table->text('materi')->nullable();
+                $table->text('sub_materi')->nullable();
+                $table->text('catatan_pengajaran')->nullable();
+                $table->string('status_keterlaksanaan')->default('terlaksana');
+                $table->unsignedBigInteger('created_by')->nullable();
+                $table->boolean('aktif')->default(1);
+                $table->softDeletes();
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void

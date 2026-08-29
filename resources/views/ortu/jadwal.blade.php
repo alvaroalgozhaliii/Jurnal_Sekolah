@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Jadwal Anak — Jurnal Sekolah')
-@section('page-title', 'Jadwal Anak')
+@section('title', 'Jadwal Pelajaran — Jurnal Sekolah')
+@section('page-title', 'Jadwal Pelajaran')
 
 @section('content')
 <div class="page-header">
     <div>
         <h1 class="page-title">Jadwal Pelajaran Anak</h1>
-        <p class="page-subtitle">Jadwal Pelajaran Mingguan Kelas Siswa</p>
+        <p class="page-subtitle">Jadwal Pelajaran Mingguan Berdasarkan Kelas</p>
     </div>
 </div>
 
@@ -29,31 +29,57 @@
 @endif
 
 @if($selectedSiswa)
-<div class="alert alert-info mb-24">
+<div class="alert alert-info mb-16">
     <div>Anak: <strong>{{ $selectedSiswa->nama }}</strong> | Kelas: <strong>{{ $selectedSiswa->kelas->nama_kelas ?? '-' }}</strong></div>
 </div>
 
 @if($jadwal->count() > 0)
-    <div class="grid-2">
-    @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $hari)
-        @if(isset($jadwal[$hari]))
+    @php
+    $urutan = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+    $jadwalGrouped = $jadwal->sortBy('jam_ke')->groupBy('hari');
+    $istirahatSeninKamis = [4 => 'Istirahat 1 (09:40 - 10:00)', 7 => 'Istirahat 2 (11:45 - 13:15)'];
+    $istirahatJumat      = [4 => 'Istirahat 1 (09:00 - 09:30)', 8 => 'Istirahat 2 (11:20 - 13:00)'];
+    @endphp
+    @foreach($urutan as $hari)
+        @if(isset($jadwalGrouped[$hari]))
+        @php
+        $jadwalHari = $jadwalGrouped[$hari]->sortBy('jam_ke');
+        $mapIstirahat = ($hari === 'Jumat') ? $istirahatJumat : $istirahatSeninKamis;
+        @endphp
         <div class="card mb-16">
-            <div class="card-header">
-                <h3 class="card-title">{{ $hari }}</h3>
+            <div class="card-header" style="background:#1e3a8a;">
+                <h3 class="card-title" style="color:#fff; margin:0;">📅 {{ strtoupper($hari) }}</h3>
             </div>
             <div class="card-body" style="padding:0;">
                 <div class="table-wrapper" style="border:none; border-radius:0;">
                     <table class="table">
-                        <thead><tr><th class="no-col">Jam</th><th>Waktu</th><th>Mapel</th><th>Guru</th><th>Ruang</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th style="width:80px;">Jam Ke</th>
+                                <th style="width:150px;">Jam Pembelajaran</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Guru</th>
+                                <th style="width:70px;">Ruang</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                        @foreach($jadwal[$hari] as $j)
+                        @foreach($jadwalHari as $j)
                         <tr>
-                            <td class="no-col fw-bold">{{ $j->jam_ke }}</td>
-                            <td>{{ $j->waktu_mulai }} - {{ $j->waktu_selesai }}</td>
+                            <td class="fw-bold text-center">Jam {{ $j->jam_ke }}</td>
+                            <td class="fw-bold" style="color:#1e3a8a;">
+                                {{ \App\Services\KbmService::getLabelWaktu($j->hari, $j->jam_ke) ?: ($j->waktu_mulai . ' - ' . $j->waktu_selesai) }}
+                            </td>
                             <td class="fw-bold text-navy">{{ $j->mapel }}</td>
                             <td>{{ $j->guru->nama ?? '-' }}</td>
                             <td>{{ $j->ruang ?? '-' }}</td>
                         </tr>
+                        @if(isset($mapIstirahat[$j->jam_ke]))
+                        <tr style="background:#fff7ed;">
+                            <td colspan="5" style="text-align:center; font-style:italic; color:#92400e; padding:6px; font-size:12px;">
+                                ☕ {{ $mapIstirahat[$j->jam_ke] }}
+                            </td>
+                        </tr>
+                        @endif
                         @endforeach
                         </tbody>
                     </table>
@@ -62,12 +88,10 @@
         </div>
         @endif
     @endforeach
-    </div>
 @else
     <div class="empty-state">
         <div class="empty-state-text">Belum ada jadwal pelajaran untuk kelas ini.</div>
     </div>
 @endif
-
 @endif
 @endsection

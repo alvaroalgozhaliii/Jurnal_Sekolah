@@ -4,17 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Jurnal Sekolah — Sistem Manajemen Information KBM')</title>
-    
+
     <!-- Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Global CSS -->
     <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}">
-    
+
     <!-- Chart.js Engine CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Tom Select (Searchable Dropdown System) -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+
+    <style>
+    /* Custom Searchable Select Styling - Responsive Flow (Pushes Content Down Inside Card) */
+    .ts-wrapper.form-control, .ts-wrapper.select-search {
+        padding: 0;
+        border: none;
+        background: transparent;
+        width: 100%;
+        display: block;
+    }
+    .ts-control {
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 9px 12px !important;
+        font-size: 14px !important;
+        font-family: 'Inter', -apple-system, sans-serif !important;
+        min-height: 40px !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        width: 100% !important;
+        cursor: pointer;
+    }
+    .ts-control:focus, .ts-wrapper.focus .ts-control {
+        border-color: #1e3a8a !important;
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15) !important;
+        background: #ffffff !important;
+    }
+    .ts-control input {
+        font-family: 'Inter', -apple-system, sans-serif !important;
+        font-size: 14px !important;
+        color: #1e293b !important;
+    }
+    .ts-dropdown {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        margin-top: 6px !important;
+        margin-bottom: 8px !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04) !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        opacity: 1 !important;
+        overflow: hidden !important;
+        z-index: 10 !important;
+    }
+    .ts-dropdown-content {
+        max-height: 220px !important;
+        overflow-y: auto !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+    }
+    .ts-dropdown .option {
+        padding: 10px 14px !important;
+        color: #1e293b !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        border-bottom: 1px solid #f1f5f9;
+        cursor: pointer;
+        font-size: 13.5px !important;
+    }
+    .ts-dropdown .option:last-child {
+        border-bottom: none;
+    }
+    .ts-dropdown .option:hover,
+    .ts-dropdown .active {
+        background-color: #eff6ff !important;
+        color: #1e3a8a !important;
+        font-weight: 600 !important;
+    }
+    .ts-dropdown .option.selected {
+        background-color: #1e3a8a !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+    .ts-dropdown .highlight {
+        background: #fef08a !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        border-radius: 2px;
+        padding: 0 2px;
+    }
+    .ts-dropdown .no-results {
+        padding: 12px 14px !important;
+        color: #64748b !important;
+        font-style: italic;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+    }
+    </style>
 
     @stack('styles')
 </head>
@@ -376,7 +474,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const dateInputs = document.querySelectorAll('input[type="date"]');
-    
+
     dateInputs.forEach(input => {
         if (input.dataset.calendarInit) return;
         input.dataset.calendarInit = 'true';
@@ -597,6 +695,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 })();
+</script>
+
+<!-- Global Tom Select Searchable Dropdown Initializer -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Inisialisasi otomatis semua select dengan class .select-search atau data-searchable="true"
+    document.querySelectorAll('select.select-search, select[data-searchable="true"]').forEach(function (el) {
+        if (!el.tomselect) {
+            new TomSelect(el, {
+                create: false,
+                sortField: { field: "text", direction: "asc" },
+                placeholder: el.getAttribute('placeholder') || '-- Ketik untuk mencari / memilih --',
+                allowEmptyOption: true,
+                maxOptions: 200,
+                onChange: function(value) {
+                    // Trigger native change event agar listener lain (onchange / Alpine / Vanilla) tetap berjalan
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        }
+    });
+});
 </script>
 
 @stack('scripts')

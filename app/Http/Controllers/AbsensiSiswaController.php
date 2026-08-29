@@ -15,6 +15,7 @@ class AbsensiSiswaController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $search = $request->get('search');
         $query = AbsensiSiswa::with(['jurnal.jadwal.kelas', 'siswa', 'user']);
 
         if ($user->isOrtu()) {
@@ -27,8 +28,22 @@ class AbsensiSiswaController extends Controller
             });
         }
 
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('status', 'like', "%{$search}%")
+                  ->orWhere('keterangan', 'like', "%{$search}%")
+                  ->orWhereHas('siswa', function($qs) use ($search) {
+                      $qs->where('nama', 'like', "%{$search}%")
+                         ->orWhere('nis', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('jurnal.jadwal.kelas', function($qk) use ($search) {
+                      $qk->where('nama_kelas', 'like', "%{$search}%");
+                  });
+            });
+        }
+
         $absensi = $query->orderBy('created_at', 'desc')->get();
-        return view('absensi-siswa.index', compact('absensi'));
+        return view('absensi-siswa.index', compact('absensi', 'search'));
     }
 
     public function create(Request $request)

@@ -32,7 +32,7 @@ return new class extends Migration
             Schema::create('dispen_log', function (Blueprint $table) {
                 $table->id('id_log');
                 $table->unsignedBigInteger('id_pengajuan');
-                $table->unsignedInteger('id_user')->nullable();
+                $table->unsignedBigInteger('id_user')->nullable();
                 $table->string('role', 50)->nullable();
                 $table->string('status_sebelum', 50)->nullable();
                 $table->string('status_sesudah', 50);

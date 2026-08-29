@@ -15,6 +15,7 @@ class AbsensiGuruPiket extends Model
         'id_jadwal',
         'tanggal',
         'status_guru',
+        'keperluan',
         'pengganti',
         'keterangan',
         'dicatat_oleh',

@@ -401,13 +401,15 @@ a:hover {
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
     margin-bottom: 20px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .card-header {
     padding: 14px 18px;
     background-color: var(--bg-card-header);
     border-bottom: 1px solid var(--border);
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: space-between;
