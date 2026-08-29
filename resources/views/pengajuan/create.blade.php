@@ -111,23 +111,23 @@
             </div>
 
             <div class="form-row">
-                <div class="form-group">
+                <div class="form-group" id="group-tanggal">
                     <label class="form-label" for="tanggal">Tanggal Dispen <span class="req">*</span></label>
                     <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="form-control" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="group-jenis-izin">
                     <label class="form-label" for="jenis_izin">Keperluan / Jenis Dispen</label>
                     <input type="text" id="jenis_izin" name="jenis_izin" value="{{ old('jenis_izin') }}" class="form-control" placeholder="Contoh: Dinas Luar / MGMP / Lomba / Urusan Keluarga">
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row" id="group-jam-dispen">
                 <div class="form-group">
                     <label class="form-label" for="jam_mulai">Jam Keluar / Mulai</label>
                     <input type="time" id="jam_mulai" name="jam_mulai" value="{{ old('jam_mulai') }}" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="perkiraan_kembali">Perkiraan Jam Kembali</label>
+                    <label class="form-label" for="perkiraan_kembali">Jam Masuk / Perkiraan Kembali</label>
                     <input type="time" id="perkiraan_kembali" name="perkiraan_kembali" value="{{ old('perkiraan_kembali') }}" class="form-control">
                 </div>
             </div>
@@ -137,7 +137,7 @@
                 <textarea id="alasan" name="alasan" rows="3" class="form-control" required placeholder="Jelaskan detail alasan atau surat tugas...">{{ old('alasan') }}</textarea>
             </div>
 
-            <div class="form-group mb-16">
+            <div class="form-group mb-16" id="group-penugasan-siswa">
                 <label class="form-label" for="keterangan">Keterangan Tambahan / Penugasan (Opsional)</label>
                 <textarea id="keterangan" name="keterangan" rows="2" class="form-control" placeholder="Tugas pengganti KBM untuk siswa / catatan tambahan piket...">{{ old('keterangan') }}</textarea>
             </div>
@@ -182,6 +182,9 @@ function setSubjekType(type) {
     const groupKategoriGuru = document.getElementById('group-kategori-guru');
     const groupSiswa = document.getElementById('group-pilih-siswa');
     const groupGuru = document.getElementById('group-pilih-guru');
+    const groupJenisIzin = document.getElementById('group-jenis-izin');
+    const groupJamDispen = document.getElementById('group-jam-dispen');
+    const groupPenugasanSiswa = document.getElementById('group-penugasan-siswa');
     const idSiswaSelect = document.getElementById('id_siswa');
     const idGuruSelect = document.getElementById('id_guru');
     const btnSubmit = document.getElementById('btn-submit');
@@ -202,6 +205,11 @@ function setSubjekType(type) {
         if (groupKategoriGuru) groupKategoriGuru.style.display = 'block';
         if (groupSiswa) groupSiswa.style.display = 'none';
         if (groupGuru) groupGuru.style.display = 'block';
+
+        // Sembunyikan field yang tidak ada/tidak diperlukan pada Dispen Guru
+        if (groupJenisIzin) groupJenisIzin.style.display = 'none';
+        if (groupJamDispen) groupJamDispen.style.display = 'none';
+        if (groupPenugasanSiswa) groupPenugasanSiswa.style.display = 'none';
 
         finalKat.value = 'izin_guru';
 
@@ -228,6 +236,11 @@ function setSubjekType(type) {
         if (groupKategoriGuru) groupKategoriGuru.style.display = 'none';
         if (groupSiswa) groupSiswa.style.display = 'block';
         if (groupGuru) groupGuru.style.display = 'none';
+
+        // Tampilkan kembali field untuk Dispen Siswa
+        if (groupJenisIzin) groupJenisIzin.style.display = 'block';
+        if (groupJamDispen) groupJamDispen.style.display = 'flex';
+        if (groupPenugasanSiswa) groupPenugasanSiswa.style.display = 'block';
 
         syncKategori();
 
