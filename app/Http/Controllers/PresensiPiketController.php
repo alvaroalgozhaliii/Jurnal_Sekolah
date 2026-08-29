@@ -157,6 +157,9 @@ class PresensiPiketController extends Controller
             'keperluan_select' => 'required|string',
             'keperluan_custom' => 'nullable|string|max:150',
             'status_guru' => 'required|in:tidak_hadir,terlambat,digantikan',
+            'jam_keluar' => 'nullable',
+            'jam_masuk' => 'nullable',
+            'keterangan' => 'nullable|string|max:500',
         ]);
 
         $keperluan = $request->keperluan_select === 'Lainnya'
@@ -170,8 +173,11 @@ class PresensiPiketController extends Controller
             ],
             [
                 'status_guru' => $request->status_guru,
+                'jam_keluar' => $request->jam_keluar,
+                'jam_masuk' => $request->jam_masuk,
                 'keperluan' => $keperluan,
                 'pengganti' => $request->pengganti,
+                'keterangan' => $request->keterangan,
                 'dicatat_oleh' => auth()->id(),
                 'created_at' => now(),
             ]
