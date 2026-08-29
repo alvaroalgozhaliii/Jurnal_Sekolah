@@ -28,10 +28,10 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="id_kelas">Kelas <span class="req">*</span></label>
-                    <select id="id_kelas" name="id_kelas" class="form-control" required>
+                    <select id="id_kelas" name="id_kelas" class="form-control select-search" required placeholder="Ketik / Pilih Kelas...">
                         <option value="">-- Pilih Kelas --</option>
                         @foreach($kelas as $k)
-                        <option value="{{ $k->id_kelas }}" {{ old('id_kelas') == $k->id_kelas ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>
+                        <option value="{{ $k->id_kelas }}" {{ old('id_kelas') == $k->id_kelas ? 'selected' : '' }}>{{ $k->nama_kelas }} ({{ $k->jurusan->nama_jurusan ?? '-' }})</option>
                         @endforeach
                     </select>
                 </div>

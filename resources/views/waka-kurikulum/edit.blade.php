@@ -44,7 +44,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="id_user_waka">Waka yang Bertugas <span class="req">*</span></label>
-                    <select class="form-control" id="id_user_waka" name="id_user_waka" required>
+                    <select class="form-control select-search" id="id_user_waka" name="id_user_waka" required placeholder="Ketik nama Waka...">
                         @foreach($wakas as $waka)
                             <option value="{{ $waka->id_user }}" @selected(old('id_user_waka', $jadwalWaka->id_user_waka) == $waka->id_user)>
                                 {{ $waka->nama }} ({{ strtoupper(str_replace('_', ' ', $waka->role)) }})
@@ -55,7 +55,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="id_guru_piket">Guru Piket yang Bertugas (Opsional)</label>
-                    <select class="form-control" id="id_guru_piket" name="id_guru_piket">
+                    <select class="form-control select-search" id="id_guru_piket" name="id_guru_piket" placeholder="Ketik nama Guru Piket...">
                         <option value="">-- Pilih Guru Piket (Opsional) --</option>
                         @foreach($gurus as $guru)
                             <option value="{{ $guru->id_guru }}" @selected(old('id_guru_piket', $jadwalWaka->id_guru_piket) == $guru->id_guru)>

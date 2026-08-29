@@ -10,10 +10,23 @@ use Illuminate\Support\Facades\Hash;
 
 class SiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $siswa = Siswa::with(['kelas', 'user'])->get();
-        return view('siswa.index', compact('siswa'));
+        $search = $request->get('search');
+        $query = Siswa::with(['kelas', 'user']);
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('nis', 'like', "%{$search}%")
+                  ->orWhereHas('kelas', function($qk) use ($search) {
+                      $qk->where('nama_kelas', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $siswa = $query->orderBy('nama', 'asc')->get();
+        return view('siswa.index', compact('siswa', 'search'));
     }
 
     public function create()

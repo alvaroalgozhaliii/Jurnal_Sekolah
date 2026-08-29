@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('jadwal_waka', function (Blueprint $table) {
             $table->id('id_jadwal_waka');
             $table->date('tanggal')->unique();
-            $table->unsignedInteger('id_user_waka');
+            $table->unsignedBigInteger('id_user_waka');
             $table->string('keterangan')->nullable();
             $table->timestamps();
 

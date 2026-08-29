@@ -30,8 +30,9 @@ class OrtuDashboardController extends Controller
         return $anakList;
     }
 
-    public function index(Request $request)
+    public function index(Request $request = null)
     {
+        $request = $request ?: request();
         $user = Auth::user();
         $anakList = $this->getAnakList();
 

@@ -15,6 +15,19 @@
     </div>
 </div>
 
+{{-- Search --}}
+<div class="card mb-16">
+    <div class="card-body" style="padding:12px 16px;">
+        <form method="GET" action="{{ route('guru.index') }}" class="d-flex gap-8" style="align-items:center;">
+            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama guru, NIP, bidang studi..." class="form-control" style="max-width:420px;">
+            <button type="submit" class="btn btn-primary btn-sm">Cari</button>
+            @if($search ?? false)
+                <a href="{{ route('guru.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+            @endif
+        </form>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-body" style="padding:0;">
         <div class="table-wrapper" style="border:none; border-radius:0;">
