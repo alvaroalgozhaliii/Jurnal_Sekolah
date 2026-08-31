@@ -53,6 +53,16 @@
 
 <!-- STATISTIK KEHADIRAN GURU & SISWA -->
 <div class="grid-4 mb-24">
+    <div class="stat-card" style="border-left: 4px solid #0284c7;">
+        <div class="stat-icon-box blue">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        </div>
+        <div>
+            <div class="stat-num" style="color: #0284c7;">{{ $totalIzinOrtuHariIni }}</div>
+            <div class="stat-label">Izin Siswa dari Ortu Hari Ini</div>
+        </div>
+    </div>
+
     <div class="stat-card">
         <div class="stat-icon-box green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
@@ -74,25 +84,76 @@
     </div>
 
     <div class="stat-card">
-        <div class="stat-icon-box blue">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-        </div>
-        <div>
-            <div class="stat-num">{{ $totalDisetujuiWaka }}</div>
-            <div class="stat-label">Dispen Acc Waka (Menunggu Satpam)</div>
-        </div>
-    </div>
-
-    <div class="stat-card">
         <div class="stat-icon-box purple">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <div>
             <div class="stat-num">{{ $totalVerifiedSatpam }}</div>
-            <div class="stat-label">Dispen Terverifikasi (Selesai)</div>
+            <div class="stat-label">Dispen Selesai</div>
         </div>
     </div>
 </div>
+
+@if(isset($izinOrtuHariIniList) && $izinOrtuHariIniList->count() > 0)
+<!-- DAFTAR IZIN ORTU TERBARU -->
+<div class="card mb-24" style="border: 2px solid #38bdf8;">
+    <div class="card-header" style="background: #f0f9ff; display:flex; justify-content:space-between; align-items:center;">
+        <h3 class="card-title" style="color: #0369a1;">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            Daftar Izin Siswa dari Orang Tua (Tercatat Otomatis di Kelas)
+        </h3>
+        <a href="{{ route('pengajuan.index') }}" class="btn btn-secondary btn-sm">Lihat Semua &rarr;</a>
+    </div>
+    <div class="card-body" style="padding:0;">
+        <div class="table-wrapper" style="border:none; border-radius:0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kategori</th>
+                        <th>Nama Siswa</th>
+                        <th>Kelas</th>
+                        <th>Tanggal Izin</th>
+                        <th>Keterangan / Alasan</th>
+                        <th>Status</th>
+                        <th>Lampiran</th>
+                        <th class="action-col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($izinOrtuHariIniList as $idx => $iz)
+                    <tr>
+                        <td class="no-col">{{ $idx + 1 }}</td>
+                        <td>
+                            <span class="badge {{ $iz->kategori === 'sakit' ? 'badge-purple' : 'badge-info' }}">
+                                {{ $iz->kategori === 'sakit' ? 'IZIN SAKIT' : 'IZIN' }}
+                            </span>
+                        </td>
+                        <td class="fw-bold text-navy">{{ $iz->siswa->nama ?? '-' }}</td>
+                        <td>{{ $iz->siswa->kelas->nama_kelas ?? '-' }}</td>
+                        <td>{{ $iz->tanggal }}</td>
+                        <td>{{ Str::limit($iz->alasan, 40) }}</td>
+                        <td><span class="badge badge-success">TERCATAT DI KELAS</span></td>
+                        <td>
+                            @if($iz->lampiran_foto)
+                                <a href="{{ asset('storage/' . $iz->lampiran_foto) }}" target="_blank" class="btn btn-secondary btn-sm">Lihat Bukti</a>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
+                        <td class="action-col">
+                            <a href="{{ route('pengajuan.show', $iz->id_pengajuan) }}" class="btn btn-primary btn-sm">
+                                Detail &rarr;
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
 
 <!-- TABEL MONITORING JADWAL HARI INI -->
 <div class="card">

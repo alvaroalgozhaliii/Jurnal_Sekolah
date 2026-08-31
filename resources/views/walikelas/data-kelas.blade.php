@@ -39,12 +39,33 @@
                         <th>NIS</th>
                         <th>Nama Siswa</th>
                         <th>Jenis Kelamin</th>
+                        <th>Status Hari Ini</th>
                         <th>Akun User Ortu</th>
                         <th>No Telp Ortu</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($siswaList as $index => $s)
+                    @php
+                        $absen = $statusHariIni[$s->id_siswa] ?? null;
+                        $st = $absen ? strtolower($absen->status) : null;
+                        $stBadge = match($st) {
+                            'hadir' => 'badge-success',
+                            'sakit' => 'badge-purple',
+                            'izin' => 'badge-info',
+                            'alpa' => 'badge-danger',
+                            'terlambat' => 'badge-warning',
+                            default => 'badge-gray'
+                        };
+                        $stText = match($st) {
+                            'hadir' => 'HADIR',
+                            'sakit' => 'IZIN SAKIT',
+                            'izin' => 'IZIN',
+                            'alpa' => 'ALPA',
+                            'terlambat' => 'TERLAMBAT',
+                            default => 'Belum Absen'
+                        };
+                    @endphp
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
                         <td class="text-muted fw-bold">{{ $s->nis }}</td>
@@ -56,6 +77,12 @@
                                 <span class="badge badge-purple">Perempuan</span>
                             @else
                                 -
+                            @endif
+                        </td>
+                        <td>
+                            <span class="badge {{ $stBadge }}">{{ $stText }}</span>
+                            @if($absen && $absen->keterangan)
+                                <div class="text-muted" style="font-size:11px; margin-top:2px;">{{ Str::limit($absen->keterangan, 30) }}</div>
                             @endif
                         </td>
                         <td>
