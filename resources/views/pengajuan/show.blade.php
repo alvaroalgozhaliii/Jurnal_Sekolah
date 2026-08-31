@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Pengajuan Dispen / Izin — Jurnal Sekolah')
-@section('page-title', 'Detail Pengajuan Dispen')
+@section('title', 'Detail Pengajuan Izin / Dispen — Jurnal Sekolah')
+@section('page-title', 'Detail Pengajuan Izin')
 
 @section('content')
 <div class="page-header">
     <div>
-        <h1 class="page-title">Detail Pengajuan Dispensasi / Izin</h1>
+        <h1 class="page-title">{{ in_array($pengajuan->kategori, ['sakit', 'acara_keluarga', 'izin_masuk', 'izin_keluar']) ? 'Detail Pengajuan Izin Siswa' : 'Detail Pengajuan Dispensasi / Izin' }}</h1>
         <p class="page-subtitle">Informasi pengajuan, verifikasi identitas, dan riwayat status</p>
     </div>
     <div class="page-actions">
@@ -43,9 +43,16 @@
                             </span>
                         </td>
                     </tr>
+                    @php
+                        $katLabelShow = match($pengajuan->kategori) {
+                            'sakit' => 'IZIN SAKIT',
+                            'izin' => 'IZIN',
+                            default => strtoupper(str_replace('_', ' ', $pengajuan->kategori))
+                        };
+                    @endphp
                     <tr>
                         <th>Kategori</th>
-                        <td><span class="badge badge-navy">{{ strtoupper(str_replace('_', ' ', $pengajuan->kategori)) }}</span></td>
+                        <td><span class="badge badge-navy">{{ $katLabelShow }}</span></td>
                     </tr>
                     @if($pengajuan->siswa)
                     <tr>
@@ -92,7 +99,7 @@
                     </tr>
                     @endif
                     <tr>
-                        <th>Jenis Dispen / Keperluan</th>
+                        <th>{{ in_array($pengajuan->kategori, ['sakit', 'acara_keluarga', 'izin_masuk', 'izin_keluar']) ? 'Keperluan / Jenis Izin' : 'Jenis Dispen / Keperluan' }}</th>
                         <td>{{ $pengajuan->jenis_izin ?? '-' }}</td>
                     </tr>
                     <tr>
@@ -135,6 +142,7 @@
             </div>
         </div>
 
+        @if($pengajuan->kategori === 'dispensasi' || $pengajuan->kategori === 'izin_guru')
         <!-- WHATSAPP NOTIFICATION TRIGGER BOX -->
         @php
             $isGuruDispen = ($pengajuan->kategori === 'izin_guru');
@@ -209,6 +217,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 
@@ -261,6 +270,8 @@
         @endif
     </div>
 </div>
+
+
 
 {{-- ============================================================
      FORM KEPUTUSAN WAKA (Hanya Waka / Admin saat pending_waka)

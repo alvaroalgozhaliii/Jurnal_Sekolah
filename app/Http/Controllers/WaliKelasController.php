@@ -50,9 +50,19 @@ class WaliKelasController extends Controller
     public function dataKelas()
     {
         $kelas = $this->getKelasWali();
+        $todayDate = Carbon::today()->toDateString();
         $siswaList = $kelas ? Siswa::with('user')->where('id_kelas', $kelas->id_kelas)->get() : collect();
+        $statusHariIni = collect();
 
-        return view('walikelas.data-kelas', compact('kelas', 'siswaList'));
+        if ($kelas) {
+            $siswaIds = $siswaList->pluck('id_siswa');
+            $statusHariIni = AbsensiSiswa::whereIn('id_siswa', $siswaIds)
+                ->whereDate('created_at', $todayDate)
+                ->get()
+                ->keyBy('id_siswa');
+        }
+
+        return view('walikelas.data-kelas', compact('kelas', 'siswaList', 'statusHariIni'));
     }
 
     public function rekapPresensi(Request $request)

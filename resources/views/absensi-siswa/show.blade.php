@@ -11,7 +11,10 @@
     </div>
     <div class="page-actions">
         <a href="{{ route('absensi-siswa.index') }}" class="btn btn-secondary">&larr; Kembali</a>
-        @if(!Auth::user()->isSiswa())
+        @php
+            $isFromOrtu = str_contains($absensi->keterangan ?? '', 'Orang Tua');
+        @endphp
+        @if(!Auth::user()->isSiswa() && !$isFromOrtu)
         <a href="{{ route('absensi-siswa.edit', $absensi->id_absensi) }}" class="btn btn-primary">Edit Data</a>
         @endif
     </div>

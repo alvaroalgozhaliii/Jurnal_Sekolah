@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Pengajuan Dispen & Izin — Jurnal Sekolah')
-@section('page-title', 'Izin & Dispensasi')
+@section('title', Auth::user()->isOrtu() ? 'Daftar Pengajuan Izin Anak — Jurnal Sekolah' : 'Daftar Pengajuan Dispen & Izin — Jurnal Sekolah')
+@section('page-title', Auth::user()->isOrtu() ? 'Pengajuan Izin Anak' : 'Izin & Dispensasi')
 
 @section('content')
 <div class="page-header">
     <div>
-        <h1 class="page-title">Daftar Pengajuan Dispensasi & Izin</h1>
-        <p class="page-subtitle">Monitoring status pengajuan dispen, persetujuan Waka & verifikasi Satpam</p>
+        <h1 class="page-title">{{ Auth::user()->isOrtu() ? 'Daftar Pengajuan Izin Anak' : 'Daftar Pengajuan Dispensasi & Izin' }}</h1>
+        <p class="page-subtitle">{{ Auth::user()->isOrtu() ? 'Monitoring status pengajuan izin anak (sakit, acara keluarga, dll) & persetujuan sekolah' : 'Monitoring status pengajuan dispen, persetujuan Waka & verifikasi Satpam' }}</p>
     </div>
     <div class="page-actions">
-        <a href="{{ route('pengajuan.create') }}" class="btn btn-primary">+ Buat Pengajuan Baru</a>
+        <a href="{{ route('pengajuan.create') }}" class="btn btn-primary">{{ Auth::user()->isOrtu() ? '+ Buat Pengajuan Izin' : '+ Buat Pengajuan Baru' }}</a>
     </div>
 </div>
 
@@ -43,10 +43,15 @@
                             'pending_waka', 'menunggu_waka', 'pending_piket' => 'badge-warning',
                             default => 'badge-danger'
                         };
+                        $katLabel = match($p->kategori) {
+                            'sakit' => 'IZIN SAKIT',
+                            'izin' => 'IZIN',
+                            default => strtoupper(str_replace('_', ' ', $p->kategori))
+                        };
                     @endphp
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
-                        <td><span class="badge badge-navy">{{ strtoupper(str_replace('_', ' ', $p->kategori)) }}</span></td>
+                        <td><span class="badge badge-navy">{{ $katLabel }}</span></td>
                         <td class="fw-bold text-navy">
                             {{ $p->siswa ? $p->siswa->nama . ' (Kelas ' . ($p->siswa->kelas->nama_kelas ?? '-') . ')' : ($p->guru ? $p->guru->nama . ' (Guru)' : ($p->pengaju->nama ?? '-')) }}
                         </td>
@@ -77,7 +82,7 @@
         </div>
         @else
         <div class="empty-state">
-            <div class="empty-state-text">Belum ada pengajuan dispensasi atau izin.</div>
+            <div class="empty-state-text">{{ Auth::user()->isOrtu() ? 'Belum ada pengajuan izin anak.' : 'Belum ada pengajuan dispensasi atau izin.' }}</div>
         </div>
         @endif
     </div>

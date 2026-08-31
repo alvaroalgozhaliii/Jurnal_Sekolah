@@ -62,13 +62,21 @@ class PiketDashboardController extends Controller
             }
         }
 
-        // Statistik Dispen
+        // Statistik Izin & Dispen
+        $totalIzinOrtuHariIni = PengajuanIzin::whereIn('kategori', ['sakit', 'izin'])->where('tanggal', $todayDate)->count();
         $totalPendingWaka = PengajuanIzin::where('status', 'pending_waka')->count();
         $totalDisetujuiWaka = PengajuanIzin::where('status', 'disetujui_waka')->count();
         $totalVerifiedSatpam = PengajuanIzin::whereIn('status', ['verified', 'completed'])->count();
         $totalDitolak = PengajuanIzin::where(function ($q) {
             $q->where('status', 'like', 'ditolak_%')->orWhere('status', 'like', 'rejected_%');
         })->count();
+
+        // Daftar Izin Masuk dari Orang Tua Terbaru
+        $izinOrtuHariIniList = PengajuanIzin::with(['siswa.kelas', 'pengaju'])
+            ->whereIn('kategori', ['sakit', 'izin'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
 
         $wakaHariIni = \App\Models\JadwalWaka::wakaBertugasPada($todayDate);
 
@@ -80,6 +88,8 @@ class PiketDashboardController extends Controller
             'jadwalHariIni',
             'guruBelumHadir',
             'kelasKosong',
+            'totalIzinOrtuHariIni',
+            'izinOrtuHariIniList',
             'totalPendingWaka',
             'totalDisetujuiWaka',
             'totalVerifiedSatpam',

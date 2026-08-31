@@ -157,18 +157,25 @@ class AbsensiSiswaController extends Controller
     public function edit($id)
     {
         $absensi = AbsensiSiswa::with(['jurnal', 'siswa'])->findOrFail($id);
+        if (str_contains($absensi->keterangan ?? '', 'Orang Tua')) {
+            return redirect()->route('absensi-siswa.show', $id)->with('error', 'Data absensi dari izin orang tua bersifat resmi dan tidak dapat diedit.');
+        }
         return view('absensi-siswa.edit', compact('absensi'));
     }
 
     public function update(Request $request, $id)
     {
+        $absensi = AbsensiSiswa::with('jurnal.jadwal')->findOrFail($id);
+        if (str_contains($absensi->keterangan ?? '', 'Orang Tua')) {
+            return redirect()->route('absensi-siswa.show', $id)->with('error', 'Data absensi dari izin orang tua bersifat resmi dan tidak dapat diubah.');
+        }
+
         $request->validate([
             'status' => 'required|in:hadir,sakit,izin,alpa,terlambat',
             'jam_masuk' => 'nullable',
             'menit_terlambat' => 'nullable|integer',
         ]);
 
-        $absensi = AbsensiSiswa::with('jurnal.jadwal')->findOrFail($id);
         $absensi->update([
             'status' => $request->status,
             'jam_masuk' => $request->jam_masuk,
@@ -198,6 +205,9 @@ class AbsensiSiswaController extends Controller
     public function destroy($id)
     {
         $absensi = AbsensiSiswa::findOrFail($id);
+        if (str_contains($absensi->keterangan ?? '', 'Orang Tua')) {
+            return redirect()->route('absensi-siswa.index')->with('error', 'Data absensi dari izin orang tua bersifat resmi dan tidak dapat dihapus.');
+        }
         $absensi->delete();
         return redirect()->route('absensi-siswa.index')->with('success', 'Data absensi berhasil dihapus.');
     }
