@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Pengajuan Dispen / Izin — Jurnal Sekolah')
-@section('page-title', 'Form Pengajuan Dispen / Izin')
+@section('title', Auth::user()->isOrtu() ? 'Buat Pengajuan Izin Anak — Jurnal Sekolah' : 'Buat Pengajuan Dispen / Izin — Jurnal Sekolah')
+@section('page-title', Auth::user()->isOrtu() ? 'Form Pengajuan Izin Anak' : 'Form Pengajuan Dispen / Izin')
 
 @section('content')
 <div class="page-header">
     <div>
         <h1 class="page-title">
-            @if(Auth::user()->isPiket())
+            @if(Auth::user()->isOrtu())
+                Form Pengajuan Izin Siswa
+            @elseif(Auth::user()->isPiket())
                 Form Pengajuan Dispen (Piket)
             @elseif(Auth::user()->isGuru())
                 Form Pengajuan Dispen / Izin Guru
@@ -16,7 +18,11 @@
             @endif
         </h1>
         <p class="page-subtitle">
-            Pencatatan pengajuan dispensasi siswa atau guru yang diteruskan secara otomatis untuk verifikasi & persetujuan
+            @if(Auth::user()->isOrtu())
+                Pengajuan izin siswa (sakit, acara keluarga, dll) oleh orang tua untuk perizinan ke sekolah
+            @else
+                Pencatatan pengajuan dispensasi siswa atau guru yang diteruskan secara otomatis untuk verifikasi & persetujuan
+            @endif
         </p>
     </div>
     <div class="page-actions">
@@ -28,7 +34,7 @@
     <div class="card-header">
         <h3 class="card-title">
             <svg class="svg-icon text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            Formulir Data Pengajuan
+            {{ Auth::user()->isOrtu() ? 'Formulir Pengajuan Izin Anak' : 'Formulir Data Pengajuan' }}
         </h3>
     </div>
     <div class="card-body">
@@ -63,16 +69,22 @@
             @csrf
 
             <!-- FIELD KATEGORI YANG PASTI TERKIRIM -->
-            <input type="hidden" name="kategori" id="final_kategori" value="{{ old('kategori', (isset($initialType) && $initialType === 'guru') ? 'izin_guru' : 'dispensasi') }}">
+            <input type="hidden" name="kategori" id="final_kategori" value="{{ old('kategori', Auth::user()->isOrtu() ? 'sakit' : ((isset($initialType) && $initialType === 'guru') ? 'izin_guru' : 'dispensasi')) }}">
 
             <!-- Kategori Pengajuan (Siswa / Guru) -->
             <div class="form-group mb-16" id="group-kategori-siswa">
-                <label class="form-label" for="kategori_siswa">Kategori Dispensasi Siswa <span class="req">*</span></label>
+                <label class="form-label" for="kategori_siswa">{{ Auth::user()->isOrtu() ? 'Kategori Izin Siswa' : 'Kategori Dispensasi / Izin Siswa' }} <span class="req">*</span></label>
                 <select id="kategori_siswa" class="form-control" onchange="syncKategori()">
-                    <option value="dispensasi" {{ old('kategori', 'dispensasi') == 'dispensasi' ? 'selected' : '' }}>Dispensasi Siswa (Pelajaran / Lomba / OSIS)</option>
-                    <option value="izin_keluar" {{ old('kategori') == 'izin_keluar' ? 'selected' : '' }}>Izin Keluar Lingkungan Sekolah</option>
-                    <option value="izin_masuk" {{ old('kategori') == 'izin_masuk' ? 'selected' : '' }}>Izin Masuk / Terlambat</option>
-                    <option value="sakit" {{ old('kategori') == 'sakit' ? 'selected' : '' }}>Izin Sakit</option>
+                    @if(Auth::user()->isOrtu())
+                        <option value="sakit" {{ old('kategori', 'sakit') == 'sakit' ? 'selected' : '' }}>Izin Sakit</option>
+                        <option value="izin" {{ old('kategori') == 'izin' ? 'selected' : '' }}>Izin</option>
+                    @else
+                        <option value="dispensasi" {{ old('kategori', 'dispensasi') == 'dispensasi' ? 'selected' : '' }}>Dispensasi Siswa (Pelajaran / Lomba / OSIS)</option>
+                        <option value="sakit" {{ old('kategori') == 'sakit' ? 'selected' : '' }}>Izin Sakit</option>
+                        <option value="izin" {{ old('kategori') == 'izin' ? 'selected' : '' }}>Izin</option>
+                        <option value="izin_keluar" {{ old('kategori') == 'izin_keluar' ? 'selected' : '' }}>Izin Keluar Lingkungan Sekolah</option>
+                        <option value="izin_masuk" {{ old('kategori') == 'izin_masuk' ? 'selected' : '' }}>Izin Masuk / Terlambat</option>
+                    @endif
                 </select>
             </div>
 
@@ -88,7 +100,9 @@
             <div class="form-group mb-16" id="group-pilih-siswa">
                 <label class="form-label" for="id_siswa">Pilih Siswa <span class="req">*</span></label>
                 <select id="id_siswa" name="id_siswa" class="form-control select-search" placeholder="Ketik Nama / NIS / Kelas Siswa...">
-                    <option value="">-- Cari Nama / NIS / Kelas Siswa --</option>
+                    @if(!Auth::user()->isOrtu())
+                        <option value="">-- Cari Nama / NIS / Kelas Siswa --</option>
+                    @endif
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}" {{ old('id_siswa') == $s->id_siswa ? 'selected' : '' }}>
                         {{ $s->nama }} (NIS: {{ $s->nis }} | Kelas: {{ $s->kelas->nama_kelas ?? '-' }})
@@ -111,17 +125,19 @@
             </div>
 
             <div class="form-row">
-                <div class="form-group" id="group-tanggal">
-                    <label class="form-label" for="tanggal">Tanggal Dispen <span class="req">*</span></label>
+                <div class="form-group" id="group-tanggal" style="flex:1;">
+                    <label class="form-label" for="tanggal">{{ Auth::user()->isOrtu() ? 'Tanggal Izin' : 'Tanggal Dispen' }} <span class="req">*</span></label>
                     <input type="date" id="tanggal" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="form-control" required>
                 </div>
+                @if(!Auth::user()->isOrtu())
                 <div class="form-group" id="group-jenis-izin">
                     <label class="form-label" for="jenis_izin">Keperluan / Jenis Dispen</label>
                     <input type="text" id="jenis_izin" name="jenis_izin" value="{{ old('jenis_izin') }}" class="form-control" placeholder="Contoh: Dinas Luar / MGMP / Lomba / Urusan Keluarga">
                 </div>
+                @endif
             </div>
 
-            <div class="form-row" id="group-jam-dispen">
+            <div class="form-row" id="group-jam-dispen" @if(Auth::user()->isOrtu()) style="display:none;" @endif>
                 <div class="form-group">
                     <label class="form-label" for="jam_mulai">Jam Keluar / Mulai</label>
                     <input type="time" id="jam_mulai" name="jam_mulai" value="{{ old('jam_mulai') }}" class="form-control">
@@ -133,17 +149,23 @@
             </div>
 
             <div class="form-group mb-16">
-                <label class="form-label" for="alasan">Alasan Lengkap Dispen <span class="req">*</span></label>
-                <textarea id="alasan" name="alasan" rows="3" class="form-control" required placeholder="Jelaskan detail alasan atau surat tugas...">{{ old('alasan') }}</textarea>
+                <label class="form-label" for="alasan" id="label-alasan">
+                    @if(Auth::user()->isOrtu())
+                        Keterangan Sakit <span class="req">*</span>
+                    @else
+                        Alasan Lengkap Dispen <span class="req">*</span>
+                    @endif
+                </label>
+                <textarea id="alasan" name="alasan" rows="3" class="form-control" required placeholder="{{ Auth::user()->isOrtu() ? 'Jelaskan keterangan sakit yang dialami anak (misal: demam, flu, berobat ke dokter)...' : 'Jelaskan detail alasan atau surat tugas...' }}">{{ old('alasan') }}</textarea>
             </div>
 
             <div class="form-group mb-16" id="group-penugasan-siswa">
-                <label class="form-label" for="keterangan">Keterangan Tambahan / Penugasan (Opsional)</label>
-                <textarea id="keterangan" name="keterangan" rows="2" class="form-control" placeholder="Tugas pengganti KBM untuk siswa / catatan tambahan piket...">{{ old('keterangan') }}</textarea>
+                <label class="form-label" for="keterangan">Keterangan Tambahan / Catatan (Opsional)</label>
+                <textarea id="keterangan" name="keterangan" rows="2" class="form-control" placeholder="Catatan tambahan untuk wali kelas / piket...">{{ old('keterangan') }}</textarea>
             </div>
 
             <div class="form-group mb-24">
-                <label class="form-label" for="lampiran_foto">Lampiran Bukti / Surat Tugas (Opsional, Max 2MB)</label>
+                <label class="form-label" for="lampiran_foto">Lampiran Surat Dokter / Foto Bukti (Opsional, Max 2MB)</label>
                 <input type="file" id="lampiran_foto" name="lampiran_foto" accept="image/*,.pdf" class="form-control">
             </div>
 
@@ -151,7 +173,7 @@
             <div style="display:flex; gap:12px; align-items:center; margin-top:28px; padding-top:20px; border-top:2px solid #e2e8f0;">
                 <button type="submit" id="btn-submit" class="btn" style="background:#1e3a8a; color:#ffffff; padding:12px 24px; font-size:13.5px; font-weight:700; border-radius:6px; border:none; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    TERUSKAN DISPEN SISWA KE WAKA
+                    {{ Auth::user()->isOrtu() ? 'KIRIM PENGAJUAN IZIN SISWA' : 'TERUSKAN DISPEN SISWA KE WAKA' }}
                 </button>
                 <a href="{{ route('pengajuan.index') }}" class="btn btn-secondary" style="padding:11px 20px; font-size:13.5px; border-radius:6px;">
                     Batal
@@ -163,14 +185,28 @@
 
 <script>
 let currentSubjek = "{{ $initialType ?? 'siswa' }}";
+const isOrtuUser = {{ Auth::user()->isOrtu() ? 'true' : 'false' }};
 
 function syncKategori() {
     const finalKat = document.getElementById('final_kategori');
     const kategoriSiswaSelect = document.getElementById('kategori_siswa');
+    const labelAlasan = document.getElementById('label-alasan');
+    const inputAlasan = document.getElementById('alasan');
+
     if (currentSubjek === 'guru') {
         finalKat.value = 'izin_guru';
     } else {
         finalKat.value = kategoriSiswaSelect.value;
+    }
+
+    if (isOrtuUser) {
+        if (finalKat.value === 'sakit') {
+            if (labelAlasan) labelAlasan.innerHTML = 'Keterangan Sakit <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Jelaskan keterangan sakit yang dialami anak (misal: demam, flu, berobat ke dokter)...';
+        } else {
+            if (labelAlasan) labelAlasan.innerHTML = 'Keterangan Izin <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Jelaskan keterangan/keperluan izin anak (misal: acara keluarga, urusan mendadak, dll)...';
+        }
     }
 }
 
@@ -206,7 +242,6 @@ function setSubjekType(type) {
         if (groupSiswa) groupSiswa.style.display = 'none';
         if (groupGuru) groupGuru.style.display = 'block';
 
-        // Sembunyikan field yang tidak ada/tidak diperlukan pada Dispen Guru
         if (groupJenisIzin) groupJenisIzin.style.display = 'none';
         if (groupJamDispen) groupJamDispen.style.display = 'none';
         if (groupPenugasanSiswa) groupPenugasanSiswa.style.display = 'none';
@@ -237,9 +272,8 @@ function setSubjekType(type) {
         if (groupSiswa) groupSiswa.style.display = 'block';
         if (groupGuru) groupGuru.style.display = 'none';
 
-        // Tampilkan kembali field untuk Dispen Siswa
-        if (groupJenisIzin) groupJenisIzin.style.display = 'block';
-        if (groupJamDispen) groupJamDispen.style.display = 'flex';
+        if (groupJenisIzin) groupJenisIzin.style.display = isOrtuUser ? 'none' : 'block';
+        if (groupJamDispen) groupJamDispen.style.display = isOrtuUser ? 'none' : 'flex';
         if (groupPenugasanSiswa) groupPenugasanSiswa.style.display = 'block';
 
         syncKategori();
@@ -248,7 +282,7 @@ function setSubjekType(type) {
         if (idGuruSelect) idGuruSelect.required = false;
 
         if (btnSubmit) {
-            btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> TERUSKAN DISPEN SISWA KE WAKA`;
+            btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> ` + (isOrtuUser ? 'KIRIM PENGAJUAN IZIN SISWA' : 'TERUSKAN DISPEN SISWA KE WAKA');
             btnSubmit.style.background = '#1e3a8a';
             btnSubmit.style.color = '#ffffff';
         }
@@ -257,6 +291,7 @@ function setSubjekType(type) {
 
 document.addEventListener('DOMContentLoaded', function() {
     setSubjekType("{{ $initialType ?? 'siswa' }}");
+    syncKategori();
 });
 </script>
 @endsection

@@ -55,7 +55,10 @@
                         <td>{{ $item->keterangan ?? '-' }}</td>
                         <td class="action-col">
                             <a href="{{ route('absensi-siswa.show', $item->id_absensi) }}" class="btn btn-secondary btn-sm">Detail</a>
-                            @if(!Auth::user()->isSiswa())
+                            @php
+                                $isFromOrtu = str_contains($item->keterangan ?? '', 'Orang Tua');
+                            @endphp
+                            @if(!Auth::user()->isSiswa() && !$isFromOrtu)
                             <a href="{{ route('absensi-siswa.edit', $item->id_absensi) }}" class="btn btn-primary btn-sm">Edit</a>
                             <form action="{{ route('absensi-siswa.destroy', $item->id_absensi) }}" method="POST" style="display:inline;">
                                 @csrf @method('DELETE')
