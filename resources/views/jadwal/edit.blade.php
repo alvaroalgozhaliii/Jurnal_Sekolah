@@ -50,7 +50,7 @@
             {{-- Tampilan Jam Pembelajaran Otomatis --}}
             <div class="form-group">
                 <label class="form-label">Jam Pembelajaran</label>
-                <div id="waktuDisplay" class="form-control-static" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-weight:600; color:#1e3a8a; min-height:42px;">
+                <div id="waktuDisplay" class="form-control-static">
                     <span id="waktuText">
                         {{ \App\Services\KbmService::getLabelWaktu($jadwal->hari, $jadwal->jam_ke) ?: '— Pilih Hari dan Jam Ke —' }}
                     </span>
@@ -61,7 +61,7 @@
             <div class="form-group">
                 <label class="form-label">Kelas <span class="req">*</span></label>
                 <input type="hidden" name="id_kelas" value="{{ $jadwal->id_kelas }}">
-                <div class="form-control-static" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-weight:600; color:#1e3a8a;">
+                <div class="form-control-static">
                     {{ $jadwal->kelas->nama_kelas ?? '—' }}
                 </div>
             </div>

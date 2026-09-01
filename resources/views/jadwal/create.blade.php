@@ -61,7 +61,7 @@
             {{-- Tampilan Jam Pembelajaran Otomatis --}}
             <div class="form-group">
                 <label class="form-label">Jam Pembelajaran</label>
-                <div id="waktuDisplay" class="form-control-static" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-weight:600; color:#1e3a8a; min-height:42px;">
+                <div id="waktuDisplay" class="form-control-static">
                     <span id="waktuText">
                         @if(old('hari') && old('jam_ke'))
                             {{ \App\Services\KbmService::getLabelWaktu(old('hari'), (int)old('jam_ke')) }}
@@ -77,7 +77,7 @@
                 <label class="form-label" for="id_kelas">Kelas <span class="req">*</span></label>
                 @if($selectedKelas)
                     <input type="hidden" id="id_kelas" name="id_kelas" value="{{ $selectedKelas->id_kelas }}" data-tingkat="{{ $selectedKelas->tingkat }}">
-                    <div class="form-control-static" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px; font-weight:600; color:#1e3a8a;">
+                    <div class="form-control-static">
                         {{ $selectedKelas->nama_kelas }} (Tingkat {{ $selectedKelas->tingkat }})
                     </div>
                 @else
