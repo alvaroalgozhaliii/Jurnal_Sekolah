@@ -461,6 +461,19 @@ a:hover {
     border-top: 1px solid var(--border);
 }
 
+.card-amber {
+    border: 1px solid #f59e0b !important;
+}
+
+.card-amber > .card-header {
+    background-color: #fef3c7 !important;
+    border-bottom: 1px solid #fde68a !important;
+}
+
+.card-amber > .card-header .card-title {
+    color: #b45309 !important;
+}
+
 .distribusi-box {
     background-color: var(--bg-card-header);
     border: 1px solid var(--border);
@@ -830,7 +843,7 @@ input[type="number"]::-webkit-outer-spin-button {
     left: 0;
     z-index: 1000;
     width: 290px;
-    background: #ffffff;
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
@@ -1171,6 +1184,20 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #60a5fa !important;
 }
 
+[data-theme="dark"] .card-amber {
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="dark"] .card-amber > .card-header {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+}
+
+[data-theme="dark"] .card-amber > .card-header .card-title,
+[data-theme="dark"] .card-amber > .card-header .svg-icon {
+    color: #fbbf24 !important;
+}
+
 /* Form Controls & Inputs */
 [data-theme="dark"] .form-control,
 [data-theme="dark"] input[type="text"],
@@ -1358,28 +1385,65 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* Dark mode for Calendar Popover */
-[data-theme="dark"] .jurnal-cal-popover {
-    background-color: #151e32;
-    border-color: var(--border);
+[data-theme="dark"] .jurnal-calendar-popover {
+    background-color: #0f172a;
+    border-color: #1e293b;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
 }
 
 [data-theme="dark"] .jurnal-cal-header {
-    background-color: #19243d;
-    border-bottom-color: var(--border);
+    background-color: transparent;
+    border-bottom-color: #1e293b;
     color: var(--text-primary);
 }
 
+[data-theme="dark"] .jurnal-cal-month-title {
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .jurnal-cal-nav-btn {
+    background: #131c31;
+    border-color: #1e293b;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .jurnal-cal-nav-btn:hover {
+    background: #1e40af;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .jurnal-cal-day-label {
+    color: #64748b;
+}
+
 [data-theme="dark"] .jurnal-cal-date-cell {
-    color: var(--text-primary);
+    color: #e2e8f0;
 }
 
 [data-theme="dark"] .jurnal-cal-date-cell:hover {
     background-color: #1e2d4a;
+    color: #93c5fd;
+}
+
+[data-theme="dark"] .jurnal-cal-date-cell.today {
+    border-color: #3b82f6;
+    color: #93c5fd;
 }
 
 [data-theme="dark"] .jurnal-cal-date-cell.other-month {
-    color: #475569;
+    color: #334155;
+}
+
+[data-theme="dark"] .jurnal-cal-footer {
+    border-top-color: #1e293b;
+}
+
+[data-theme="dark"] .jurnal-cal-btn-today {
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .jurnal-cal-btn-clear {
+    color: #f87171;
 }
 
 /* Theme Toggle Button */

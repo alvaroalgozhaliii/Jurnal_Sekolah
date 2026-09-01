@@ -15,11 +15,11 @@
 </div>
 
 <!-- TABEL PENDING PERSETUJUAN -->
-<div class="card mb-24" style="border: 2px solid var(--gold-accent);">
-    <div class="card-header" style="background: var(--gold-light);">
-        <h3 class="card-title" style="color: var(--gold-hover);">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            Menunggu Persetujuan Waka (Pending) &mdash; {{ $pendingList->count() }} Pengajuan
+<div class="card {{ $pendingList->count() > 0 ? 'card-amber' : '' }} mb-24">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Menunggu Persetujuan Waka (Pending: {{ $pendingList->count() }})
         </h3>
     </div>
     <div class="card-body" style="padding:0;">
