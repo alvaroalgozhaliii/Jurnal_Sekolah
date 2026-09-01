@@ -604,6 +604,16 @@ a:hover {
     box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
 }
 
+/* Selalu tampilkan tombol pemilih menit / angka (spin button up/down) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: inner-spin-button !important;
+    opacity: 1 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    cursor: pointer;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1116,6 +1126,18 @@ a:hover {
     background-color: #080c16 !important;
     border: 1px solid #26354f !important;
     color: #f8fafc !important;
+}
+
+[data-theme="dark"] input[type="number"] {
+    color-scheme: dark;
+}
+
+[data-theme="dark"] input[type="number"]::-webkit-inner-spin-button,
+[data-theme="dark"] input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    filter: none !important;
 }
 
 [data-theme="dark"] input::placeholder,
