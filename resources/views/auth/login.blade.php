@@ -6,10 +6,15 @@
 <div class="login-card">
     <div class="login-header">
         <div class="login-logo">
-            <svg class="svg-icon" viewBox="0 0 24 24" stroke-width="2" style="width: 32px; height: 32px; color: #ffffff;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                <path d="M12 6v10"></path>
+            </svg>
         </div>
         <div class="login-title">JURNAL SEKOLAH</div>
         <div class="login-subtitle">Sistem Informasi Presensi KBM</div>
+        <div class="login-accent-line"></div>
     </div>
 
     @if(session('error'))
@@ -19,7 +24,7 @@
     @endif
 
     @if(session('info'))
-        <div class="alert mb-16" style="background:#eff6ff; border:1px solid #3b82f6; color:#1e3a8a; padding:12px 16px; border-radius:8px; font-size:13px; line-height:1.5;">
+        <div class="alert mb-16" style="background:rgba(59, 130, 246, 0.15); border:1px solid rgba(59, 130, 246, 0.3); color:#93c5fd; padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.5;">
             <div>ℹ️ {{ session('info') }}</div>
         </div>
     @endif
@@ -35,17 +40,56 @@
 
         <div class="form-group">
             <label class="form-label" for="username">Username</label>
-            <input type="text" id="username" name="username" value="{{ old('username') }}" class="form-control" placeholder="Masukkan username" required autofocus>
+            <div class="input-icon-wrapper">
+                <span class="input-icon-left">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </span>
+                <input type="text" id="username" name="username" value="{{ old('username') }}" class="form-control" placeholder="Username" required autofocus>
+            </div>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="password">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan password" required>
+            <div class="input-icon-wrapper">
+                <span class="input-icon-left">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </span>
+                <input type="password" id="password" name="password" class="form-control has-toggle" placeholder="••••••••" required>
+                <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('password', this)" title="Tampilkan/Sembunyikan Password">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg mt-16" style="width: 100%;">
+        <button type="submit" class="btn btn-primary btn-lg mt-16">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
             Masuk Sistem
         </button>
+
+        <div class="login-divider">
+            <span>atau</span>
+        </div>
+
+        <div class="login-footer-info">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M9 12l2 2 4-4"></path>
+            </svg>
+            <span>Akses hanya untuk pengguna terdaftar</span>
+        </div>
     </form>
 </div>
 @endsection
