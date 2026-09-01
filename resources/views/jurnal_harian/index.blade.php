@@ -30,7 +30,7 @@
             <div class="form-group" style="margin:0;">
                 <label for="id_guru" class="form-label" style="margin-bottom:2px;">Filter Guru</label>
                 <select id="id_guru" name="id_guru" class="form-control">
-                    <option value="">-- Semua Guru --</option>
+                    <option value="">Semua Guru</option>
                     @foreach($guruList as $g)
                     <option value="{{ $g->id_guru }}" {{ $id_guru == $g->id_guru ? 'selected' : '' }}>{{ $g->nama }}</option>
                     @endforeach
@@ -41,7 +41,7 @@
             <div class="form-group" style="margin:0;">
                 <label for="id_kelas" class="form-label" style="margin-bottom:2px;">Filter Kelas</label>
                 <select id="id_kelas" name="id_kelas" class="form-control">
-                    <option value="">-- Semua Kelas --</option>
+                    <option value="">Semua Kelas</option>
                     @foreach($kelasList as $k)
                     <option value="{{ $k->id_kelas }}" {{ $id_kelas == $k->id_kelas ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>
                     @endforeach
@@ -111,5 +111,4 @@
         @endif
     </div>
 </div>
-@endsection
 @endsection
