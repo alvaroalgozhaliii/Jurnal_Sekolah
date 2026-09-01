@@ -121,9 +121,9 @@
     <div>
         {{-- FORM EKSEKUSI KEPUTUSAN (JIKA BELUM DIPUTUSKAN / PENDING WAKA) --}}
         @if($pengajuan->status === 'pending_waka')
-        <div class="card mb-24" style="border: 2px solid var(--gold-accent);">
-            <div class="card-header" style="background: var(--gold-light);">
-                <h3 class="card-title" style="color: var(--gold-hover);">
+        <div class="card card-amber mb-24">
+            <div class="card-header">
+                <h3 class="card-title">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                     Form Keputusan Persetujuan Waka
                 </h3>
