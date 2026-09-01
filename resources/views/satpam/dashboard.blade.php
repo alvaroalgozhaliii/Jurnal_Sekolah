@@ -13,31 +13,31 @@
 
 <!-- STAT CARDS -->
 <div class="grid-2 mb-24">
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #d97706;">
         <div class="stat-icon-box amber">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $antreanVerifikasi->count() }}</div>
+            <div class="stat-num" style="color: #d97706;">{{ $antreanVerifikasi->count() }}</div>
             <div class="stat-label">Menunggu Verifikasi Gerbang</div>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #16a34a;">
         <div class="stat-icon-box green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $riwayatVerifikasi->where('status', 'verified')->count() }}</div>
+            <div class="stat-num" style="color: #16a34a;">{{ $riwayatVerifikasi->where('status', 'verified')->count() }}</div>
             <div class="stat-label">Izin Terverifikasi (Valid)</div>
         </div>
     </div>
 </div>
 
 <!-- ANTREAN MENUNGGU VERIFIKASI -->
-<div class="card mb-24">
+<div class="card {{ $antreanVerifikasi->count() > 0 ? 'card-amber' : '' }} mb-24">
     <div class="card-header">
         <h3 class="card-title">
-            <svg class="svg-icon text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             Antrean Verifikasi Kartu Pelajar & Izin Gerbang (Telah Disetujui Waka)
         </h3>
     </div>
