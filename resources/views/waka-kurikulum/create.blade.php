@@ -70,7 +70,7 @@
                 Daftar Penugasan Harian — <span id="labelBulanAktif" style="color:var(--navy-primary); font-weight:700;"></span>
             </h3>
             <span class="text-muted" style="font-size:12px;">
-                🔍 Klik pada kolom Waka atau Guru untuk mencari dan memilih nama dengan cepat
+                 Klik pada kolom Waka atau Guru untuk mencari dan memilih nama dengan cepat
             </span>
         </div>
         <div class="card-body" style="padding:0;">
@@ -94,11 +94,11 @@
         </div>
         <div class="card-footer" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
             <button type="submit" class="btn btn-primary btn-lg" style="font-weight:700; padding:10px 24px;">
-                💾 SIMPAN JADWAL BULANAN
+                 SIMPAN JADWAL BULANAN
             </button>
             <a href="{{ route('waka-kurikulum.index') }}" class="btn btn-secondary btn-lg">Batal</a>
             <span class="text-muted" style="font-size:12px; margin-left:auto;">
-                ⚠️ Tanggal yang sudah ada jadwalnya akan dilewati otomatis.
+                 Tanggal yang sudah ada jadwalnya akan dilewati otomatis.
             </span>
         </div>
     </div>

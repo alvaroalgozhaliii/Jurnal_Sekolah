@@ -242,7 +242,7 @@
                         $cleanGuru = App\Services\WhatsAppService::formatNomor($nomorGuru);
                     @endphp
                     <a href="https://api.whatsapp.com/send?phone={{ $cleanGuru }}" target="_blank" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
-                        💬 Chat WhatsApp Guru ({{ $nomorGuru }})
+                         Chat WhatsApp Guru ({{ $nomorGuru }})
                     </a>
                 </div>
             </div>

@@ -48,7 +48,7 @@
         @endphp
         <div class="card mb-16">
             <div class="card-header" style="background:#1e3a8a;">
-                <h3 class="card-title" style="color:#fff; margin:0;">📅 {{ strtoupper($hari) }}</h3>
+                <h3 class="card-title" style="color:#fff; margin:0;"> {{ strtoupper($hari) }}</h3>
             </div>
             <div class="card-body" style="padding:0;">
                 <div class="table-wrapper" style="border:none; border-radius:0;">
@@ -76,7 +76,7 @@
                         @if(isset($mapIstirahat[$j->jam_ke]))
                         <tr style="background:#fff7ed;">
                             <td colspan="5" style="text-align:center; font-style:italic; color:#92400e; padding:6px; font-size:12px;">
-                                ☕ {{ $mapIstirahat[$j->jam_ke] }}
+                                 {{ $mapIstirahat[$j->jam_ke] }}
                             </td>
                         </tr>
                         @endif
