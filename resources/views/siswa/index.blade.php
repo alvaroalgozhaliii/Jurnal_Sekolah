@@ -16,19 +16,19 @@
 </div>
 
 {{-- CSV Import Card --}}
-<div class="card mb-16" style="background:#f8fafc; border:1px dashed #cbd5e1;">
+<div class="card mb-16">
     <div class="card-body" style="padding:12px 16px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div style="display:flex; align-items:center; gap:8px;">
-                <strong style="color:var(--text-navy, #1e293b); font-size:14px;">&#x1F4E5; Import Data Siswa via CSV:</strong>
+                <strong class="text-navy" style="font-size:14px;">Import Data Siswa via CSV:</strong>
                 <a href="{{ route('siswa.import-template') }}" class="btn btn-secondary btn-sm" style="font-size:12px; padding:4px 10px;">
-                    &#x2B07; Download Template CSV
+                    Download Template CSV
                 </a>
             </div>
             <form action="{{ route('siswa.import-csv') }}" method="POST" enctype="multipart/form-data" style="display:flex; align-items:center; gap:8px;">
                 @csrf
                 <input type="file" name="csv_file" accept=".csv,text/csv,text/plain" required style="font-size:12px;">
-                <button type="submit" class="btn btn-primary btn-sm">&#x1F4E4; Upload &amp; Import</button>
+                <button type="submit" class="btn btn-primary btn-sm">Upload &amp; Import</button>
             </form>
         </div>
     </div>

@@ -30,8 +30,13 @@
     <div class="card-body" style="padding: 22px 26px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
+<<<<<<< HEAD
                 <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700;">
                     🕒 Waktu Laptop / Perangkat Saat Ini
+=======
+                <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 600;">
+                     Waktu Perangkat / Laptop Saat Ini
+>>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
                 </div>
                 <div style="font-size: 32px; font-weight: 800; letter-spacing: 0.5px; font-family: monospace; margin-top: 2px;" id="liveClockDisplay">
                     {{ $now->format('H:i:s') }} WIB
@@ -41,9 +46,15 @@
                 </div>
             </div>
 
+<<<<<<< HEAD
             <div style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); padding: 14px 20px; border-radius: 12px; min-width: 280px;">
                 <div style="font-size: 11.5px; text-transform: uppercase; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px;">
                     📌 Status Jam KBM Saat Ini
+=======
+            <div style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); padding: 12px 18px; border-radius: 10px; min-width: 260px;">
+                <div style="font-size: 11.5px; text-transform: uppercase; color: #93c5fd; font-weight: 700; letter-spacing: 0.5px;">
+                     Status Jam KBM Terdeteksi
+>>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
                 </div>
                 <div style="font-size: 17px; font-weight: 700; margin-top: 4px;">
                     @if($slotStatus === 'kbm')
@@ -75,6 +86,14 @@
                         <span style="color: #a7f3d0;">Tidak Ada Jadwal Mengajar</span>
                     @endif
                 </div>
+<<<<<<< HEAD
+=======
+                @if($jadwalSelected)
+                    <div style="font-size: 12px; color: #60a5fa; margin-top: 4px; font-weight: 600;">
+                         Terkoneksi: Kelas {{ $jadwalSelected->kelas->nama_kelas ?? '-' }} — {{ $jadwalSelected->mapel }}
+                    </div>
+                @endif
+>>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
             </div>
         </div>
     </div>
@@ -141,18 +160,23 @@
             <div class="form-group mb-24">
                 <label class="form-label" for="status_keterlaksanaan">Status Keterlaksanaan &amp; Kehadiran Guru <span class="req">*</span></label>
                 <select id="status_keterlaksanaan" name="status_keterlaksanaan" class="form-control" required>
-                    <option value="terlaksana" {{ old('status_keterlaksanaan') == 'terlaksana' ? 'selected' : '' }}>✅ Terlaksana (Hadir Mengajar)</option>
-                    <option value="izin_guru" {{ old('status_keterlaksanaan') == 'izin_guru' ? 'selected' : '' }}>ℹ️ Izin Guru (Ada Keperluan / Penugasan)</option>
-                    <option value="sakit_guru" {{ old('status_keterlaksanaan') == 'sakit_guru' ? 'selected' : '' }}>🏥 Sakit Guru</option>
-                    <option value="dispen_guru" {{ old('status_keterlaksanaan') == 'dispen_guru' ? 'selected' : '' }}>📋 Dispensasi Guru / Tugas Luar</option>
-                    <option value="pengganti" {{ old('status_keterlaksanaan') == 'pengganti' ? 'selected' : '' }}>🔄 Digantikan Guru Piket / Pengganti</option>
-                    <option value="tidak_terlaksana" {{ old('status_keterlaksanaan') == 'tidak_terlaksana' ? 'selected' : '' }}>❌ Tidak Terlaksana</option>
+                    <option value="terlaksana" {{ old('status_keterlaksanaan') == 'terlaksana' ? 'selected' : '' }}> Terlaksana (Hadir Mengajar)</option>
+                    <option value="izin_guru" {{ old('status_keterlaksanaan') == 'izin_guru' ? 'selected' : '' }}> Izin Guru (Ada Keperluan / Penugasan)</option>
+                    <option value="sakit_guru" {{ old('status_keterlaksanaan') == 'sakit_guru' ? 'selected' : '' }}> Sakit Guru</option>
+                    <option value="dispen_guru" {{ old('status_keterlaksanaan') == 'dispen_guru' ? 'selected' : '' }}> Dispensasi Guru / Tugas Luar</option>
+                    <option value="pengganti" {{ old('status_keterlaksanaan') == 'pengganti' ? 'selected' : '' }}> Digantikan Guru Piket / Pengganti</option>
+                    <option value="tidak_terlaksana" {{ old('status_keterlaksanaan') == 'tidak_terlaksana' ? 'selected' : '' }}> Tidak Terlaksana</option>
                 </select>
             </div>
 
             <div class="d-flex gap-12 align-center flex-wrap">
+<<<<<<< HEAD
                 <button type="submit" class="btn btn-primary btn-lg" style="font-weight:700; padding:10px 24px;">
                     💾 SIMPAN JURNAL MENGAJAR
+=======
+                <button type="submit" class="btn btn-primary btn-lg" style="font-weight:700;">
+                     SIMPAN JURNAL &amp; LANJUT ABSENSI SISWA
+>>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
                 </button>
                 <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary btn-lg">Batal</a>
             </div>
@@ -162,6 +186,7 @@
 
 {{-- JIKA BUKAN JAM MENGAJAR / ISTIRAHAT / PULANG / LIBUR --}}
 @else
+<<<<<<< HEAD
 <div class="card" style="max-width: 800px;">
     <div class="card-body" style="padding: 32px 24px; text-align: center;">
         @if($slotStatus === 'istirahat')
@@ -209,6 +234,11 @@
         <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary">
             &larr; Lihat Riwayat Jurnal Mengajar Saya
         </a>
+=======
+<div class="alert alert-info" style="max-width: 800px;">
+    <div>
+        <strong> Informasi Jadwal:</strong> Tidak ditemukan jadwal mengajar otomatis pada jam ini. Silakan pilih jadwal mengajar KBM dari dropdown di atas untuk mengisi jurnal.
+>>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
     </div>
 </div>
 @endif

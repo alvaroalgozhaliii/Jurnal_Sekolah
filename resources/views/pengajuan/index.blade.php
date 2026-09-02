@@ -15,12 +15,12 @@
 </div>
 
 {{-- Rekap Excel Bulanan Card --}}
-<div class="card mb-16" style="background:#f0fdf4; border:1px solid #bbf7d0;">
+<div class="card mb-16">
     <div class="card-body" style="padding:12px 16px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div style="display:flex; align-items:center; gap:8px;">
-                <strong style="color:#166534; font-size:14px;">&#x1F4CA; Rekap Excel Persetujuan Izin per Bulan:</strong>
-                <span style="color:#15803d; font-size:12px;">(Izin Siswa, Izin Guru, dan Ringkasan)</span>
+                <strong class="text-navy" style="font-size:14px;">Rekap Excel Persetujuan Izin per Bulan:</strong>
+                <span class="text-muted" style="font-size:12px;">(Izin Siswa, Izin Guru, dan Ringkasan)</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <select id="bulanIzin" class="form-control" style="width:auto; padding:4px 10px; font-size:13px; height:auto;">
@@ -31,7 +31,7 @@
                 </select>
                 <input type="number" id="tahunIzin" value="{{ date('Y') }}" min="2020" max="2099" class="form-control" style="width:80px; padding:4px 8px; font-size:13px; height:auto;">
                 <a id="btnDownloadIzin" href="{{ route('rekap.izin-excel', ['bulan' => date('n'), 'tahun' => date('Y')]) }}" class="btn btn-sm" style="background:#16a34a; color:#fff; font-weight:600;">
-                    &#x2B07; Unduh Rekap Excel (.XLSX)
+                    Unduh Rekap Excel (.XLSX)
                 </a>
             </div>
         </div>

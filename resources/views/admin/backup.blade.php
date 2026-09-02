@@ -15,12 +15,12 @@
     <!-- BACKUP DATABASE CARD -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">&#x1F4E4; 1. Buat Backup Database</h3>
+            <h3 class="card-title">1. Buat Backup Database</h3>
         </div>
         <div class="card-body">
             <p class="mb-16 text-muted">Ekspor seluruh skema dan data database ke file SQL standar. File ini juga otomatis tersimpan di server.</p>
             <a href="{{ route('admin.backup.export') }}" class="btn btn-primary btn-lg">
-                &#x2B07; Ekspor Database Sekarang (.SQL)
+                Ekspor Database Sekarang (.SQL)
             </a>
         </div>
     </div>
@@ -28,7 +28,7 @@
     <!-- RESTORE DATABASE CARD -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">&#x1F4E5; 2. Restore dari File</h3>
+            <h3 class="card-title">2. Restore dari File</h3>
         </div>
         <div class="card-body">
             <p class="mb-16 text-muted">Unggah file backup <code>.sql</code> atau <code>.json</code> untuk memulihkan seluruh data sistem.</p>
@@ -41,7 +41,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-danger mt-16" onclick="return confirm('PERINGATAN: Memulihkan database akan menimpa data yang ada saat ini. Pastikan Anda sudah membuat backup terlebih dahulu. Lanjutkan?')">
-                    &#x26A0; Restore Database Sekarang
+                    Restore Database Sekarang
                 </button>
             </form>
         </div>
@@ -51,7 +51,7 @@
 <!-- STORED BACKUPS TABLE -->
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">&#x1F4C1; File Cadangan Tersimpan di Server ({{ count($backupFiles ?? []) }})</h3>
+        <h3 class="card-title">File Cadangan Tersimpan di Server ({{ count($backupFiles ?? []) }})</h3>
     </div>
     <div class="card-body" style="padding:0;">
         @if(!empty($backupFiles) && count($backupFiles) > 0)
@@ -75,18 +75,18 @@
                         <td class="text-muted">{{ $bf['modified'] }}</td>
                         <td class="action-col" style="white-space:nowrap;">
                             <a href="{{ route('admin.backup.download', $bf['name']) }}" class="btn btn-secondary btn-sm" title="Unduh File">
-                                &#x2B07; Unduh
+                                Unduh
                             </a>
                             <form action="{{ route('admin.backup.restore-stored', $bf['name']) }}" method="POST" style="display:inline;">
                                 @csrf
                                 <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Pulihkan database dari file {{ $bf['name'] }}? Data saat ini akan diperbarui.')">
-                                    &#x267B; Restore
+                                    Restore
                                 </button>
                             </form>
                             <form action="{{ route('admin.backup.delete', $bf['name']) }}" method="POST" style="display:inline;">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus file backup {{ $bf['name'] }}?')">
-                                    &#x1F5D1; Hapus
+                                    Hapus
                                 </button>
                             </form>
                         </td>

@@ -42,7 +42,7 @@
         @if(isset($wakaHariIni) && $wakaHariIni && $wakaHariIni->waka)
         <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px;">
             <div>
-                🛡️ <strong>Waka Bertugas Hari Ini:</strong> {{ $wakaHariIni->waka->nama }} ({{ strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) }})
+                 <strong>Waka Bertugas Hari Ini:</strong> {{ $wakaHariIni->waka->nama }} ({{ strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) }})
             </div>
             @if($wakaHariIni->waka->no_hp)
                 <span style="color:#059669; font-weight:600;">WA Aktif: {{ $wakaHariIni->waka->no_hp }}</span>
@@ -57,10 +57,10 @@
         @endphp
         <div style="display:flex; gap:12px; margin-bottom:20px; background:var(--clr-bg-subtle); padding:6px; border-radius:8px;">
             <button type="button" id="btn-tab-siswa" onclick="setSubjekType('siswa')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'siswa' ? 'background:#1e3a8a; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
-                👨‍🎓 Dispensasi Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)
+                 Dispensasi Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)
             </button>
             <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
-                👨‍🏫 Dispensasi Guru (Alur: Piket &rarr; Waka SDM/Piket &rarr; Kepsek)
+                 Dispensasi Guru (Alur: Piket &rarr; Waka SDM/Piket &rarr; Kepsek)
             </button>
         </div>
         @endif
@@ -92,7 +92,7 @@
                 <label class="form-label" for="kategori_guru">Kategori Izin Guru</label>
                 <input type="text" class="form-control" value="Dispensasi / Izin Meninggalkan Tugas Guru" readonly style="background:#f8fafc; font-weight:600;">
                 <small class="text-muted" style="display:block; margin-top:4px;">
-                    ℹ️ Pengajuan ini akan diteruskan ke <strong>Waka SDM</strong>, lalu ke <strong>Kepala Sekolah</strong> (tanpa satpam).
+                     Pengajuan ini akan diteruskan ke <strong>Waka SDM</strong>, lalu ke <strong>Kepala Sekolah</strong> (tanpa satpam).
                 </small>
             </div>
 

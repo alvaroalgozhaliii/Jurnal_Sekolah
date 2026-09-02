@@ -16,19 +16,19 @@
 </div>
 
 {{-- CSV Import Card --}}
-<div class="card mb-16" style="background:#f8fafc; border:1px dashed #cbd5e1;">
+<div class="card mb-16">
     <div class="card-body" style="padding:12px 16px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div style="display:flex; align-items:center; gap:8px;">
-                <strong style="color:var(--text-navy, #1e293b); font-size:14px;">&#x1F4E5; Import Data Jadwal via CSV:</strong>
+                <strong class="text-navy" style="font-size:14px;">Import Data Jadwal via CSV:</strong>
                 <a href="{{ route('jadwal.import-template') }}" class="btn btn-secondary btn-sm" style="font-size:12px; padding:4px 10px;">
-                    &#x2B07; Download Template CSV
+                    Download Template CSV
                 </a>
             </div>
             <form action="{{ route('jadwal.import-csv') }}" method="POST" enctype="multipart/form-data" style="display:flex; align-items:center; gap:8px;">
                 @csrf
                 <input type="file" name="csv_file" accept=".csv,text/csv,text/plain" required style="font-size:12px;">
-                <button type="submit" class="btn btn-primary btn-sm">&#x1F4E4; Upload &amp; Import</button>
+                <button type="submit" class="btn btn-primary btn-sm">Upload &amp; Import</button>
             </form>
         </div>
     </div>
@@ -64,10 +64,10 @@
                 {{-- Mode Switcher: Folder Cards vs Tabel --}}
                 <div class="d-flex gap-4" style="border-left:1px solid #cbd5e1; padding-left:8px;">
                     <a href="{{ route('jadwal.index', ['view' => 'folder', 'tingkat' => $tingkatFilter, 'search' => $search]) }}" class="btn btn-sm {{ $viewMode === 'folder' ? 'btn-primary' : 'btn-secondary' }}" title="Tampilan Folder Kelas">
-                        📂 Folder Kelas
+                         Folder Kelas
                     </a>
                     <a href="{{ route('jadwal.index', ['view' => 'table', 'tingkat' => $tingkatFilter, 'search' => $search]) }}" class="btn btn-sm {{ $viewMode === 'table' ? 'btn-primary' : 'btn-secondary' }}" title="Tampilan Tabel Semua">
-                        📋 Tabel Ringkas
+                         Tabel Ringkas
                     </a>
                 </div>
             </div>
@@ -98,7 +98,7 @@
             {{-- Header Folder --}}
             <div class="card-header d-flex justify-between align-center" style="padding:14px 16px;">
                 <div class="d-flex align-center gap-8">
-                    <span style="font-size:24px;">📁</span>
+                    
                     <div>
                         <h3 class="card-title" style="font-size:16px; margin:0;">{{ $k->nama_kelas }}</h3>
                         <span style="font-size:12px;" class="text-muted">{{ $k->jurusan->nama_jurusan ?? 'Tanpa Jurusan' }}</span>
@@ -114,15 +114,15 @@
                 {{-- Info Wali Kelas & Siswa --}}
                 <div style="font-size:13px; margin-bottom:12px;">
                     <div class="d-flex justify-between py-4" style="border-bottom:1px dashed var(--border);">
-                        <span class="text-muted">👨‍🏫 Wali Kelas:</span>
+                        <span class="text-muted"> Wali Kelas:</span>
                         <strong class="text-navy">{{ $k->wali_kelas ?: '-' }}</strong>
                     </div>
                     <div class="d-flex justify-between py-4" style="border-bottom:1px dashed var(--border);">
-                        <span class="text-muted">👥 Jumlah Siswa:</span>
+                        <span class="text-muted"> Jumlah Siswa:</span>
                         <strong>{{ $k->siswa_count }} Siswa</strong>
                     </div>
                     <div class="d-flex justify-between py-4">
-                        <span class="text-muted">📅 Total Jadwal:</span>
+                        <span class="text-muted"> Total Jadwal:</span>
                         <strong style="color:{{ $k->jadwal_count > 0 ? '#16a34a' : '#dc2626' }}; font-size:14px;">
                             {{ $k->jadwal_count }} Sesi Pelajaran
                         </strong>
@@ -145,10 +145,10 @@
             {{-- Footer Action Buttons --}}
             <div class="card-footer d-flex gap-8" style="padding:12px 16px;">
                 <a href="{{ route('kelas.show', $k->id_kelas) }}" class="btn btn-primary btn-sm" style="flex:1; text-align:center;">
-                    📂 Kelola Jadwal Kelas
+                     Kelola Jadwal Kelas
                 </a>
                 <a href="{{ route('jadwal.create', ['id_kelas' => $k->id_kelas]) }}" class="btn btn-secondary btn-sm" title="Tambah Jadwal untuk kelas ini">
-                    ➕ Tambah
+                     Tambah
                 </a>
             </div>
         </div>
@@ -187,7 +187,7 @@
             <div class="card mb-16">
                 <div class="card-header" style="background:#1e3a8a;">
                     <h3 class="card-title" style="color:#ffffff; margin:0;">
-                        📅 {{ strtoupper($hari) }}
+                         {{ strtoupper($hari) }}
                     </h3>
                 </div>
                 <div class="card-body" style="padding:0;">
