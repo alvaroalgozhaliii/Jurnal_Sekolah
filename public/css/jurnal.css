@@ -604,7 +604,7 @@ a:hover {
 }
 
 .table tbody tr:hover {
-    background-color: #f8fafc;
+    background-color: var(--bg-card-header);
 }
 
 /* Info Table */
