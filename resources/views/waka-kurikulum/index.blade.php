@@ -34,7 +34,7 @@
                 @endfor
             </select>
         </div>
-        <button type="submit" class="btn btn-primary" style="padding:8px 18px;">🔍 Tampilkan</button>
+        <button type="submit" class="btn btn-primary" style="padding:8px 18px;">Tampilkan</button>
 
         @if($bulanTersedia->count() > 0)
             <div style="margin-left:auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -95,7 +95,7 @@
                             @endif
                         </td>
                         <td style="color:{{ $isWeekend ? '#d97706' : 'inherit' }}; font-weight:{{ $isWeekend ? '700' : '500' }};">
-                            {{ $item->tanggal ? $item->tanggal->translatedFormat('l') : '-' }}
+                            {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd') : '-' }}
                         </td>
                         <td>
                             <strong class="text-navy">{{ $item->waka->nama ?? '-' }}</strong>

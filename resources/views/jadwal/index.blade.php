@@ -94,14 +94,14 @@
             $kamisCount = $groupedJadwal->has('Kamis') ? $groupedJadwal['Kamis']->count() : 0;
             $jumatCount = $groupedJadwal->has('Jumat') ? $groupedJadwal['Jumat']->count() : 0;
         @endphp
-        <div class="card" style="border-top: 4px solid #1e3a8a; display:flex; flex-direction:column; justify-content:space-between; transition:transform 0.15s, box-shadow 0.15s;">
+        <div class="card card-folder mb-24" style="border-top: 4px solid var(--navy-primary); display:flex; flex-direction:column; justify-content:space-between;">
             {{-- Header Folder --}}
-            <div class="card-header d-flex justify-between align-center" style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:14px 16px;">
+            <div class="card-header d-flex justify-between align-center" style="padding:14px 16px;">
                 <div class="d-flex align-center gap-8">
                     <span style="font-size:24px;">📁</span>
                     <div>
-                        <h3 class="card-title" style="font-size:16px; margin:0; color:#0f172a;">{{ $k->nama_kelas }}</h3>
-                        <span style="font-size:12px; color:#64748b;">{{ $k->jurusan->nama_jurusan ?? 'Tanpa Jurusan' }}</span>
+                        <h3 class="card-title" style="font-size:16px; margin:0;">{{ $k->nama_kelas }}</h3>
+                        <span style="font-size:12px;" class="text-muted">{{ $k->jurusan->nama_jurusan ?? 'Tanpa Jurusan' }}</span>
                     </div>
                 </div>
                 <div>
@@ -113,11 +113,11 @@
             <div class="card-body" style="padding:16px;">
                 {{-- Info Wali Kelas & Siswa --}}
                 <div style="font-size:13px; margin-bottom:12px;">
-                    <div class="d-flex justify-between py-4" style="border-bottom:1px dashed #f1f5f9;">
+                    <div class="d-flex justify-between py-4" style="border-bottom:1px dashed var(--border);">
                         <span class="text-muted">👨‍🏫 Wali Kelas:</span>
                         <strong class="text-navy">{{ $k->wali_kelas ?: '-' }}</strong>
                     </div>
-                    <div class="d-flex justify-between py-4" style="border-bottom:1px dashed #f1f5f9;">
+                    <div class="d-flex justify-between py-4" style="border-bottom:1px dashed var(--border);">
                         <span class="text-muted">👥 Jumlah Siswa:</span>
                         <strong>{{ $k->siswa_count }} Siswa</strong>
                     </div>
@@ -130,8 +130,8 @@
                 </div>
 
                 {{-- Badges Per Hari --}}
-                <div style="background:#f8fafc; border-radius:6px; padding:8px 10px; margin-top:8px;">
-                    <div style="font-size:11px; font-weight:700; color:#64748b; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Distribusi Hari:</div>
+                <div class="distribusi-box">
+                    <div style="font-size:11px; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;" class="text-muted">Distribusi Hari:</div>
                     <div class="d-flex gap-4 flex-wrap" style="font-size:11px;">
                         <span class="badge {{ $seninCount > 0 ? 'badge-info' : 'badge-gray' }}" title="Senin">Sen: {{ $seninCount }}</span>
                         <span class="badge {{ $selasaCount > 0 ? 'badge-info' : 'badge-gray' }}" title="Selasa">Sel: {{ $selasaCount }}</span>
@@ -143,7 +143,7 @@
             </div>
 
             {{-- Footer Action Buttons --}}
-            <div class="card-footer d-flex gap-8" style="background:#ffffff; border-top:1px solid #e2e8f0; padding:12px 16px;">
+            <div class="card-footer d-flex gap-8" style="padding:12px 16px;">
                 <a href="{{ route('kelas.show', $k->id_kelas) }}" class="btn btn-primary btn-sm" style="flex:1; text-align:center;">
                     📂 Kelola Jadwal Kelas
                 </a>

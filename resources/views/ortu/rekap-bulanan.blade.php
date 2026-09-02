@@ -32,7 +32,7 @@
                 <select name="bulan" class="form-control">
                     @foreach(range(1, 12) as $m)
                     @php $monthName = DateTime::createFromFormat('!m', $m)->format('F'); @endphp
-                    <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>{{ $monthName }} ({{ sprintf('%02d', $m) }})</option>
+                    <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>{{ $monthName }}</option>
                     @endforeach
                 </select>
             </div>
