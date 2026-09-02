@@ -59,7 +59,7 @@
             <div class="form-group mb-16">
                 <label class="form-label" for="id_jadwal">Pilih Jadwal Mengajar Guru <span class="req">*</span></label>
                 <select id="id_jadwal" name="id_jadwal" class="form-control select-search" required placeholder="Ketik nama guru / kelas / mapel...">
-                    <option value="">-- Pilih Jadwal & Guru Hari Ini --</option>
+                    <option value="">Pilih Jadwal & Guru Hari Ini</option>
                     @foreach($jadwalHariIni as $j)
                         <option value="{{ $j->id_jadwal }}" {{ old('id_jadwal') == $j->id_jadwal ? 'selected' : '' }}>
                             {{ $j->guru->nama ?? 'Tanpa Guru' }} — Kelas {{ $j->kelas->nama_kelas ?? '-' }} (Mapel: {{ $j->mapel }}, Jam {{ $j->jam_ke }})
@@ -71,7 +71,7 @@
             <div class="form-group mb-16">
                 <label class="form-label" for="keperluan_select">Keperluan / Alasan Izin <span class="req">*</span></label>
                 <select name="keperluan_select" id="keperluan_select" class="form-control" required>
-                    <option value="">-- Pilih Keperluan / Alasan Izin --</option>
+                    <option value="">Pilih Keperluan / Alasan Izin</option>
                     @foreach($keperluanOptions as $kop)
                         <option value="{{ $kop }}" {{ old('keperluan_select') == $kop ? 'selected' : '' }}>{{ $kop }}</option>
                     @endforeach

@@ -365,7 +365,7 @@ function renderTabel() {
                     : `
                     <input type="hidden" name="id_user_waka[${dateStr}]" id="waka_val_${dateStr}" value="">
                     <button type="button" class="picker-trigger" id="waka_btn_${dateStr}" onclick="openPicker(event, 'waka', '${dateStr}')">
-                        <span class="trigger-text trigger-placeholder" id="waka_txt_${dateStr}">${isWeekend ? '-- Kosongkan (Weekend) --' : '-- Pilih Waka Bertugas --'}</span>
+                        <span class="trigger-text trigger-placeholder" id="waka_txt_${dateStr}">${isWeekend ? 'Kosongkan (Weekend)' : 'Pilih Waka Bertugas'}</span>
                         <svg class="trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     `
@@ -482,7 +482,7 @@ function selectPickerItem(id, displayLabel) {
         activePickerTarget.textEl.style.fontWeight = '600';
         activePickerTarget.textEl.style.color = 'var(--text-primary)';
     } else {
-        activePickerTarget.textEl.textContent = activePickerTarget.type === 'waka' ? '-- Pilih Waka Bertugas --' : '-- Pilih Guru Piket (Opsional) --';
+        activePickerTarget.textEl.textContent = activePickerTarget.type === 'waka' ? 'Pilih Waka Bertugas' : 'Pilih Guru Piket (Opsional)';
         activePickerTarget.textEl.classList.add('trigger-placeholder');
         activePickerTarget.textEl.style.fontWeight = '400';
     }

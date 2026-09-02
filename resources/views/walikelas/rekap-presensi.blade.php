@@ -18,7 +18,7 @@
             <div class="form-group" style="margin:0;">
                 <label class="form-label" style="margin-bottom:2px;">Filter Siswa</label>
                 <select name="id_siswa" class="form-control">
-                    <option value="">-- Semua Siswa Kelas {{ $kelas->nama_kelas }} --</option>
+                    <option value="">Semua Siswa Kelas {{ $kelas->nama_kelas }}</option>
                     @foreach($siswaList as $s)
                     <option value="{{ $s->id_siswa }}" {{ $selectedSiswaId == $s->id_siswa ? 'selected' : '' }}>
                         {{ $s->nama }} (NISN: {{ $s->NISN }})

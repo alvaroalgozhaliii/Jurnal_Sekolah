@@ -85,7 +85,7 @@
         <form action="{{ route('kelas.attach-mapel', $kelas->id_kelas) }}" method="POST" class="d-flex gap-8" style="align-items:center; flex-wrap:wrap;">
             @csrf
             <select name="id_mapel" class="form-control select-search" style="min-width:320px;" required placeholder="Ketik / Pilih Mata Pelajaran">
-                <option value="">-- Pilih Mata Pelajaran --</option>
+                <option value="">Pilih Mata Pelajaran</option>
                 @foreach($availableMapel as $m)
                 <option value="{{ $m->id_mapel }}">{{ $m->nama_mapel }} ({{ $m->kode_mapel ?? '-' }})</option>
                 @endforeach

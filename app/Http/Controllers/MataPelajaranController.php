@@ -14,11 +14,11 @@ class MataPelajaranController extends Controller
 
         if ($search) {
             $query->where('nama_mapel', 'like', "%{$search}%")
-                  ->orWhere('kode_mapel', 'like', "%{$search}%")
-                  ->orWhere('tingkat', 'like', "%{$search}%");
+                ->orWhere('kode_mapel', 'like', "%{$search}%")
+                ->orWhere('tingkat', 'like', "%{$search}%");
         }
 
-        $mapel = $query->orderBy('tingkat', 'asc')->orderBy('nama_mapel', 'asc')->get();
+                $mapel = $query->orderBy('tingkat', 'asc')->orderBy('nama_mapel', 'asc')->get();
 
         return view('mapel.index', compact('mapel', 'search'));
     }
