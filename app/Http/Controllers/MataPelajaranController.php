@@ -14,10 +14,11 @@ class MataPelajaranController extends Controller
 
         if ($search) {
             $query->where('nama_mapel', 'like', "%{$search}%")
-                  ->orWhere('kode_mapel', 'like', "%{$search}%");
+                  ->orWhere('kode_mapel', 'like', "%{$search}%")
+                  ->orWhere('tingkat', 'like', "%{$search}%");
         }
 
-        $mapel = $query->orderBy('nama_mapel', 'asc')->get();
+        $mapel = $query->orderBy('tingkat', 'asc')->orderBy('nama_mapel', 'asc')->get();
 
         return view('mapel.index', compact('mapel', 'search'));
     }
@@ -30,13 +31,20 @@ class MataPelajaranController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_mapel' => 'required|string|max:100|unique:mata_pelajaran,nama_mapel',
+            'nama_mapel' => 'required|string|max:100',
+            'tingkat' => 'nullable|in:X,XI,XII',
             'kode_mapel' => 'nullable|string|max:20',
         ]);
 
+        $tingkat = $request->tingkat ?? 'X';
+        $kodeMapel = $request->filled('kode_mapel')
+            ? trim($request->kode_mapel)
+            : MataPelajaran::generateKode($request->nama_mapel, $tingkat);
+
         MataPelajaran::create([
             'nama_mapel' => $request->nama_mapel,
-            'kode_mapel' => $request->kode_mapel,
+            'tingkat' => $tingkat,
+            'kode_mapel' => $kodeMapel,
         ]);
 
         return redirect()->route('mapel.index')->with('success', 'Mata Pelajaran berhasil ditambahkan');
@@ -53,13 +61,20 @@ class MataPelajaranController extends Controller
         $mapel = MataPelajaran::findOrFail($id);
 
         $request->validate([
-            'nama_mapel' => 'required|string|max:100|unique:mata_pelajaran,nama_mapel,' . $id . ',id_mapel',
+            'nama_mapel' => 'required|string|max:100',
+            'tingkat' => 'nullable|in:X,XI,XII',
             'kode_mapel' => 'nullable|string|max:20',
         ]);
 
+        $tingkat = $request->tingkat ?? $mapel->tingkat ?? 'X';
+        $kodeMapel = $request->filled('kode_mapel')
+            ? trim($request->kode_mapel)
+            : ($mapel->kode_mapel ?: MataPelajaran::generateKode($request->nama_mapel, $tingkat));
+
         $mapel->update([
             'nama_mapel' => $request->nama_mapel,
-            'kode_mapel' => $request->kode_mapel,
+            'tingkat' => $tingkat,
+            'kode_mapel' => $kodeMapel,
         ]);
 
         return redirect()->route('mapel.index')->with('success', 'Mata Pelajaran berhasil diubah');

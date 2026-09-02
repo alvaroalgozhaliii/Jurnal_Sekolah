@@ -14,6 +14,43 @@
     </div>
 </div>
 
+{{-- Rekap Excel Bulanan Card --}}
+<div class="card mb-16" style="background:#f0fdf4; border:1px solid #bbf7d0;">
+    <div class="card-body" style="padding:12px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <strong style="color:#166534; font-size:14px;">&#x1F4CA; Rekap Excel Persetujuan Izin per Bulan:</strong>
+                <span style="color:#15803d; font-size:12px;">(Izin Siswa, Izin Guru, dan Ringkasan)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <select id="bulanIzin" class="form-control" style="width:auto; padding:4px 10px; font-size:13px; height:auto;">
+                    @php $curMonth = date('n'); @endphp
+                    @foreach(['1'=>'Januari','2'=>'Februari','3'=>'Maret','4'=>'April','5'=>'Mei','6'=>'Juni','7'=>'Juli','8'=>'Agustus','9'=>'September','10'=>'Oktober','11'=>'November','12'=>'Desember'] as $mVal => $mName)
+                        <option value="{{ $mVal }}" {{ $curMonth == $mVal ? 'selected' : '' }}>{{ $mName }}</option>
+                    @endforeach
+                </select>
+                <input type="number" id="tahunIzin" value="{{ date('Y') }}" min="2020" max="2099" class="form-control" style="width:80px; padding:4px 8px; font-size:13px; height:auto;">
+                <a id="btnDownloadIzin" href="{{ route('rekap.izin-excel', ['bulan' => date('n'), 'tahun' => date('Y')]) }}" class="btn btn-sm" style="background:#16a34a; color:#fff; font-weight:600;">
+                    &#x2B07; Unduh Rekap Excel (.XLSX)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const b = document.getElementById('bulanIzin');
+    const t = document.getElementById('tahunIzin');
+    const btn = document.getElementById('btnDownloadIzin');
+    function updateUrl() {
+        btn.href = "{{ route('rekap.izin-excel') }}?bulan=" + b.value + "&tahun=" + t.value;
+    }
+    b.addEventListener('change', updateUrl);
+    t.addEventListener('input', updateUrl);
+});
+</script>
+
 <div class="card">
     <div class="card-body" style="padding:0;">
         @if($pengajuanList->count() > 0)

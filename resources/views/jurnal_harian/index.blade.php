@@ -17,6 +17,43 @@
     @endif
 </div>
 
+{{-- Rekap Excel Bulanan Card --}}
+<div class="card mb-16" style="background:#eff6ff; border:1px solid #bfdbfe;">
+    <div class="card-body" style="padding:12px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <strong style="color:#1e40af; font-size:14px;">&#x1F4CA; Rekap Excel Jurnal Harian KBM per Bulan:</strong>
+                <span style="color:#2563eb; font-size:12px;">(Khusus Guru Pengajar Berjadwal)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <select id="bulanJurnal" class="form-control" style="width:auto; padding:4px 10px; font-size:13px; height:auto;">
+                    @php $curMonth = date('n'); @endphp
+                    @foreach(['1'=>'Januari','2'=>'Februari','3'=>'Maret','4'=>'April','5'=>'Mei','6'=>'Juni','7'=>'Juli','8'=>'Agustus','9'=>'September','10'=>'Oktober','11'=>'November','12'=>'Desember'] as $mVal => $mName)
+                        <option value="{{ $mVal }}" {{ $curMonth == $mVal ? 'selected' : '' }}>{{ $mName }}</option>
+                    @endforeach
+                </select>
+                <input type="number" id="tahunJurnal" value="{{ date('Y') }}" min="2020" max="2099" class="form-control" style="width:80px; padding:4px 8px; font-size:13px; height:auto;">
+                <a id="btnDownloadJurnal" href="{{ route('rekap.jurnal-excel', ['bulan' => date('n'), 'tahun' => date('Y')]) }}" class="btn btn-sm" style="background:#2563eb; color:#fff; font-weight:600;">
+                    &#x2B07; Unduh Rekap Excel (.XLSX)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const b = document.getElementById('bulanJurnal');
+    const t = document.getElementById('tahunJurnal');
+    const btn = document.getElementById('btnDownloadJurnal');
+    function updateUrl() {
+        btn.href = "{{ route('rekap.jurnal-excel') }}?bulan=" + b.value + "&tahun=" + t.value;
+    }
+    b.addEventListener('change', updateUrl);
+    t.addEventListener('input', updateUrl);
+});
+</script>
+
 <!-- FILTER BAR -->
 <div class="card mb-24">
     <div class="card-body">
@@ -111,5 +148,4 @@
         @endif
     </div>
 </div>
-@endsection
 @endsection

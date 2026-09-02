@@ -97,4 +97,69 @@ class JurusanController extends Controller
         Jurusan::withTrashed()->findOrFail($id)->forceDelete();
         return redirect()->route('jurusan.trash')->with('success', 'Data jurusan berhasil dihapus permanen.');
     }
+
+    public function importTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="template_data_jurusan.csv"',
+        ];
+
+        $sample = [
+            ['nama_jurusan', 'rombel', 'maks_rombel'],
+            ['Rekayasa Perangkat Lunak', 'RPL', 2],
+            ['Teknik Komputer & Jaringan', 'TKJ', 2],
+        ];
+
+        return response()->stream(function() use ($sample) {
+            $output = fopen('php://output', 'w');
+            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
+            foreach ($sample as $row) {
+                fputcsv($output, $row);
+            }
+            fclose($output);
+        }, 200, $headers);
+    }
+
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|max:5120',
+        ]);
+
+        try {
+            $parsed = \App\Services\CsvImportService::parseCsv($request->file('csv_file'));
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal memproses file CSV: ' . $e->getMessage());
+        }
+
+        $inserted = 0;
+        $skipped = 0;
+
+        foreach ($parsed['rows'] as $data) {
+            $namaJurusan = $data['nama_jurusan'] ?? '';
+            $rombel = $data['rombel'] ?? ($data['kode_rombel'] ?? ($data['singkatan'] ?? ''));
+            $maksRombel = (int)($data['maks_rombel'] ?? 2);
+
+            if (empty($namaJurusan) || empty($rombel)) {
+                $skipped++;
+                continue;
+            }
+
+            if (Jurusan::where('nama_jurusan', $namaJurusan)->orWhere('rombel', $rombel)->exists()) {
+                $skipped++;
+                continue;
+            }
+
+            Jurusan::create([
+                'nama_jurusan' => $namaJurusan,
+                'rombel' => $rombel,
+                'maks_rombel' => $maksRombel > 0 ? $maksRombel : 2,
+            ]);
+
+            $inserted++;
+        }
+
+        return back()->with('success', "Import CSV berhasil! {$inserted} data jurusan ditambahkan, {$skipped} data dilewati.");
+    }
 }

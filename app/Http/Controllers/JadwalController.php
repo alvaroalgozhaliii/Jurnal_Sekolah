@@ -314,4 +314,179 @@ class JadwalController extends Controller
         Jadwal::withTrashed()->findOrFail($id)->forceDelete();
         return redirect()->route('jadwal.trash')->with('success', 'Jadwal dihapus permanen');
     }
+
+    public function importTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="template_data_jadwal.csv"',
+        ];
+
+        $sample = [
+            ['nama_kelas', 'hari', 'jam_ke', 'mapel', 'nama_guru', 'ruang', 'waktu_mulai', 'waktu_selesai'],
+            ['X RPL 1', 'Senin', 1, 'Bahasa Indonesia', 'Sri Rahayu, S.Pd', 'R. 10', '07:00', '07:40'],
+            ['X RPL 1', 'Senin', 2, 'Bahasa Indonesia', 'Sri Rahayu, S.Pd', 'R. 10', '07:40', '08:20'],
+            ['X RPL 1', 'Selasa', 1, 'Matematika', 'Arvia Rienetasary, S.Pd', 'Lab. RPL 1', '07:00', '07:40'],
+        ];
+
+        return response()->stream(function() use ($sample) {
+            $output = fopen('php://output', 'w');
+            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
+            foreach ($sample as $row) {
+                fputcsv($output, $row);
+            }
+            fclose($output);
+        }, 200, $headers);
+    }
+
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|max:10240',
+        ]);
+
+        try {
+            $parsed = \App\Services\CsvImportService::parseCsv($request->file('csv_file'));
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal memproses file CSV: ' . $e->getMessage());
+        }
+
+        $inserted        = 0;
+        $skipDuplikat    = 0;
+        $skipKelasNotFound = 0;
+        $skipAlokasi     = 0;
+        $skipField       = 0;
+        $errors          = [];
+
+        // Pre-load semua kelas (beserta tingkat) dan guru agar tidak N+1 query
+        $kelasList = Kelas::all()->keyBy('id_kelas');
+        $kelasMap  = Kelas::pluck('id_kelas', 'nama_kelas')->toArray();
+        $gurus     = Guru::all();
+
+        foreach ($parsed['rows'] as $rowIndex => $data) {
+            // Baca kolom dengan berbagai variasi nama (sudah di-lowercase & underscore oleh CsvImportService)
+            $namaKelas    = trim($data['nama_kelas']    ?? ($data['kelas']           ?? ($data['nama_kelas_'] ?? '')));
+            $hari         = ucfirst(strtolower(trim($data['hari'] ?? '')));
+            $jamKe        = (int) ($data['jam_ke']      ?? ($data['jam']             ?? ($data['jam_ke_']     ?? 0)));
+            $mapel        = trim($data['mapel']         ?? ($data['mata_pelajaran']  ?? ($data['pelajaran']   ?? '')));
+            $guruNama     = trim($data['nama_guru']     ?? ($data['guru']            ?? ($data['pengajar']    ?? '')));
+            $ruang        = trim($data['ruang']         ?? ($data['ruangan']         ?? '')) ?: null;
+            $waktuMulai   = trim($data['waktu_mulai']   ?? ($data['mulai']           ?? '')) ?: null;
+            $waktuSelesai = trim($data['waktu_selesai'] ?? ($data['selesai']         ?? '')) ?: null;
+
+            // Validasi field wajib
+            if (empty($namaKelas) || empty($hari) || empty($mapel) || $jamKe <= 0) {
+                $skipField++;
+                continue;
+            }
+
+            // Validasi nama hari
+            if (!in_array($hari, ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'])) {
+                $skipField++;
+                continue;
+            }
+
+            // Cari id_kelas
+            $idKelas = $kelasMap[$namaKelas] ?? null;
+            if (!$idKelas) {
+                $foundKelas = Kelas::where('nama_kelas', 'like', "%{$namaKelas}%")->first();
+                if ($foundKelas) {
+                    $idKelas = $foundKelas->id_kelas;
+                    $kelasList[$idKelas] = $foundKelas;
+                }
+            }
+
+            if (!$idKelas) {
+                $skipKelasNotFound++;
+                if (count($errors) < 5) {
+                    $errors[] = "Kelas '{$namaKelas}' tidak ditemukan di database.";
+                }
+                continue;
+            }
+
+            // Ambil tingkat kelas untuk validasi alokasi waktu (khusus Jumat jam 13)
+            $tingkat = $kelasList[$idKelas]?->tingkat;
+
+            // Validasi alokasi waktu
+            $alokasi = KbmService::getAlokasiWaktu($hari, $jamKe, $tingkat);
+            if (!$alokasi) {
+                $skipAlokasi++;
+                if (count($errors) < 5) {
+                    $errors[] = "Jam ke-{$jamKe} pada hari {$hari} tidak valid untuk kelas '{$namaKelas}' (tingkat {$tingkat}).";
+                }
+                continue;
+            }
+
+            // Auto-fill waktu jika kosong
+            $waktuMulai   = $waktuMulai   ?: $alokasi['waktu_mulai'];
+            $waktuSelesai = $waktuSelesai ?: $alokasi['waktu_selesai'];
+
+            // Match Guru (case-insensitive fuzzy)
+            $idGuru = null;
+            if (!empty($guruNama)) {
+                $cleanSearch = trim(strtok($guruNama, ','));
+                $matchedGuru = $gurus->first(function ($g) use ($guruNama, $cleanSearch) {
+                    return strcasecmp($g->nama, $guruNama) === 0
+                        || stripos($g->nama, $cleanSearch) !== false
+                        || stripos($guruNama, trim(strtok($g->nama, ','))) !== false;
+                });
+                $idGuru = $matchedGuru?->id_guru;
+            }
+
+            // Cek duplikat: skip jika kelas+hari+jam_ke sudah ada
+            $exists = Jadwal::where('id_kelas', $idKelas)
+                ->where('hari', $hari)
+                ->where('jam_ke', $jamKe)
+                ->exists();
+
+            if ($exists) {
+                $skipDuplikat++;
+                continue;
+            }
+
+            try {
+                Jadwal::create([
+                    'id_kelas'      => $idKelas,
+                    'id_guru'       => $idGuru,
+                    'hari'          => $hari,
+                    'jam_ke'        => $jamKe,
+                    'mapel'         => $mapel,
+                    'ruang'         => $ruang,
+                    'waktu_mulai'   => $waktuMulai,
+                    'waktu_selesai' => $waktuSelesai,
+                    'aktif'         => 1,
+                ]);
+                $inserted++;
+            } catch (\Throwable $e) {
+                $errors[] = "Gagal menyimpan {$namaKelas} {$hari} jam {$jamKe}: " . $e->getMessage();
+                $skipField++;
+            }
+        }
+
+        $totalRows = count($parsed['rows']);
+        $parts = [];
+        if ($skipDuplikat > 0)      $parts[] = "{$skipDuplikat} sudah ada (duplikat)";
+        if ($skipKelasNotFound > 0) $parts[] = "{$skipKelasNotFound} kelas tidak ditemukan";
+        if ($skipAlokasi > 0)       $parts[] = "{$skipAlokasi} jam tidak valid";
+        if ($skipField > 0)         $parts[] = "{$skipField} data tidak lengkap";
+
+        $totalSkip = $skipDuplikat + $skipKelasNotFound + $skipAlokasi + $skipField;
+        $msg = "Import selesai — {$totalRows} baris dibaca, {$inserted} ditambahkan, {$totalSkip} dilewati";
+        if (!empty($parts)) {
+            $msg .= ' (' . implode(', ', $parts) . ')';
+        }
+        $msg .= '.';
+
+        // Jika semua baris skip karena field kosong, tampilkan header CSV yang terdeteksi untuk debug
+        if ($inserted === 0 && $skipField === $totalRows && $totalRows > 0) {
+            $detectedHeaders = implode(', ', $parsed['header']);
+            $msg .= " Kolom CSV terdeteksi: [{$detectedHeaders}]. Pastikan ada kolom: nama_kelas, hari, jam_ke, mapel.";
+        }
+
+        if (!empty($errors)) {
+            $msg .= ' Catatan: ' . implode(' | ', array_slice($errors, 0, 3));
+        }
+
+        return back()->with('success', $msg);
+    }
 }
