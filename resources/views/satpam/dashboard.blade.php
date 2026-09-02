@@ -33,7 +33,7 @@
     </div>
 </div>
 
-<!-- ANTREAN MENUNGGU VERIFIKASI -->
+{{-- ANTREAN MENUNGGU VERIFIKASI --}}
 <div class="card {{ $antreanVerifikasi->count() > 0 ? 'card-amber' : '' }} mb-24">
     <div class="card-header">
         <h3 class="card-title">
