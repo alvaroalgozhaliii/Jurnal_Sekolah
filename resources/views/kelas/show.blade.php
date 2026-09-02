@@ -135,7 +135,7 @@
 {{-- BAGIAN 3: JADWAL PELAJARAN PER HARI --}}
 <div class="card">
     <div class="card-header d-flex justify-between align-center">
-        <h3 class="card-title">📅 Jadwal Pelajaran</h3>
+        <h3 class="card-title"> Jadwal Pelajaran</h3>
         <a href="{{ route('jadwal.create', ['id_kelas' => $kelas->id_kelas]) }}" class="btn btn-primary btn-sm">+ Tambah Jadwal</a>
     </div>
     <div class="card-body" style="padding:0 0 8px 0;">
@@ -195,7 +195,7 @@
                                 @if(isset($mapIstirahat[$j->jam_ke]))
                                 <tr style="background:#fff7ed;">
                                     <td colspan="6" style="text-align:center; font-style:italic; color:#92400e; padding:6px; font-size:12px;">
-                                        ☕ {{ $mapIstirahat[$j->jam_ke] }}
+                                         {{ $mapIstirahat[$j->jam_ke] }}
                                     </td>
                                 </tr>
                                 @endif
