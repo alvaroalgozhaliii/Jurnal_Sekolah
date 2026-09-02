@@ -14,7 +14,7 @@
 @if($siswa)
 <div class="card mb-24">
     <div class="card-header">
-        <h3 class="card-title">👨‍🎓 Profil Siswa: {{ $siswa->nama }}</h3>
+        <h3 class="card-title"> Profil Siswa: {{ $siswa->nama }}</h3>
     </div>
     <div class="card-body">
         <div class="grid-3">
@@ -28,7 +28,7 @@
 <div class="grid-2">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">🗓️ Jadwal Pelajaran Hari Ini</h3>
+            <h3 class="card-title"> Jadwal Pelajaran Hari Ini</h3>
         </div>
         <div class="card-body" style="padding:0;">
             @if($jadwalHariIni->count() > 0)
@@ -58,7 +58,7 @@
                 </div>
             @else
                 <div class="empty-state">
-                    <div class="empty-state-icon">☕</div>
+                    <div class="empty-state-icon"></div>
                     <div class="empty-state-text">Tidak ada jadwal pelajaran hari ini.</div>
                 </div>
             @endif
@@ -67,7 +67,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">✅ Status Presensi Saya Hari Ini</h3>
+            <h3 class="card-title"> Status Presensi Saya Hari Ini</h3>
         </div>
         <div class="card-body" style="padding:0;">
             @if($statusPresensi->count() > 0)
@@ -104,7 +104,7 @@
                 </div>
             @else
                 <div class="empty-state">
-                    <div class="empty-state-icon">📋</div>
+                    <div class="empty-state-icon"></div>
                     <div class="empty-state-text">Belum ada catatan presensi hari ini.</div>
                 </div>
             @endif
@@ -113,7 +113,7 @@
 </div>
 @else
 <div class="alert alert-warning">
-    <span>⚠️</span>
+    
     <div>Data siswa tidak terhubung dengan akun Anda.</div>
 </div>
 @endif

@@ -14,7 +14,7 @@
 @if($kelas)
 <div class="card mb-24">
     <div class="card-header">
-        <h3 class="card-title">🏫 Kelas Bimbingan: {{ $kelas->nama_kelas }} (Tingkat {{ $kelas->tingkat }})</h3>
+        <h3 class="card-title"> Kelas Bimbingan: {{ $kelas->nama_kelas }} (Tingkat {{ $kelas->tingkat }})</h3>
     </div>
     <div class="card-body">
         <div class="grid-3">
@@ -27,7 +27,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">📋 Presensi Siswa Kelas Hari Ini</h3>
+        <h3 class="card-title"> Presensi Siswa Kelas Hari Ini</h3>
     </div>
     <div class="card-body" style="padding:0;">
         @if($presensiHariIni->count() > 0)
@@ -60,7 +60,7 @@
         </div>
         @else
         <div class="empty-state">
-            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-icon"></div>
             <div class="empty-state-text">Belum ada presensi yang dicatat untuk siswa kelas ini hari ini.</div>
         </div>
         @endif
@@ -68,7 +68,7 @@
 </div>
 @else
 <div class="alert alert-warning">
-    <span>⚠️</span>
+    
     <div>Anda belum ditugaskan sebagai Wali Kelas pada kelas tertentu.</div>
 </div>
 @endif

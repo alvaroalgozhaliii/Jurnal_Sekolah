@@ -25,7 +25,7 @@
 
     @if(session('info'))
         <div class="alert mb-16" style="background:rgba(59, 130, 246, 0.15); border:1px solid rgba(59, 130, 246, 0.3); color:#93c5fd; padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.5;">
-            <div>ℹ️ {{ session('info') }}</div>
+            <div> {{ session('info') }}</div>
         </div>
     @endif
 

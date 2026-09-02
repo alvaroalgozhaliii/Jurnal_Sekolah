@@ -64,7 +64,7 @@
                             &bull; Guru Piket: <strong>{{ $jadwalHariIni->guruPiket->nama }}</strong>
                         @endif
                     @else
-                        <span style="color:#fef08a;">⚠️ Belum ada Waka yang dijadwalkan bertugas untuk hari ini.</span>
+                        <span style="color:#fef08a;"> Belum ada Waka yang dijadwalkan bertugas untuk hari ini.</span>
                     @endif
                 </div>
             </div>

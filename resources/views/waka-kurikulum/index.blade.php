@@ -102,7 +102,7 @@
                             <div class="text-muted" style="font-size:11.5px;">
                                 {{ strtoupper(str_replace('_', ' ', $item->waka->role ?? '-')) }}
                                 @if($item->waka && $item->waka->no_hp)
-                                    &bull; 📱 {{ $item->waka->no_hp }}
+                                    &bull;  {{ $item->waka->no_hp }}
                                 @endif
                             </div>
                         </td>
