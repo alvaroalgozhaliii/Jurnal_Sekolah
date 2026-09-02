@@ -21,7 +21,7 @@
             <div class="form-group">
                 <label class="form-label" for="id_siswa">Pilih Siswa <span class="req">*</span></label>
                 <select id="id_siswa" name="id_siswa" class="form-control" required>
-                    <option value="">-- Pilih Siswa --</option>
+                    <option value="">Pilih Siswa</option>
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}">
                         {{ $s->nama }} (NISN: {{ $s->NISN }} - Kelas {{ $s->kelas->nama_kelas ?? '-' }})

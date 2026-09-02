@@ -39,7 +39,7 @@
             <div class="form-group">
                 <label class="form-label" for="id_jurusan">Jurusan</label>
                 <select id="id_jurusan" name="id_jurusan" class="form-control select-search" placeholder="Ketik / Pilih Jurusan...">
-                    <option value="">-- Tidak Ada Jurusan --</option>
+                    <option value="">Tidak Ada Jurusan</option>
                     @foreach($jurusan as $j)
                     <option value="{{ $j->id_jurusan }}" {{ old('id_jurusan') == $j->id_jurusan ? 'selected' : '' }}>{{ $j->nama_jurusan }} ({{ $j->rombel }})</option>
                     @endforeach

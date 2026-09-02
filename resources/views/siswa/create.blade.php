@@ -29,7 +29,7 @@
                 <div class="form-group">
                     <label class="form-label" for="id_kelas">Kelas <span class="req">*</span></label>
                     <select id="id_kelas" name="id_kelas" class="form-control select-search" required placeholder="Ketik / Pilih Kelas...">
-                        <option value="">-- Pilih Kelas --</option>
+                        <option value="">Pilih Kelas</option>
                         @foreach($kelas as $k)
                         <option value="{{ $k->id_kelas }}" {{ old('id_kelas') == $k->id_kelas ? 'selected' : '' }}>{{ $k->nama_kelas }} ({{ $k->jurusan->nama_jurusan ?? '-' }})</option>
                         @endforeach
@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <label class="form-label" for="jenis_kelamin">Jenis Kelamin</label>
                     <select id="jenis_kelamin" name="jenis_kelamin" class="form-control">
-                        <option value="">-- Pilih --</option>
+                        <option value="">Pilih</option>
                         <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
                         <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
                     </select>
