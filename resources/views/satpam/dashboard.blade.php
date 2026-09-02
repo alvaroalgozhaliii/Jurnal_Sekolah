@@ -37,7 +37,7 @@
 <div class="card {{ $antreanVerifikasi->count() > 0 ? 'card-amber' : '' }} mb-24">
     <div class="card-header">
         <h3 class="card-title">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <svg class="svg-icon {{ $antreanVerifikasi->count() > 0 ? '' : 'text-navy' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             Antrean Verifikasi Kartu Pelajar & Izin Gerbang (Telah Disetujui Waka)
         </h3>
     </div>
@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<!-- RIWAYAT VERIFIKASI TERAKHIR -->
+{{-- RIWAYAT VERIFIKASI TERAKHIR --}}
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">
@@ -109,12 +109,12 @@
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
-                        <th>Subjek / Nama</th>
+                        <th>Subjek</th>
+                        <th>Kategori</th>
                         <th>Tanggal</th>
-                        <th>Jam</th>
                         <th>Hasil Verifikasi</th>
-                        <th>Waktu Verifikasi</th>
                         <th>Catatan Satpam</th>
+                        <th class="action-col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,8 +122,8 @@
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
                         <td class="fw-bold text-navy">{{ $p->siswa ? $p->siswa->nama : ($p->guru ? $p->guru->nama : ($p->pengaju->nama ?? '-')) }}</td>
+                        <td><span class="badge badge-navy">{{ strtoupper(str_replace('_', ' ', $p->kategori)) }}</span></td>
                         <td>{{ $p->tanggal }}</td>
-                        <td>{{ $p->jam_mulai ?? '-' }}</td>
                         <td>
                             @if($p->status_satpam === 'valid' || $p->status === 'verified')
                                 <span class="badge badge-success">VALID</span>
@@ -131,8 +131,10 @@
                                 <span class="badge badge-danger">TIDAK VALID</span>
                             @endif
                         </td>
-                        <td class="text-muted">{{ $p->tgl_satpam ?? '-' }}</td>
                         <td>{{ $p->catatan_satpam ?? '-' }}</td>
+                        <td class="action-col">
+                            <a href="{{ route('satpam.show', $p->id_pengajuan) }}" class="btn btn-secondary btn-sm">Detail</a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
