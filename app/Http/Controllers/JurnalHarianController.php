@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\Jadwal;
 use App\Models\Pengaturan;
 use App\Models\Notifikasi;
+use App\Models\PengajuanIzin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ class JurnalHarianController extends Controller
     {
         $user = Auth::user();
         $search = $request->get('search');
+        $activeTab = $request->input('tab', 'jurnal');
         $query = JurnalHarian::with(['guru', 'jadwal.kelas']);
 
         if ($user->isGuru() && !$user->isAdmin()) {
@@ -54,13 +56,25 @@ class JurnalHarianController extends Controller
         }
 
         $jurnal_harian = $query->orderBy('tanggal', 'desc')->get();
+
+        // Load Pengajuan List for merging inside Jurnal view
+        $pengajuanQuery = PengajuanIzin::with(['siswa.kelas', 'guru', 'pengaju', 'wakaApprover', 'satpam']);
+        if ($user->isGuru() && !$user->isAdmin()) {
+            $idGuru = $user->guru?->id_guru;
+            $pengajuanQuery->where(function ($q) use ($idGuru, $user) {
+                if ($idGuru) $q->where('id_guru', $idGuru);
+                $q->orWhere('id_user_pengaju', $user->id_user);
+            });
+        }
+        $pengajuanList = $pengajuanQuery->orderBy('created_at', 'desc')->get();
+
         $guruList = Guru::all();
         $kelasList = Kelas::all();
         $tanggal = $request->input('tanggal');
         $id_guru = $request->input('id_guru');
         $id_kelas = $request->input('id_kelas');
 
-    return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList', 'tanggal', 'id_guru', 'id_kelas', 'search'));
+        return view('jurnal_harian.index', compact('jurnal_harian', 'pengajuanList', 'activeTab', 'guruList', 'kelasList', 'tanggal', 'id_guru', 'id_kelas', 'search'));
     }
 
     public function create(Request $request)
@@ -97,6 +111,9 @@ class JurnalHarianController extends Controller
         $jadwalSelected = null;
         if ($request->filled('id_jadwal')) {
             $jadwalSelected = $jadwalList->firstWhere('id_jadwal', (int) $request->id_jadwal);
+        } else {
+            // Auto-select first schedule matching current day if available
+            $jadwalSelected = $jadwalList->firstWhere('hari', $currentDayIndo);
         }
 
         return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected'));
@@ -112,19 +129,12 @@ class JurnalHarianController extends Controller
 
         $jadwal = Jadwal::findOrFail($request->id_jadwal);
         $user = Auth::user();
-        $now = Carbon::now();
 
-        $days = [
-            'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
-            'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
-        ];
-        $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
-
-        // Enforce teaching schedule time restriction for Guru
+        // Check ownership if guru
         if ($user->isGuru() && !$user->isAdmin()) {
-            if (!$this->isScheduleActiveNow($jadwal, $currentDayIndo, $now, $request->tanggal)) {
-                $msg = $this->getScheduleTimeMessage($jadwal, $currentDayIndo, $now, $request->tanggal);
-                return back()->with('error', 'Tidak dapat mengisi jurnal: ' . $msg);
+            $guru = $user->guru;
+            if ($guru && $jadwal->id_guru != $guru->id_guru) {
+                return back()->with('error', 'Anda hanya dapat mengisi jurnal untuk jadwal mengajar Anda sendiri.');
             }
         }
 
