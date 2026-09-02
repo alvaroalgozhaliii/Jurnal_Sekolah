@@ -16,33 +16,33 @@
 </div>
 
 <!-- STAT CARDS -->
-<div class="stats-grid mb-24">
-    <div class="stat-card">
-        <div class="stat-icon bg-navy-light text-navy">
+<div class="grid-3 mb-24">
+    <div class="stat-card" style="border-left: 4px solid #0284c7;">
+        <div class="stat-icon-box blue">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
         </div>
         <div>
-            <div class="stat-value">{{ $totalJadwal }}</div>
+            <div class="stat-value" style="color: #0284c7;">{{ $totalJadwal }}</div>
             <div class="stat-label">Total Hari Terjadwal</div>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-icon" style="background:#fef3c7; color:#d97706;">
+    <div class="stat-card" style="border-left: 4px solid #d97706;">
+        <div class="stat-icon-box amber">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         </div>
         <div>
-            <div class="stat-value">{{ count($wakas) }}</div>
+            <div class="stat-value" style="color: #d97706;">{{ count($wakas) }}</div>
             <div class="stat-label">Waka Aktif</div>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-icon bg-success-light text-success">
+    <div class="stat-card" style="border-left: 4px solid #16a34a;">
+        <div class="stat-icon-box green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
         </div>
         <div>
-            <div class="stat-value">{{ $totalPelajaran }}</div>
+            <div class="stat-value" style="color: #16a34a;">{{ $totalPelajaran }}</div>
             <div class="stat-label">Jadwal Mapel KBM</div>
         </div>
     </div>
@@ -55,7 +55,7 @@
             <div>
                 <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; font-size:11px; margin-bottom:8px;">PENUGASAN HARI INI</span>
                 <h2 style="margin:0 0 6px 0; font-size:20px; color:#fff;">
-                    {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+                    {{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
                 </h2>
                 <div style="font-size:14px; opacity:0.9;">
                     @if($jadwalHariIni)
@@ -104,7 +104,7 @@
                 <tbody>
                 @foreach($jadwalMendatang as $item)
                     <tr>
-                        <td class="fw-bold">{{ $item->tanggal ? $item->tanggal->translatedFormat('l, d F Y') : '-' }}</td>
+                        <td class="fw-bold">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') : '-' }}</td>
                         <td>
                             <strong class="text-navy">{{ $item->waka->nama ?? '-' }}</strong>
                             <div class="text-muted" style="font-size:11.5px;">{{ strtoupper(str_replace('_', ' ', $item->waka->role ?? '-')) }}</div>

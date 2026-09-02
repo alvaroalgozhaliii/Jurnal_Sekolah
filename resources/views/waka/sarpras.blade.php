@@ -14,33 +14,33 @@
     </div>
 </div>
 
-<div class="stats-grid mb-24">
-    <div class="stat-card">
-        <div class="stat-icon bg-navy-light text-navy">
+<div class="grid-3 mb-24">
+    <div class="stat-card" style="border-left: 4px solid #0284c7;">
+        <div class="stat-icon-box blue">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         </div>
         <div>
-            <div class="stat-value">{{ $kelasList->count() }}</div>
+            <div class="stat-value" style="color: #0284c7;">{{ $kelasList->count() }}</div>
             <div class="stat-label">Total Rombel / Kelas</div>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-icon" style="background:#ecfdf5; color:#059669;">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+    <div class="stat-card" style="border-left: 4px solid #16a34a;">
+        <div class="stat-icon-box green">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
         </div>
         <div>
-            <div class="stat-value">{{ $ruangList->count() ?: 12 }}</div>
+            <div class="stat-value" style="color: #16a34a;">{{ $ruangList->count() ?: 12 }}</div>
             <div class="stat-label">Ruang Kelas / Lab Aktif</div>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-icon" style="background:#eff6ff; color:#2563eb;">
+    <div class="stat-card" style="border-left: 4px solid #9333ea;">
+        <div class="stat-icon-box purple">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
         </div>
         <div>
-            <div class="stat-value">{{ $jadwalAktif->count() }}</div>
+            <div class="stat-value" style="color: #9333ea;">{{ $jadwalAktif->count() }}</div>
             <div class="stat-label">Sesi Penggunaan Ruang KBM</div>
         </div>
     </div>
