@@ -18,7 +18,7 @@ class SiswaController extends Controller
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('nis', 'like', "%{$search}%")
+                  ->orWhere('nisn', 'like', "%{$search}%")
                   ->orWhereHas('kelas', function($qk) use ($search) {
                       $qk->where('nama_kelas', 'like', "%{$search}%");
                   });
@@ -37,8 +37,11 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
+        $nisn = $request->input('nisn', $request->input('nis'));
+        $request->merge(['nisn' => $nisn]);
+
         $request->validate([
-            'nis' => 'required|string|max:20|unique:siswa,nis',
+            'nisn' => 'required|string|max:30|unique:siswa,nisn',
             'nama' => 'required|string|max:150',
             'id_kelas' => 'required|exists:kelas,id_kelas',
             'jenis_kelamin' => 'nullable|in:L,P',
@@ -61,14 +64,14 @@ class SiswaController extends Controller
 
         Siswa::create([
             'id_user' => $userId,
-            'nis' => $request->nis,
+            'nisn' => $nisn,
             'nama' => $request->nama,
             'id_kelas' => $request->id_kelas,
             'jenis_kelamin' => $request->jenis_kelamin,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'no_telp_ortu' => $request->no_telp_ortu,
-            'aktif' => $request->has('aktif') ? 1 : 1,
+            'aktif' => 1,
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil ditambahkan');
@@ -91,15 +94,18 @@ class SiswaController extends Controller
     {
         $siswa = Siswa::findOrFail($id);
 
+        $nisn = $request->input('nisn', $request->input('nis'));
+        $request->merge(['nisn' => $nisn]);
+
         $request->validate([
-            'nis' => 'required|string|max:20|unique:siswa,nis,' . $id . ',id_siswa',
+            'nisn' => 'required|string|max:30|unique:siswa,nisn,' . $id . ',id_siswa',
             'nama' => 'required|string|max:150',
             'id_kelas' => 'required|exists:kelas,id_kelas',
             'jenis_kelamin' => 'nullable|in:L,P',
         ]);
 
         $siswa->update([
-            'nis' => $request->nis,
+            'nisn' => $nisn,
             'nama' => $request->nama,
             'id_kelas' => $request->id_kelas,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -150,7 +156,7 @@ class SiswaController extends Controller
         ];
 
         $sample = [
-            ['nis', 'nama', 'nama_kelas', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'no_telp_ortu'],
+            ['nisn', 'nama', 'nama_kelas', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'no_telp_ortu'],
             ['0012345678', 'ACHMAD DANI', 'X RPL 1', 'L', 'Tulungagung', '2008-05-12', '081234567801'],
             ['0012345679', 'BELLA SAFITRI', 'X RPL 1', 'P', 'Tulungagung', '2008-08-20', '081234567802'],
         ];
@@ -183,16 +189,16 @@ class SiswaController extends Controller
         $kelasMap = Kelas::pluck('id_kelas', 'nama_kelas')->toArray();
 
         foreach ($parsed['rows'] as $data) {
-            $nis = $data['nis'] ?? '';
+            $nisn = $data['nisn'] ?? ($data['nis'] ?? '');
             $nama = $data['nama'] ?? '';
-            $namaKelas = $data['nama_kelas'] ?? '';
+            $namaKelas = $data['nama_kelas'] ?? ($data['kelas'] ?? '');
 
-            if (empty($nis) || empty($nama)) {
+            if (empty($nisn) || empty($nama)) {
                 $skipped++;
                 continue;
             }
 
-            if (Siswa::where('nis', $nis)->exists()) {
+            if (Siswa::where('nisn', $nisn)->exists()) {
                 $skipped++;
                 continue;
             }
@@ -208,7 +214,7 @@ class SiswaController extends Controller
                 continue;
             }
 
-            $username = 'siswa.' . $nis;
+            $username = 'siswa.' . $nisn;
             $userId = null;
             if (!User::where('username', $username)->exists()) {
                 $user = User::create([
@@ -223,7 +229,7 @@ class SiswaController extends Controller
 
             Siswa::create([
                 'id_user' => $userId,
-                'nis' => $nis,
+                'nisn' => $nisn,
                 'nama' => $nama,
                 'id_kelas' => $idKelas,
                 'jenis_kelamin' => !empty($data['jenis_kelamin']) ? strtoupper($data['jenis_kelamin']) : null,

@@ -60,8 +60,8 @@
                         <td class="fw-bold text-navy">{{ $pengajuan->siswa->nama }}</td>
                     </tr>
                     <tr>
-                        <th>NIS & Kelas</th>
-                        <td>NIS: {{ $pengajuan->siswa->nis }} | Kelas: {{ $pengajuan->siswa->kelas->nama_kelas ?? '-' }} ({{ $pengajuan->siswa->kelas->jurusan->nama_jurusan ?? '-' }})</td>
+                        <th>NISN & Kelas</th>
+                        <td>NISN: {{ $pengajuan->siswa->NISN }} | Kelas: {{ $pengajuan->siswa->kelas->nama_kelas ?? '-' }} ({{ $pengajuan->siswa->kelas->jurusan->nama_jurusan ?? '-' }})</td>
                     </tr>
                     @elseif($pengajuan->guru)
                     <tr>

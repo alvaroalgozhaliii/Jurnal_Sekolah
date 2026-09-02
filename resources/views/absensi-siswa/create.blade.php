@@ -59,7 +59,7 @@
                     <thead>
                         <tr>
                             <th class="no-col">No</th>
-                            <th>NIS</th>
+                            <th>NISN</th>
                             <th>Nama Siswa</th>
                             <th>Status Kehadiran *</th>
                             <th>Jam Masuk (jika Terlambat)</th>
@@ -71,7 +71,7 @@
                     @foreach($siswaList as $s)
                     <tr>
                         <td class="no-col">{{ $loop->iteration }}</td>
-                        <td class="text-muted fw-bold">{{ $s->nis }}</td>
+                        <td class="text-muted fw-bold">{{ $s->nisn }}</td>
                         <td class="fw-bold text-navy">{{ $s->nama }}</td>
                         <td>
                             <select name="absensi[{{ $s->id_siswa }}]" class="form-control" required style="padding:4px 8px;">

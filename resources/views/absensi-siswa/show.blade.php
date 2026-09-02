@@ -39,7 +39,7 @@
         <table class="info-table">
             <tbody>
                 <tr><th>Nama Siswa</th><td class="fw-bold text-navy">{{ $absensi->siswa->nama ?? '-' }}</td></tr>
-                <tr><th>NIS</th><td class="fw-bold text-muted">{{ $absensi->siswa->nis ?? '-' }}</td></tr>
+                <tr><th>NISN</th><td class="fw-bold text-muted">{{ $absensi->siswa->nisn ?? '-' }}</td></tr>
                 <tr><th>Kelas</th><td><span class="badge badge-navy">{{ $absensi->siswa->kelas->nama_kelas ?? '-' }}</span></td></tr>
                 <tr><th>Tanggal Jurnal</th><td class="fw-bold">{{ $absensi->jurnal->tanggal ?? '-' }}</td></tr>
                 <tr><th>Mata Pelajaran</th><td>{{ $absensi->jurnal->mapel ?? '-' }}</td></tr>

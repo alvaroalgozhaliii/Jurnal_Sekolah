@@ -33,7 +33,7 @@
         @if($presensiHariIni->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
             <table class="table">
-                <thead><tr><th>NIS</th><th>Nama Siswa</th><th>Status</th><th>Jam Masuk</th><th>Keterangan</th></tr></thead>
+                <thead><tr><th>NISN</th><th>Nama Siswa</th><th>Status</th><th>Jam Masuk</th><th>Keterangan</th></tr></thead>
                 <tbody>
                 @foreach($presensiHariIni as $p)
                 @php
@@ -48,7 +48,7 @@
                     };
                 @endphp
                 <tr>
-                    <td class="text-muted">{{ $p->siswa->nis ?? '-' }}</td>
+                    <td class="text-muted">{{ $p->siswa->NISN ?? '-' }}</td>
                     <td class="fw-bold text-navy">{{ $p->siswa->nama ?? '-' }}</td>
                     <td><span class="badge {{ $badgeCls }}">{{ strtoupper($p->status) }}</span></td>
                     <td>{{ $p->jam_masuk ?? '-' }}</td>

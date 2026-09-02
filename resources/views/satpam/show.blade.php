@@ -32,8 +32,8 @@
                         <td class="fw-bold text-navy" style="font-size:15px;">{{ $pengajuan->siswa->nama }}</td>
                     </tr>
                     <tr>
-                        <th>NIS (Kartu Pelajar)</th>
-                        <td class="fw-bold">{{ $pengajuan->siswa->nis }}</td>
+                        <th>NISN (Kartu Pelajar)</th>
+                        <td class="fw-bold">{{ $pengajuan->siswa->NISN }}</td>
                     </tr>
                     <tr>
                         <th>Kelas & Jurusan</th>

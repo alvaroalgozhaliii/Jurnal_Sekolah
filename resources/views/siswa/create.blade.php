@@ -23,8 +23,8 @@
             @csrf
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label" for="nis">NIS <span class="req">*</span></label>
-                    <input type="text" id="nis" name="nis" value="{{ old('nis') }}" class="form-control" placeholder="Nomor Induk Siswa" required>
+                    <label class="form-label" for="NISN">NISN <span class="req">*</span></label>
+                    <input type="text" id="NISN" name="NISN" value="{{ old('NISN') }}" class="form-control" placeholder="Nomor Induk Siswa" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="id_kelas">Kelas <span class="req">*</span></label>

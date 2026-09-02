@@ -64,7 +64,7 @@
                         <td class="fw-bold text-navy">{{ $p->siswa ? $p->siswa->nama : ($p->guru ? $p->guru->nama : ($p->pengaju->nama ?? '-')) }}</td>
                         <td>
                             @if($p->siswa)
-                                <span class="badge badge-navy">{{ $p->siswa->kelas->nama_kelas ?? '-' }}</span> (NIS: {{ $p->siswa->nis }})
+                                <span class="badge badge-navy">{{ $p->siswa->kelas->nama_kelas ?? '-' }}</span> (NISN: {{ $p->siswa->NISN }})
                             @else
                                 <span class="badge badge-gray">Guru / Karyawan</span>
                             @endif

@@ -16,6 +16,7 @@ class Siswa extends Model
 
     protected $fillable = [
         'id_user',
+        'nisn',
         'nis',
         'nama',
         'id_kelas',
@@ -26,6 +27,16 @@ class Siswa extends Model
         'aktif',
         'deleted_at',
     ];
+
+    public function getNisAttribute()
+    {
+        return $this->attributes['nisn'] ?? ($this->attributes['nis'] ?? null);
+    }
+
+    public function setNisAttribute($value)
+    {
+        $this->attributes['nisn'] = $value;
+    }
 
     public function user()
     {

@@ -19,7 +19,7 @@
             <select name="id_siswa" onchange="this.form.submit()" class="form-control" style="max-width:350px;">
                 @foreach($anakList as $a)
                 <option value="{{ $a->id_siswa }}" {{ ($selectedSiswa && $selectedSiswa->id_siswa == $a->id_siswa) ? 'selected' : '' }}>
-                    {{ $a->nama }} (NIS: {{ $a->nis }})
+                    {{ $a->nama }} (NISN: {{ $a->NISN }})
                 </option>
                 @endforeach
             </select>

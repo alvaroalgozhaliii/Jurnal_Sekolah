@@ -367,7 +367,14 @@ class JadwalController extends Controller
             // Baca kolom dengan berbagai variasi nama (sudah di-lowercase & underscore oleh CsvImportService)
             $namaKelas    = trim($data['nama_kelas']    ?? ($data['kelas']           ?? ($data['nama_kelas_'] ?? '')));
             $hari         = ucfirst(strtolower(trim($data['hari'] ?? '')));
-            $jamKe        = (int) ($data['jam_ke']      ?? ($data['jam']             ?? ($data['jam_ke_']     ?? 0)));
+            
+            // Dukungan jam tunggal (jam_ke) maupun rentang jam (jam_mulai & jam_selesai)
+            $jamMulai     = (int) ($data['jam_mulai']   ?? ($data['jam_ke']          ?? ($data['jam'] ?? ($data['jam_awal'] ?? 0))));
+            $jamSelesai   = (int) ($data['jam_selesai'] ?? ($data['jam_akhir']       ?? $jamMulai));
+            if ($jamSelesai < $jamMulai) {
+                $jamSelesai = $jamMulai;
+            }
+
             $mapel        = trim($data['mapel']         ?? ($data['mata_pelajaran']  ?? ($data['pelajaran']   ?? '')));
             $guruNama     = trim($data['nama_guru']     ?? ($data['guru']            ?? ($data['pengajar']    ?? '')));
             $ruang        = trim($data['ruang']         ?? ($data['ruangan']         ?? '')) ?: null;
@@ -375,7 +382,7 @@ class JadwalController extends Controller
             $waktuSelesai = trim($data['waktu_selesai'] ?? ($data['selesai']         ?? '')) ?: null;
 
             // Validasi field wajib
-            if (empty($namaKelas) || empty($hari) || empty($mapel) || $jamKe <= 0) {
+            if (empty($namaKelas) || empty($hari) || empty($mapel) || $jamMulai <= 0) {
                 $skipField++;
                 continue;
             }
@@ -407,20 +414,6 @@ class JadwalController extends Controller
             // Ambil tingkat kelas untuk validasi alokasi waktu (khusus Jumat jam 13)
             $tingkat = $kelasList[$idKelas]?->tingkat;
 
-            // Validasi alokasi waktu
-            $alokasi = KbmService::getAlokasiWaktu($hari, $jamKe, $tingkat);
-            if (!$alokasi) {
-                $skipAlokasi++;
-                if (count($errors) < 5) {
-                    $errors[] = "Jam ke-{$jamKe} pada hari {$hari} tidak valid untuk kelas '{$namaKelas}' (tingkat {$tingkat}).";
-                }
-                continue;
-            }
-
-            // Auto-fill waktu jika kosong
-            $waktuMulai   = $waktuMulai   ?: $alokasi['waktu_mulai'];
-            $waktuSelesai = $waktuSelesai ?: $alokasi['waktu_selesai'];
-
             // Match Guru (case-insensitive fuzzy)
             $idGuru = null;
             if (!empty($guruNama)) {
@@ -433,33 +426,57 @@ class JadwalController extends Controller
                 $idGuru = $matchedGuru?->id_guru;
             }
 
-            // Cek duplikat: skip jika kelas+hari+jam_ke sudah ada
-            $exists = Jadwal::where('id_kelas', $idKelas)
-                ->where('hari', $hari)
-                ->where('jam_ke', $jamKe)
-                ->exists();
+            // Loop untuk setiap jam dalam rentang jam_mulai hingga jam_selesai
+            for ($jamKe = $jamMulai; $jamKe <= $jamSelesai; $jamKe++) {
+                // Validasi alokasi waktu
+                $alokasi = KbmService::getAlokasiWaktu($hari, $jamKe, $tingkat);
+                if (!$alokasi) {
+                    $skipAlokasi++;
+                    if (count($errors) < 5) {
+                        $errors[] = "Jam ke-{$jamKe} pada hari {$hari} tidak valid untuk kelas '{$namaKelas}' (tingkat {$tingkat}).";
+                    }
+                    continue;
+                }
 
-            if ($exists) {
-                $skipDuplikat++;
-                continue;
-            }
+                // Auto-fill waktu jika kosong
+                $rowWaktuMulai   = $waktuMulai   ?: $alokasi['waktu_mulai'];
+                $rowWaktuSelesai = $waktuSelesai ?: $alokasi['waktu_selesai'];
 
-            try {
-                Jadwal::create([
-                    'id_kelas'      => $idKelas,
-                    'id_guru'       => $idGuru,
-                    'hari'          => $hari,
-                    'jam_ke'        => $jamKe,
-                    'mapel'         => $mapel,
-                    'ruang'         => $ruang,
-                    'waktu_mulai'   => $waktuMulai,
-                    'waktu_selesai' => $waktuSelesai,
-                    'aktif'         => 1,
-                ]);
-                $inserted++;
-            } catch (\Throwable $e) {
-                $errors[] = "Gagal menyimpan {$namaKelas} {$hari} jam {$jamKe}: " . $e->getMessage();
-                $skipField++;
+                // Cek duplikat: update jika sudah ada atau buat baru
+                $existingJadwal = Jadwal::where('id_kelas', $idKelas)
+                    ->where('hari', $hari)
+                    ->where('jam_ke', $jamKe)
+                    ->first();
+
+                if ($existingJadwal) {
+                    $existingJadwal->update([
+                        'id_guru'       => $idGuru,
+                        'mapel'         => $mapel,
+                        'ruang'         => $ruang,
+                        'waktu_mulai'   => $rowWaktuMulai,
+                        'waktu_selesai' => $rowWaktuSelesai,
+                        'aktif'         => 1,
+                    ]);
+                    $inserted++;
+                } else {
+                    try {
+                        Jadwal::create([
+                            'id_kelas'      => $idKelas,
+                            'id_guru'       => $idGuru,
+                            'hari'          => $hari,
+                            'jam_ke'        => $jamKe,
+                            'mapel'         => $mapel,
+                            'ruang'         => $ruang,
+                            'waktu_mulai'   => $rowWaktuMulai,
+                            'waktu_selesai' => $rowWaktuSelesai,
+                            'aktif'         => 1,
+                        ]);
+                        $inserted++;
+                    } catch (\Throwable $e) {
+                        $errors[] = "Gagal menyimpan {$namaKelas} {$hari} jam {$jamKe}: " . $e->getMessage();
+                        $skipField++;
+                    }
+                }
             }
         }
 

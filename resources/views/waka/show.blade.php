@@ -50,8 +50,8 @@
                         <td class="fw-bold text-navy" style="font-size:15px;">{{ $pengajuan->siswa->nama }}</td>
                     </tr>
                     <tr>
-                        <th>NIS & Kelas</th>
-                        <td>NIS: <strong>{{ $pengajuan->siswa->nis }}</strong> | Kelas: <span class="badge badge-navy">{{ $pengajuan->siswa->kelas->nama_kelas ?? '-' }}</span></td>
+                        <th>NISN & Kelas</th>
+                        <td>NISN: <strong>{{ $pengajuan->siswa->NISN }}</strong> | Kelas: <span class="badge badge-navy">{{ $pengajuan->siswa->kelas->nama_kelas ?? '-' }}</span></td>
                     </tr>
                     <tr>
                         <th>Jurusan</th>
