@@ -54,13 +54,17 @@ class JurnalHarianController extends Controller
         }
 
         $jurnal_harian = $query->orderBy('tanggal', 'desc')->get();
-        $guruList = Guru::all();
-        $kelasList = Kelas::all();
+        // Hanya tampilkan guru yang memiliki jadwal mengajar aktif di filter
+        $guruList = Guru::whereHas('jadwal', fn($q) => $q->where('aktif', 1))->orderBy('nama', 'asc')->get();
+        if ($guruList->isEmpty()) {
+            $guruList = Guru::orderBy('nama', 'asc')->get();
+        }
+        $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
         $tanggal = $request->input('tanggal');
         $id_guru = $request->input('id_guru');
         $id_kelas = $request->input('id_kelas');
 
-    return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList', 'tanggal', 'id_guru', 'id_kelas', 'search'));
+        return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList', 'tanggal', 'id_guru', 'id_kelas', 'search'));
     }
 
     public function create(Request $request)
@@ -74,6 +78,7 @@ class JurnalHarianController extends Controller
             'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
         ];
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+        $currentSlot = \App\Services\KbmService::getCurrentSlotInfo($now);
 
         if ($user->isGuru() && !$user->isAdmin()) {
             $guru = $user->guru;
@@ -84,6 +89,11 @@ class JurnalHarianController extends Controller
                 ->where('id_guru', $guru->id_guru)
                 ->where('aktif', 1)
                 ->get();
+
+            if ($jadwalList->isEmpty()) {
+                return redirect()->route('jurnal-harian.index')
+                    ->with('error', 'Pengisian Jurnal KBM hanya untuk guru yang memiliki jadwal mengajar. Anda tidak memiliki jadwal mengajar aktif.');
+            }
         } else {
             $jadwalList = Jadwal::with(['kelas', 'guru'])->where('aktif', 1)->get();
         }
@@ -97,9 +107,21 @@ class JurnalHarianController extends Controller
         $jadwalSelected = null;
         if ($request->filled('id_jadwal')) {
             $jadwalSelected = $jadwalList->firstWhere('id_jadwal', (int) $request->id_jadwal);
+        } else {
+            // Auto-detect schedule for today and current jam_ke
+            if ($currentSlot['status'] === 'kbm' && $currentSlot['jam_ke']) {
+                $jadwalSelected = $jadwalList->first(function ($j) use ($currentDayIndo, $currentSlot) {
+                    return $j->hari === $currentDayIndo && (int)$j->jam_ke === (int)$currentSlot['jam_ke'];
+                });
+            }
+
+            // Fallback: if no exact slot match, pick first schedule for today
+            if (!$jadwalSelected) {
+                $jadwalSelected = $jadwalList->firstWhere('hari', $currentDayIndo);
+            }
         }
 
-        return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected'));
+        return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected', 'currentSlot', 'currentDayIndo', 'now'));
     }
 
     public function store(Request $request)
@@ -119,14 +141,6 @@ class JurnalHarianController extends Controller
             'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
         ];
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
-
-        // Enforce teaching schedule time restriction for Guru
-        if ($user->isGuru() && !$user->isAdmin()) {
-            if (!$this->isScheduleActiveNow($jadwal, $currentDayIndo, $now, $request->tanggal)) {
-                $msg = $this->getScheduleTimeMessage($jadwal, $currentDayIndo, $now, $request->tanggal);
-                return back()->with('error', 'Tidak dapat mengisi jurnal: ' . $msg);
-            }
-        }
 
         $idGuru = $user->isGuru() ? ($user->guru->id_guru ?? $jadwal->id_guru) : $jadwal->id_guru;
 

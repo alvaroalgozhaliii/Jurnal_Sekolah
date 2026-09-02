@@ -131,4 +131,96 @@ class GuruController extends Controller
         Guru::withTrashed()->findOrFail($id)->forceDelete();
         return redirect()->route('guru.trash')->with('success', 'Data guru dihapus permanen');
     }
+
+    public function importTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="template_data_guru.csv"',
+        ];
+
+        $sample = [
+            ['nama', 'nip', 'bidang_studi', 'no_telp', 'username', 'password'],
+            ['Budi Santoso, S.Pd', '19800101 200312 1 001', 'Matematika', '081234567890', 'budi.santoso', 'guru123'],
+            ['Siti Aminah, M.Pd', '19850202 200801 2 002', 'Bahasa Indonesia', '081234567891', 'siti.aminah', 'guru123'],
+        ];
+
+        return response()->stream(function() use ($sample) {
+            $output = fopen('php://output', 'w');
+            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
+            foreach ($sample as $row) {
+                fputcsv($output, $row);
+            }
+            fclose($output);
+        }, 200, $headers);
+    }
+
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|max:5120',
+        ]);
+
+        try {
+            $parsed = \App\Services\CsvImportService::parseCsv($request->file('csv_file'));
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal memproses file CSV: ' . $e->getMessage());
+        }
+
+        $inserted = 0;
+        $skipped = 0;
+
+        foreach ($parsed['rows'] as $data) {
+            $nama = $data['nama'] ?? '';
+            if (empty($nama)) {
+                $skipped++;
+                continue;
+            }
+
+            $nip = !empty($data['nip']) ? $data['nip'] : null;
+            if ($nip && Guru::where('nip', $nip)->exists()) {
+                $skipped++;
+                continue;
+            }
+
+            $bidangStudi = $data['bidang_studi'] ?? null;
+            $noTelp = $data['no_telp'] ?? null;
+            $username = $data['username'] ?? null;
+            $password = !empty($data['password']) ? $data['password'] : 'guru123';
+
+            $userId = null;
+            if (!empty($username)) {
+                if (User::where('username', $username)->exists()) {
+                    $counter = 1;
+                    $orig = $username;
+                    while (User::where('username', $username)->exists()) {
+                        $username = $orig . $counter;
+                        $counter++;
+                    }
+                }
+
+                $user = User::create([
+                    'nama' => $nama,
+                    'nip' => $nip,
+                    'username' => $username,
+                    'password' => Hash::make($password),
+                    'role' => 'guru',
+                    'aktif' => 1,
+                ]);
+                $userId = $user->id_user;
+            }
+
+            Guru::create([
+                'id_user' => $userId,
+                'nama' => $nama,
+                'nip' => $nip,
+                'bidang_studi' => $bidangStudi,
+                'no_telp' => $noTelp,
+            ]);
+
+            $inserted++;
+        }
+
+        return back()->with('success', "Import CSV berhasil! {$inserted} data guru ditambahkan, {$skipped} data dilewati.");
+    }
 }

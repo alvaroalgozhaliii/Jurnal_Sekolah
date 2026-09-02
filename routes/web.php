@@ -32,6 +32,7 @@ use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\TahunPelajaranController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\MataPelajaranController;
+use App\Http\Controllers\RekapController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -81,6 +82,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifikasi/{id}/read', [NotifikasiController::class, 'read'])->name('notifikasi.read');
     Route::post('/notifikasi/read-all', [NotifikasiController::class, 'readAll'])->name('notifikasi.read-all');
 
+    // Rekap Excel Bulanan (Izin & Jurnal KBM)
+    Route::get('/rekap/izin-excel', [RekapController::class, 'rekapIzinExcel'])->name('rekap.izin-excel');
+    Route::get('/rekap/jurnal-excel', [RekapController::class, 'rekapJurnalExcel'])->name('rekap.jurnal-excel');
+
     // Pengajuan Izin / Dispensasi (Shared View & Create)
     Route::get('/pengajuan-izin', [PengajuanIzinController::class, 'index'])->name('pengajuan.index');
     Route::get('/pengajuan-izin/buat', [PengajuanIzinController::class, 'create'])->name('pengajuan.create');
@@ -114,6 +119,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/backup', [BackupController::class, 'index'])->name('admin.backup');
     Route::get('/backup/export', [BackupController::class, 'exportDatabase'])->name('admin.backup.export');
     Route::post('/backup/restore', [BackupController::class, 'restoreDatabase'])->name('admin.backup.restore');
+    Route::get('/backup/{filename}/download', [BackupController::class, 'downloadBackup'])->name('admin.backup.download');
+    Route::delete('/backup/{filename}/delete', [BackupController::class, 'deleteBackup'])->name('admin.backup.delete');
+    Route::post('/backup/{filename}/restore-stored', [BackupController::class, 'restoreFromStorage'])->name('admin.backup.restore-stored');
 
     // Pengaturan Admin
     Route::post('/pengaturan', [PengaturanController::class, 'updateAdminSettings'])->name('admin.pengaturan.update');
@@ -272,6 +280,22 @@ Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka
     Route::get('/jurnal-harian/trash', [JurnalHarianController::class, 'trash'])->name('jurnal-harian.trash');
     Route::put('/jurnal-harian/{id}/restore', [JurnalHarianController::class, 'restore'])->name('jurnal-harian.restore');
     Route::delete('/jurnal-harian/{id}/force-delete', [JurnalHarianController::class, 'forceDelete'])->name('jurnal-harian.forceDelete');
+
+    // CSV IMPORT & TEMPLATE ROUTES
+    Route::get('/guru/import-template', [GuruController::class, 'importTemplate'])->name('guru.import-template');
+    Route::post('/guru/import-csv', [GuruController::class, 'importCsv'])->name('guru.import-csv');
+
+    Route::get('/siswa/import-template', [SiswaController::class, 'importTemplate'])->name('siswa.import-template');
+    Route::post('/siswa/import-csv', [SiswaController::class, 'importCsv'])->name('siswa.import-csv');
+
+    Route::get('/kelas/import-template', [KelasController::class, 'importTemplate'])->name('kelas.import-template');
+    Route::post('/kelas/import-csv', [KelasController::class, 'importCsv'])->name('kelas.import-csv');
+
+    Route::get('/jurusan/import-template', [JurusanController::class, 'importTemplate'])->name('jurusan.import-template');
+    Route::post('/jurusan/import-csv', [JurusanController::class, 'importCsv'])->name('jurusan.import-csv');
+
+    Route::get('/jadwal/import-template', [JadwalController::class, 'importTemplate'])->name('jadwal.import-template');
+    Route::post('/jadwal/import-csv', [JadwalController::class, 'importCsv'])->name('jadwal.import-csv');
 
     // RESOURCE ROUTES
     Route::resource('guru', GuruController::class);
