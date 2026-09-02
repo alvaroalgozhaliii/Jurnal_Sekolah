@@ -112,11 +112,11 @@
                 @elseif($user->isSiswa() && $user->siswa)
 
                     <div class="form-group">
-                        <label class="form-label">NIS</label>
+                        <label class="form-label">NISN</label>
 
                         <input
                             type="text"
-                            value="{{ $user->siswa->nis }}"
+                            value="{{ $user->siswa->nisn }}"
                             class="form-control"
                             readonly
                             style="background:var(--bg-card-header);"

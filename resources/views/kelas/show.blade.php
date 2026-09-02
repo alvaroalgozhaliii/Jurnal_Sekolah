@@ -47,7 +47,7 @@
                     <thead>
                         <tr>
                             <th class="no-col">No</th>
-                            <th>NIS</th>
+                            <th>NISN</th>
                             <th>Nama Siswa</th>
                             <th>JK</th>
                         </tr>
@@ -56,7 +56,7 @@
                         @foreach($kelas->siswa as $s)
                         <tr>
                             <td class="no-col">{{ $loop->iteration }}</td>
-                            <td class="text-muted fw-bold">{{ $s->nis }}</td>
+                            <td class="text-muted fw-bold">{{ $s->nisn }}</td>
                             <td class="fw-bold text-navy">{{ $s->nama }}</td>
                             <td>{{ $s->jenis_kelamin }}</td>
                         </tr>

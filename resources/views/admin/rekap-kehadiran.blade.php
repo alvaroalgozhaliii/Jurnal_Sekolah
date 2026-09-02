@@ -101,7 +101,7 @@
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
-                        <th>NIS</th>
+                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Kelas</th>
                         <th>Mata Pelajaran</th>
@@ -124,7 +124,7 @@
                     @endphp
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
-                        <td class="text-muted fw-bold">{{ $rs->siswa->nis ?? '-' }}</td>
+                        <td class="text-muted fw-bold">{{ $rs->siswa->nisn ?? '-' }}</td>
                         <td class="fw-bold text-navy">{{ $rs->siswa->nama ?? '-' }}</td>
                         <td><span class="badge badge-navy">{{ $rs->siswa->kelas->nama_kelas ?? '-' }}</span></td>
                         <td>{{ $rs->jurnal->mapel ?? '-' }}</td>

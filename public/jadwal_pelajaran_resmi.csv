@@ -1,0 +1,1067 @@
+Kelas,Hari,Jam_Mulai,Jam_Selesai,Mata_Pelajaran,Guru,Ruang
+X TKI 1,Senin,1,1,UPACA RA APEL,,
+X TKI 1,Senin,2,3,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",Lab. KI 1
+X TKI 1,Senin,4,6,PJOK,"Ilham Sungeidi, S.Pd",LAP
+X TKI 1,Senin,7,8,Bahasa Indonesia,"Yani, S.Pd.",Lab. KI 1
+X TKI 1,Senin,9,10,Bahasa Jawa,"Yustin Febrini, S.Pd",Lab. KI 1
+X TKI 1,Selasa,1,2,Seni Budaya,"Anang Prasetyo, S.Pd",Lab. KI 1
+X TKI 1,Selasa,3,4,Bahasa Indonesia,"Yani, S.Pd.",Lab. KI 1
+X TKI 1,Selasa,5,7,IPAS,"Khuriyatul Kamila, S.Si",Lab. KI 1
+X TKI 1,Selasa,8,10,Dasar TKI,"Rifkotin Na'imah, S.Pd",Lab. KI 1
+X TKI 1,Rabu,1,2,Koding dan Kecerdasan Artifisial Endang Ary Handayani,"S.T., M.Pd",Lab. TKJ 3
+X TKI 1,Rabu,3,5,Dasar TKI,"Sri Kusumastuti, S.Pd",Lab. KI 1
+X TKI 1,Rabu,6,8,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",Lab. KI 1
+X TKI 1,Rabu,9,10,Informatika,"Lutfia Marsalina, S.Pd.I M.Pd.",Lab. Broadcast
+X TKI 1,Kamis,1,2,Matematika,"Arvia Rienetasary, S.Pd",Lab. KI 1
+X TKI 1,Kamis,3,4,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",Lab. KI 1
+X TKI 1,Kamis,5,7,IPAS,"Khuriyatul Kamila, S.Si",Lab. KI 1
+X TKI 1,Kamis,8,10,Dasar TKI,"Sri Kusumastuti, S.Pd",Lab. KI 1
+X TKI 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X TKI 1,Jumat,2,4,Dasar TKI,"Rifkotin Na'imah, S.Pd",Lab. KI 1
+X TKI 1,Jumat,5,5,BK,Yuni Jiastuti S.Pd,Lab. KI 1
+X TKI 1,Jumat,6,7,Matematika,"Arvia Rienetasary, S.Pd",Lab. KI 1
+X TKI 1,Jumat,8,9,Informatika,"Lutfia Marsalina, S.Pd.I M.Pd.",Lab. Broadcast
+X TKI 1,Jumat,10,11,Sejarah,"Fajar Luthfianto, S.Pd",Lab. KI 1
+X TKI 1,Jumat,12,13,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",Lab. KI 1
+X TKI 2,Senin,1,1,UPACA RA APEL,,
+X TKI 2,Senin,2,3,Bahasa Indonesia,"Yani, S.Pd.",R 10
+X TKI 2,Senin,4,5,Matematika,"Arvia Rienetasary, S.Pd",R 10
+X TKI 2,Senin,6,7,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 10
+X TKI 2,Senin,8,10,Dasar TKI,"Sri Kusumastuti, S.Pd",R 10
+X TKI 2,Selasa,1,1,BK,Yuni Jiastuti S.Pd,R 10
+X TKI 2,Selasa,2,4,Dasar TKI,"Rifkotin Na'imah, S.Pd",R 10
+X TKI 2,Selasa,5,6,Informatika,"Lutfia Marsalina, S.Pd.I M.Pd.",Lab. Broadcast
+X TKI 2,Selasa,7,8,Sejarah,"Ista Nofasari, S.Pd",R 10
+X TKI 2,Selasa,9,10,Koding dan Kecerdasan Artifisial Endang Ary Handayani,"S.T., M.Pd",Lab. TKJ 3
+X TKI 2,Rabu,1,2,Matematika,"Arvia Rienetasary, S.Pd",R 10
+X TKI 2,Rabu,3,4,Seni Budaya,"Anang Prasetyo, S.Pd",R 10
+X TKI 2,Rabu,5,6,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 10
+X TKI 2,Rabu,7,8,Informatika,"Lutfia Marsalina, S.Pd.I M.Pd.",Lab. Broadcast
+X TKI 2,Rabu,9,10,Bahasa Jawa,"Yustin Febrini, S.Pd",R 10
+X TKI 2,Kamis,1,3,Dasar TKI,"Rifkotin Na'imah, S.Pd",R 10
+X TKI 2,Kamis,4,5,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 10
+X TKI 2,Kamis,6,7,Bahasa Indonesia,"Yani, S.Pd.",R 10
+X TKI 2,Kamis,8,10,IPAS,"Khuriyatul Kamila, S.Si",R 10
+X TKI 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X TKI 2,Jumat,2,4,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 10
+X TKI 2,Jumat,5,7,PJOK,"Ilham Sungeidi, S.Pd",LAP
+X TKI 2,Jumat,8,10,Dasar TKI,"Sri Kusumastuti, S.Pd",R 10
+X TKI 2,Jumat,11,13,IPAS,"Khuriyatul Kamila, S.Si",R 10
+X RPL 1,Senin,1,1,UPACA RA APEL,,
+X RPL 1,Senin,2,3,Bahasa Indonesia,"Winartin, S.Pd",Lab. RPL 1
+X RPL 1,Senin,4,4,BK,Widodo S.Pd,Lab. RPL 1
+X RPL 1,Senin,5,7,PJOK,"Zainul Arifin,S.Pd",LAP
+X RPL 1,Senin,8,10,IPAS,"Indriati, S.Pd",R 57
+X RPL 1,Selasa,1,3,IPAS,"Indriati, S.Pd",R 57
+X RPL 1,Selasa,4,5,Bahasa Jawa,Rizki Putri Wulandari S.Pd,R 57
+X RPL 1,Selasa,6,7,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 57
+X RPL 1,Selasa,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 57
+X RPL 1,Rabu,1,2,Seni Budaya,"Anang Prasetyo, S.Pd",R 57
+X RPL 1,Rabu,3,4,Matematika,"Elysa Yuli Nur'aini, S.Si",R 57
+X RPL 1,Rabu,5,6,Informatika,Kurnila Putri Islamawati S.Pd,Lab. RPL 1
+X RPL 1,Rabu,7,10,Dasar PPLG,"Badrus Sulaiman, S.Pd.",Lab. RPL 1
+X RPL 1,Kamis,1,2,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 57
+X RPL 1,Kamis,3,4,Matematika,"Elysa Yuli Nur'aini, S.Si",R 57
+X RPL 1,Kamis,5,6,Sejarah,"Yustin Febrini, S.Pd",R 57
+X RPL 1,Kamis,7,10,Dasar PPLG,"Ruly Dwi Setyaningrum, S.Kom",Lab. RPL 1
+X RPL 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X RPL 1,Jumat,2,5,Dasar PPLG,"Ruly Dwi Setyaningrum, S.Kom",Lab. RPL 1
+X RPL 1,Jumat,6,7,Koding dan Kecerdasan Artifisial,Elyana Frisca Monica S.Pd,Lab. RPL 1
+X RPL 1,Jumat,8,9,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 57
+X RPL 1,Jumat,10,11,Informatika,Kurnila Putri Islamawati S.Pd,Lab. RPL 1
+X RPL 1,Jumat,12,13,Bahasa Indonesia,"Winartin, S.Pd",Lab. RPL 1
+X RPL 2,Senin,1,1,UPACA RA APEL,,
+X RPL 2,Senin,2,5,Dasar PPLG,"Ruly Dwi Setyaningrum, S.Kom",Lab. RPL 2
+X RPL 2,Senin,6,7,Bahasa Indonesia,"Umi Kulsum, S.Pd",R 57
+X RPL 2,Senin,8,10,IPAS,"Fitri Amaliyah, S.Pd",R 58
+X RPL 2,Selasa,1,4,Informatika,"Elyana Frisca Monica, S.Pd",Lab. RPL 2
+X RPL 2,Selasa,5,6,Koding dan Kecerdasan Artifisial,Elyana Frisca Monica S.Pd,Lab. RPL 2
+X RPL 2,Selasa,7,8,Sejarah,"Yustin Febrini, S.Pd",R 58
+X RPL 2,Selasa,9,10,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 58
+X RPL 2,Rabu,1,2,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 58
+X RPL 2,Rabu,3,4,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 58
+X RPL 2,Rabu,5,6,Matematika,"Elysa Yuli Nur'aini, S.Si",R 58
+X RPL 2,Rabu,7,10,Dasar PPLG,"Ruly Dwi Setyaningrum, S.Kom",Lab. RPL 2
+X RPL 2,Kamis,1,4,Dasar PPLG,"Badrus Sulaiman, S.Pd.",Lab. RPL 2
+X RPL 2,Kamis,5,7,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 58
+X RPL 2,Kamis,8,10,IPAS,"Fitri Amaliyah, S.Pd",R 58
+X RPL 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X RPL 2,Jumat,2,3,Bahasa Indonesia,"Umi Kulsum, S.Pd",Lab. RPL 2
+X RPL 2,Jumat,4,4,BK,Widodo S.Pd,Lab. RPL 2
+X RPL 2,Jumat,5,7,PJOK,"Zainul Arifin,S.Pd",Lapangan
+X RPL 2,Jumat,8,9,Bahasa Jawa,"Laili Ermawati, S.Pd",R 58
+X RPL 2,Jumat,10,11,Seni Budaya,"Anang Prasetyo, S.Pd",R 58
+X RPL 2,Jumat,12,13,Matematika,"Elysa Yuli Nur'aini, S.Si",R 58
+X TKJ 1,Senin,1,1,UPACA RA APEL,,
+X TKJ 1,Senin,2,4,IPAS,"Fitri Amaliyah, S.Pd",R 32
+X TKJ 1,Senin,5,6,Bahasa Inggris,"Isti Mufadah, S.Pd",R 32
+X TKJ 1,Senin,7,8,Koding dan Kecerdasan Artifisial,"Listyana Hartati, S.Kom. M.Pd",Lab. TKJ 3
+X TKJ 1,Senin,9,10,Dasar TJKT,"Listyana Hartati, S.Kom. M.Pd",Lab. TKJ 3
+X TKJ 1,Selasa,1,4,Informatika,"Siswanti Purwaningsih, S.T., M.Pd",Lab. TKJ 3
+X TKJ 1,Selasa,5,7,IPAS,"Fitri Amaliyah, S.Pd",R 32
+X TKJ 1,Selasa,8,9,Bahasa Jawa,Muhammad Fajar Assidiqi S.Pd,R 32
+X TKJ 1,Selasa,10,10,BK,Nishfu Laili S.Pd,R 32
+X TKJ 1,Rabu,1,2,Matematika,"Basuki Sarjono, S.Pd",R 32
+X TKJ 1,Rabu,3,4,Bahasa Indonesia,"Sri Rahayu, S.Pd",R 32
+X TKJ 1,Rabu,5,6,Dasar TJKT Endang Ary Handayani,"S.T., M.Pd",Lab. TKJ 3
+X TKJ 1,Rabu,7,8,Matematika,"Basuki Sarjono, S.Pd",R 32
+X TKJ 1,Rabu,9,10,Bahasa Inggris,"Isti Mufadah, S.Pd",R 32
+X TKJ 1,Kamis,1,2,Sejarah,"Ista Nofasari, S.Pd",R 32
+X TKJ 1,Kamis,3,4,Bahasa Indonesia,"Sri Rahayu, S.Pd",R 32
+X TKJ 1,Kamis,5,6,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 32
+X TKJ 1,Kamis,7,10,Dasar TJKT,"Siti Munawaroh, S.Kom.,M.Pd",Lab. TKJ 3
+X TKJ 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X TKJ 1,Jumat,2,4,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+X TKJ 1,Jumat,5,6,Seni Budaya,"Anang Prasetyo, S.Pd",R 32
+X TKJ 1,Jumat,7,10,Dasar TJKT,"Siswanti Purwaningsih, S.T., M.Pd",Lab. TKJ 3
+X TKJ 1,Jumat,11,13,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 32
+X TKJ 2,Senin,1,1,UPACA RA APEL,,
+X TKJ 2,Senin,2,5,Dasar TJKT,"Siti Munawaroh, S.Kom.,M.Pd",Lab. TKJ 3
+X TKJ 2,Senin,6,8,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 33
+X TKJ 2,Senin,9,10,Matematika,"Basuki Sarjono, S.Pd",R 33
+X TKJ 2,Selasa,1,2,Bahasa Indonesia,"Sri Rahayu, S.Pd",R 33
+X TKJ 2,Selasa,3,5,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+X TKJ 2,Selasa,6,7,Dasar TJKT Endang Ary Handayani,"S.T., M.Pd",Lab. TKJ 3
+X TKJ 2,Selasa,8,10,IPAS,"Fitri Amaliyah, S.Pd",R 33
+X TKJ 2,Rabu,1,2,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 33
+X TKJ 2,Rabu,3,3,BK,"Nishfu Laili, S.Pd",R 33
+X TKJ 2,Rabu,4,6,IPAS,"Fitri Amaliyah, S.Pd",R 33
+X TKJ 2,Rabu,7,8,Dasar TJKT,"Listyana Hartati, S.Kom. M.Pd",Lab. TKJ 3
+X TKJ 2,Rabu,9,10,Matematika,"Basuki Sarjono, S.Pd",R 33
+X TKJ 2,Kamis,1,4,Informatika,"Siswanti Purwaningsih, S.T., M.Pd",Lab. TKJ 3
+X TKJ 2,Kamis,5,6,Bahasa Indonesia,"Sri Rahayu, S.Pd",R 33
+X TKJ 2,Kamis,7,8,Seni Budaya,"Anang Prasetyo, S.Pd",R 33
+X TKJ 2,Kamis,9,10,Bahasa Inggris,"Isti Mufadah, S.Pd",R 33
+X TKJ 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X TKJ 2,Jumat,2,5,Dasar TJKT,"Siswanti Purwaningsih, S.T., M.Pd",Lab. TKJ 3
+X TKJ 2,Jumat,6,7,Sejarah,"Yustin Febrini, S.Pd",R 33
+X TKJ 2,Jumat,8,9,Bahasa Jawa,Muhammad Fajar Assidiqi S.Pd,R 33
+X TKJ 2,Jumat,10,11,Bahasa Inggris,"Isti Mufadah, S.Pd",R 33
+X TKJ 2,Jumat,12,13,Koding dan Kecerdasan Artifisial,"Listyana Hartati, S.Kom. M.Pd",Lab. TKJ 3
+X BD 1,Senin,1,1,UPACA RA APEL,,
+X BD 1,Senin,2,3,Sejarah,"Pipit Ambarwati, S.Pd",R 23
+X BD 1,Senin,4,7,Dasar PM,"Ratih Dian Irawati, SE",R 23
+X BD 1,Senin,8,9,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 23
+X BD 1,Senin,10,10,BK,Dian Mawarti S.Pd,R 23
+X BD 1,Selasa,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 23
+X BD 1,Selasa,4,5,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 23
+X BD 1,Selasa,6,8,IPAS,"Indriati, S.Pd",R 23
+X BD 1,Selasa,9,10,Matematika,"Laili Ermawati, S.Pd",R 23
+X BD 1,Rabu,1,2,Koding dan Kecerdasan Artifisial,"Siti Munawaroh, S.Kom. M.Pd",Lab. PM Belakang
+X BD 1,Rabu,3,4,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 23
+X BD 1,Rabu,5,8,Dasar PM,"Anisa Kusumawati, S.Pd",R 23
+X BD 1,Rabu,9,10,Seni Budaya Angga Widhy Wirawan,"S.Pd.,M.Pd",R 23
+X BD 1,Kamis,1,3,IPAS,"Indriati, S.Pd",R 23
+X BD 1,Kamis,4,6,PJOK,"Agus Fahruddy, S.Pd., M.Pd",LAP
+X BD 1,Kamis,7,8,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 23
+X BD 1,Kamis,9,10,Pendidikan Pancasila,"Anisa Kusumawati, S.Pd",R 23
+X BD 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X BD 1,Jumat,2,5,Informatika,"Eko Saputro, S.Pd",Lab. PM Belakang
+X BD 1,Jumat,6,7,Matematika,"Laili Ermawati, S.Pd",R 23
+X BD 1,Jumat,8,11,Dasar PM,"Retno Widyastuti, S.Pd., M.Pd",R 23
+X BD 1,Jumat,12,13,Bahasa Jawa,Rizki Putri Wulandari S.Pd,R 23
+X BD 2,Senin,1,1,UPACA RA APEL,,
+X BD 2,Senin,2,4,IPAS,"Indriati, S.Pd",R 24
+X BD 2,Senin,5,8,Dasar PM,"Retno Widyastuti, S.Pd., M.Pd",R 24
+X BD 2,Senin,9,10,Pendidikan Pancasila,"Anisa Kusumawati, S.Pd",R 24
+X BD 2,Selasa,1,2,Bahasa Jawa,"Erna Qoriah, S.E.",R 24
+X BD 2,Selasa,3,4,Koding dan Kecerdasan Artifisial,"Siti Munawaroh, S.Kom. M.Pd",Lab. PM Belakang
+X BD 2,Selasa,5,6,Matematika,"Laili Ermawati, S.Pd",R 24
+X BD 2,Selasa,7,10,Dasar PM,"Ratih Dian Irawati, SE",R 24
+X BD 2,Rabu,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 24
+X BD 2,Rabu,4,6,IPAS,"Indriati, S.Pd",R 24
+X BD 2,Rabu,7,10,Informatika,"Eko Saputro, S.Pd",Lab. PM Belakang
+X BD 2,Kamis,1,4,Dasar PM,"Anisa Kusumawati, S.Pd",R 24
+X BD 2,Kamis,5,6,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 24
+X BD 2,Kamis,7,8,Sejarah,"Pipit Ambarwati, S.Pd",R 24
+X BD 2,Kamis,9,10,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 24
+X BD 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X BD 2,Jumat,2,2,BK,Dian Mawarti S.Pd,R 24
+X BD 2,Jumat,3,4,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 24
+X BD 2,Jumat,5,7,PJOK,"Agus Fahruddy, S.Pd., M.Pd",LAP
+X BD 2,Jumat,8,9,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 24
+X BD 2,Jumat,10,11,Seni Budaya Angga Widhy Wirawan,"S.Pd.,M.Pd",R 24
+X BD 2,Jumat,12,13,Matematika,"Laili Ermawati, S.Pd",R 24
+X BD 3,Senin,1,1,UPACA RA / APEL,,
+X BD 3,Senin,2,4,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",R 25
+X BD 3,Senin,5,7,PJOK,"Bella Prakoso, S.Pd",Lapangan
+X BD 3,Senin,8,10,IPAS,"Sri Subekti, S.Pd",R 25
+X BD 3,Selasa,1,2,Matematika,"Eko Saputro, S.Pd",R 25
+X BD 3,Selasa,3,6,Dasar PM,"Retno Widyastuti, S.Pd., M.Pd",R 25
+X BD 3,Selasa,7,8,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 25
+X BD 3,Selasa,9,10,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 25
+X BD 3,Rabu,1,4,Dasar PM,"Anisa Kusumawati, S.Pd",R 25
+X BD 3,Rabu,5,6,Sejarah,"Yustin Febrini, S.Pd",R 25
+X BD 3,Rabu,7,8,Bahasa Jawa,Muhammad Fajar Assidiqi S.Pd,R 25
+X BD 3,Rabu,9,10,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 25
+X BD 3,Kamis,1,2,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 25
+X BD 3,Kamis,3,5,IPAS,"Sri Subekti, S.Pd",R 25
+X BD 3,Kamis,6,7,Seni Budaya Angga Widhy Wirawan,"S.Pd.,M.Pd",R 25
+X BD 3,Kamis,8,9,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 25
+X BD 3,Kamis,10,10,"BK Niken Hari Pratiwi,","S.Psi.,M.Pd",R 25
+X BD 3,Jumat,1,1,Pembia saan Hari Jumat,,
+X BD 3,Jumat,2,5,Dasar PM,"Ratih Dian Irawati, SE",R 25
+X BD 3,Jumat,6,9,Informatika,"Eko Saputro, S.Pd",Lab. PM Belakang
+X BD 3,Jumat,10,11,Matematika,"Eko Saputro, S.Pd",R 25
+X BD 3,Jumat,12,13,Koding dan Kecerdasan Artifisial,"Siti Munawaroh, S.Kom. M.Pd",Lab. PM Belakang
+X MP 1,Senin,1,1,UPACA RA APEL,,
+X MP 1,Senin,2,4,IPAS,"Sri Subekti, S.Pd",R 11
+X MP 1,Senin,5,6,Sejarah,"Fajar Luthfianto, S.Pd",R 11
+X MP 1,Senin,7,8,Seni Budaya Angga Widhy Wirawan,"S.Pd.,M.Pd",R 11
+X MP 1,Senin,9,10,Bahasa Indonesia,"Purwati,S.Pd",R 11
+X MP 1,Selasa,1,4,Dasar MPLB,"Dwi Kuswanto, S.Pd",R 11
+X MP 1,Selasa,5,6,Bahasa Inggris,"Komariyah, S.Pd",R 11
+X MP 1,Selasa,7,8,Bahasa Indonesia,"Purwati,S.Pd",R 11
+X MP 1,Selasa,9,10,Matematika,"Rulik Indrawati, S.Pd",R 11
+X MP 1,Rabu,1,2,Bahasa Inggris,"Komariyah, S.Pd",R 11
+X MP 1,Rabu,3,4,Bahasa Jawa,Muhammad Fajar Assidiqi S.Pd,R 11
+X MP 1,Rabu,5,7,IPAS,"Sri Subekti, S.Pd",R 11
+X MP 1,Rabu,8,8,BK Veronica Damay,Rulitasari S.Pd,R 11
+X MP 1,Rabu,9,10,Informatika,Kurnila Putri Islamawati S.Pd,Lab. AP BAWAH
+X MP 1,Kamis,1,2,Pendidikan Pancasila,"Tutut Sriatin, S.Pd",R 11
+X MP 1,Kamis,3,4,Matematika,"Rulik Indrawati, S.Pd",R 11
+X MP 1,Kamis,5,6,Koding dan Kecerdasan Artifisial,Kurnila Putri Islamawati S.Pd,Lab. AP BAWAH
+X MP 1,Kamis,7,10,Dasar MPLB,"Dwi Kuswanto, S.Pd",R 11
+X MP 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X MP 1,Jumat,2,4,PJOK,"Zainul Arifin,S.Pd",LAP
+X MP 1,Jumat,5,8,Dasar MPLB,"Dwi Kuswanto, S.Pd",R 11
+X MP 1,Jumat,9,11,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",R 11
+X MP 1,Jumat,12,13,Informatika,Kurnila Putri Islamawati S.Pd,Lab. AP BAWAH
+X MP 2,Senin,1,1,UPACA RA APEL,,
+X MP 2,Senin,2,2,BK,Nishfu Laili S.Pd,R 12
+X MP 2,Senin,3,4,Pendidikan Pancasila,"Tutut Sriatin, S.Pd",R 12
+X MP 2,Senin,5,6,Bahasa Jawa,Muhammad Fajar Assidiqi S.Pd,R 12
+X MP 2,Senin,7,8,Bahasa Inggris,"Komariyah, S.Pd",R 12
+X MP 2,Senin,9,10,Sejarah,"Fajar Luthfianto, S.Pd",R 12
+X MP 2,Selasa,1,2,Bahasa Inggris,"Komariyah, S.Pd",R 12
+X MP 2,Selasa,3,4,Matematika,"Rulik Indrawati, S.Pd",R 12
+X MP 2,Selasa,5,8,Dasar MPLB,"Peni Wulandari, S.Pd",R 12
+X MP 2,Selasa,9,10,Koding dan Kecerdasan Artifisial,Kurnila Putri Islamawati S.Pd,Lab. AP BAWAH
+X MP 2,Rabu,1,2,Seni Budaya Angga Widhy Wirawan,"S.Pd.,M.Pd",R 12
+X MP 2,Rabu,3,5,PJOK,"Zainul Arifin,S.Pd",Lapangan
+X MP 2,Rabu,6,7,Matematika,"Rulik Indrawati, S.Pd",R 12
+X MP 2,Rabu,8,10,IPAS,"Sri Subekti, S.Pd",R 12
+X MP 2,Kamis,1,4,Informatika,"Ary Sunaryo, ST.,M.Pd",Lab. AP BAWAH
+X MP 2,Kamis,5,6,Bahasa Indonesia,"Purwati,S.Pd",R 12
+X MP 2,Kamis,7,10,Dasar MPLB,"Peni Wulandari, S.Pd",R 12
+X MP 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X MP 2,Jumat,2,4,IPAS,"Sri Subekti, S.Pd",R 12
+X MP 2,Jumat,5,7,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",R 12
+X MP 2,Jumat,8,9,Bahasa Indonesia,"Purwati,S.Pd",R 12
+X MP 2,Jumat,10,13,Dasar MPLB,"Peni Wulandari, S.Pd",R 12
+X MP 3,Senin,1,1,UPACA RA APEL,,
+X MP 3,Senin,2,4,PJOK,"Zainul Arifin,S.Pd",LAP
+X MP 3,Senin,5,6,Bahasa Inggris,"Komariyah, S.Pd",R 13
+X MP 3,Senin,7,10,Dasar MPLB,"Lilik Suratmi, S.Pd",R 13
+X MP 3,Selasa,1,2,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 13
+X MP 3,Selasa,3,4,Bahasa Inggris,"Komariyah, S.Pd",R 13
+X MP 3,Selasa,5,6,Koding dan Kecerdasan Artifisial,"Badrus Sulaiman, S.Pd.",Lab. AP ATAS
+X MP 3,Selasa,7,10,Dasar MPLB,"Lilik Suratmi, S.Pd",R 13
+X MP 3,Rabu,1,2,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 13
+X MP 3,Rabu,3,4,Matematika,"Basuki Sarjono, S.Pd",R 13
+X MP 3,Rabu,5,7,IPAS,"Khuriyatul Kamila, S.Si",R 13
+X MP 3,Rabu,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",R 13
+X MP 3,Kamis,1,3,IPAS,"Khuriyatul Kamila, S.Si",R 13
+X MP 3,Kamis,4,5,Matematika,"Basuki Sarjono, S.Pd",R 13
+X MP 3,Kamis,6,6,BK Nur Eko Wahyuningsi,"h, S.Pd",R 13
+X MP 3,Kamis,7,10,Informatika,"Badrus Sulaiman, S.Pd.",Lab. AP ATAS
+X MP 3,Jumat,1,1,Pembia saan Hari Jumat,,
+X MP 3,Jumat,2,3,Pendidikan Pancasila,"Khuriyatul Kamila, S.Si",R 13
+X MP 3,Jumat,4,5,Sejarah,"Yustin Febrini, S.Pd",R 13
+X MP 3,Jumat,6,7,Bahasa Jawa,Rizki Putri Wulandari S.Pd,R 13
+X MP 3,Jumat,8,11,Dasar MPLB,"Lilik Suratmi, S.Pd",R 13
+X MP 3,Jumat,12,13,Seni Budaya Angga Widhy Wirawan,"S.Pd.,M.Pd",R 13
+X MP 4,Senin,1,1,UPACA RA APEL,,
+X MP 4,Senin,2,4,IPAS,"Khuriyatul Kamila, S.Si",R 14
+X MP 4,Senin,5,8,Dasar MPLB,"Rindang Rejeki, S.Pd",R 14
+X MP 4,Senin,9,10,Matematika,"Eko Saputro, S.Pd",R 14
+X MP 4,Selasa,1,3,PJOK,"Zainul Arifin,S.Pd",Lapangan
+X MP 4,Selasa,4,5,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 14
+X MP 4,Selasa,6,7,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 14
+X MP 4,Selasa,8,10,IPAS,"Khuriyatul Kamila, S.Si",R 14
+X MP 4,Rabu,1,2,Koding dan Kecerdasan Artifisial,"Badrus Sulaiman, S.Pd.",Lab. AP ATAS
+X MP 4,Rabu,3,6,Dasar MPLB,"Rindang Rejeki, S.Pd",R 14
+X MP 4,Rabu,7,8,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 14
+X MP 4,Rabu,9,10,Sejarah,"Fajar Luthfianto, S.Pd",R 14
+X MP 4,Kamis,1,2,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 14
+X MP 4,Kamis,3,3,BK,Siti Maisaroh S.Pd,R 14
+X MP 4,Kamis,4,6,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 14
+X MP 4,Kamis,7,8,Matematika,"Eko Saputro, S.Pd",R 14
+X MP 4,Kamis,9,10,Seni Budaya Angga Widhy Wirawan,"S.Pd.,M.Pd",R 14
+X MP 4,Jumat,1,1,Pembia saan Hari Jumat,,
+X MP 4,Jumat,2,5,Informatika,"Badrus Sulaiman, S.Pd.",Lab. AP ATAS
+X MP 4,Jumat,6,7,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 14
+X MP 4,Jumat,8,9,Bahasa Jawa,Rizki Putri Wulandari S.Pd,R 14
+X MP 4,Jumat,10,13,Dasar MPLB,"Rindang Rejeki, S.Pd",R 14
+X AK 1,Senin,1,1,UPACA RA / APEL,,
+X AK 1,Senin,2,3,Matematika,"Lutfia Marsalina, S.Pd.I M.Pd.",R 1
+X AK 1,Senin,4,5,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 1
+X AK 1,Senin,6,6,BK Nur Eko Wahyuningsi,"h, S.Pd",R 1
+X AK 1,Senin,7,8,Sejarah,"Fajar Luthfianto, S.Pd",R 1
+X AK 1,Senin,9,10,Informatika Shinta Indyar Shanty,"Susanto, S.Kom",Lab. AK ATAS
+X AK 1,Selasa,1,2,"Seni Budaya Angga Widhy Wirawan,","S.Pd.,M.Pd",R 1
+X AK 1,Selasa,3,5,Dasar AKL,"Pipit Ambarwati, S.Pd",R 1
+X AK 1,Selasa,6,8,IPAS,"Sri Subekti, S.Pd",R 1
+X AK 1,Selasa,9,10,Informatika Shinta Indyar Shanty,"Susanto, S.Kom",Lab. AK ATAS
+X AK 1,Rabu,1,2,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 1
+X AK 1,Rabu,3,5,PJOK,"Agus Fahruddy, S.Pd., M.Pd",Lapangan
+X AK 1,Rabu,6,7,Bahasa Indonesia,"Endang Safitri, S.Pd",R 1
+X AK 1,Rabu,8,10,Dasar AKL,"Pipit Ambarwati, S.Pd",R 1
+X AK 1,Kamis,1,2,Bahasa Indonesia,"Endang Safitri, S.Pd",R 1
+X AK 1,Kamis,3,4,Bahasa Jawa,"Fitri Amaliyah, S.Pd",R 1
+X AK 1,Kamis,5,6,Dasar AKL,"Atih Wilupi, S.E, M.Pd",R 1
+X AK 1,Kamis,7,8,Pendidikan Pancasila,"Yuli Ratnasari, S.Pd",R 1
+X AK 1,Kamis,9,10,Matematika,"Lutfia Marsalina, S.Pd.I, M.Pd.",R 1
+X AK 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X AK 1,Jumat,2,3,Koding dan Kecerdasan Artifisial Shinta Indyar Shanty,"Susanto, S.Kom",Lab. AK ATAS
+X AK 1,Jumat,4,6,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 1
+X AK 1,Jumat,7,9,IPAS,"Sri Subekti, S.Pd",R 1
+X AK 1,Jumat,10,13,Dasar AKL,"Agustina Mardika Rini, S.Pd.,M.Pd",Lab. AK BAWAH
+X AK 2,Senin,1,1,UPACA RA / APEL,,
+X AK 2,Senin,2,3,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 2
+X AK 2,Senin,4,6,Dasar AKL,"Indayah, S.Pd., M.Pd",R 2
+X AK 2,Senin,7,8,Informatika Shinta Indyar Shanty,"Susanto, S.Kom",Lab. AK ATAS
+X AK 2,Senin,9,10,Bahasa Indonesia,"Endang Safitri, S.Pd",R 2
+X AK 2,Selasa,1,2,Informatika Shinta Indyar Shanty,"Susanto, S.Kom",Lab. AK ATAS
+X AK 2,Selasa,3,4,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 2
+X AK 2,Selasa,5,7,PJOK,"Agus Fahruddy, S.Pd., M.Pd",Lapangan
+X AK 2,Selasa,8,9,Matematika,"Lutfia Marsalina, S.Pd.I, M.Pd.",R 2
+X AK 2,Selasa,10,10,BK Nur Eko Wahyuningsi,"h, S.Pd",R 2
+X AK 2,Rabu,1,3,IPAS,"Sri Subekti, S.Pd",R 2
+X AK 2,Rabu,4,6,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 2
+X AK 2,Rabu,7,10,Dasar AKL,"Agustina Mardika Rini, S.Pd.,M.Pd",Lab. AK BAWAH
+X AK 2,Kamis,1,3,Dasar AKL,"Indayah, S.Pd., M.Pd",R 2
+X AK 2,Kamis,4,5,Matematika,"Lutfia Marsalina, S.Pd.I, M.Pd.",R 2
+X AK 2,Kamis,6,8,IPAS,"Sri Subekti, S.Pd",R 2
+X AK 2,Kamis,9,10,Koding dan Kecerdasan Artifisial Shinta Indyar Shanty,"Susanto, S.Kom",Lab. AK ATAS
+X AK 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X AK 2,Jumat,2,3,Pendidikan Pancasila,"Yuli Ratnasari, S.Pd",R 2
+X AK 2,Jumat,4,5,Bahasa Indonesia,"Endang Safitri, S.Pd",R 2
+X AK 2,Jumat,6,7,Bahasa Jawa,"Fitri Amaliyah, S.Pd",R 2
+X AK 2,Jumat,8,9,"Seni Budaya Angga Widhy Wirawan,","S.Pd.,M.Pd",R 2
+X AK 2,Jumat,10,11,Dasar AKL,"Pipit Ambarwati, S.Pd",R 2
+X AK 2,Jumat,12,13,Sejarah,"Fajar Luthfianto, S.Pd",R 2
+X AK 3,Senin,1,1,UPACA RA / APEL,,
+X AK 3,Senin,2,4,PJOK,"Agus Fahruddy, S.Pd., M.Pd",Lapangan
+X AK 3,Senin,5,6,Dasar AKL,"Pipit Ambarwati, S.Pd",R 3
+X AK 3,Senin,7,8,Koding dan Kecerdasan Artifisial,Ruly Dwi Setyaningrum S.Kom,Lab. AK BAWAH
+X AK 3,Senin,9,10,Informatika,"Ary Sunaryo, ST.,M.Pd",Lab. AK BAWAH
+X AK 3,Selasa,1,2,Informatika,"Ary Sunaryo, ST.,M.Pd",Lab. AK BAWAH
+X AK 3,Selasa,3,4,"Seni Budaya Angga Widhy Wirawan,","S.Pd.,M.Pd",R 3
+X AK 3,Selasa,5,6,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 3
+X AK 3,Selasa,7,8,Bahasa Indonesia,"Endang Safitri, S.Pd",R 3
+X AK 3,Selasa,9,10,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 3
+X AK 3,Rabu,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 3
+X AK 3,Rabu,4,5,Matematika,"Dwi Nova Setyandari, S.Pd",R 3
+X AK 3,Rabu,6,6,BK Astra Bella,"Flamboyan, S.Psi",R 3
+X AK 3,Rabu,7,10,Dasar AKL,"Titin Sukmasari, S.Pd., M.Pd",Lab. AK ATAS
+X AK 3,Kamis,1,2,Sejarah,"Pipit Ambarwati, S.Pd",R 3
+X AK 3,Kamis,3,4,Bahasa Jawa,"Rizki Putri Wulandari, S.Pd",R 3
+X AK 3,Kamis,5,7,Dasar AKL,"Setiyo Winarko, S.Pd",R 3
+X AK 3,Kamis,8,10,IPAS,"Ista Nofasari, S.Pd",R 3
+X AK 3,Jumat,1,1,Pembia saan Hari Jumat,,
+X AK 3,Jumat,2,4,IPAS,"Ista Nofasari, S.Pd",R 3
+X AK 3,Jumat,5,6,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 3
+X AK 3,Jumat,7,9,Dasar AKL,"Setiyo Winarko, S.Pd",R 3
+X AK 3,Jumat,10,11,Matematika,Dwi Nova Setyandari S.Pd,R 3
+X AK 3,Jumat,12,13,Bahasa Indonesia,"Endang Safitri, S.Pd",R 3
+X AK 4,Senin,1,1,UPACA RA / APEL,,
+X AK 4,Senin,2,3,"Seni Budaya Angga Widhy Wirawan,","S.Pd.,M.Pd",R 4
+X AK 4,Senin,4,4,BK Astra Bella,"Flamboyan, S.Psi",R 4
+X AK 4,Senin,5,7,IPAS,"Ista Nofasari, S.Pd",R 4
+X AK 4,Senin,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",R 4
+X AK 4,Selasa,1,2,Sejarah,"Pipit Ambarwati, S.Pd",R 4
+X AK 4,Selasa,3,4,Informatika,"Ary Sunaryo, ST.,M.Pd",Lab. AK BAWAH
+X AK 4,Selasa,5,6,Matematika,"Dwi Nova Setyandari, S.Pd",R 4
+X AK 4,Selasa,7,8,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 4
+X AK 4,Selasa,9,10,Dasar AKL,"Pipit Ambarwati, S.Pd",R 4
+X AK 4,Rabu,1,3,Dasar AKL,"Septiani, S.Pd.,M.Pd",R 4
+X AK 4,Rabu,4,5,Bahasa Jawa,"Rizki Putri Wulandari, S.Pd",R 4
+X AK 4,Rabu,6,7,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 4
+X AK 4,Rabu,8,10,IPAS,"Ista Nofasari, S.Pd",R 4
+X AK 4,Kamis,1,3,PJOK,"Agus Fahruddy, S.Pd., M.Pd",LAP
+X AK 4,Kamis,4,6,Dasar AKL,"Septiani, S.Pd.,M.Pd",R 4
+X AK 4,Kamis,7,8,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 4
+X AK 4,Kamis,9,10,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 4
+X AK 4,Jumat,1,1,Pembia saan Hari Jumat,,
+X AK 4,Jumat,2,3,Informatika,"Ary Sunaryo, ST.,M.Pd",Lab. AK BAWAH
+X AK 4,Jumat,4,5,Matematika,"Dwi Nova Setyandari, S.Pd",R 4
+X AK 4,Jumat,6,7,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 4
+X AK 4,Jumat,8,9,Koding dan Kecerdasan Artifisial,"Ruly Dwi Setyaningrum, S.Kom",Lab. AK BAWAH
+X AK 4,Jumat,10,13,Dasar AKL,"Titin Sukmasari, S.Pd., M.Pd",Lab. AK ATAS
+X ULW,Senin,1,1,UPACA RA APEL,,
+X ULW,Senin,2,4,IPAS,"Ista Nofasari, S.Pd",R 22
+X ULW,Senin,5,8,Informatika,"Siswanti Purwaningsih, S.T., M.Pd",Lab. UPW 2 (Ticketing)
+X ULW,Senin,9,10,Bahasa Jawa,"Laili Ermawati, S.Pd",R 22
+X ULW,Selasa,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 22
+X ULW,Selasa,4,6,PJOK,"Bella Prakoso, S.Pd",Lapangan
+X ULW,Selasa,7,8,Dasar ULP,Risqi Nur Imama S.Tr.Par,R 22
+X ULW,Selasa,9,10,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 22
+X ULW,Rabu,1,2,Bahasa Indonesia,"Sri Rahayu, S.Pd",R 22
+X ULW,Rabu,3,6,Dasar ULP,"Risqi Nur Imama, S.Tr.Par",R 22
+X ULW,Rabu,7,8,Matematika,Dwi Nova Setyandari S.Pd,R 22
+X ULW,Rabu,9,10,Bahasa Inggris,"Fitria Renytasari, S.Pd",R 22
+X ULW,Kamis,1,2,Bahasa Indonesia,"Sri Rahayu, S.Pd",R 22
+X ULW,Kamis,3,6,Dasar ULP,"Risqi Nur Imama, S.Tr.Par",R 22
+X ULW,Kamis,7,8,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 22
+X ULW,Kamis,9,10,Sejarah,"Fajar Luthfianto, S.Pd",R 22
+X ULW,Jumat,1,1,Pembia saan Hari Jumat,,
+X ULW,Jumat,2,2,"BK Niken Hari Pratiwi,","S.Psi.,M.Pd",R 22
+X ULW,Jumat,3,4,Dasar ULP,"Risqi Nur Imama, S.Tr.Par",R 22
+X ULW,Jumat,5,6,"Seni Budaya Angga Widhy Wirawan,","S.Pd.,M.Pd",R 22
+X ULW,Jumat,7,8,Koding dan Kecerdasan Artifisial Shinta Indyar Shanty,"Susanto, S.Kom",Lab. UPW 2 (Ticketing)
+X ULW,Jumat,9,11,IPAS,"Ista Nofasari, S.Pd",R 22
+X ULW,Jumat,12,13,Matematika,"Dwi Nova Setyandari, S.Pd",R 22
+X DKV 1,Senin,1,1,UPACA RA / APEL,,
+X DKV 1,Senin,2,4,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,R 15
+X DKV 1,Senin,5,7,IPAS,"Khuriyatul Kamila, S.Si",R 15
+X DKV 1,Senin,8,10,Dasar DKV,"Danang Anjar Hymawanto, S.Pd",R 15
+X DKV 1,Selasa,1,1,BK Nur Eko Wahyuningsi,"h, S.Pd",R 15
+X DKV 1,Selasa,2,3,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 15
+X DKV 1,Selasa,4,6,Dasar DKV,"Agus Pramono, S.Sn",R 15
+X DKV 1,Selasa,7,8,Bahasa Jawa,"Khoyrotun Hisani, S.Sn",R 15
+X DKV 1,Selasa,9,10,Bahasa Indonesia,"Erna Rinawati, S.Pd",R 15
+X DKV 1,Rabu,1,2,Matematika,"Rulik Indrawati, S.Pd",R 15
+X DKV 1,Rabu,3,5,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+X DKV 1,Rabu,6,8,Dasar DKV,"Khoyrotun Hisani, S.Sn",R 15
+X DKV 1,Rabu,9,10,"Koding dan Kecerdasan Artifisial Endik Kuswantoro,","S.Kom.,M.T",Lab. DKV Komputer
+X DKV 1,Kamis,1,2,Informatika,"Elysa Yuli Nur'aini, S.Si",Lab. DKV Komputer
+X DKV 1,Kamis,3,4,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 15
+X DKV 1,Kamis,5,6,Seni Budaya,"Anang Prasetyo, S.Pd",R 15
+X DKV 1,Kamis,7,8,Sejarah,"Yustin Febrini, S.Pd",R 15
+X DKV 1,Kamis,9,10,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 15
+X DKV 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X DKV 1,Jumat,2,4,Dasar DKV,"Agus Pramono, S.Sn",R 15
+X DKV 1,Jumat,5,6,Matematika,"Rulik Indrawati, S.Pd",R 15
+X DKV 1,Jumat,7,9,IPAS,"Khuriyatul Kamila, S.Si",R 15
+X DKV 1,Jumat,10,11,Informatika,"Elysa Yuli Nur'aini, S.Si",Lab. DKV Komputer
+X DKV 1,Jumat,12,13,Bahasa Indonesia,"Erna Rinawati, S.Pd",R 15
+X DKV 2,Senin,1,1,UPACA RA APEL,,
+X DKV 2,Senin,2,3,"Koding dan Kecerdasan Artifisial Endik Kuswantoro,","S.Kom.,M.T",Lab. DKV Komputer
+X DKV 2,Senin,4,5,Sejarah,"Yustin Febrini, S.Pd",R 16
+X DKV 2,Senin,6,8,Dasar DKV,"Agus Pramono, S.Sn",R 16
+X DKV 2,Senin,9,10,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 16
+X DKV 2,Selasa,1,3,IPAS,"Fitri Amaliyah, S.Pd",R 16
+X DKV 2,Selasa,4,5,Bahasa Indonesia,"Erna Rinawati, S.Pd",R 16
+X DKV 2,Selasa,6,7,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 16
+X DKV 2,Selasa,8,10,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,R 16
+X DKV 2,Rabu,1,2,Informatika,"Elysa Yuli Nur'aini, S.Si",Lab. DKV Komputer
+X DKV 2,Rabu,3,3,BK,"Yuni Jiastuti, S.Pd",R 16
+X DKV 2,Rabu,4,6,Dasar DKV,"Agus Pramono, S.Sn",R 16
+X DKV 2,Rabu,7,8,Matematika,"Ajeng Okvitasari, S.Pd",R 16
+X DKV 2,Rabu,9,10,Bahasa Indonesia,"Erna Rinawati, S.Pd",R 16
+X DKV 2,Kamis,1,2,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 16
+X DKV 2,Kamis,3,5,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+X DKV 2,Kamis,6,7,Informatika,"Elysa Yuli Nur'aini, S.Si",Lab. DKV Komputer
+X DKV 2,Kamis,8,10,Dasar DKV,"Danang Anjar Hymawanto, S.Pd",R 16
+X DKV 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X DKV 2,Jumat,2,3,Seni Budaya,"Anang Prasetyo, S.Pd",R 16
+X DKV 2,Jumat,4,5,Bahasa Jawa,"Khoyrotun Hisani, S.Sn",R 16
+X DKV 2,Jumat,6,8,Dasar DKV,"Khoyrotun Hisani, S.Sn",R 16
+X DKV 2,Jumat,9,10,Matematika,"Ajeng Okvitasari, S.Pd",R 16
+X DKV 2,Jumat,11,13,IPAS,"Fitri Amaliyah, S.Pd",R 16
+X PSPT 1,Senin,1,1,UPACA RA / APEL,,
+X PSPT 1,Senin,2,4,PJOK,"Bella Prakoso, S.Pd",Lapangan
+X PSPT 1,Senin,5,6,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 55
+X PSPT 1,Senin,7,10,Dasar BP,"Benny Mamora, S.Kom",Lab. Broadcast
+X PSPT 1,Selasa,1,4,Dasar BP,"Benny Mamora, S.Kom",Lab. Broadcast
+X PSPT 1,Selasa,5,6,Seni Budaya,"Anang Prasetyo, S.Pd",R 55
+X PSPT 1,Selasa,7,8,Matematika,"Eko Saputro, S.Pd",R 55
+X PSPT 1,Selasa,9,10,Bahasa Indonesia,"Winartin, S.Pd",R 55
+X PSPT 1,Rabu,1,3,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,R 55
+X PSPT 1,Rabu,4,6,IPAS,"Ista Nofasari, S.Pd",R 55
+X PSPT 1,Rabu,7,8,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 55
+X PSPT 1,Rabu,9,10,Bahasa Indonesia,"Winartin, S.Pd",R 55
+X PSPT 1,Kamis,1,2,Koding dan Kecerdasan Artifisial,"Elyana Frisca Monica, S.Pd",Lab. Broadcast
+X PSPT 1,Kamis,3,6,Informatika,"Elyana Frisca Monica, S.Pd",Lab. Broadcast
+X PSPT 1,Kamis,7,8,Bahasa Jawa,"Khoyrotun Hisani, S.Sn",R 55
+X PSPT 1,Kamis,9,10,Matematika,"Eko Saputro, S.Pd",R 55
+X PSPT 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X PSPT 1,Jumat,2,3,Sejarah,"Yustin Febrini, S.Pd",R 55
+X PSPT 1,Jumat,4,5,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 55
+X PSPT 1,Jumat,6,8,IPAS,"Ista Nofasari, S.Pd",R 55
+X PSPT 1,Jumat,9,9,"BK Winarsih,","S.Pd, M.Pd",R 55
+X PSPT 1,Jumat,10,13,Dasar BP,"Benny Mamora, S.Kom",Lab. Broadcast
+X PSPT 2,Senin,1,1,UPACA RA / APEL,,
+X PSPT 2,Senin,2,5,Informatika,"Elyana Frisca Monica, S.Pd",Lab. Broadcast
+X PSPT 2,Senin,6,7,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 56
+X PSPT 2,Senin,8,10,IPAS,"Ista Nofasari, S.Pd",R 56
+X PSPT 2,Selasa,1,3,IPAS,"Ista Nofasari, S.Pd",R 56
+X PSPT 2,Selasa,4,5,Sejarah,"Yustin Febrini, S.Pd",R 56
+X PSPT 2,Selasa,6,6,"BK Winarsih,","S.Pd, M.Pd",R 56
+X PSPT 2,Selasa,7,10,Dasar BP,"Sa'ad Wazis Hiedayat, S.Pd",Lab. Broadcast
+X PSPT 2,Rabu,1,4,Dasar BP,"Sa'ad Wazis Hiedayat, S.Pd",Lab. Broadcast
+X PSPT 2,Rabu,5,7,PJOK,"Bella Prakoso, S.Pd",Lapangan
+X PSPT 2,Rabu,8,10,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,R 56
+X PSPT 2,Kamis,1,2,Bahasa Indonesia,"Umi Kulsum, S.Pd",R 56
+X PSPT 2,Kamis,3,4,Matematika,"Laili Ermawati, S.Pd",R 56
+X PSPT 2,Kamis,5,6,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 56
+X PSPT 2,Kamis,7,8,Bahasa Jawa,"Muhammad Fajar Assidiqi, S.Pd",R 56
+X PSPT 2,Kamis,9,10,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 56
+X PSPT 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X PSPT 2,Jumat,2,3,Koding dan Kecerdasan Artifisial,Elyana Frisca Monica S.Pd,Lab. Broadcast
+X PSPT 2,Jumat,4,7,Dasar BP,"Sa'ad Wazis Hiedayat, S.Pd",Lab. Broadcast
+X PSPT 2,Jumat,8,9,Seni Budaya,"Anang Prasetyo, S.Pd",R 56
+X PSPT 2,Jumat,10,11,Matematika,"Laili Ermawati, S.Pd",R 56
+X PSPT 2,Jumat,12,13,Bahasa Indonesia,"Umi Kulsum, S.Pd",R 56
+X AN 1,Senin,1,1,UPACA RA / APEL,,
+X AN 1,Senin,2,3,Sejarah,"Yustin Febrini, S.Pd",R 31
+X AN 1,Senin,4,5,Seni Budaya,"Anang Prasetyo, S.Pd",R 31
+X AN 1,Senin,6,6,BK,"Siti Maisaroh, S.Pd",R 31
+X AN 1,Senin,7,8,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 31
+X AN 1,Senin,9,10,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 31
+X AN 1,Selasa,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",R 31
+X AN 1,Selasa,4,5,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 31
+X AN 1,Selasa,6,7,Informatika,"Tuhu Eries Kudori, S.Sn",Lab. AN COE 2
+X AN 1,Selasa,8,10,Dasar AN,"Rika Okta Maulida, S.Ds.",Lab. AN COE 2
+X AN 1,Rabu,1,3,Dasar AN,"Dhuana Putri Puspitasary, S.Pd",Lab. AN COE 2
+X AN 1,Rabu,4,5,Pendidikan Pancasila,"Mega Mahardika, S.Pd",R 31
+X AN 1,Rabu,6,7,Matematika,"Arvia Rienetasary, S.Pd",R 31
+X AN 1,Rabu,8,10,IPAS,"Indriati, S.Pd",R 31
+X AN 1,Kamis,1,2,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 31
+X AN 1,Kamis,3,4,Matematika,"Arvia Rienetasary, S.Pd",R 31
+X AN 1,Kamis,5,7,PJOK,"Bella Prakoso, S.Pd",LAP
+X AN 1,Kamis,8,10,Dasar AN,"Dhuana Putri Puspitasary, S.Pd",Lab. AN COE 2
+X AN 1,Jumat,1,1,Pembia saan Hari Jumat,,
+X AN 1,Jumat,2,4,IPAS,"Indriati, S.Pd",R 31
+X AN 1,Jumat,5,6,Bahasa Jawa,Muhammad Fajar Assidiqi S.Pd,R 31
+X AN 1,Jumat,7,9,Dasar AN,"Rika Okta Maulida, S.Ds.",Lab. AN COE 2
+X AN 1,Jumat,10,11,"Koding dan Kecerdasan Artifisial Endik Kuswantoro,","S.Kom.,M.T",Lab. AN COE 2
+X AN 1,Jumat,12,13,Informatika,"Tuhu Eries Kudori, S.Sn",Lab. AN COE 2
+X AN 2,Senin,1,1,UPACA RA / APEL,,
+X AN 2,Senin,2,4,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",R 60
+X AN 2,Senin,5,6,"Koding dan Kecerdasan Artifisial Endik Kuswantoro,","S.Kom.,M.T",Lab. AN COE 2
+X AN 2,Senin,7,8,Sejarah,"Yustin Febrini, S.Pd",R 60
+X AN 2,Senin,9,10,Matematika,"Ajeng Okvitasari, S.Pd",R 60
+X AN 2,Selasa,1,3,PJOK,"Bella Prakoso, S.Pd",Lapangan
+X AN 2,Selasa,4,5,Matematika,"Ajeng Okvitasari, S.Pd",R 60
+X AN 2,Selasa,6,7,Pendidikan Pancasila,"Mega Mahardika, S.Pd",R 60
+X AN 2,Selasa,8,9,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 60
+X AN 2,Selasa,10,10,BK,"Siti Maisaroh, S.Pd",R 60
+X AN 2,Rabu,1,3,IPAS,"Indriati, S.Pd",R 60
+X AN 2,Rabu,4,5,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 60
+X AN 2,Rabu,6,7,Seni Budaya,"Anang Prasetyo, S.Pd",R 60
+X AN 2,Rabu,8,10,Dasar AN,"Rika Okta Maulida, S.Ds.",Lab. AN COE 2
+X AN 2,Kamis,1,2,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 60
+X AN 2,Kamis,3,4,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 60
+X AN 2,Kamis,5,7,Dasar AN,"Dhuana Putri Puspitasary, S.Pd",Lab. AN COE 2
+X AN 2,Kamis,8,10,Dasar AN,"Rika Okta Maulida, S.Ds.",Lab. AN COE 1
+X AN 2,Jumat,1,1,Pembia saan Hari Jumat,,
+X AN 2,Jumat,2,3,Bahasa Jawa,Muhammad Fajar Assidiqi S.Pd,R 60
+X AN 2,Jumat,4,5,Informatika,"Rika Okta Maulida, S.Ds.",Lab. AN COE 2
+X AN 2,Jumat,6,8,IPAS,"Indriati, S.Pd",R 60
+X AN 2,Jumat,9,11,Dasar AN,"Dhuana Putri Puspitasary, S.Pd",Lab. AN COE 1
+X AN 2,Jumat,12,13,Informatika,"Rika Okta Maulida, S.Ds.",Lab. AN COE 1
+XI TKI 1,Senin,1,1,UPACA RA APEL,,
+XI TKI 1,Senin,2,3,Konsentrasi TKI,"Baskoro, S.Si",R 65
+XI TKI 1,Senin,4,6,Konsentrasi TKI,"Ayu Puspitorini, ST",R 65
+XI TKI 1,Senin,7,10,Konsentrasi TKI,"Diana Hartanti, S.T., M.Pd",R 65
+XI TKI 1,Selasa,1,2,Bahasa Jepang,"Rizki Putri Wulandari, S.Pd",R 65
+XI TKI 1,Selasa,3,4,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 65
+XI TKI 1,Selasa,5,7,"Kreativitas, Inovasi dan Kewirausahaan","Baskoro, S.Si",R 65
+XI TKI 1,Selasa,8,10,Matematika,"Basuki Sarjono, S.Pd",R 65
+XI TKI 1,Rabu,1,2,Bahasa Jawa,"Yustin Febrini, S.Pd",R 65
+XI TKI 1,Rabu,3,4,Konsentrasi TKI,"Rifkotin Na'imah, S.Pd",R 65
+XI TKI 1,Rabu,5,6,"Kreativitas Inovasi, dan Kewirausahaan","Baskoro, S.Si",R 65
+XI TKI 1,Rabu,7,8,Mapel Pilihan TKI,"Sri Kusumastuti, S.Pd",R 65
+XI TKI 1,Rabu,9,10,Pendidikan Pancasila,"Sri Kusumastuti, S.Pd",R 65
+XI TKI 1,Kamis,1,3,Bahasa Indonesia,"Yani, S.Pd.",R 65
+XI TKI 1,Kamis,4,5,Sejarah,"Baskoro, S.Si",R 65
+XI TKI 1,Kamis,6,7,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+XI TKI 1,Kamis,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 65
+XI TKI 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI TKI 1,Jumat,2,4,Konsentrasi TKI,"Ayu Puspitorini, ST",R 65
+XI TKI 1,Jumat,5,8,Konsentrasi TKI,"Diana Hartanti, S.T., M.Pd",R 65
+XI TKI 1,Jumat,9,10,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 65
+XI TKI 1,Jumat,11,12,BK,"Yuni Jiastuti, S.Pd",R 65
+XI TKI 2,Senin,1,1,UPACA RA / APEL,,
+XI TKI 2,Senin,2,3,PJOK,"Ilham Sungeidi, S.Pd",LAP
+XI TKI 2,Senin,4,6,Matematika,"Basuki Sarjono, S.Pd",R 66
+XI TKI 2,Senin,7,8,Bahasa Jepang,"Rizki Putri Wulandari, S.Pd",R 66
+XI TKI 2,Senin,9,10,Bahasa Inggris,"Komariyah, S.Pd",R 66
+XI TKI 2,Selasa,1,2,"Kreativitas, Inovasi, dan Kewirausahaan","Baskoro, S.Si",R 66
+XI TKI 2,Selasa,3,4,Konsentrasi TKI,"Baskoro, S.Si",R 66
+XI TKI 2,Selasa,5,6,Konsentrasi TKI,"Rifkotin Na'imah, S.Pd",R 66
+XI TKI 2,Selasa,7,8,Mapel Pilihan TKI,"Sri Kusumastuti, S.Pd",R 66
+XI TKI 2,Selasa,9,10,Pendidikan Pancasila,"Sri Kusumastuti, S.Pd",R 66
+XI TKI 2,Rabu,1,3,Bahasa Indonesia,"Yani, S.Pd.",R 66
+XI TKI 2,Rabu,4,6,Konsentrasi TKI,"Ayu Puspitorini, ST",R 66
+XI TKI 2,Rabu,7,10,Konsentrasi TKI,"Diana Hartanti, S.T., M.Pd",R 66
+XI TKI 2,Kamis,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 66
+XI TKI 2,Kamis,4,7,Konsentrasi TKI,"Diana Hartanti, S.T., M.Pd",R 66
+XI TKI 2,Kamis,8,10,Konsentrasi TKI,"Ayu Puspitorini, ST",R 66
+XI TKI 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI TKI 2,Jumat,2,3,Sejarah,"Baskoro, S.Si",R 66
+XI TKI 2,Jumat,4,6,"Kreativitas, Inovasi, dan Kewirausahaan","Baskoro, S.Si",R 66
+XI TKI 2,Jumat,7,8,Bahasa Inggris,"Komariyah, S.Pd",R 66
+XI TKI 2,Jumat,9,10,BK,"Yuni Jiastuti, S.Pd",R 66
+XI TKI 2,Jumat,11,12,Bahasa Jawa,"Yustin Febrini, S.Pd",R 66
+XI RPL 1,Senin,1,1,UPACA RA / APEL,,
+XI RPL 1,Senin,2,4,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 57
+XI RPL 1,Senin,5,6,BK,"Widodo, S.Pd",Lab. RPL 1
+XI RPL 1,Senin,7,10,Konsentrasi RPL,"Kurnila Putri Islamawati, S.Pd",Lab. RPL 1
+XI RPL 1,Selasa,1,4,Konsentrasi RPL,"Kurnila Putri Islamawati, S.Pd",Lab. RPL 1
+XI RPL 1,Selasa,5,7,Konsentrasi RPL,"Shinta Indyar Shanty Susanto, S.Kom",Lab. RPL 1
+XI RPL 1,Selasa,8,10,"Kreativitas, Inovasi, dan Kewirausahaan","Anisa Kusumawati, S.Pd",Lab. RPL 1
+XI RPL 1,Rabu,1,4,Konsentrasi RPL,"Shinta Indyar Shanty Susanto, S.Kom",Lab. RPL 1
+XI RPL 1,Rabu,5,6,Bahasa Inggris,"Isti Mufadah, S.Pd",R 57
+XI RPL 1,Rabu,7,8,Sejarah,"Erna Qoriah, S.E.",R 57
+XI RPL 1,Rabu,9,10,Bahasa Jawa,"Laili Ermawati, S.Pd",R 57
+XI RPL 1,Kamis,1,3,Konsentrasi RPL,"Shinta Indyar Shanty Susanto, S.Kom",Lab. RPL 1
+XI RPL 1,Kamis,4,5,Mapel Pilihan RPL,"Hendro Suwignyo, ST",Lab. RPL 1
+XI RPL 1,Kamis,6,7,PJOK,"Zainul Arifin,S.Pd",LAP
+XI RPL 1,Kamis,8,10,Bahasa Indonesia,"Umi Kulsum, S.Pd",R 57
+XI RPL 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI RPL 1,Jumat,2,3,"Kreativitas, Inovasi, dan Kewirausahaan","Anisa Kusumawati, S.Pd",R 57
+XI RPL 1,Jumat,4,5,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 57
+XI RPL 1,Jumat,6,7,Bahasa Jepang,"Sulistyowati, SS",R 57
+XI RPL 1,Jumat,8,9,Bahasa Inggris,"Isti Mufadah, S.Pd",Lab. RPL 1
+XI RPL 1,Jumat,10,12,Matematika,"Lutfia Marsalina, S.Pd.I, M.Pd.",R 57
+XI RPL 2,Senin,1,1,UPACA RA / APEL,,
+XI RPL 2,Senin,2,4,"Kreativitas, Inovasi, dan Kewirausahaan","Anisa Kusumawati, S.Pd",R 58
+XI RPL 2,Senin,5,6,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 58
+XI RPL 2,Senin,7,10,Konsentrasi RPL,"Badrus Sulaiman, S.Pd.",Lab. RPL 2
+XI RPL 2,Selasa,1,3,Matematika,"Lutfia Marsalina, S.Pd.I, M.Pd.",R 58
+XI RPL 2,Selasa,4,5,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 58
+XI RPL 2,Selasa,6,7,PJOK,"Zainul Arifin,S.Pd",LAP
+XI RPL 2,Selasa,8,10,Konsentrasi RPL,"Badrus Sulaiman, S.Pd.",Lab. RPL 2
+XI RPL 2,Rabu,1,4,Konsentrasi RPL,"Kurnila Putri Islamawati, S.Pd",Lab. RPL 2
+XI RPL 2,Rabu,5,6,Mapel Pilihan RPL,"Hendro Suwignyo, ST",Lab. RPL 2
+XI RPL 2,Rabu,7,8,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 58
+XI RPL 2,Rabu,9,10,Sejarah,"Erna Qoriah, S.E.",R 58
+XI RPL 2,Kamis,1,2,Bahasa Jepang,"Sulistyowati, SS",R 58
+XI RPL 2,Kamis,3,4,BK,"Widodo, S.Pd",R 58
+XI RPL 2,Kamis,5,6,Bahasa Jawa,"Laili Ermawati, S.Pd",Lab. RPL 2
+XI RPL 2,Kamis,7,10,Konsentrasi RPL,"Kurnila Putri Islamawati, S.Pd",Lab. RPL 2
+XI RPL 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI RPL 2,Jumat,2,4,Bahasa Indonesia,"Winartin, S.Pd",R 58
+XI RPL 2,Jumat,5,7,Pendidikan Agama Islam dan Budi Pekerti,"Mufatiroh, S.Ag",R 58
+XI RPL 2,Jumat,8,10,Konsentrasi RPL,"Badrus Sulaiman, S.Pd.",Lab. RPL 2
+XI RPL 2,Jumat,11,12,"Kreativitas, Inovasi, dan Kewirausahaan","Anisa Kusumawati, S.Pd",Lab. RPL 2
+XI TKJ 1,Senin,1,1,UPACA RA / APEL,,
+XI TKJ 1,Senin,2,3,Bahasa Jepang,"Sulistyowati, SS",Lab. TKJ 1
+XI TKJ 1,Senin,4,6,Bahasa Indonesia,"Sri Rahayu, S.Pd",Lab. TKJ 1
+XI TKJ 1,Senin,7,10,Konsentrasi TKJ,"Siti Munawaroh, S.Kom.,M.Pd",Lab. TKJ 1
+XI TKJ 1,Selasa,1,2,Bahasa Inggris,"Isti Mufadah, S.Pd",Lab. TKJ 1
+XI TKJ 1,Selasa,3,5,"Kreativitas, Inovasi, dan Kewirausahaan","Niken Dewi Hastika, S.Pd",Lab. TKJ 1
+XI TKJ 1,Selasa,6,7,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+XI TKJ 1,Selasa,8,10,Konsentrasi TKJ,"Siswanti Purwaningsih, S.T., M.Pd",Lab. TKJ 1
+XI TKJ 1,Rabu,1,2,Sejarah,"Baskoro, S.Si",Lab. TKJ 1
+XI TKJ 1,Rabu,3,4,Bahasa Inggris,"Isti Mufadah, S.Pd",Lab. TKJ 1
+XI TKJ 1,Rabu,5,6,Mapel Pilihan TKJ,"Listyana Hartati, S.Kom., M.Pd",Lab. TKJ 1
+XI TKJ 1,Rabu,7,8,"Konsentrasi TKJ Endang Ary Handayani,","S.T., M.Pd",Lab. TKJ 1
+XI TKJ 1,Rabu,9,10,Bahasa Jawa,"Luluk Munfarida,S.Pd",Lab. TKJ 1
+XI TKJ 1,Kamis,1,3,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,Lab. TKJ 1
+XI TKJ 1,Kamis,4,5,BK,"Nishfu Laili,S.Pd",Lab. TKJ 1
+XI TKJ 1,Kamis,6,10,Konsentrasi TKJ,"Listyana Hartati, S.Kom.,M.Pd",Lab. TKJ 1
+XI TKJ 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI TKJ 1,Jumat,2,4,Matematika,"Lutfia Marsalina, S.Pd.I, M.Pd.",Lab. TKJ 1
+XI TKJ 1,Jumat,5,8,Konsentrasi TKJ,"Ary Sunaryo, ST.,M.Pd",Lab. TKJ 1
+XI TKJ 1,Jumat,9,10,Pendidikan Pancasila,"Fitri Amaliyah, S.Pd",Lab. TKJ 1
+XI TKJ 1,Jumat,11,12,"Kreativitas, Inovasi, dan Kewirausahaan","Niken Dewi Hastika, S.Pd",Lab. TKJ 1
+XI TKJ 2,Senin,1,1,UPACA RA / APEL,,
+XI TKJ 2,Senin,2,3,Bahasa Jawa,"Luluk Munfarida,S.Pd",R 34
+XI TKJ 2,Senin,4,5,"Konsentrasi TKJ Endang Ary Handayani,","S.T., M.Pd",Lab. TKJ 2 (FO)
+XI TKJ 2,Senin,6,8,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,R 34
+XI TKJ 2,Senin,9,10,Bahasa Inggris,"Isti Mufadah, S.Pd",R 34
+XI TKJ 2,Selasa,1,3,Matematika,"Elysa Yuli Nur'aini, S.Si",R 34
+XI TKJ 2,Selasa,4,5,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",R 34
+XI TKJ 2,Selasa,6,10,Konsentrasi TKJ,"Listyana Hartati, S.Kom.,M.Pd",Lab. TKJ 2 (FO)
+XI TKJ 2,Rabu,1,2,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+XI TKJ 2,Rabu,3,4,Mapel Pilihan TKJ,"Listyana Hartati, S.Kom., M.Pd",Lab. TKJ 2 (FO)
+XI TKJ 2,Rabu,5,6,BK,"Nishfu Laili,S.Pd",R 34
+XI TKJ 2,Rabu,7,10,Konsentrasi TKJ,"Ary Sunaryo, ST.,M.Pd",Lab. TKJ 2 (FO)
+XI TKJ 2,Kamis,1,2,Sejarah,"Baskoro, S.Si",R 34
+XI TKJ 2,Kamis,3,4,Bahasa Inggris,"Isti Mufadah, S.Pd",R 34
+XI TKJ 2,Kamis,5,7,Konsentrasi TKJ,"Siswanti Purwaningsih, S.T., M.Pd",Lab. TKJ 2 (FO)
+XI TKJ 2,Kamis,8,10,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",R 34
+XI TKJ 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI TKJ 2,Jumat,2,3,Pendidikan Pancasila,"Fitri Amaliyah, S.Pd",R 34
+XI TKJ 2,Jumat,4,6,Bahasa Indonesia,"Sri Rahayu, S.Pd",R 34
+XI TKJ 2,Jumat,7,10,Konsentrasi TKJ,"Siti Munawaroh, S.Kom.,M.Pd",Lab. TKJ 2 (FO)
+XI TKJ 2,Jumat,11,12,Bahasa Jepang,"Sulistyowati, SS",R 34
+XI BD 1,Senin,1,1,UPACA RA / APEL,,
+XI BD 1,Senin,2,3,Bahasa Jawa,"Muhammad Fajar Assidiqi, S.Pd",R 26
+XI BD 1,Senin,4,6,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",R 26
+XI BD 1,Senin,7,10,Mapel Pilihan BD,"Andri Krisdianto, SE.,M.Pd",R 26
+XI BD 1,Selasa,1,2,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 26
+XI BD 1,Selasa,3,4,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 26
+XI BD 1,Selasa,5,7,Konsentrasi BD,"Nurul Azizah, S.Pd",R 26
+XI BD 1,Selasa,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 26
+XI BD 1,Rabu,1,2,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",R 26
+XI BD 1,Rabu,3,5,Matematika,"Arvia Rienetasary, S.Pd",R 26
+XI BD 1,Rabu,6,7,PJOK,"Agus Fahruddy, S.Pd., M.Pd",Lapangan
+XI BD 1,Rabu,8,10,Konsentrasi BD,"Niken Dewi Hastika, S.Pd",R 26
+XI BD 1,Kamis,1,2,BK,"Nur Eko Wahyuningsih, S.Pd",R 26
+XI BD 1,Kamis,3,4,Konsentrasi BD,"Andri Krisdianto, SE., M.Pd",R 26
+XI BD 1,Kamis,5,8,Konsentrasi BD,"Agung Yulianto, S.Pd",R 26
+XI BD 1,Kamis,9,10,Konsentrasi BD,"Niken Dewi Hastika, S.Pd",R 26
+XI BD 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI BD 1,Jumat,2,3,Konsentrasi BD,"Nurul Azizah, S.Pd",R 26
+XI BD 1,Jumat,4,5,Konsentrasi BD,"Luluk Munfarida,S.Pd",R 26
+XI BD 1,Jumat,6,7,Sejarah,Dra. Anik Indriani,R 26
+XI BD 1,Jumat,8,10,Bahasa Indonesia,"Erna Rinawati, S.Pd",R 26
+XI BD 1,Jumat,11,12,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 26
+XI BD 2,Senin,1,1,UPACA RA / APEL,,
+XI BD 2,Senin,2,5,Konsentrasi BD,"Agung Yulianto, S.Pd",R 61
+XI BD 2,Senin,6,7,Sejarah,Dra. Anik Indriani,R 61
+XI BD 2,Senin,8,10,Bahasa Indonesia,"Erna Rinawati, S.Pd",R 61
+XI BD 2,Selasa,1,3,Matematika,"Arvia Rienetasary, S.Pd",R 61
+XI BD 2,Selasa,4,7,Mapel Pilihan BD,"Andri Krisdianto, SE.,M.Pd",R 61
+XI BD 2,Selasa,8,10,Konsentrasi BD,"Nurul Azizah, S.Pd",R 61
+XI BD 2,Rabu,1,2,PJOK,"Agus Fahruddy, S.Pd., M.Pd",Lapangan
+XI BD 2,Rabu,3,4,Konsentrasi BD,"Niken Dewi Hastika, S.Pd",R 61
+XI BD 2,Rabu,5,6,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",R 61
+XI BD 2,Rabu,7,8,Konsentrasi BD,"Andri Krisdianto, SE., M.Pd",R 61
+XI BD 2,Rabu,9,10,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 61
+XI BD 2,Kamis,1,3,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",R 61
+XI BD 2,Kamis,4,6,Konsentrasi BD,"Niken Dewi Hastika, S.Pd",R 61
+XI BD 2,Kamis,7,8,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 61
+XI BD 2,Kamis,9,10,Bahasa Jawa,"Muhammad Fajar Assidiqi, S.Pd",R 61
+XI BD 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI BD 2,Jumat,2,3,Konsentrasi BD,"Luluk Munfarida,S.Pd",R 61
+XI BD 2,Jumat,4,6,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 61
+XI BD 2,Jumat,7,8,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",R 61
+XI BD 2,Jumat,9,10,BK,"Dian Mawarti, S.Pd",R 61
+XI BD 2,Jumat,11,12,Konsentrasi BD,"Luluk Munfarida,S.Pd",R 61
+XI BD 3,Senin,1,1,UPACA RA / APEL,,
+XI BD 3,Senin,2,3,Sejarah,Dra. Anik Indriani,Lab. BD Depan
+XI BD 3,Senin,4,7,Mapel Pilihan BD,"Niken Dewi Hastika, S.Pd",Lab. BD Depan
+XI BD 3,Senin,8,10,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",Lab. BD Depan
+XI BD 3,Selasa,1,2,BK,"Dian Mawarti, S.Pd",Lab. BD Depan
+XI BD 3,Selasa,3,4,Konsentrasi BD,"Luluk Munfarida,S.Pd",Lab. BD Depan
+XI BD 3,Selasa,5,8,Konsentrasi BD,"Agung Yulianto, S.Pd",Lab. BD Depan
+XI BD 3,Selasa,9,10,Bahasa Jawa,"Luluk Munfarida,S.Pd",Lab. BD Depan
+XI BD 3,Rabu,1,2,Konsentrasi BD,"Niken Dewi Hastika, S.Pd",Lab. BD Depan
+XI BD 3,Rabu,3,4,"Kreativitas, Inovasi, dan Kewirausahaan","Erna Qoriah, S.E.",Lab. BD Depan
+XI BD 3,Rabu,5,7,Konsentrasi BD,"Nurul Azizah, S.Pd",Lab. BD Depan
+XI BD 3,Rabu,8,10,Bahasa Indonesia,"Umi Kulsum, S.Pd",Lab. BD Depan
+XI BD 3,Kamis,1,2,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",Lab. BD Depan
+XI BD 3,Kamis,3,4,PJOK,"Bella Prakoso, S.Pd",Lapangan
+XI BD 3,Kamis,5,7,Matematika,"Ajeng Okvitasari, S.Pd",Lab. BD Depan
+XI BD 3,Kamis,8,10,Konsentrasi BD,"Nurul Azizah, S.Pd",Lab. BD Depan
+XI BD 3,Jumat,1,1,Pembia saan Hari Jumat,,
+XI BD 3,Jumat,2,4,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",Lab. BD Depan
+XI BD 3,Jumat,5,6,Bahasa Inggris,"Dwi Rini Manfaati, S.Pd",Lab. BD Depan
+XI BD 3,Jumat,7,8,Konsentrasi BD,"Anisa Kusumawati, S.Pd",Lab. BD Depan
+XI BD 3,Jumat,9,10,Konsentrasi BD,"Luluk Munfarida,S.Pd",Lab. BD Depan
+XI BD 3,Jumat,11,12,Pendidikan Pancasila,"Nurul Azizah, S.Pd",Lab. BD Depan
+XI MP 1,Senin,1,1,UPACA RA APEL,,
+XI MP 1,Senin,2,5,Konsentrasi MP,"Martiin, S.Pd",Lab. AP BAWAH
+XI MP 1,Senin,6,8,Bahasa Indonesia,"Purwati,S.Pd",R 6
+XI MP 1,Senin,9,10,Mapel Pilihan MP,"Tutut Sriatin, S.Pd",R 6
+XI MP 1,Selasa,1,2,Konsentrasi MP,"Martiin, S.Pd",Lab. AP BAWAH
+XI MP 1,Selasa,3,5,Konsentrasi MP,"Martiin, S.Pd",Lab. AP BAWAH
+XI MP 1,Selasa,6,8,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",R 6
+XI MP 1,Selasa,9,10,Bahasa Inggris,"Komariyah, S.Pd",R 6
+XI MP 1,Rabu,1,2,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 6
+XI MP 1,Rabu,3,6,Konsentrasi MP,"Martiin, S.Pd",Lab. AP BAWAH
+XI MP 1,Rabu,7,8,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 6
+XI MP 1,Rabu,9,10,Bahasa Jepang,"Sulistyowati, SS",R 6
+XI MP 1,Kamis,1,2,PJOK,"Zainul Arifin,S.Pd",LAP
+XI MP 1,Kamis,3,4,Sejarah,Dra. Anik Indriani,R 6
+XI MP 1,Kamis,5,7,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 6
+XI MP 1,Kamis,8,10,Matematika,"Laili Ermawati, S.Pd",R 6
+XI MP 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI MP 1,Jumat,2,3,Konsentrasi MP,"Martiin, S.Pd",Lab. AP BAWAH
+XI MP 1,Jumat,4,6,Konsentrasi MP,"Martiin, S.Pd",Lab. AP BAWAH
+XI MP 1,Jumat,7,8,BK Veronica Damay,"Rulitasari, S.Pd",R 6
+XI MP 1,Jumat,9,10,Bahasa Inggris,"Komariyah, S.Pd",R 6
+XI MP 1,Jumat,11,12,Bahasa Jawa,"Muhammad Fajar Assidiqi, S.Pd",R 6
+XI MP 2,Senin,1,1,UPACA RA / APEL,,
+XI MP 2,Senin,2,3,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 7
+XI MP 2,Senin,4,6,Matematika,"Laili Ermawati, S.Pd",R 7
+XI MP 2,Senin,7,10,Konsentrasi MP,"Sunarti, S.Pd",Lab. AP BAWAH
+XI MP 2,Selasa,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",R 7
+XI MP 2,Selasa,4,5,PJOK,"Zainul Arifin,S.Pd",Lapangan
+XI MP 2,Selasa,6,8,Konsentrasi MP,"Sunarti, S.Pd",Lab. AP BAWAH
+XI MP 2,Selasa,9,10,Mapel Pilihan MP,"Tutut Sriatin, S.Pd",R 7
+XI MP 2,Rabu,1,2,Konsentrasi MP,"Sunarti, S.Pd",Lab. AP BAWAH
+XI MP 2,Rabu,3,4,Bahasa Jepang,"Sulistyowati, SS",R 7
+XI MP 2,Rabu,5,6,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 7
+XI MP 2,Rabu,7,8,Konsentrasi MP,"Sunarti, S.Pd",Lab. AP BAWAH
+XI MP 2,Rabu,9,10,Bahasa Inggris,"Komariyah, S.Pd",R 7
+XI MP 2,Kamis,1,3,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 7
+XI MP 2,Kamis,4,5,Bahasa Jawa,"Muhammad Fajar Assidiqi, S.Pd",R 7
+XI MP 2,Kamis,6,7,Sejarah,Dra. Anik Indriani,R 7
+XI MP 2,Kamis,8,10,Konsentrasi MP,"Sunarti, S.Pd",Lab. AP BAWAH
+XI MP 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI MP 2,Jumat,2,4,Bahasa Indonesia,"Purwati,S.Pd",R 7
+XI MP 2,Jumat,5,6,Bahasa Inggris,"Komariyah, S.Pd",R 7
+XI MP 2,Jumat,7,10,Konsentrasi MP,"Sunarti, S.Pd",Lab. AP BAWAH
+XI MP 2,Jumat,11,12,BK,"Siti Maisaroh, S.Pd",R 7
+XI MP 3,Senin,1,1,UPACA RA / APEL,,
+XI MP 3,Senin,2,4,Matematika,"Rulik Indrawati, S.Pd",R 8
+XI MP 3,Senin,5,6,Bahasa Jepang,"Sulistyowati, SS",R 8
+XI MP 3,Senin,7,10,Konsentrasi MP,"Titik Samsistini, S.Pd",Lab. AP ATAS
+XI MP 3,Selasa,1,3,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 8
+XI MP 3,Selasa,4,6,Bahasa Indonesia,"Endang Safitri, S.Pd",R 8
+XI MP 3,Selasa,7,8,Konsentrasi MP,"Titik Samsistini, S.Pd",Lab. AP ATAS
+XI MP 3,Selasa,9,10,Konsentrasi MP,"Titik Samsistini, S.Pd",Lab. AP ATAS
+XI MP 3,Rabu,1,2,PJOK,"Zainul Arifin,S.Pd",Lapangan
+XI MP 3,Rabu,3,6,Konsentrasi MP,"Titik Samsistini, S.Pd",Lab. AP ATAS
+XI MP 3,Rabu,7,8,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 8
+XI MP 3,Rabu,9,10,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 8
+XI MP 3,Kamis,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Fitria Diah Ayu Hartati, S.Pd",R 8
+XI MP 3,Kamis,4,6,Konsentrasi MP,"Titik Samsistini, S.Pd",Lab. AP ATAS
+XI MP 3,Kamis,7,8,BK Veronica Damay,"Rulitasari, S.Pd",R 8
+XI MP 3,Kamis,9,10,Mapel Pilihan MP,"Tutut Sriatin, S.Pd",R 8
+XI MP 3,Jumat,1,1,Pembia saan Hari Jumat,,
+XI MP 3,Jumat,2,3,Sejarah,Dra. Anik Indriani,R 8
+XI MP 3,Jumat,4,5,Bahasa Jawa,"Rizki Putri Wulandari, S.Pd",R 8
+XI MP 3,Jumat,6,7,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 8
+XI MP 3,Jumat,8,10,Konsentrasi MP,"Titik Samsistini, S.Pd",Lab. AP ATAS
+XI MP 3,Jumat,11,12,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 8
+XI MP 4,Senin,1,1,UPACA RA / APEL,,
+XI MP 4,Senin,2,5,Konsentrasi MP,"Mega Mahardika, S.Pd",Lab. AP ATAS
+XI MP 4,Senin,6,7,BK Veronica Damay,"Rulitasari, S.Pd",R 9
+XI MP 4,Senin,8,10,Matematika,"Rulik Indrawati, S.Pd",R 9
+XI MP 4,Selasa,1,4,Konsentrasi MP,"Mega Mahardika, S.Pd",Lab. AP ATAS
+XI MP 4,Selasa,5,6,Sejarah,Dra. Anik Indriani,R 9
+XI MP 4,Selasa,7,8,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 9
+XI MP 4,Selasa,9,10,Bahasa Jawa,"Rizki Putri Wulandari, S.Pd",R 9
+XI MP 4,Rabu,1,2,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 9
+XI MP 4,Rabu,3,5,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 9
+XI MP 4,Rabu,6,7,PJOK,"Zainul Arifin,S.Pd",Lapangan
+XI MP 4,Rabu,8,10,Konsentrasi MP,"Mega Mahardika, S.Pd",Lab. AP ATAS
+XI MP 4,Kamis,1,3,Konsentrasi MP,"Mega Mahardika, S.Pd",Lab. AP ATAS
+XI MP 4,Kamis,4,5,Mapel Pilihan MP,"Tutut Sriatin, S.Pd",R 9
+XI MP 4,Kamis,6,7,Bahasa Jepang,"Sulistyowati, SS",R 9
+XI MP 4,Kamis,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 9
+XI MP 4,Jumat,1,1,Pembia saan Hari Jumat,,
+XI MP 4,Jumat,2,3,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 9
+XI MP 4,Jumat,4,5,"Kreativitas, Inovasi, dan Kewirausahaan",Dra. Susakti Yuharini,R 9
+XI MP 4,Jumat,6,7,Konsentrasi MP,"Mega Mahardika, S.Pd",Lab. AP ATAS
+XI MP 4,Jumat,8,10,Bahasa Indonesia,"Endang Safitri, S.Pd",R 9
+XI MP 4,Jumat,11,12,Konsentrasi MP,"Mega Mahardika, S.Pd",Lab. AP ATAS
+XI AK 1,Senin,1,1,UPACA RA / APEL,,
+XI AK 1,Senin,2,3,Konsentrasi AK,"Kasmi, S.Pd., M.Pd",R 5
+XI AK 1,Senin,4,5,Sejarah,Dra. Anik Indriani,R 5
+XI AK 1,Senin,6,8,Matematika,"Eko Saputro, S.Pd",R 5
+XI AK 1,Senin,9,10,Bahasa Jawa,"Muhammad Fajar Assidiqi, S.Pd",R 5
+XI AK 1,Selasa,1,2,PJOK,"Agus Fahruddy, S.Pd., M.Pd",Lapangan
+XI AK 1,Selasa,3,4,BK,"Astra Bella Flamboyan, S.Psi",R 5
+XI AK 1,Selasa,5,10,Konsentrasi AK,"Indayah, S.Pd., M.Pd",Lab. AK BAWAH
+XI AK 1,Rabu,1,2,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 5
+XI AK 1,Rabu,3,4,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 5
+XI AK 1,Rabu,5,6,Bahasa Jepang,"Sulistyowati, SS",R 5
+XI AK 1,Rabu,7,10,Konsentrasi AK,"Septiani, S.Pd.,M.Pd",R 5
+XI AK 1,Kamis,1,3,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 5
+XI AK 1,Kamis,4,5,"Konsentrasi AK Agustina Mardika Rini,","S.Pd.,M.Pd",R 5
+XI AK 1,Kamis,6,10,"Kreativitas, Inovasi, dan Kewirausahaan","Kasmi, S.Pd., M.Pd",Lab. AK BAWAH
+XI AK 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI AK 1,Jumat,2,3,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 5
+XI AK 1,Jumat,4,7,Konsentrasi AK,"Dyah Esti Rahayu, S.Pd",Lab. AK BAWAH
+XI AK 1,Jumat,8,10,Bahasa Indonesia,"Winartin, S.Pd",R 5
+XI AK 1,Jumat,11,12,Mapel Pilihan AK,"Yuli Ratnasari, S.Pd",R 5
+XI AK 2,Senin,1,1,UPACA RA / APEL,,
+XI AK 2,Senin,2,5,Konsentrasi AK,"Dyah Esti Rahayu, S.Pd",Lab. AK BAWAH
+XI AK 2,Senin,6,8,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 62
+XI AK 2,Senin,9,10,Bahasa Jepang,"Sulistyowati, SS",R 62
+XI AK 2,Selasa,1,2,Sejarah,Dra. Anik Indriani,R 62
+XI AK 2,Selasa,3,4,PJOK,"Agus Fahruddy, S.Pd., M.Pd",LAP
+XI AK 2,Selasa,5,6,Mapel Pilihan AK,"Yuli Ratnasari, S.Pd",R 62
+XI AK 2,Selasa,7,10,Konsentrasi AK,"Yuli Ratnasari, S.Pd",R 62
+XI AK 2,Rabu,1,6,Konsentrasi AK,"Pipit Ambarwati, S.Pd",Lab. AK BAWAH
+XI AK 2,Rabu,7,8,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 62
+XI AK 2,Rabu,9,10,Bahasa Jawa,"Muhammad Fajar Assidiqi, S.Pd",R 62
+XI AK 2,Kamis,1,5,"Kreativitas, Inovasi, dan Kewirausahaan","Kasmi, S.Pd., M.Pd",Lab. AK BAWAH
+XI AK 2,Kamis,6,8,Bahasa Indonesia,"Winartin, S.Pd",R 62
+XI AK 2,Kamis,9,10,Konsentrasi AK,"Setiyo Winarko, S.Pd",R 62
+XI AK 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI AK 2,Jumat,2,3,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 62
+XI AK 2,Jumat,4,6,Matematika,"Ajeng Okvitasari, S.Pd",R 62
+XI AK 2,Jumat,7,8,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 62
+XI AK 2,Jumat,9,10,Konsentrasi AK,"Kasmi, S.Pd., M.Pd",R 62
+XI AK 2,Jumat,11,12,BK,"Winarsih, S.Pd, M.Pd",R 62
+XI AK 3,Senin,1,1,UPACA RA / APEL,,
+XI AK 3,Senin,2,4,Pendidikan Agama Islam dan Budi Pekerti,"Alfinu Farikh Abdillah, S.Pd.I",R 63
+XI AK 3,Senin,5,6,PJOK,"Agus Fahruddy, S.Pd., M.Pd",LAP
+XI AK 3,Senin,7,10,Konsentrasi AK,"Atih Wilupi, S.E, M.Pd",R 63
+XI AK 3,Selasa,1,3,Bahasa Indonesia,"Winartin, S.Pd",R 63
+XI AK 3,Selasa,4,8,"Kreativitas, Inovasi, dan Kewirausahaan","Ninik Sriwidayati, S.Pd.,M.Pd",Lab. AK ATAS
+XI AK 3,Selasa,9,10,Konsentrasi AK,"Setiyo Winarko, S.Pd",R 63
+XI AK 3,Rabu,1,6,Konsentrasi AK,"Atih Wilupi, S.E, M.Pd",Lab. AK ATAS
+XI AK 3,Rabu,7,8,Mapel Pilihan AK,"Yuli Ratnasari, S.Pd",R 63
+XI AK 3,Rabu,9,10,Bahasa Jawa,"Rizki Putri Wulandari, S.Pd",R 63
+XI AK 3,Kamis,1,2,Sejarah,Dra. Anik Indriani,R 63
+XI AK 3,Kamis,3,4,Bahasa Jepang,"Sulistyowati, SS",R 63
+XI AK 3,Kamis,5,8,Konsentrasi AK,"Dyah Esti Rahayu, S.Pd",Lab. AK ATAS
+XI AK 3,Kamis,9,10,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 63
+XI AK 3,Jumat,1,1,Pembia saan Hari Jumat,,
+XI AK 3,Jumat,2,4,Matematika,"Arvia Rienetasary, S.Pd",R 63
+XI AK 3,Jumat,5,6,Konsentrasi AK,"Indayah, S.Pd., M.Pd",R 63
+XI AK 3,Jumat,7,8,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 63
+XI AK 3,Jumat,9,10,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 63
+XI AK 3,Jumat,11,12,BK,"Nur Eko Wahyuningsih, S.Pd",R 63
+XI AK 4,Senin,1,1,UPACA RA / APEL,,
+XI AK 4,Senin,2,6,"Kreativitas, Inovasi, dan Kewirausahaan","Ninik Sriwidayati, S.Pd.,M.Pd",Lab. AK ATAS
+XI AK 4,Senin,7,8,Bahasa Jepang,"Sulistyowati, SS",R 64
+XI AK 4,Senin,9,10,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 64
+XI AK 4,Selasa,1,2,Mapel Pilihan AK,"Yuli Ratnasari, S.Pd",R 64
+XI AK 4,Selasa,3,4,Sejarah,Dra. Anik Indriani,R 64
+XI AK 4,Selasa,5,6,BK,"Nur Eko Wahyuningsih, S.Pd",R 64
+XI AK 4,Selasa,7,10,Konsentrasi AK,"Atih Wilupi, S.E, M.Pd",R 64
+XI AK 4,Rabu,1,2,Bahasa Jawa,"Rizki Putri Wulandari, S.Pd",R 64
+XI AK 4,Rabu,3,4,Bahasa Inggris,"Andri Retno Yuli Astuti, S.Pd",R 64
+XI AK 4,Rabu,5,6,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 64
+XI AK 4,Rabu,7,8,Konsentrasi AK,"Ninik Sriwidayati, S.Pd., M.Pd",R 64
+XI AK 4,Rabu,9,10,Konsentrasi AK,"Indayah, S.Pd., M.Pd",R 64
+XI AK 4,Kamis,1,4,Konsentrasi AK,"Titin Sukmasari, S.Pd., M.Pd",Lab. AK ATAS
+XI AK 4,Kamis,5,7,Bahasa Indonesia,"Siti Khoiriyah, S.Pd",R 64
+XI AK 4,Kamis,8,10,Matematika,"Basuki Sarjono, S.Pd",R 64
+XI AK 4,Jumat,1,1,Pembia saan Hari Jumat,,
+XI AK 4,Jumat,2,3,PJOK,"Agus Fahruddy, S.Pd., M.Pd",LAP
+XI AK 4,Jumat,4,9,Konsentrasi AK,"Septiani, S.Pd.,M.Pd",Lab. AK ATAS
+XI AK 4,Jumat,10,12,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",R 64
+XI ULW,Senin,1,1,UPACA RA / APEL,,
+XI ULW,Senin,2,4,Bahasa Indonesia,"Purwati,S.Pd",Lab. UPW 2 (Ticketing)
+XI ULW,Senin,5,8,Konsentrasi ULW,"Risqi Nur Imama, S.Tr.Par",Lab. UPW 1 (Guiding)
+XI ULW,Senin,9,10,Bahasa Inggris,"Fitria Renytasari, S.Pd",Lab. UPW 2 (Ticketing)
+XI ULW,Selasa,1,2,Bahasa Inggris,"Fitria Renytasari, S.Pd",Lab. UPW 2 (Ticketing)
+XI ULW,Selasa,3,6,Konsentrasi ULW,"Risqi Nur Imama, S.Tr.Par",Lab. UPW 1 (Guiding)
+XI ULW,Selasa,7,8,"Kreativitas, Inovasi, dan Kewirausahaan","Nur Nastutisari, S.ST.Par.",Lab. UPW 1 (Guiding)
+XI ULW,Selasa,9,10,Sejarah,"Erna Qoriah, S.E.",Lab. UPW 2 (Ticketing)
+XI ULW,Rabu,1,2,Bahasa Jepang,"Sulistyowati, SS",Lab. UPW 2 (Ticketing)
+XI ULW,Rabu,3,5,"Kreativitas, Inovasi, dan Kewirausahaan","Nur Nastutisari, S.ST.Par.",Lab. UPW 2 (Ticketing)
+XI ULW,Rabu,6,8,Konsentrasi ULW,"Nur Nastutisari, S.ST.Par.",Lab. UPW 2 (Ticketing)
+XI ULW,Rabu,9,10,Bahasa Jawa,"Ajeng Okvitasari, S.Pd",Lab. UPW 2 (Ticketing)
+XI ULW,Kamis,1,2,PJOK,"Bella Prakoso, S.Pd",Lapangan
+XI ULW,Kamis,3,5,Matematika,"Dwi Nova Setyandari, S.Pd",Lab. UPW 2 (Ticketing)
+XI ULW,Kamis,6,8,Konsentrasi ULW,"Nur Nastutisari, S.ST.Par.",Lab. UPW 2 (Ticketing)
+XI ULW,Kamis,9,10,Bahasa Jepang,"Sulistyowati, SS",Lab. UPW 2 (Ticketing)
+XI ULW,Jumat,1,1,Pembia saan Hari Jumat,,
+XI ULW,Jumat,2,4,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",Lab. UPW 2 (Ticketing)
+XI ULW,Jumat,5,8,Konsentrasi ULW,"Risqi Nur Imama, S.Tr.Par",Lab. UPW 1 (Guiding)
+XI ULW,Jumat,9,10,BK,"Niken Hari Pratiwi, S.Psi., M.Pd",Lab. UPW 2 (Ticketing)
+XI ULW,Jumat,11,12,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",Lab. UPW 2 (Ticketing)
+XI DKV 1,Senin,1,1,UPACA RA / APEL,,
+XI DKV 1,Senin,2,3,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 17
+XI DKV 1,Senin,4,6,Konsentrasi DKV,"Danang Anjar Hymawanto, S.Pd",Lab. DKV Komputer
+XI DKV 1,Senin,7,10,Konsentrasi DKV,"Istiana Suhartati, S.T",Lab. DKV Komputer
+XI DKV 1,Selasa,1,3,Konsentrasi DKV,"Agus Pramono, S.Sn",R 17
+XI DKV 1,Selasa,4,6,Konsentrasi DKV,"Khoyrotun Hisani, S.Sn",R 17
+XI DKV 1,Selasa,7,8,"Kreativitas, Inovasi, dan Kewirausahaan","Mas'an Widodo, S.Pd. M.T",R 17
+XI DKV 1,Selasa,9,10,Sejarah,"Indriati, S.Pd",R 17
+XI DKV 1,Rabu,1,2,BK,"Astra Bella Flamboyan, S.Psi",R 17
+XI DKV 1,Rabu,3,5,Konsentrasi DKV,"Khoyrotun Hisani, S.Sn",Lab. DKV Komputer
+XI DKV 1,Rabu,6,7,Konsentrasi DKV Danang Anjar,"Hymawanto, S.Pd",Lab. DKV Komputer
+XI DKV 1,Rabu,8,10,"Kreativitas, Inovasi, dan Kewirausahaan","Mas'an Widodo, S.Pd. M.T",Lab. DKV Produksi
+XI DKV 1,Kamis,1,2,PJOK,"Ilham Sungeidi, S.Pd",LAP
+XI DKV 1,Kamis,3,4,Bahasa Jawa,"Khoyrotun Hisani, S.Sn",R 17
+XI DKV 1,Kamis,5,7,Bahasa Indonesia,"Endang Safitri, S.Pd",R 17
+XI DKV 1,Kamis,8,10,Matematika,"Elysa Yuli Nur'aini, S.Si",R 17
+XI DKV 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI DKV 1,Jumat,2,5,Mapel Pilihan DKV,"Endik Kuswantoro, S.Kom.,M.T",Lab. DKV Komputer
+XI DKV 1,Jumat,6,7,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 17
+XI DKV 1,Jumat,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 17
+XI DKV 1,Jumat,11,12,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 17
+XI DKV 2,Senin,1,1,UPACA RA / APEL,,
+XI DKV 2,Senin,2,3,BK,"Astra Bella Flamboyan, S.Psi",R 18
+XI DKV 2,Senin,4,6,Konsentrasi DKV,"Khoyrotun Hisani, S.Sn",R 18
+XI DKV 2,Senin,7,8,Bahasa Jawa,"Khoyrotun Hisani, S.Sn",R 18
+XI DKV 2,Senin,9,10,Pendidikan Pancasila,"Abdul Rohman, S.Pd",R 18
+XI DKV 2,Selasa,1,3,Konsentrasi DKV,"Khoyrotun Hisani, S.Sn",Lab. DKV Komputer
+XI DKV 2,Selasa,4,7,Konsentrasi DKV,"Istiana Suhartati, S.T",Lab. DKV Komputer
+XI DKV 2,Selasa,8,10,Konsentrasi DKV,"Danang Anjar Hymawanto, S.Pd",Lab. DKV Komputer
+XI DKV 2,Rabu,1,2,Konsentrasi DKV Danang Anjar,"Hymawanto, S.Pd",R 18
+XI DKV 2,Rabu,3,5,Bahasa Indonesia,"Endang Safitri, S.Pd",R 18
+XI DKV 2,Rabu,6,7,PJOK,"Ilham Sungeidi, S.Pd",Lapangan
+XI DKV 2,Rabu,8,10,Matematika,"Elysa Yuli Nur'aini, S.Si",R 18
+XI DKV 2,Kamis,1,3,"Kreativitas, Inovasi, dan Kewirausahaan","Mas'an Widodo, S.Pd. M.T",R 18
+XI DKV 2,Kamis,4,5,Sejarah,"Indriati, S.Pd",R 18
+XI DKV 2,Kamis,6,7,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 18
+XI DKV 2,Kamis,8,10,Pendidikan Agama Islam dan Budi Pekerti,"Sinta Lestari, S.Pd.I",R 18
+XI DKV 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI DKV 2,Jumat,2,3,"Kreativitas, Inovasi, dan Kewirausahaan","Mas'an Widodo, S.Pd. M.T",R 18
+XI DKV 2,Jumat,4,5,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 18
+XI DKV 2,Jumat,6,9,Mapel Pilihan DKV,"Endik Kuswantoro, S.Kom.,M.T",Lab. DKV Komputer
+XI DKV 2,Jumat,10,12,Konsentrasi DKV,"Agus Pramono, S.Sn",R 18
+XI PSPT 1,Senin,1,1,UPACA RA / APEL,,
+XI PSPT 1,Senin,2,4,Bahasa Indonesia,"Umi Kulsum, S.Pd",R 40
+XI PSPT 1,Senin,5,6,Konsentrasi PSPT,"Benny Mamora, S.Kom",Lab. PSPT Editing
+XI PSPT 1,Senin,7,10,Konsentrasi PSPT,"Joko Priyanto, S.Kom",Lab. PSPT Studio
+XI PSPT 1,Selasa,1,2,Konsentrasi PSPT,"Sa'ad Wazis Hiedayat, S.Pd",Lab. PSPT Editing
+XI PSPT 1,Selasa,3,4,Konsentrasi PSPT,"Sa'ad Wazis Hiedayat, S.Pd",Lab. PSPT Editing
+XI PSPT 1,Selasa,5,6,Konsentrasi PSPT,"Joko Priyanto, S.Kom",Lab. PSPT Studio
+XI PSPT 1,Selasa,7,8,Konsentrasi PSPT,"Joko Priyanto, S.Kom",Lab. PSPT Studio
+XI PSPT 1,Selasa,9,10,BK,"Winarsih, S.Pd, M.Pd",R 40
+XI PSPT 1,Rabu,1,4,Konsentrasi PSPT,"Tuhu Eries Kudori, S.Sn",Lab. PSPT Editing
+XI PSPT 1,Rabu,5,6,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 40
+XI PSPT 1,Rabu,7,8,Pendidikan Pancasila,"Fitri Amaliyah, S.Pd",R 40
+XI PSPT 1,Rabu,9,10,"Kreativitas, Inovasi, dan Kewirausahaan","Siti Umiharsih, S.Pd",R 40
+XI PSPT 1,Kamis,1,4,Mapel Pilihan PSPT,"Tuhu Eries Kudori, S.Sn",Lab. PSPT Editing
+XI PSPT 1,Kamis,5,7,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,R 40
+XI PSPT 1,Kamis,8,10,Matematika,"Ajeng Okvitasari, S.Pd",R 40
+XI PSPT 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI PSPT 1,Jumat,2,3,Bahasa Inggris,"Fajar Wahyu Pratiwi, S.S",R 40
+XI PSPT 1,Jumat,4,5,Sejarah,Dra. Anik Indriani,R 40
+XI PSPT 1,Jumat,6,7,PJOK,"Bella Prakoso, S.Pd",Lapangan
+XI PSPT 1,Jumat,8,9,Bahasa Jawa,"Erna Qoriah, S.E.",R 40
+XI PSPT 1,Jumat,10,12,"Kreativitas, Inovasi, dan Kewirausahaan","Siti Umiharsih, S.Pd",R 40
+XI PSPT 2,Senin,1,1,UPACA RA / APEL,,
+XI PSPT 2,Senin,2,4,Matematika,"Eko Saputro, S.Pd",R 41
+XI PSPT 2,Senin,5,6,"Kreativitas, Inovasi, dan Kewirausahaan","Siti Umiharsih, S.Pd",R 41
+XI PSPT 2,Senin,7,10,Konsentrasi PSPT,"Tuhu Eries Kudori, S.Sn",Lab. PSPT Editing
+XI PSPT 2,Selasa,1,3,Pendidikan Agama Islam dan Budi Pekerti,Dra. Hanik Pangestuti,R 41
+XI PSPT 2,Selasa,4,6,"Kreativitas, Inovasi, dan Kewirausahaan","Siti Umiharsih, S.Pd",R 41
+XI PSPT 2,Selasa,7,8,Sejarah,Dra. Anik Indriani,R 41
+XI PSPT 2,Selasa,9,10,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 41
+XI PSPT 2,Rabu,1,4,Konsentrasi PSPT,"Joko Priyanto, S.Kom",Lab. PSPT Studio
+XI PSPT 2,Rabu,5,8,Mapel Pilihan PSPT,"Tuhu Eries Kudori, S.Sn",Lab. PSPT Editing
+XI PSPT 2,Rabu,9,10,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 41
+XI PSPT 2,Kamis,1,2,Konsentrasi PSPT,"Joko Priyanto, S.Kom",Lab. PSPT Studio
+XI PSPT 2,Kamis,3,4,Konsentrasi PSPT,"Joko Priyanto, S.Kom",Lab. PSPT Studio
+XI PSPT 2,Kamis,5,6,Konsentrasi PSPT,"Sa'ad Wazis Hiedayat, S.Pd",Lab. PSPT Editing
+XI PSPT 2,Kamis,7,8,Konsentrasi PSPT,"Sa'ad Wazis Hiedayat, S.Pd",Lab. PSPT Editing
+XI PSPT 2,Kamis,9,10,Konsentrasi PSPT,"Benny Mamora, S.Kom",Lab. PSPT Editing
+XI PSPT 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI PSPT 2,Jumat,2,3,PJOK,"Bella Prakoso, S.Pd",Lapangan
+XI PSPT 2,Jumat,4,5,BK,"Winarsih, S.Pd, M.Pd",R 41
+XI PSPT 2,Jumat,6,8,Bahasa Indonesia,"Umi Kulsum, S.Pd",R 41
+XI PSPT 2,Jumat,9,10,Bahasa Inggris,"Muto'atul Khosi'ah, S.Pd",R 41
+XI PSPT 2,Jumat,11,12,Bahasa Jawa,"Erna Qoriah, S.E.",R 41
+XI AN 1,Senin,1,1,UPACA RA / APEL,,
+XI AN 1,Senin,2,4,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 59
+XI AN 1,Senin,5,6,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 59
+XI AN 1,Senin,7,8,Konsentrasi AN,"Andika Christian Sasmita, S.ST",Lab. AN COE 2
+XI AN 1,Senin,9,10,"Mapel Pilihan AN Endik Kuswantoro,","S.Kom.,M.T",Lab. AN COE 2
+XI AN 1,Selasa,1,3,Konsentrasi AN,"Erwan Septiyono, S.Pd",Lab. AN COE 1
+XI AN 1,Selasa,4,7,Konsentrasi AN,"Rika Okta Maulida, S.Ds.",Lab. AN COE 1
+XI AN 1,Selasa,8,10,Konsentrasi AN,"Dhuana Putri Puspitasary, S.Pd",Lab. AN COE 1
+XI AN 1,Rabu,1,3,Konsentrasi AN,"Endik Kuswantoro, S.Kom.,M.T",Lab. AN COE 1
+XI AN 1,Rabu,4,6,"Kreativitas, Inovasi, dan Kewirausahaan","Andika Christian Sasmita, S.ST",Lab. AN COE 1
+XI AN 1,Rabu,7,8,Sejarah,"Yustin Febrini, S.Pd",R 59
+XI AN 1,Rabu,9,10,Pendidikan Pancasila,"Khuriyatul Kamila, S.Si",R 59
+XI AN 1,Kamis,1,3,Konsentrasi AN,"Erwan Septiyono, S.Pd",Lab. AN COE 1
+XI AN 1,Kamis,4,5,"Kreativitas, Inovasi, dan Kewirausahaan","Andika Christian Sasmita, S.ST",Lab. AN COE 1
+XI AN 1,Kamis,6,8,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",R 60
+XI AN 1,Kamis,9,10,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 60
+XI AN 1,Jumat,1,1,Pembia saan Hari Jumat,,
+XI AN 1,Jumat,2,3,Mapel Pilihan AN,"Andika Christian Sasmita, S.ST",Lab. AN COE 2
+XI AN 1,Jumat,4,5,PJOK,"Bella Prakoso, S.Pd",LAP
+XI AN 1,Jumat,6,8,Matematika,"Dwi Nova Setyandari, S.Pd",R 59
+XI AN 1,Jumat,9,10,BK,"Siti Maisaroh, S.Pd",R 59
+XI AN 1,Jumat,11,12,Bahasa Jawa,"Ajeng Okvitasari, S.Pd",R 59
+XI AN 2,Senin,1,1,UPACA RA / APEL,,
+XI AN 2,Senin,2,4,Konsentrasi AN,"Dhuana Putri Puspitasary, S.Pd",Lab. AN COE 1
+XI AN 2,Senin,5,8,Konsentrasi AN,"Rika Okta Maulida, S.Ds.",Lab. AN COE 1
+XI AN 2,Senin,9,10,Konsentrasi AN,"Andika Christian Sasmita, S.ST",Lab. AN COE 1
+XI AN 2,Selasa,1,3,"Kreativitas, Inovasi, dan Kewirausahaan","Andika Christian Sasmita, S.ST",Lab. AN COE 2
+XI AN 2,Selasa,4,5,"Mapel Pilihan AN Endik Kuswantoro,","S.Kom.,M.T",Lab. AN COE 2
+XI AN 2,Selasa,6,7,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 59
+XI AN 2,Selasa,8,10,Bahasa Indonesia,"Arif Setyobudi, S.Pd",R 59
+XI AN 2,Rabu,1,2,Bahasa Jawa,"Luluk Munfarida,S.Pd",R 59
+XI AN 2,Rabu,3,4,PJOK,"Bella Prakoso, S.Pd",Lapangan
+XI AN 2,Rabu,5,7,Konsentrasi AN,"Endik Kuswantoro, S.Kom.,M.T",Lab. AN COE 2
+XI AN 2,Rabu,8,10,Konsentrasi AN,"Erwan Septiyono, S.Pd",Lab. AN COE 1
+XI AN 2,Kamis,1,2,BK,"Siti Maisaroh, S.Pd",R 59
+XI AN 2,Kamis,3,5,Pendidikan Agama Islam dan Budi Pekerti,"Muashofah, M.Pd",R 59
+XI AN 2,Kamis,6,8,Matematika,"Dwi Nova Setyandari, S.Pd",R 59
+XI AN 2,Kamis,9,10,Sejarah,"Yustin Febrini, S.Pd",R 59
+XI AN 2,Jumat,1,1,Pembia saan Hari Jumat,,
+XI AN 2,Jumat,2,4,Konsentrasi AN,"Erwan Septiyono, S.Pd",Lab. AN COE 1
+XI AN 2,Jumat,5,6,Mapel Pilihan AN,"Andika Christian Sasmita, S.ST",Lab. AN COE 1
+XI AN 2,Jumat,7,8,"Kreativitas, Inovasi, dan Kewirausahaan","Andika Christian Sasmita, S.ST",Lab. AN COE 1
+XI AN 2,Jumat,9,10,Pendidikan Pancasila,"Wiwik Yuniarsih, S.Pd",R 60
+XI AN 2,Jumat,11,12,Bahasa Inggris,"Agus Muharyanto, M.Pd",R 60

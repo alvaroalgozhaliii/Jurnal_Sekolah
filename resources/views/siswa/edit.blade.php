@@ -24,8 +24,8 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label" for="nis">NIS <span class="req">*</span></label>
-                    <input type="text" id="nis" name="nis" value="{{ old('nis', $siswa->nis) }}" class="form-control" required>
+                    <label class="form-label" for="NISN">NISN <span class="req">*</span></label>
+                    <input type="text" id="NISN" name="NISN" value="{{ old('NISN', $siswa->NISN) }}" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="id_kelas">Kelas <span class="req">*</span></label>

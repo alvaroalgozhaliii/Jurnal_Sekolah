@@ -36,7 +36,7 @@
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
-                        <th>NIS</th>
+                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Jenis Kelamin</th>
                         <th>Status Hari Ini</th>
@@ -68,7 +68,7 @@
                     @endphp
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
-                        <td class="text-muted fw-bold">{{ $s->nis }}</td>
+                        <td class="text-muted fw-bold">{{ $s->NISN }}</td>
                         <td class="fw-bold text-navy">{{ $s->nama }}</td>
                         <td>
                             @if($s->jenis_kelamin == 'L')

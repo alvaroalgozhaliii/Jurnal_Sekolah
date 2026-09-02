@@ -70,7 +70,7 @@ class JurnalHarianController extends Controller
     public function create(Request $request)
     {
         $user = Auth::user();
-        $now = Carbon::now();
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
         $todayDate = $now->toDateString();
 
         $days = [
@@ -105,20 +105,10 @@ class JurnalHarianController extends Controller
         }
 
         $jadwalSelected = null;
-        if ($request->filled('id_jadwal')) {
-            $jadwalSelected = $jadwalList->firstWhere('id_jadwal', (int) $request->id_jadwal);
-        } else {
-            // Auto-detect schedule for today and current jam_ke
-            if ($currentSlot['status'] === 'kbm' && $currentSlot['jam_ke']) {
-                $jadwalSelected = $jadwalList->first(function ($j) use ($currentDayIndo, $currentSlot) {
-                    return $j->hari === $currentDayIndo && (int)$j->jam_ke === (int)$currentSlot['jam_ke'];
-                });
-            }
-
-            // Fallback: if no exact slot match, pick first schedule for today
-            if (!$jadwalSelected) {
-                $jadwalSelected = $jadwalList->firstWhere('hari', $currentDayIndo);
-            }
+        if ($currentSlot['status'] === 'kbm' && !empty($currentSlot['jam_ke'])) {
+            $jadwalSelected = $jadwalList->first(function ($j) use ($currentDayIndo, $currentSlot) {
+                return $j->hari === $currentDayIndo && (int)$j->jam_ke === (int)$currentSlot['jam_ke'];
+            });
         }
 
         return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected', 'currentSlot', 'currentDayIndo', 'now'));
@@ -126,6 +116,13 @@ class JurnalHarianController extends Controller
 
     public function store(Request $request)
     {
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
+        $currentSlot = \App\Services\KbmService::getCurrentSlotInfo($now);
+
+        if ($currentSlot['status'] !== 'kbm') {
+            return back()->with('error', 'Tidak dapat mengisi jurnal: ' . ($currentSlot['keterangan'] ?? 'Di luar jam KBM') . '.');
+        }
+
         $request->validate([
             'id_jadwal' => 'required|exists:jadwal,id_jadwal',
             'tanggal' => 'required|date',
@@ -134,7 +131,6 @@ class JurnalHarianController extends Controller
 
         $jadwal = Jadwal::findOrFail($request->id_jadwal);
         $user = Auth::user();
-        $now = Carbon::now();
 
         $days = [
             'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
@@ -156,7 +152,7 @@ class JurnalHarianController extends Controller
             'created_by' => $user->id_user,
         ]);
 
-        return redirect()->route('absensi-siswa.create', ['id_jurnal' => $jurnal->id_jurnal])->with('success', 'Jurnal harian disimpan. Silakan lanjutkan mengisi absensi siswa.');
+        return redirect()->route('jurnal-harian.index')->with('success', 'Jurnal harian mengajar berhasil disimpan.');
     }
 
     public function show($id)
