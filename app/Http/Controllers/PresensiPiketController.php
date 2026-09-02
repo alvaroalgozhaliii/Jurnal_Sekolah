@@ -205,7 +205,7 @@ class PresensiPiketController extends Controller
                 if ($search) {
                     $query->where(function($q) use ($search) {
                         $q->where('nama', 'like', "%{$search}%")
-                          ->orWhere('nis', 'like', "%{$search}%");
+                          ->orWhere('nisn', 'like', "%{$search}%");
                     });
                 }
                 $siswaList = $query->orderBy('nama', 'asc')->get();

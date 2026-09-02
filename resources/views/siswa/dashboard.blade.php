@@ -18,7 +18,7 @@
     </div>
     <div class="card-body">
         <div class="grid-3">
-            <div><span class="text-muted">NIS:</span> <strong>{{ $siswa->nis }}</strong></div>
+            <div><span class="text-muted">NISN:</span> <strong>{{ $siswa->NISN }}</strong></div>
             <div><span class="text-muted">Kelas:</span> <strong>{{ $siswa->kelas->nama_kelas ?? '-' }}</strong></div>
             <div><span class="text-muted">Jurusan:</span> <strong>{{ $siswa->kelas->jurusan->nama_jurusan ?? '-' }}</strong></div>
         </div>

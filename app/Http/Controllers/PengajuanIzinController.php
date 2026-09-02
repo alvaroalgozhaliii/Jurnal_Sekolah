@@ -173,52 +173,6 @@ class PengajuanIzinController extends Controller
             $siswa = Siswa::with('kelas')->find($idSiswa);
             $namaSiswa = $siswa?->nama ?? 'Siswa';
 
-            // ========================================================
-            // LANGSUNG SINKRONISASI KE DATA KELAS / ABSENSI SISWA
-            // ========================================================
-            if ($siswa) {
-                $tanggalIzin = $pengajuan->tanggal;
-                $statusAbsensi = ($pengajuan->kategori === 'sakit') ? 'sakit' : 'izin';
-
-                // Cari Jurnal Harian pada tanggal tersebut untuk kelas siswa
-                $jurnal = \App\Models\JurnalHarian::where('tanggal', $tanggalIzin)
-                    ->whereHas('jadwal', function ($q) use ($siswa) {
-                        $q->where('id_kelas', $siswa->id_kelas);
-                    })
-                    ->first();
-
-                if (!$jurnal) {
-                    $jadwalFirst = \App\Models\Jadwal::where('id_kelas', $siswa->id_kelas)->where('aktif', 1)->first();
-                    if ($jadwalFirst) {
-                        $jurnal = \App\Models\JurnalHarian::firstOrCreate(
-                            [
-                                'id_jadwal' => $jadwalFirst->id_jadwal,
-                                'tanggal' => $tanggalIzin,
-                            ],
-                            [
-                                'id_guru' => $jadwalFirst->id_guru ?? Guru::first()?->id_guru,
-                                'materi' => 'Presensi Kelas (Izin Orang Tua)',
-                                'jam_ke' => $jadwalFirst->jam_ke ?? 1,
-                            ]
-                        );
-                    }
-                }
-
-                if ($jurnal) {
-                    \App\Models\AbsensiSiswa::updateOrCreate(
-                        [
-                            'id_jurnal' => $jurnal->id_jurnal,
-                            'id_siswa' => $siswa->id_siswa,
-                        ],
-                        [
-                            'status' => $statusAbsensi,
-                            'keterangan' => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . '(Izin Orang Tua)',
-                            'dicatat_oleh' => $user->id_user,
-                            'created_at' => now(),
-                        ]
-                    );
-                }
-            }
 
             // Notifikasi ke Guru Piket
             Notifikasi::kirimKeRole(

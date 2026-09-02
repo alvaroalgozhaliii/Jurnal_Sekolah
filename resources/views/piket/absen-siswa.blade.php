@@ -24,7 +24,7 @@
         
         <form action="{{ route('piket.absen-siswa') }}" method="GET" style="display:inline;">
             <input type="hidden" name="id_kelas" value="{{ $idKelas }}">
-            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama atau NIS siswa..." style="padding: 5px; width: 220px;">
+            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama atau NISN siswa..." style="padding: 5px; width: 220px;">
             <button type="submit">Cari Siswa</button>
             @if(!empty($search))
                 <a href="{{ route('piket.absen-siswa', ['id_kelas' => $idKelas]) }}">Reset Search</a>
@@ -41,7 +41,7 @@
                 <thead>
                     <tr>
                         <th style="width: 40px;">No</th>
-                        <th>NIS</th>
+                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Jenis Kelamin</th>
                         <th>Status Presensi (Hari Ini)</th>
@@ -54,7 +54,7 @@
                     @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $s->nis }}</td>
+                        <td>{{ $s->NISN }}</td>
                         <td><strong>{{ $s->nama }}</strong></td>
                         <td>{{ $s->jenis_kelamin ?? '-' }}</td>
                         <td>

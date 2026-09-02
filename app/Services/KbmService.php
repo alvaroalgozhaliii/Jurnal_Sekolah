@@ -131,7 +131,7 @@ class KbmService
      */
     public static function getCurrentSlotInfo(?Carbon $now = null): array
     {
-        $now = $now ?? Carbon::now();
+        $now = $now ?? Carbon::now(config('app.timezone', 'Asia/Jakarta'));
         $days = [
             'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
             'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
@@ -141,6 +141,16 @@ class KbmService
 
         $slots = ($hariIndo === 'Jumat') ? self::$jumatSlots : self::$seninKamisSlots;
         $istirahatList = ($hariIndo === 'Jumat') ? self::$jumatIstirahat : self::$seninKamisIstirahat;
+
+        if ($hariIndo === 'Sabtu' || $hariIndo === 'Minggu') {
+            return [
+                'hari' => $hariIndo,
+                'jam_ke' => null,
+                'waktu_label' => $currentTime,
+                'status' => 'libur',
+                'keterangan' => 'Hari Libur Sekolah (Tidak Ada Jadwal Mengajar)',
+            ];
+        }
 
         // Cek apakah dalam slot mengajar
         foreach ($slots as $jamKe => $slot) {
@@ -165,18 +175,28 @@ class KbmService
                     'jam_ke' => null,
                     'waktu_label' => $ist['waktu'],
                     'status' => 'istirahat',
-                    'keterangan' => $ist['label'],
+                    'keterangan' => 'Waktu ' . $ist['label'] . " ({$ist['waktu']})",
                 ];
             }
         }
 
-        // Diluar jam KBM
+        if ($currentTime < '07:00') {
+            return [
+                'hari' => $hariIndo,
+                'jam_ke' => null,
+                'waktu_label' => $currentTime,
+                'status' => 'sebelum_kbm',
+                'keterangan' => 'Belum Masuk Jam KBM (Dimulai Pukul 07:00 WIB)',
+            ];
+        }
+
+        // Sudah lewat jam terakhir KBM
         return [
             'hari' => $hariIndo,
             'jam_ke' => null,
             'waktu_label' => $currentTime,
-            'status' => 'di_luar_kbm',
-            'keterangan' => 'Di luar jam KBM sekolah',
+            'status' => 'jam_pulang',
+            'keterangan' => 'Jam Pulang Sekolah (Tidak Ada Jadwal Mengajar)',
         ];
     }
 }

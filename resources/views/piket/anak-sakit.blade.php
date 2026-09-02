@@ -24,7 +24,7 @@
                     <option value="">-- Pilih Siswa --</option>
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}">
-                        {{ $s->nama }} (NIS: {{ $s->nis }} - Kelas {{ $s->kelas->nama_kelas ?? '-' }})
+                        {{ $s->nama }} (NISN: {{ $s->NISN }} - Kelas {{ $s->kelas->nama_kelas ?? '-' }})
                     </option>
                     @endforeach
                 </select>
@@ -63,7 +63,7 @@
                 <thead>
                     <tr>
                         <th>Tanggal</th>
-                        <th>NIS</th>
+                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Kelas</th>
                         <th>Alasan / Gejala</th>
@@ -75,7 +75,7 @@
                     @foreach($riwayatSakit as $r)
                     <tr>
                         <td class="fw-bold">{{ $r->tanggal }}</td>
-                        <td class="text-muted">{{ $r->siswa->nis ?? '-' }}</td>
+                        <td class="text-muted">{{ $r->siswa->NISN ?? '-' }}</td>
                         <td class="fw-bold text-navy">{{ $r->siswa->nama ?? '-' }}</td>
                         <td><span class="badge badge-navy">{{ $r->siswa->kelas->nama_kelas ?? '-' }}</span></td>
                         <td>{{ $r->alasan }}</td>

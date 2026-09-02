@@ -38,7 +38,7 @@
 <div class="card mb-16">
     <div class="card-body" style="padding:12px 16px;">
         <form method="GET" action="{{ route('siswa.index') }}" class="d-flex gap-8" style="align-items:center;">
-            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama siswa, NIS, kelas..." class="form-control" style="max-width:420px;">
+            <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama siswa, NISN, kelas..." class="form-control" style="max-width:420px;">
             <button type="submit" class="btn btn-primary btn-sm">Cari</button>
             @if($search ?? false)
                 <a href="{{ route('siswa.index') }}" class="btn btn-secondary btn-sm">Reset</a>
@@ -54,7 +54,7 @@
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
-                        <th>NIS</th>
+                        <th>NISN</th>
                         <th>Nama Lengkap</th>
                         <th>Kelas</th>
                         <th>JK</th>
@@ -66,7 +66,7 @@
                     @foreach($siswa as $item)
                     <tr>
                         <td class="no-col">{{ $loop->iteration }}</td>
-                        <td class="text-muted fw-bold">{{ $item->nis }}</td>
+                        <td class="text-muted fw-bold">{{ $item->NISN }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
                         <td><span class="badge badge-navy">{{ $item->kelas->nama_kelas ?? '-' }}</span></td>
                         <td>{{ $item->jenis_kelamin ?? '-' }}</td>

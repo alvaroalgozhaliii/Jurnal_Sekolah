@@ -148,8 +148,4 @@ document.addEventListener('DOMContentLoaded', function() {
         @endif
     </div>
 </div>
-<<<<<<< HEAD
 @endsection
-=======
-@endsection
->>>>>>> 38dcf32ce861d4daae2d396e0e6415aed17363ea

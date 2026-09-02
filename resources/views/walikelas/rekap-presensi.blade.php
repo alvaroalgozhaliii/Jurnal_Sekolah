@@ -21,7 +21,7 @@
                     <option value="">-- Semua Siswa Kelas {{ $kelas->nama_kelas }} --</option>
                     @foreach($siswaList as $s)
                     <option value="{{ $s->id_siswa }}" {{ $selectedSiswaId == $s->id_siswa ? 'selected' : '' }}>
-                        {{ $s->nama }} (NIS: {{ $s->nis }})
+                        {{ $s->nama }} (NISN: {{ $s->NISN }})
                     </option>
                     @endforeach
                 </select>
@@ -118,7 +118,7 @@
                     <tr>
                         <th>Tanggal</th>
                         <th>Hari</th>
-                        <th>NIS</th>
+                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Status</th>
                         <th>Jam Masuk</th>
@@ -144,7 +144,7 @@
                     <tr>
                         <td class="fw-bold">{{ $tgl ? \Carbon\Carbon::parse($tgl)->format('d/m/Y') : '-' }}</td>
                         <td>{{ $hariIndo }}</td>
-                        <td class="text-muted">{{ $r->siswa->nis ?? '-' }}</td>
+                        <td class="text-muted">{{ $r->siswa->NISN ?? '-' }}</td>
                         <td class="fw-bold text-navy">{{ $r->siswa->nama ?? '-' }}</td>
                         <td><span class="badge {{ $badgeCls }}">{{ strtoupper($r->status) }}</span></td>
                         <td>{{ $r->jam_masuk ?? '-' }}</td>

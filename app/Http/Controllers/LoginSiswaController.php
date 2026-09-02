@@ -15,20 +15,20 @@ class LoginSiswaController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'nis' => 'required'
+            'nisn' => 'required'
         ]);
 
-        $siswa = Siswa::where('nis', $request->nis)->first();
+        $siswa = Siswa::where('nisn', $request->nisn)->first();
 
         if (!$siswa) {
-            return back()->with('error', 'NIS tidak ditemukan');
+            return back()->with('error', 'NISN tidak ditemukan');
         }
 
         session([
             'login_siswa' => true,
             'id_siswa' => $siswa->id_siswa,
             'nama_siswa' => $siswa->nama,
-            'nis' => $siswa->nis
+            'nisn' => $siswa->nisn
         ]);
 
         return redirect()->route('dashboard.siswa');
@@ -49,7 +49,7 @@ class LoginSiswaController extends Controller
             'login_siswa',
             'id_siswa',
             'nama_siswa',
-            'nis'
+            'nisn'
         ]);
 
         return redirect()->route('dashboard');

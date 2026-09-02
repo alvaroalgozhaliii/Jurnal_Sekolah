@@ -22,7 +22,7 @@
     <div class="card-body" style="padding:0;">
         <table class="info-table">
             <tbody>
-                <tr><th>NIS</th><td class="fw-bold text-navy">{{ $siswa->nis }}</td></tr>
+                <tr><th>NISN</th><td class="fw-bold text-navy">{{ $siswa->NISN }}</td></tr>
                 <tr><th>Nama Lengkap</th><td class="fw-bold">{{ $siswa->nama }}</td></tr>
                 <tr><th>Kelas</th><td><span class="badge badge-navy">{{ $siswa->kelas->nama_kelas ?? '-' }}</span></td></tr>
                 <tr><th>Jurusan</th><td>{{ $siswa->kelas->jurusan->nama_jurusan ?? '-' }}</td></tr>
