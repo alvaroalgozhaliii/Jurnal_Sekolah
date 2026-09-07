@@ -50,14 +50,70 @@
             </svg>
         </button>
 
-        <!-- Animated Seamless Aesthetic Ocean Wave Divider -->
-        <svg class="sso-wave-svg" viewBox="0 0 100 600" preserveAspectRatio="none">
-            <!-- Background Soft Wave 1 -->
-            <path class="sso-wave-layer-bg" d="M100,-10 L0,-10 C45,120 70,200 25,320 C-15,420 50,510 100,610 L100,-10 Z" fill="rgba(56, 189, 248, 0.28)"></path>
-            <!-- Background Soft Wave 2 -->
-            <path class="sso-wave-layer-mid" d="M100,-10 L0,-10 C20,150 75,230 18,350 C-20,430 35,520 100,610 L100,-10 Z" fill="rgba(37, 99, 235, 0.45)"></path>
-            <!-- Foreground Main Wave (Sangat Mulus Menyatu dengan Panel Kanan) -->
-            <path class="sso-wave-layer-front" d="M100,-10 L0,-10 C38,140 60,220 20,335 C-12,415 38,510 100,610 L100,-10 Z" fill="currentColor"></path>
+        <!-- Animated 3-Layered Wave Divider (Smooth, No Clipping, Synchronized) -->
+        <svg class="sso-wave-svg" viewBox="0 0 80 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <clipPath id="waveClip">
+                    <rect x="-50" y="0" width="130" height="600"/>
+                </clipPath>
+            </defs>
+            <g clip-path="url(#waveClip)">
+                <!-- Layer 1 (Back - Light, widest swell, slowest) -->
+                <path class="sso-wave-layer-bg" fill="rgba(165, 180, 252, 0.45)" stroke="none">
+                    <animate
+                        attributeName="d"
+                        dur="9s"
+                        repeatCount="indefinite"
+                        calcMode="spline"
+                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
+                        keyTimes="0; 0.25; 0.5; 0.75; 1"
+                        values="
+                            M80,0 L10,0 Q-30,150 10,300 Q55,450 80,600 Z;
+                            M80,0 L10,0 Q55,150 10,300 Q-30,450 80,600 Z;
+                            M80,0 L10,0 Q-30,150 10,300 Q55,450 80,600 Z;
+                            M80,0 L10,0 Q55,150 10,300 Q-30,450 80,600 Z;
+                            M80,0 L10,0 Q-30,150 10,300 Q55,450 80,600 Z"
+                    />
+                </path>
+
+                <!-- Layer 2 (Mid - Medium blue, offset phase -2s) -->
+                <path class="sso-wave-layer-mid" fill="rgba(59, 130, 246, 0.7)" stroke="none">
+                    <animate
+                        attributeName="d"
+                        dur="9s"
+                        begin="-3s"
+                        repeatCount="indefinite"
+                        calcMode="spline"
+                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
+                        keyTimes="0; 0.25; 0.5; 0.75; 1"
+                        values="
+                            M80,0 L20,0 Q-20,150 20,300 Q62,450 80,600 Z;
+                            M80,0 L20,0 Q62,150 20,300 Q-20,450 80,600 Z;
+                            M80,0 L20,0 Q-20,150 20,300 Q62,450 80,600 Z;
+                            M80,0 L20,0 Q62,150 20,300 Q-20,450 80,600 Z;
+                            M80,0 L20,0 Q-20,150 20,300 Q62,450 80,600 Z"
+                    />
+                </path>
+
+                <!-- Layer 3 (Front - Dark solid, narrowest, offset phase -4s) -->
+                <path class="sso-wave-layer-front" fill="currentColor" stroke="none">
+                    <animate
+                        attributeName="d"
+                        dur="9s"
+                        begin="-6s"
+                        repeatCount="indefinite"
+                        calcMode="spline"
+                        keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1"
+                        keyTimes="0; 0.25; 0.5; 0.75; 1"
+                        values="
+                            M80,0 L32,0 Q-8,150 32,300 Q68,450 80,600 Z;
+                            M80,0 L32,0 Q68,150 32,300 Q-8,450 80,600 Z;
+                            M80,0 L32,0 Q-8,150 32,300 Q68,450 80,600 Z;
+                            M80,0 L32,0 Q68,150 32,300 Q-8,450 80,600 Z;
+                            M80,0 L32,0 Q-8,150 32,300 Q68,450 80,600 Z"
+                    />
+                </path>
+            </g>
         </svg>
 
         <!-- Subtle Background Icons / watermark pattern -->
