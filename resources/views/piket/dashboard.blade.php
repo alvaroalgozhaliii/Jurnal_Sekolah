@@ -17,14 +17,14 @@
 </div>
 
 <!-- BANNER WAKA BERTUGAS HARI INI -->
-<div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+<div style="background:var(--bg-card); border:1px solid #38bdf8; border-radius:8px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
     <div style="display:flex; align-items:center; gap:12px;">
         <span style="font-size:24px;">🛡️</span>
         <div>
-            <div style="font-size:13.5px; font-weight:700; color:#1e3a8a;">
+            <div style="font-size:13.5px; font-weight:700; color:#38bdf8;">
                 Waka yang Bertugas Hari Ini: {{ $wakaHariIni ? $wakaHariIni->waka->nama . ' (' . strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) . ')' : 'Belum Terjadwal (Otomatis diarahkan ke Waka SDM / Kesiswaan)' }}
             </div>
-            <div style="font-size:12px; color:#475569; margin-top:2px;">
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
                 Pengajuan dispensasi siswa & guru yang dibuat hari ini akan otomatis diteruskan ke Waka di atas via WhatsApp.
             </div>
         </div>
@@ -63,32 +63,32 @@
         </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #16a34a;">
         <div class="stat-icon-box green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $jumlahGuruHadir }}</div>
+            <div class="stat-num" style="color: #16a34a;">{{ $jumlahGuruHadir }}</div>
             <div class="stat-label">Guru Hadir Hari Ini</div>
         </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #d97706;">
         <div class="stat-icon-box amber">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $totalPendingWaka }}</div>
+            <div class="stat-num" style="color: #d97706;">{{ $totalPendingWaka }}</div>
             <div class="stat-label">Dispen Menunggu Waka</div>
         </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #9333ea;">
         <div class="stat-icon-box purple">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $totalVerifiedSatpam }}</div>
+            <div class="stat-num" style="color: #9333ea;">{{ $totalVerifiedSatpam }}</div>
             <div class="stat-label">Dispen Selesai</div>
         </div>
     </div>
@@ -96,9 +96,9 @@
 
 @if(isset($izinOrtuHariIniList) && $izinOrtuHariIniList->count() > 0)
 <!-- DAFTAR IZIN ORTU TERBARU -->
-<div class="card mb-24" style="border: 2px solid #38bdf8;">
-    <div class="card-header" style="background: #f0f9ff; display:flex; justify-content:space-between; align-items:center;">
-        <h3 class="card-title" style="color: #0369a1;">
+<div class="card mb-24">
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 class="card-title" style="color: #38bdf8;">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             Daftar Izin Siswa dari Orang Tua (Tercatat Otomatis di Kelas)
         </h3>
