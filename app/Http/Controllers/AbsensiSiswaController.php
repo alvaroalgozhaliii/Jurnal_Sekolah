@@ -34,7 +34,7 @@ class AbsensiSiswaController extends Controller
                   ->orWhere('keterangan', 'like', "%{$search}%")
                   ->orWhereHas('siswa', function($qs) use ($search) {
                       $qs->where('nama', 'like', "%{$search}%")
-                         ->orWhere('nis', 'like', "%{$search}%");
+                         ->orWhere('nisn', 'like', "%{$search}%");
                   })
                   ->orWhereHas('jurnal.jadwal.kelas', function($qk) use ($search) {
                       $qk->where('nama_kelas', 'like', "%{$search}%");

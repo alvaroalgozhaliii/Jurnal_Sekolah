@@ -20,7 +20,7 @@
                 <select name="id_siswa" class="form-control">
                     @foreach($anakList as $a)
                     <option value="{{ $a->id_siswa }}" {{ ($selectedSiswa && $selectedSiswa->id_siswa == $a->id_siswa) ? 'selected' : '' }}>
-                        {{ $a->nama }} (NIS: {{ $a->nis }})
+                        {{ $a->nama }} (NISN: {{ $a->NISN }})
                     </option>
                     @endforeach
                 </select>
@@ -32,7 +32,7 @@
                 <select name="bulan" class="form-control">
                     @foreach(range(1, 12) as $m)
                     @php $monthName = DateTime::createFromFormat('!m', $m)->format('F'); @endphp
-                    <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>{{ $monthName }} ({{ sprintf('%02d', $m) }})</option>
+                    <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>{{ $monthName }}</option>
                     @endforeach
                 </select>
             </div>
@@ -57,7 +57,7 @@
         <h3 class="card-title">Ringkasan Presensi {{ strtoupper(DateTime::createFromFormat('!m', $bulan)->format('F')) }} {{ $tahun }}</h3>
     </div>
     <div class="card-body">
-        <p class="mb-16">Anak: <strong>{{ $selectedSiswa->nama }}</strong> | NIS: <strong>{{ $selectedSiswa->nis }}</strong> | Kelas: <strong>{{ $selectedSiswa->kelas->nama_kelas ?? '-' }}</strong></p>
+        <p class="mb-16">Anak: <strong>{{ $selectedSiswa->nama }}</strong> | NISN: <strong>{{ $selectedSiswa->NISN }}</strong> | Kelas: <strong>{{ $selectedSiswa->kelas->nama_kelas ?? '-' }}</strong></p>
         <div class="stat-grid">
             <div class="stat-card">
                 <div class="stat-icon-box green">

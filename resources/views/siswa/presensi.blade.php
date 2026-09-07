@@ -2,7 +2,7 @@
 
 @section('content')
 <h2>Riwayat Presensi Saya</h2>
-<p>Nama: <strong>{{ $siswa->nama }}</strong> | NIS: <strong>{{ $siswa->nis }}</strong></p>
+<p>Nama: <strong>{{ $siswa->nama }}</strong> | NISN: <strong>{{ $siswa->NISN }}</strong></p>
 
 @if($riwayatPresensi->count() > 0)
     <table>

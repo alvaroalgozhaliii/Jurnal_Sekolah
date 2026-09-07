@@ -4,10 +4,21 @@
 @section('page-title', 'Dashboard Waka')
 
 @section('content')
+@php
+    $wakaRoleLabel = match(Auth::user()->role) {
+        'waka_kesiswaan' => 'Waka Kesiswaan',
+        'waka_kurikulum' => 'Waka Kurikulum',
+        'waka_sdm'       => 'Waka SDM',
+        'waka_sarpras'   => 'Waka Sarpras',
+        'waka_humas'     => 'Waka Humas',
+        default          => 'Waka'
+    };
+@endphp
+
 <div class="page-header">
     <div>
         <h1 class="page-title">
-            Dashboard Waka {{ $isSdm ? 'SDM (Izin & Dispen Guru)' : 'Kesiswaan (Dispen Siswa)' }}
+            Dashboard {{ $wakaRoleLabel }}
         </h1>
         <p class="page-subtitle">Verifikasi, Persetujuan Dispensasi & Integrasi Notifikasi WhatsApp Gerbang</p>
     </div>
@@ -15,41 +26,41 @@
 
 <!-- STAT CARDS -->
 <div class="grid-3 mb-24">
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #d97706;">
         <div class="stat-icon-box amber">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $totalPending }}</div>
+            <div class="stat-num" style="color: #d97706;">{{ $totalPending }}</div>
             <div class="stat-label">Pengajuan Baru (Menunggu Acc)</div>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #16a34a;">
         <div class="stat-icon-box green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $totalDisetujui }}</div>
+            <div class="stat-num" style="color: #16a34a;">{{ $totalDisetujui }}</div>
             <div class="stat-label">Telah Disetujui</div>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #dc2626;">
         <div class="stat-icon-box red">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
         <div>
-            <div class="stat-num">{{ $totalDitolak }}</div>
+            <div class="stat-num" style="color: #dc2626;">{{ $totalDitolak }}</div>
             <div class="stat-label">Ditolak</div>
         </div>
     </div>
 </div>
 
 <!-- PENDING APPROVAL WAKA -->
-<div class="card mb-24">
+<div class="card {{ $pengajuanPending->count() > 0 ? 'card-amber' : '' }} mb-24">
     <div class="card-header">
         <h3 class="card-title">
-            <svg class="svg-icon text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            Pending Approval Waka (Membutuhkan Keputusan Anda)
+            <svg class="svg-icon {{ $pengajuanPending->count() > 0 ? '' : 'text-navy' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Menunggu Persetujuan {{ $wakaRoleLabel }} (Pending: {{ $pengajuanPending->count() }})
         </h3>
     </div>
     <div class="card-body" style="padding:0;">

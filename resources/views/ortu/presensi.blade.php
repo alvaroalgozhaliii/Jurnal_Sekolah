@@ -19,7 +19,7 @@
             <select name="id_siswa" onchange="this.form.submit()" class="form-control" style="max-width:350px;">
                 @foreach($anakList as $a)
                 <option value="{{ $a->id_siswa }}" {{ ($selectedSiswa && $selectedSiswa->id_siswa == $a->id_siswa) ? 'selected' : '' }}>
-                    {{ $a->nama }} (NIS: {{ $a->nis }})
+                    {{ $a->nama }} (NISN: {{ $a->NISN }})
                 </option>
                 @endforeach
             </select>
@@ -31,7 +31,7 @@
 @if($selectedSiswa)
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Riwayat Presensi: {{ $selectedSiswa->nama }} (NIS: {{ $selectedSiswa->nis }})</h3>
+        <h3 class="card-title">Riwayat Presensi: {{ $selectedSiswa->nama }} (NISN: {{ $selectedSiswa->NISN }})</h3>
     </div>
     <div class="card-body" style="padding:0;">
         @if($riwayatPresensi->count() > 0)

@@ -19,7 +19,7 @@
 <!-- BANNER WAKA BERTUGAS HARI INI -->
 <div style="background:var(--bg-card); border:1px solid #38bdf8; border-radius:8px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
     <div style="display:flex; align-items:center; gap:12px;">
-        <span style="font-size:24px;">🛡️</span>
+        
         <div>
             <div style="font-size:13.5px; font-weight:700; color:#38bdf8;">
                 Waka yang Bertugas Hari Ini: {{ $wakaHariIni ? $wakaHariIni->waka->nama . ' (' . strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) . ')' : 'Belum Terjadwal (Otomatis diarahkan ke Waka SDM / Kesiswaan)' }}
@@ -31,7 +31,7 @@
     </div>
     @if($wakaHariIni && $wakaHariIni->waka && $wakaHariIni->waka->no_hp)
         <span class="badge" style="background:#10b981; color:#fff; font-size:12px; padding:6px 12px; font-weight:600;">
-            📱 WA: {{ $wakaHariIni->waka->no_hp }}
+             WA: {{ $wakaHariIni->waka->no_hp }}
         </span>
     @endif
 </div>

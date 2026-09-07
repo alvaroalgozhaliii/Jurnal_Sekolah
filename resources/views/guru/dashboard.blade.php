@@ -36,6 +36,92 @@
     </div>
 @endif
 
+@if($waliMonitoring)
+<!-- MONITORING KELAS BIMBINGAN WALI KELAS -->
+<div class="card mb-24" style="border-left: 4px solid #10b981; overflow:hidden;">
+    <div class="card-header" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(59, 130, 246, 0.05)); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:14px 20px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:42px; height:42px; border-radius:10px; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px;">
+                🎓
+            </div>
+            <div>
+                <h3 class="card-title" style="margin:0; font-size:16px; color:#10b981; font-weight:700;">
+                    Monitoring Siswa Kelas {{ $waliMonitoring['kelas']->nama_kelas }} (Wali Kelas)
+                </h3>
+                <p style="margin:2px 0 0; font-size:12px; color:var(--text-muted);">
+                    Tingkat {{ $waliMonitoring['kelas']->tingkat }} &bull; {{ $waliMonitoring['kelas']->jurusan->nama_jurusan ?? 'Reguler' }} &bull; Total {{ $waliMonitoring['totalSiswa'] }} Siswa
+                </p>
+            </div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <a href="{{ route('walikelas.data-kelas') }}" class="btn btn-secondary btn-sm">👥 Data Siswa</a>
+            <a href="{{ route('walikelas.rekap-presensi') }}" class="btn btn-secondary btn-sm">📋 Rekap Presensi</a>
+            <a href="{{ route('walikelas.siswa-terlambat') }}" class="btn btn-secondary btn-sm">⏰ Terlambat</a>
+            <a href="{{ route('walikelas.dashboard') }}" class="btn btn-primary btn-sm" style="background:#10b981; border-color:#10b981;">Portal Wali Kelas &rarr;</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- STATS PRESENSI HARI INI -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-bottom:16px;">
+            <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Total Siswa</div>
+                <div style="font-size:22px; font-weight:800; color:var(--navy-primary); margin-top:4px;">{{ $waliMonitoring['totalSiswa'] }}</div>
+            </div>
+            <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                <div style="font-size:11px; font-weight:700; color:#10b981; text-transform:uppercase;">Hadir Hari Ini</div>
+                <div style="font-size:22px; font-weight:800; color:#10b981; margin-top:4px;">{{ $waliMonitoring['hadir'] }}</div>
+            </div>
+            <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                <div style="font-size:11px; font-weight:700; color:#f59e0b; text-transform:uppercase;">Terlambat</div>
+                <div style="font-size:22px; font-weight:800; color:#f59e0b; margin-top:4px;">{{ $waliMonitoring['terlambat'] + $waliMonitoring['siswaTerlambatList']->count() }}</div>
+            </div>
+            <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                <div style="font-size:11px; font-weight:700; color:#3b82f6; text-transform:uppercase;">Izin / Sakit</div>
+                <div style="font-size:22px; font-weight:800; color:#3b82f6; margin-top:4px;">{{ $waliMonitoring['izin'] + $waliMonitoring['sakit'] }}</div>
+            </div>
+            <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+                <div style="font-size:11px; font-weight:700; color:#ef4444; text-transform:uppercase;">Alpa / Absen</div>
+                <div style="font-size:22px; font-weight:800; color:#ef4444; margin-top:4px;">{{ $waliMonitoring['alpa'] }}</div>
+            </div>
+        </div>
+
+        @if($waliMonitoring['siswaTerlambatList']->count() > 0 || $waliMonitoring['siswaIzinList']->count() > 0)
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:12px;">
+                @if($waliMonitoring['siswaTerlambatList']->count() > 0)
+                    <div style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:8px; padding:12px;">
+                        <strong style="font-size:13px; color:#d97706; display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+                            ⏰ Siswa Kelas Terlambat Hari Ini ({{ $waliMonitoring['siswaTerlambatList']->count() }}):
+                        </strong>
+                        <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6;">
+                            @foreach($waliMonitoring['siswaTerlambatList'] as $st)
+                                <li>
+                                    <strong>{{ $st->siswa->nama ?? '-' }}</strong> (Pukul {{ $st->jam_kedatangan }}, Jam ke-{{ $st->terlambat_sampai_jam }}) - <em>{{ $st->alasan }}</em>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if($waliMonitoring['siswaIzinList']->count() > 0)
+                    <div style="background:rgba(59, 130, 246, 0.08); border:1px solid rgba(59, 130, 246, 0.3); border-radius:8px; padding:12px;">
+                        <strong style="font-size:13px; color:#2563eb; display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+                            📝 Siswa Izin / Sakit Hari Ini ({{ $waliMonitoring['siswaIzinList']->count() }}):
+                        </strong>
+                        <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6;">
+                            @foreach($waliMonitoring['siswaIzinList'] as $si)
+                                <li>
+                                    <strong>{{ $si->siswa->nama ?? '-' }}</strong> - <span class="badge {{ $si->kategori === 'sakit' ? 'badge-purple' : 'badge-info' }}">{{ strtoupper($si->kategori) }}</span>: {{ Str::limit($si->alasan, 35) }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+        @endif
+    </div>
+</div>
+@endif
+
 <div class="grid-3 mb-24">
     <!-- PRESENSI MASUK/KELUAR STAT CARD -->
     <div class="stat-card">

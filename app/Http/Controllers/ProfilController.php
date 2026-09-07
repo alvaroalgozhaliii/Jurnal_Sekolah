@@ -6,47 +6,79 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\TahunPelajaran;
 
 class ProfilController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
         $user = Auth::user();
-        return view('profil.show', compact('user'));
+        $role = $user->role;
+
+        // Detail relasi jika guru atau siswa
+        $detailGuru = null;
+        $detailSiswa = null;
+        if ($user->guru) {
+            $detailGuru = $user->guru()->with('kelasWali')->first();
+        }
+        if ($user->siswa) {
+            $detailSiswa = $user->siswa()->with('kelas')->first();
+        }
+
+        $tahunAktif = TahunPelajaran::where('aktif', 1)->first();
+        $activeTab = $request->query('tab', 'profil');
+
+        return view('profil.show', compact(
+            'user',
+            'role',
+            'detailGuru',
+            'detailSiswa',
+            'tahunAktif',
+            'activeTab'
+        ));
     }
 
+    /**
+     * Update foto profil (halaman Profil Akun).
+     */
     public function updateProfil(Request $request)
     {
         $user = Auth::user();
 
         $request->validate([
-            'nama' => 'required|string|max:150',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('foto_profil')) {
+            $file = $request->file('foto_profil');
+            $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+            $path = $file->storeAs('uploads/profil', $filename, 'public');
+
+            // Hapus foto lama jika ada
+            if ($user->foto_profil && \Storage::disk('public')->exists($user->foto_profil)) {
+                \Storage::disk('public')->delete($user->foto_profil);
+            }
+
+            $user->update(['foto_profil' => $path]);
+        }
+
+        return back()->with('success', 'Foto profil berhasil diperbarui.');
+    }
+
+    /**
+     * Ubah username (dari halaman Pengaturan).
+     */
+    public function updateUsername(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
             'username' => 'required|string|max:50|unique:users,username,' . $user->id_user . ',id_user',
-            'no_telp' => 'nullable|string|max:20',
         ]);
 
-        $user->update([
-            'nama' => $request->nama,
-            'username' => $request->username,
-            'no_hp' => $request->no_telp ?? $request->no_hp,
-        ]);
+        $user->update(['username' => $request->username]);
 
-        // If user is linked to Guru
-        if ($user->isGuru() && $user->guru) {
-            $user->guru->update([
-                'nama' => $request->nama,
-                'no_telp' => $request->no_telp,
-            ]);
-        }
-
-        // If user is linked to Siswa
-        if ($user->isSiswa() && $user->siswa) {
-            $user->siswa->update([
-                'nama' => $request->nama,
-            ]);
-        }
-
-        return back()->with('success', 'Profil berhasil diperbarui.');
+        return back()->with('success', 'Username berhasil diubah.');
     }
 
     public function updatePassword(Request $request)

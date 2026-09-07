@@ -15,9 +15,9 @@ class WhatsAppService
 
     public function __construct()
     {
-        $this->apiUrl = config('services.whatsapp.api_url', env('WHATSAPP_API_URL'));
-        $this->apiKey = config('services.whatsapp.api_key', env('WHATSAPP_API_KEY'));
-        $this->sender = config('services.whatsapp.sender', env('WHATSAPP_SENDER'));
+        $this->apiUrl = \App\Models\Pengaturan::getVal('wa_api_url') ?: config('services.whatsapp.api_url', env('WHATSAPP_API_URL'));
+        $this->apiKey = \App\Models\Pengaturan::getVal('wa_api_key') ?: config('services.whatsapp.api_key', env('WHATSAPP_API_KEY'));
+        $this->sender = \App\Models\Pengaturan::getVal('wa_sender') ?: config('services.whatsapp.sender', env('WHATSAPP_SENDER'));
     }
 
     /**
@@ -169,7 +169,7 @@ class WhatsAppService
     {
         $nama = $pengajuan->siswa?->nama ?? 'Siswa';
         $kelas = $pengajuan->siswa?->kelas?->nama_kelas ?? '-';
-        $nis = $pengajuan->siswa?->nis ?? '-';
+        $nis = $pengajuan->siswa?->nisn ?? '-';
         $jenis = $pengajuan->jenis_izin ?? strtoupper(str_replace('_', ' ', $pengajuan->kategori));
         $tanggal = $pengajuan->tanggal;
         $jam = $pengajuan->jam_mulai ? $pengajuan->jam_mulai . ($pengajuan->perkiraan_kembali ? ' (Kembali: '.$pengajuan->perkiraan_kembali.')' : '') : 'Hari ini';
@@ -179,7 +179,7 @@ class WhatsAppService
         return "*[JURNAL SEKOLAH - VERIFIKASI GERBANG SATPAM]*\n\n"
              . "Dispen siswa telah *DISETUJUI OLEH WAKA*.\n\n"
              . "• *Nama Siswa:* {$nama}\n"
-             . "• *NIS / Kelas:* {$nis} / {$kelas}\n"
+             . "• *NISN / Kelas:* {$nis} / {$kelas}\n"
              . "• *Tanggal:* {$tanggal}\n"
              . "• *Jam Keluar:* {$jam}\n"
              . "• *Keperluan:* {$jenis}\n\n"

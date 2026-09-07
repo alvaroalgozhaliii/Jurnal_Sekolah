@@ -21,12 +21,19 @@ class User extends Authenticatable
         'role',
         'no_hp',
         'aktif',
+        'foto_profil',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    // URL foto profil (fallback ke inisial nama via UI)
+    public function getFotoProfilUrlAttribute(): ?string
+    {
+        return $this->foto_profil ? asset('storage/' . $this->foto_profil) : null;
+    }
 
     // Role helper checks
     public function isAdmin(): bool
@@ -54,9 +61,22 @@ class User extends Authenticatable
         return in_array($this->role, ['siswa', 'ortu']);
     }
 
+    public function getKelasWaliAttribute()
+    {
+        if ($this->guru) {
+            return Kelas::where('id_guru_walikelas', $this->guru->id_guru)
+                ->orWhere('wali_kelas', $this->guru->nama)
+                ->first();
+        }
+        return null;
+    }
+
     public function isWaliKelas(): bool
     {
-        return in_array($this->role, ['walikelas', 'wali_kelas']);
+        if (in_array($this->role, ['walikelas', 'wali_kelas'])) {
+            return true;
+        }
+        return $this->kelas_wali !== null;
     }
 
     public function isWakaKesiswaan(): bool

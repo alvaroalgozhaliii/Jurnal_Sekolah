@@ -28,8 +28,20 @@
             </div>
 
             <div class="form-group">
+                <label class="form-label" for="tingkat">Tingkat Kelas <span class="req">*</span></label>
+                <select id="tingkat" name="tingkat" class="form-control" required>
+                    <option value="X" {{ old('tingkat', $mapel->tingkat) == 'X' ? 'selected' : '' }}>Kelas X (Kode: -01)</option>
+                    <option value="XI" {{ old('tingkat', $mapel->tingkat) == 'XI' ? 'selected' : '' }}>Kelas XI (Kode: -02)</option>
+                    <option value="XII" {{ old('tingkat', $mapel->tingkat) == 'XII' ? 'selected' : '' }}>Kelas XII (Kode: -03)</option>
+                </select>
+                <small class="form-hint" style="color:var(--text-muted, #666);font-size:12px;display:block;margin-top:4px;">
+                    Contoh pengelompokan kode: Kelas 10 &rarr; <code>bin-01</code>, Kelas 11 &rarr; <code>bin-02</code>, Kelas 12 &rarr; <code>bin-03</code>
+                </small>
+            </div>
+
+            <div class="form-group">
                 <label class="form-label" for="kode_mapel">Kode Mapel</label>
-                <input type="text" id="kode_mapel" name="kode_mapel" value="{{ old('kode_mapel', $mapel->kode_mapel) }}" class="form-control">
+                <input type="text" id="kode_mapel" name="kode_mapel" value="{{ old('kode_mapel', $mapel->kode_mapel) }}" class="form-control" placeholder="Contoh: bin-01">
             </div>
 
             <div class="d-flex gap-8 mt-24">

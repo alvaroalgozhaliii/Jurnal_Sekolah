@@ -32,6 +32,9 @@ use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\TahunPelajaranController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\MataPelajaranController;
+use App\Http\Controllers\RekapController;
+
+use App\Http\Controllers\PiketSiswaTerlambatController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -72,7 +75,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
     Route::post('/profil/update', [ProfilController::class, 'updateProfil'])->name('profil.update');
+    Route::post('/profil/username', [ProfilController::class, 'updateUsername'])->name('profil.username');
     Route::post('/profil/password', [ProfilController::class, 'updatePassword'])->name('profil.password');
+    Route::post('/profil/preferensi', [PengaturanController::class, 'updateGeneralPreferences'])->name('profil.preferensi.update');
 
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
 
@@ -80,6 +85,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
     Route::get('/notifikasi/{id}/read', [NotifikasiController::class, 'read'])->name('notifikasi.read');
     Route::post('/notifikasi/read-all', [NotifikasiController::class, 'readAll'])->name('notifikasi.read-all');
+
+    // Rekap Excel Bulanan (Izin & Jurnal KBM)
+    Route::get('/rekap/izin-excel', [RekapController::class, 'rekapIzinExcel'])->name('rekap.izin-excel');
+    Route::get('/rekap/jurnal-excel', [RekapController::class, 'rekapJurnalExcel'])->name('rekap.jurnal-excel');
 
     // Pengajuan Izin / Dispensasi (Shared View & Create)
     Route::get('/pengajuan-izin', [PengajuanIzinController::class, 'index'])->name('pengajuan.index');
@@ -102,9 +111,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/rekap-kehadiran', [AdminDashboardController::class, 'rekapKehadiran'])->name('admin.rekap-kehadiran');
+    Route::get('/rekap-kehadiran/export-csv', [AdminDashboardController::class, 'exportRekapCsv'])->name('admin.rekap-kehadiran.export-csv');
 
     // Pengguna (User Management)
     Route::resource('pengguna', PenggunaController::class);
+    Route::patch('/pengguna/{id}/reset-password', [PenggunaController::class, 'resetPassword'])->name('pengguna.reset-password');
 
     // Tahun Pelajaran
     Route::resource('tahun-pelajaran', TahunPelajaranController::class)->except(['create', 'show', 'edit', 'update']);
@@ -114,9 +125,34 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/backup', [BackupController::class, 'index'])->name('admin.backup');
     Route::get('/backup/export', [BackupController::class, 'exportDatabase'])->name('admin.backup.export');
     Route::post('/backup/restore', [BackupController::class, 'restoreDatabase'])->name('admin.backup.restore');
+    Route::get('/backup/{filename}/download', [BackupController::class, 'downloadBackup'])->name('admin.backup.download');
+    Route::delete('/backup/{filename}/delete', [BackupController::class, 'deleteBackup'])->name('admin.backup.delete');
+    Route::post('/backup/{filename}/restore-stored', [BackupController::class, 'restoreFromStorage'])->name('admin.backup.restore-stored');
+
+    // CSV Master (Import Terpadu)
+    Route::get('/csv-master', [\App\Http\Controllers\Admin\MasterCsvController::class, 'index'])->name('admin.csv-master.index');
+    Route::post('/csv-master/import', [\App\Http\Controllers\Admin\MasterCsvController::class, 'importMaster'])->name('admin.csv-master.import');
+    Route::get('/csv-master/template/{type}', [\App\Http\Controllers\Admin\MasterCsvController::class, 'downloadTemplate'])->name('admin.csv-master.template');
+
+    // Manajemen Wali Kelas (Admin)
+    Route::get('/wali-kelas', [\App\Http\Controllers\Admin\WaliKelasAdminController::class, 'index'])->name('admin.wali-kelas.index');
+    Route::put('/wali-kelas/{id}', [\App\Http\Controllers\Admin\WaliKelasAdminController::class, 'update'])->name('admin.wali-kelas.update');
+    Route::get('/wali-kelas/export-csv', [\App\Http\Controllers\Admin\WaliKelasAdminController::class, 'exportCsv'])->name('admin.wali-kelas.export-csv');
+    Route::get('/wali-kelas/export', [\App\Http\Controllers\Admin\WaliKelasAdminController::class, 'exportCsv'])->name('admin.wali-kelas.export');
+
+    // Export CSV Master Data
+    Route::get('/guru/export-csv', [GuruController::class, 'exportCsv'])->name('guru.export-csv');
+    Route::get('/siswa/export-csv', [SiswaController::class, 'exportCsv'])->name('siswa.export-csv');
 
     // Pengaturan Admin
     Route::post('/pengaturan', [PengaturanController::class, 'updateAdminSettings'])->name('admin.pengaturan.update');
+
+    // Pengaturan Nomor WhatsApp & Gateway API
+    Route::get('/whatsapp', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'index'])->name('admin.whatsapp.index');
+    Route::post('/whatsapp/pejabat', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'updatePejabat'])->name('admin.whatsapp.pejabat.update');
+    Route::post('/whatsapp/gateway', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'updateGateway'])->name('admin.whatsapp.gateway.update');
+    Route::post('/whatsapp/test', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'testKirim'])->name('admin.whatsapp.test');
+    Route::post('/whatsapp/user/{id}', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'updateUserWa'])->name('admin.whatsapp.user.update');
 });
 
 
@@ -149,6 +185,13 @@ Route::middleware(['auth', 'role:admin,piket'])->prefix('piket-area')->group(fun
     Route::get('/absen-siswa', [PresensiPiketController::class, 'absenSiswaIndex'])->name('piket.absen-siswa');
     Route::post('/absen-siswa', [PresensiPiketController::class, 'absenSiswaStore'])->name('piket.absen-siswa.store');
     Route::post('/pengaturan', [PengaturanController::class, 'updatePiketSettings'])->name('piket.pengaturan.update');
+
+    // Siswa Terlambat
+    Route::get('/siswa-terlambat', [PiketSiswaTerlambatController::class, 'index'])->name('piket.siswa-terlambat.index');
+    Route::get('/siswa-terlambat/create', [PiketSiswaTerlambatController::class, 'create'])->name('piket.siswa-terlambat.create');
+    Route::post('/siswa-terlambat', [PiketSiswaTerlambatController::class, 'store'])->name('piket.siswa-terlambat.store');
+    Route::get('/siswa-terlambat/{id}/slip', [PiketSiswaTerlambatController::class, 'cetakSlip'])->name('piket.siswa-terlambat.slip');
+    Route::delete('/siswa-terlambat/{id}', [PiketSiswaTerlambatController::class, 'destroy'])->name('piket.siswa-terlambat.destroy');
 });
 
 
@@ -164,12 +207,13 @@ Route::middleware(['auth', 'role:admin,ortu,siswa'])->prefix('ortu-area')->group
     Route::get('/rekap-bulanan', [OrtuDashboardController::class, 'rekapBulanan'])->name('ortu.rekap-bulanan');
     Route::get('/notifikasi-ortu', [OrtuDashboardController::class, 'notifikasi'])->name('ortu.notifikasi');
     Route::get('/pesan-ortu', [OrtuDashboardController::class, 'pesan'])->name('ortu.pesan');
-    
+
     // Alias route names for compatibility
     Route::get('/jadwal-pelajaran', [OrtuDashboardController::class, 'jadwal'])->name('siswa.jadwal-pelajaran');
     Route::get('/presensi-saya', [OrtuDashboardController::class, 'presensi'])->name('siswa.presensi-saya');
     Route::get('/kelas-info', [OrtuDashboardController::class, 'dataAnak'])->name('siswa.kelas-info');
     Route::get('/siswa-dashboard', [OrtuDashboardController::class, 'index'])->name('siswa.dashboard');
+    Route::post('/pengaturan', [PengaturanController::class, 'updateSiswaSettings'])->name('siswa.pengaturan.update');
 });
 
 
@@ -181,7 +225,10 @@ Route::middleware(['auth', 'role:admin,guru,wali_kelas'])->prefix('walikelas-are
     Route::get('/dashboard', [WaliKelasController::class, 'index'])->name('walikelas.dashboard');
     Route::get('/data-kelas', [WaliKelasController::class, 'dataKelas'])->name('walikelas.data-kelas');
     Route::get('/rekap-presensi', [WaliKelasController::class, 'rekapPresensi'])->name('walikelas.rekap-presensi');
+    Route::get('/rekap-presensi/export-csv', [WaliKelasController::class, 'exportRekapCsv'])->name('walikelas.rekap-presensi.export-csv');
     Route::get('/jurnal', [WaliKelasController::class, 'jurnal'])->name('walikelas.jurnal');
+    Route::get('/siswa-terlambat', [WaliKelasController::class, 'siswaTerlambat'])->name('walikelas.siswa-terlambat');
+    Route::get('/siswa-terlambat/export-csv', [WaliKelasController::class, 'exportSiswaTerlambatCsv'])->name('walikelas.siswa-terlambat.export-csv');
 });
 
 
@@ -272,6 +319,22 @@ Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka
     Route::get('/jurnal-harian/trash', [JurnalHarianController::class, 'trash'])->name('jurnal-harian.trash');
     Route::put('/jurnal-harian/{id}/restore', [JurnalHarianController::class, 'restore'])->name('jurnal-harian.restore');
     Route::delete('/jurnal-harian/{id}/force-delete', [JurnalHarianController::class, 'forceDelete'])->name('jurnal-harian.forceDelete');
+
+    // CSV IMPORT & TEMPLATE ROUTES
+    Route::get('/guru/import-template', [GuruController::class, 'importTemplate'])->name('guru.import-template');
+    Route::post('/guru/import-csv', [GuruController::class, 'importCsv'])->name('guru.import-csv');
+
+    Route::get('/siswa/import-template', [SiswaController::class, 'importTemplate'])->name('siswa.import-template');
+    Route::post('/siswa/import-csv', [SiswaController::class, 'importCsv'])->name('siswa.import-csv');
+
+    Route::get('/kelas/import-template', [KelasController::class, 'importTemplate'])->name('kelas.import-template');
+    Route::post('/kelas/import-csv', [KelasController::class, 'importCsv'])->name('kelas.import-csv');
+
+    Route::get('/jurusan/import-template', [JurusanController::class, 'importTemplate'])->name('jurusan.import-template');
+    Route::post('/jurusan/import-csv', [JurusanController::class, 'importCsv'])->name('jurusan.import-csv');
+
+    Route::get('/jadwal/import-template', [JadwalController::class, 'importTemplate'])->name('jadwal.import-template');
+    Route::post('/jadwal/import-csv', [JadwalController::class, 'importCsv'])->name('jadwal.import-csv');
 
     // RESOURCE ROUTES
     Route::resource('guru', GuruController::class);

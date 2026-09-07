@@ -142,4 +142,90 @@ class KelasController extends Controller
         Kelas::withTrashed()->findOrFail($id)->forceDelete();
         return redirect()->route('kelas.trash')->with('success', 'Data kelas dihapus permanen');
     }
+
+    public function importTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="template_data_kelas.csv"',
+        ];
+
+        $sample = [
+            ['nama_kelas', 'tingkat', 'nama_jurusan_atau_rombel', 'wali_kelas'],
+            ['X RPL 1', 'X', 'RPL', 'Indriati, S.Pd'],
+            ['XI TKJ 1', 'XI', 'TKJ', 'Sri Rahayu, S.Pd'],
+        ];
+
+        return response()->stream(function() use ($sample) {
+            $output = fopen('php://output', 'w');
+            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
+            foreach ($sample as $row) {
+                fputcsv($output, $row);
+            }
+            fclose($output);
+        }, 200, $headers);
+    }
+
+    public function importCsv(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|max:5120',
+        ]);
+
+        try {
+            $parsed = \App\Services\CsvImportService::parseCsv($request->file('csv_file'));
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal memproses file CSV: ' . $e->getMessage());
+        }
+
+        $inserted = 0;
+        $skipped = 0;
+
+        $jurusanList = Jurusan::all();
+
+        foreach ($parsed['rows'] as $data) {
+            $namaKelas = $data['nama_kelas'] ?? '';
+            $tingkat = $data['tingkat'] ?? '';
+            $jurusanKey = $data['nama_jurusan_atau_rombel'] ?? ($data['nama_jurusan'] ?? ($data['jurusan'] ?? ($data['rombel'] ?? '')));
+            $waliKelas = $data['wali_kelas'] ?? null;
+
+            if (empty($namaKelas)) {
+                $skipped++;
+                continue;
+            }
+
+            if (Kelas::where('nama_kelas', $namaKelas)->exists()) {
+                $skipped++;
+                continue;
+            }
+
+            if (empty($tingkat)) {
+                if (str_starts_with($namaKelas, 'XII')) $tingkat = 'XII';
+                elseif (str_starts_with($namaKelas, 'XI')) $tingkat = 'XI';
+                elseif (str_starts_with($namaKelas, 'X')) $tingkat = 'X';
+                else $tingkat = 'X';
+            }
+
+            $idJurusan = null;
+            if (!empty($jurusanKey)) {
+                $foundJurusan = $jurusanList->first(function($j) use ($jurusanKey) {
+                    return strcasecmp($j->rombel, $jurusanKey) === 0 
+                        || strcasecmp($j->nama_jurusan, $jurusanKey) === 0
+                        || stripos($j->nama_jurusan, $jurusanKey) !== false;
+                });
+                $idJurusan = $foundJurusan?->id_jurusan;
+            }
+
+            Kelas::create([
+                'nama_kelas' => $namaKelas,
+                'tingkat' => $tingkat,
+                'id_jurusan' => $idJurusan,
+                'wali_kelas' => $waliKelas,
+            ]);
+
+            $inserted++;
+        }
+
+        return back()->with('success', "Import CSV berhasil! {$inserted} data kelas ditambahkan, {$skipped} data dilewati.");
+    }
 }
