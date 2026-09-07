@@ -7,3 +7,146 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer base {
+    /* 1. Buttons & Clickable Elements */
+    a,
+    button, 
+    [type='button'], 
+    [type='reset'], 
+    [type='submit'],
+    [role='button'],
+    .btn,
+    select,
+    .cursor-pointer,
+    .nav-link,
+    summary,
+    .badge-clickable {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 250ms;
+        touch-action: manipulation;
+    }
+    
+    a:hover,
+    button:hover, 
+    [type='button']:hover, 
+    [type='reset']:hover, 
+    [type='submit']:hover,
+    [role='button']:hover,
+    .btn:hover,
+    select:hover,
+    .cursor-pointer:hover,
+    .nav-link:hover,
+    summary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
+    }
+    
+    a:active,
+    button:active, 
+    [type='button']:active, 
+    [type='reset']:active, 
+    [type='submit']:active,
+    [role='button']:active,
+    .btn:active,
+    select:active,
+    .cursor-pointer:active,
+    .nav-link:active,
+    summary:active {
+        transform: scale(0.96) translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 2. Form Columns & Inputs */
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='number'],
+    input[type='search'],
+    input[type='date'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='file'],
+    textarea,
+    select,
+    .form-control,
+    .form-select,
+    .sso-input-pill {
+        transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), 
+                    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1), 
+                    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        touch-action: manipulation;
+    }
+
+    input[type='text']:hover,
+    input[type='password']:hover,
+    input[type='email']:hover,
+    input[type='number']:hover,
+    input[type='search']:hover,
+    input[type='date']:hover,
+    input[type='time']:hover,
+    input[type='datetime-local']:hover,
+    textarea:hover,
+    select:hover,
+    .form-control:hover,
+    .form-select:hover,
+    .sso-input-pill:hover {
+        border-color: rgba(59, 130, 246, 0.5);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    input[type='text']:focus,
+    input[type='password']:focus,
+    input[type='email']:focus,
+    input[type='number']:focus,
+    input[type='search']:focus,
+    input[type='date']:focus,
+    input[type='time']:focus,
+    input[type='datetime-local']:focus,
+    textarea:focus,
+    select:focus,
+    .form-control:focus,
+    .form-select:focus,
+    .sso-input-pill:focus-within {
+        transform: translateY(-1px) scale(1.005);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3), 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    /* 3. Checkboxes & Radio Buttons */
+    input[type='checkbox'],
+    input[type='radio'] {
+        transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms ease;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    input[type='checkbox']:hover,
+    input[type='radio']:hover {
+        transform: scale(1.15);
+    }
+
+    input[type='checkbox']:active,
+    input[type='radio']:active {
+        transform: scale(0.9);
+    }
+
+    /* 4. Table Rows & Cards */
+    table tbody tr,
+    .card,
+    .stat-card,
+    .box,
+    .panel {
+        transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    table tbody tr:hover {
+        background-color: rgba(59, 130, 246, 0.04);
+    }
+
+    .card:hover,
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
+    }
+}

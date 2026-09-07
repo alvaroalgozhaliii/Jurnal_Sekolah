@@ -1,0 +1,11 @@
+role,nama,nip_nisn,username,password,nama_kelas,mata_pelajaran,no_hp
+guru,"Hardini Indahing Budi, S.E., M.Pd.",19820822 201407 2 002,hardini,password123,,"Waka Kurikulum / Konsentrasi Keahlian",081234567801
+guru,"Yani, S.Pd.",19661207 199412 1 003,yani1966,password123,,"Bahasa Indonesia",081234567802
+walikelas,"Muashofah, M.Pd",19710806 200801 2 012,muashofah,password123,X TKI-1,"Pendidikan Agama Islam dan Budi Pekerti",081234567803
+walikelas,"Sri Kusumastuti, S.Pd",19830331 202321 2 015,srikusuma,password123,X TKI-2,"Dasar Program Keahlian",081234567804
+walikelas,"Indriati, S.Pd",19850910 200903 2 009,indriati,password123,X RPL 1,"Projek IPAS",081234567805
+walikelas,"Umi Kulsum, S.Pd",19690425 200701 2 025,umikulsum,password123,X RPL 2,"Bahasa Indonesia",081234567806
+siswa,"Ahmad Fauzan Al-Ghifari",0081234501,fauzan01,password123,X TKI-1,,085123456701
+siswa,"Bunga Citra Lestari",0081234502,bunga02,password123,X TKI-1,,085123456702
+siswa,"Dimas Arya Pratama",0081234503,dimas03,password123,X RPL 1,,085123456703
+siswa,"Eka Putri Ramadhani",0081234504,ekaputri04,password123,X RPL 2,,085123456704

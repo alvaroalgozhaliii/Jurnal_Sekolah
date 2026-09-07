@@ -71,12 +71,57 @@
             <path d="M0,192L60,181.3C120,171,240,149,360,160C480,171,600,213,720,213.3C840,213,960,171,1080,154.7C1200,139,1320,149,1380,154.7L1440,160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
         </svg>
 
-        <!-- Floating Isometric Cubes / Badges -->
-        <div class="shape-badge badge-top-left">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            <span>KBM Online</span>
+        <!-- Animated Background Shooting Stars & Particles -->
+        <div class="shooting-stars-container" aria-hidden="true">
+            <div class="shooting-star star-1"></div>
+            <div class="shooting-star star-2"></div>
+            <div class="shooting-star star-3"></div>
+            <div class="glow-particle p-1"></div>
+            <div class="glow-particle p-2"></div>
+            <div class="glow-particle p-3"></div>
+            <div class="glow-particle p-4"></div>
         </div>
-        <div class="shape-badge badge-bottom-right">
+
+        <!-- Floating Isometric Cubes / Badges (10 Neatly Positioned Badges) -->
+        <div class="shape-badge badge-live-update">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 16"/><polyline points="17 6 23 6 23 12"/></svg>
+            <span>Live Update</span>
+        </div>
+        <div class="shape-badge badge-accurate">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <span>Highly Accurate</span>
+        </div>
+        <div class="shape-badge badge-direct-alert">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><circle cx="18" cy="4" r="3" fill="#ef4444"/></svg>
+            <span>Direct Alert</span>
+        </div>
+        <div class="shape-badge badge-presensi">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+            <span>Presensi Digital</span>
+        </div>
+
+        <div class="shape-badge badge-realtime">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Real Time</span>
+        </div>
+        <div class="shape-badge badge-secure">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            <span>Secure Data</span>
+        </div>
+
+        <div class="shape-badge badge-recap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Auto Recap</span>
+        </div>
+        <div class="shape-badge badge-discipline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            <span>Discipline</span>
+        </div>
+        <div class="shape-badge badge-transparent">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Transparent</span>
+        </div>
+        <div class="shape-badge badge-terverifikasi">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             <span>Terverifikasi</span>
         </div>

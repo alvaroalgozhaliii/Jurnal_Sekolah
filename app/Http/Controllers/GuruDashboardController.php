@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Jadwal;
 use App\Models\JurnalHarian;
 use App\Models\PresensiMasuk;
+use App\Models\Kelas;
+use App\Models\Siswa;
+use App\Models\AbsensiSiswa;
+use App\Models\SiswaTerlambat;
+use App\Models\PengajuanIzin;
 use Carbon\Carbon;
 
 class GuruDashboardController extends Controller
@@ -22,6 +27,7 @@ class GuruDashboardController extends Controller
                 'jurnalHariIni' => collect(),
                 'presensiHariIni' => null,
                 'pengingatJurnal' => [],
+                'waliMonitoring' => null,
                 'error' => 'Data profil guru belum terhubung dengan akun ini.'
             ]);
         }
@@ -71,6 +77,55 @@ class GuruDashboardController extends Controller
             }
         }
 
+        // Monitoring Siswa Kelas (Jika Guru ditugaskan sebagai Wali Kelas)
+        $kelasWali = $user->kelas_wali;
+        $waliMonitoring = null;
+
+        if ($kelasWali) {
+            $siswaWali = Siswa::where('id_kelas', $kelasWali->id_kelas)->get();
+            $totalSiswaWali = $siswaWali->count();
+            $siswaIds = $siswaWali->pluck('id_siswa');
+
+            // Presensi hari ini di kelas bimbingan
+            $presensiHariIniKelas = AbsensiSiswa::with('siswa')
+                ->whereIn('id_siswa', $siswaIds)
+                ->whereHas('jurnal', function ($q) use ($todayDate) {
+                    $q->where('tanggal', $todayDate);
+                })
+                ->get();
+
+            $hadirCount = $presensiHariIniKelas->where('status', 'hadir')->count();
+            $sakitCount = $presensiHariIniKelas->where('status', 'sakit')->count();
+            $izinCount = $presensiHariIniKelas->where('status', 'izin')->count();
+            $alpaCount = $presensiHariIniKelas->where('status', 'alpa')->count();
+            $terlambatCount = $presensiHariIniKelas->where('status', 'terlambat')->count();
+
+            // Log siswa terlambat hari ini yang dicatat piket
+            $terlambatHariIni = SiswaTerlambat::with('siswa')
+                ->whereIn('id_siswa', $siswaIds)
+                ->where('tanggal', $todayDate)
+                ->orderBy('jam_kedatangan', 'desc')
+                ->get();
+
+            // Pengajuan izin / sakit siswa kelas ini hari ini
+            $izinHariIni = PengajuanIzin::with('siswa')
+                ->whereIn('id_siswa', $siswaIds)
+                ->where('tanggal', $todayDate)
+                ->get();
+
+            $waliMonitoring = [
+                'kelas' => $kelasWali,
+                'totalSiswa' => $totalSiswaWali,
+                'hadir' => $hadirCount,
+                'sakit' => $sakitCount,
+                'izin' => $izinCount,
+                'alpa' => $alpaCount,
+                'terlambat' => $terlambatCount,
+                'siswaTerlambatList' => $terlambatHariIni,
+                'siswaIzinList' => $izinHariIni,
+            ];
+        }
+
         return view('guru.dashboard', compact(
             'guru',
             'jadwalHariIni',
@@ -80,7 +135,8 @@ class GuruDashboardController extends Controller
             'jurnalTerlaksana',
             'jurnalPengganti',
             'jurnalTidakTerlaksana',
-            'totalJurnalGuru'
+            'totalJurnalGuru',
+            'waliMonitoring'
         ));
     }
 }

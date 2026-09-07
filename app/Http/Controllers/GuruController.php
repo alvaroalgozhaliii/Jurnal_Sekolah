@@ -223,4 +223,45 @@ class GuruController extends Controller
 
         return back()->with('success', "Import CSV berhasil! {$inserted} data guru ditambahkan, {$skipped} data dilewati.");
     }
+
+    public function exportCsv(Request $request)
+    {
+        $search = $request->get('search');
+        $query  = Guru::with('user');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('nip', 'like', "%{$search}%")
+                  ->orWhere('bidang_studi', 'like', "%{$search}%");
+            });
+        }
+
+        $data    = $query->orderBy('nama', 'asc')->get();
+        $filename = 'data_guru_' . date('Ymd_His') . '.csv';
+
+        $headers = [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+
+        return response()->stream(function () use ($data) {
+            $out = fopen('php://output', 'w');
+            fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($out, ['No', 'Nama Guru', 'NIP', 'Bidang Studi', 'No Telepon', 'Username', 'Role', 'Status Akun']);
+            foreach ($data as $i => $g) {
+                fputcsv($out, [
+                    $i + 1,
+                    $g->nama,
+                    $g->nip ?? '-',
+                    $g->bidang_studi ?? '-',
+                    $g->no_telp ?? '-',
+                    $g->user->username ?? '-',
+                    $g->user->role ?? 'guru',
+                    ($g->user && $g->user->aktif) ? 'Aktif' : 'Nonaktif',
+                ]);
+            }
+            fclose($out);
+        }, 200, $headers);
+    }
 }

@@ -866,17 +866,17 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .jurnal-calendar-popover {
     position: absolute;
-    top: calc(100% + 5px);
+    top: calc(100% + 6px);
     left: 0;
-    z-index: 1000;
-    width: 290px;
+    z-index: 9999;
+    width: 300px;
     background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    padding: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 14px 40px rgba(0,0,0,.16);
+    padding: 16px;
     display: none;
-    font-family: inherit;
+    font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .jurnal-calendar-popover.active {
@@ -887,29 +887,41 @@ input[type="number"]::-webkit-outer-spin-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
 }
 
 .jurnal-cal-month-title {
-    font-weight: 700;
-    color: var(--navy-primary);
-    font-size: 13px;
+    font-weight: 800;
+    font-size: 15px;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
 }
 
 .jurnal-cal-nav-btn {
-    background: var(--bg-card-header);
+    background: var(--bg-page);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 3px 7px;
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     font-weight: 700;
     color: var(--text-primary);
-    font-size: 12px;
+    font-size: 14px;
+    transition: all 0.18s ease;
 }
 
 .jurnal-cal-nav-btn:hover {
-    background: var(--navy-primary);
+    background: #3b82f6;
+    border-color: #3b82f6;
     color: #ffffff;
+    transform: scale(1.08);
 }
 
 .jurnal-cal-grid {
@@ -920,58 +932,83 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .jurnal-cal-day-label {
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
     color: var(--text-secondary);
-    padding: 3px 0;
+    padding: 4px 0;
     text-transform: uppercase;
 }
 
 .jurnal-cal-date-cell {
-    padding: 6px 0;
-    font-size: 12px;
-    border-radius: 4px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12.5px;
+    font-weight: 500;
+    border-radius: 8px;
     cursor: pointer;
     color: var(--text-primary);
-    transition: var(--transition);
+    transition: all 0.15s ease;
+    user-select: none;
 }
 
-.jurnal-cal-date-cell:hover {
-    background-color: var(--badge-navy-bg);
-    color: var(--navy-primary);
+.jurnal-cal-date-cell:hover:not(.other-month):not(.selected) {
+    background-color: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    transform: scale(1.08);
 }
 
 .jurnal-cal-date-cell.today {
-    border: 1px solid var(--navy-primary);
-    font-weight: 700;
+    box-shadow: inset 0 0 0 2px #3b82f6;
+    color: #3b82f6;
+    font-weight: 800;
 }
 
 .jurnal-cal-date-cell.selected {
-    background-color: var(--navy-primary);
-    color: #ffffff;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important;
+    color: #ffffff !important;
     font-weight: 700;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+    transform: scale(1.08);
 }
 
 .jurnal-cal-date-cell.other-month {
-    color: #cbd5e1;
+    opacity: 0.2;
     cursor: default;
-}
-
-.jurnal-cal-date-cell.other-month:hover {
-    background: none;
+    pointer-events: none;
 }
 
 .jurnal-cal-footer {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
-    padding-top: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
     border-top: 1px solid var(--border);
 }
 
 .jurnal-cal-btn-today,
 .jurnal-cal-btn-clear {
-    background: none;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.jurnal-cal-btn-today:hover {
+    background: #3b82f6;
+    color: #ffffff;
+    border-color: #3b82f6;
+}
+.jurnal-cal-btn-clear:hover {
+    background: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+}
     border: none;
     font-size: 11px;
     font-weight: 600;
@@ -1864,61 +1901,251 @@ input[type="number"]::-webkit-outer-spin-button {
     filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
 }
 
-.shape-badge.badge-top-left {
-    top: 9%;
-    left: 7%;
-    animation: floatBadgeWideLeft 8s ease-in-out infinite;
+/* Animated Shooting Stars & Particles */
+.shooting-stars-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
 }
 
-.shape-badge.badge-bottom-right {
-    bottom: 9%;
-    right: 7%;
+.shooting-star {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(-45deg, rgba(56, 189, 248, 1), rgba(56, 189, 248, 0));
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
+    animation: shootingStarAnim 7s ease-in-out infinite;
+    border-radius: 999px;
+}
+
+.shooting-star.star-1 {
+    top: 15%;
+    left: 20%;
+    width: 120px;
+    animation-delay: 0s;
+}
+
+.shooting-star.star-2 {
+    top: 35%;
+    right: 15%;
+    width: 150px;
+    background: linear-gradient(-45deg, rgba(192, 132, 252, 1), rgba(192, 132, 252, 0));
+    filter: drop-shadow(0 0 6px rgba(192, 132, 252, 0.8));
+    animation-delay: 2.5s;
+    animation-duration: 6s;
+}
+
+.shooting-star.star-3 {
+    top: 70%;
+    left: 10%;
+    width: 100px;
+    background: linear-gradient(-45deg, rgba(52, 211, 153, 1), rgba(52, 211, 153, 0));
+    filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
+    animation-delay: 4.8s;
+    animation-duration: 8s;
+}
+
+@keyframes shootingStarAnim {
+    0% {
+        transform: translateX(-100px) translateY(-100px) rotate(-45deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    40% {
+        transform: translateX(300px) translateY(300px) rotate(-45deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(300px) translateY(300px) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+.glow-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.8) 0%, transparent 70%);
+    animation: particleGlow 4s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.glow-particle.p-1 { width: 8px; height: 8px; top: 22%; left: 18%; animation-delay: 0s; }
+.glow-particle.p-2 { width: 12px; height: 12px; top: 68%; right: 22%; animation-delay: 1.2s; background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, transparent 70%); }
+.glow-particle.p-3 { width: 10px; height: 10px; top: 12%; right: 30%; animation-delay: 2.4s; background: radial-gradient(circle, rgba(251, 113, 133, 0.8) 0%, transparent 70%); }
+.glow-particle.p-4 { width: 7px; height: 7px; bottom: 18%; left: 32%; animation-delay: 0.8s; background: radial-gradient(circle, rgba(52, 211, 153, 0.8) 0%, transparent 70%); }
+
+@keyframes particleGlow {
+    0% { transform: scale(0.8) translateY(0); opacity: 0.3; }
+    100% { transform: scale(1.5) translateY(-15px); opacity: 0.9; }
+}
+
+/* 10 Floating Frosted Glass Badges */
+.shape-badge.badge-live-update {
+    top: 8%;
+    left: 4%;
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeLiveUpdate 8.5s ease-in-out infinite;
+}
+.shape-badge.badge-live-update svg { color: #38bdf8; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
+
+.shape-badge.badge-accurate {
+    top: 5%;
+    left: 28%;
+    border-color: rgba(251, 113, 133, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(251, 113, 133, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeAccurate 10.5s ease-in-out infinite;
+}
+.shape-badge.badge-accurate svg { color: #fb7185; filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.6)); }
+
+.shape-badge.badge-direct-alert {
+    top: 5%;
+    right: 28%;
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeDirectAlert 9s ease-in-out infinite;
+}
+.shape-badge.badge-direct-alert svg { color: #f87171; filter: drop-shadow(0 0 8px rgba(248, 113, 113, 0.7)); }
+
+.shape-badge.badge-presensi {
+    top: 8%;
+    right: 4%;
+    border-color: rgba(192, 132, 252, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(192, 132, 252, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgePresensi 10s ease-in-out infinite;
+}
+.shape-badge.badge-presensi svg { color: #c084fc; filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.6)); }
+
+.shape-badge.badge-realtime {
+    top: 48%;
+    left: 2%;
+    border-color: rgba(251, 191, 36, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(251, 191, 36, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeRealtime 9.5s ease-in-out infinite;
+}
+.shape-badge.badge-realtime svg { color: #fbbf24; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6)); }
+
+.shape-badge.badge-secure {
+    top: 48%;
+    right: 2%;
+    border-color: rgba(96, 165, 250, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(96, 165, 250, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeSecure 8.5s ease-in-out infinite;
+}
+.shape-badge.badge-secure svg { color: #60a5fa; filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6)); }
+
+.shape-badge.badge-recap {
+    bottom: 8%;
+    left: 4%;
+    border-color: rgba(45, 212, 191, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(45, 212, 191, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeRecap 11s ease-in-out infinite;
+}
+.shape-badge.badge-recap svg { color: #2dd4bf; filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.6)); }
+
+.shape-badge.badge-discipline {
+    bottom: 5%;
+    left: 28%;
+    border-color: rgba(250, 204, 21, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(250, 204, 21, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeDiscipline 10.2s ease-in-out infinite;
+}
+.shape-badge.badge-discipline svg { color: #facc15; filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.6)); }
+
+.shape-badge.badge-transparent {
+    bottom: 5%;
+    right: 28%;
+    border-color: rgba(129, 140, 248, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(129, 140, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeTransparent 9.8s ease-in-out infinite;
+}
+.shape-badge.badge-transparent svg { color: #818cf8; filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.6)); }
+
+.shape-badge.badge-terverifikasi {
+    bottom: 8%;
+    right: 4%;
     border-color: rgba(34, 197, 94, 0.45);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    animation: floatBadgeWideRight 9s ease-in-out infinite;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(34, 197, 94, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeTerverifikasi 9s ease-in-out infinite;
+}
+.shape-badge.badge-terverifikasi svg { color: #4ade80; filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6)); }
+
+/* Animations for each badge */
+@keyframes floatBadgeLiveUpdate {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(20px, -24px) rotate(2deg); }
+    50% { transform: translate(35px, -8px) rotate(-2deg); }
+    75% { transform: translate(15px, 18px) rotate(1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
-.shape-badge.badge-bottom-right svg {
-    color: #4ade80;
-    filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6));
+@keyframes floatBadgeTerverifikasi {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(-22px, 22px) rotate(-2deg); }
+    50% { transform: translate(-38px, 6px) rotate(2deg); }
+    75% { transform: translate(-16px, -20px) rotate(-1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
-/* Gerakan melayang luas & dinamis untuk KBM Online */
-@keyframes floatBadgeWideLeft {
-    0% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
-    25% {
-        transform: translate(24px, -32px) rotate(3deg);
-    }
-    50% {
-        transform: translate(45px, -12px) rotate(-2deg);
-    }
-    75% {
-        transform: translate(18px, 24px) rotate(2deg);
-    }
-    100% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
+@keyframes floatBadgeAccurate {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(-15px, 15px) rotate(-2deg); }
+    66% { transform: translate(15px, 18px) rotate(2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
-/* Gerakan melayang luas & dinamis untuk Terverifikasi */
-@keyframes floatBadgeWideRight {
-    0% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
-    25% {
-        transform: translate(-28px, 28px) rotate(-3deg);
-    }
-    50% {
-        transform: translate(-48px, 8px) rotate(2deg);
-    }
-    75% {
-        transform: translate(-20px, -28px) rotate(-2deg);
-    }
-    100% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
+@keyframes floatBadgeDirectAlert {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(18px, 15px) rotate(2deg); }
+    66% { transform: translate(-12px, 20px) rotate(-2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgePresensi {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(-18px, 22px) rotate(-2deg); }
+    50% { transform: translate(-30px, -12px) rotate(2deg); }
+    75% { transform: translate(-10px, -25px) rotate(-1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeRealtime {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    30% { transform: translate(20px, -16px) rotate(2.5deg); }
+    60% { transform: translate(12px, 20px) rotate(-2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeSecure {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    30% { transform: translate(-20px, -20px) rotate(-2.5deg); }
+    60% { transform: translate(-12px, 16px) rotate(2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeRecap {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(18px, -18px) rotate(1.5deg); }
+    50% { transform: translate(32px, 8px) rotate(-2deg); }
+    75% { transform: translate(12px, 20px) rotate(1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeDiscipline {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(-15px, -15px) rotate(-2deg); }
+    66% { transform: translate(15px, -18px) rotate(2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeTransparent {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(16px, -15px) rotate(2deg); }
+    66% { transform: translate(-15px, -18px) rotate(-2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
 /* Floating Geometric Cubes */
@@ -2418,13 +2645,13 @@ input[type="number"]::-webkit-outer-spin-button {
     z-index: 3;
 }
 
-/* SVG Multi-Layer Animated Ocean Wave Divider */
+/* SVG 3-Layered Wave Divider */
 .sso-wave-svg {
     position: absolute;
-    top: -1px;
-    bottom: -1px;
-    left: -79px;
-    height: calc(100% + 2px);
+    top: 0;
+    bottom: 0;
+    left: -80px;
+    height: 100%;
     width: 80px;
     color: #1d4ed8;
     pointer-events: none;
@@ -2432,68 +2659,33 @@ input[type="number"]::-webkit-outer-spin-button {
     overflow: visible;
 }
 
-/* Animasi Ombak Utama (Front Layer) - Mengalun Halus & Rapi Menyatu */
-.sso-wave-layer-front {
-    transform-origin: 100% 50%;
-    animation: waveSwayFront 6.5s ease-in-out infinite alternate;
-}
-
-/* Animasi Ombak Tengah (Mid Layer - Cyan Glow) */
-.sso-wave-layer-mid {
-    transform-origin: 100% 50%;
-    animation: waveSwayMid 8.5s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4));
-}
-
-/* Animasi Ombak Belakang (Back Layer - Soft Sky) */
+/* Layer 1: Back Layer (Light Periwinkle Blue Wave - Widest) */
 .sso-wave-layer-bg {
-    transform-origin: 100% 50%;
-    animation: waveSwayBg 10.5s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.35));
+    filter: none !important;
 }
 
-/* Gelombang mengalun melengkung tanpa patah di perbatasan panel */
-@keyframes waveSwayFront {
-    0% {
-        transform: scaleX(1);
-    }
-    50% {
-        transform: scaleX(1.14);
-    }
-    100% {
-        transform: scaleX(0.94);
-    }
+/* Layer 2: Middle Layer (Medium Royal Blue Wave) */
+.sso-wave-layer-mid {
+    filter: none !important;
 }
 
-@keyframes waveSwayMid {
-    0% {
-        transform: scaleX(0.96);
-        opacity: 0.6;
-    }
-    50% {
-        transform: scaleX(1.24);
-        opacity: 0.85;
-    }
-    100% {
-        transform: scaleX(1.06);
-        opacity: 0.7;
-    }
+/* Layer 3: Front Layer (Dark Solid Royal Blue Wave - Narrowest) */
+.sso-wave-layer-front {
+    filter: none !important;
 }
 
-@keyframes waveSwayBg {
-    0% {
-        transform: scaleX(1.1);
-        opacity: 0.5;
-    }
-    50% {
-        transform: scaleX(0.9);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scaleX(1.26);
-        opacity: 0.6;
-    }
+/* Light mode specific wave color palette to match reference image */
+[data-theme="light"] .sso-wave-layer-bg {
+    fill: rgba(147, 197, 253, 0.65) !important;
 }
+[data-theme="light"] .sso-wave-layer-mid {
+    fill: rgba(59, 130, 246, 0.85) !important;
+}
+[data-theme="light"] .sso-wave-layer-front {
+    fill: #1d4ed8 !important;
+}
+
+/* Wave keyframes removed — all animation handled via SVG <animate> on path d attribute */
 
 /* Watermark Pattern Icons */
 .sso-pattern-bg {
@@ -2755,6 +2947,20 @@ input[type="number"]::-webkit-outer-spin-button {
     .sso-form-wrap {
         max-width: 100%;
     }
+
+    .shape-badge.badge-accurate,
+    .shape-badge.badge-direct-alert,
+    .shape-badge.badge-discipline,
+    .shape-badge.badge-transparent,
+    .shape-badge.badge-realtime,
+    .shape-badge.badge-secure {
+        display: none;
+    }
+
+    .shape-badge {
+        font-size: 11px;
+        padding: 6px 14px;
+    }
 }
 
 /* Theme Toggle Button as a sleek small box in top-right corner */
@@ -2788,21 +2994,32 @@ input[type="number"]::-webkit-outer-spin-button {
    LIGHT MODE OVERRIDES FOR SSO LOGIN CONTAINER
    ============================================================ */
 [data-theme="light"] .login-page {
-    background-color: #f1f5f9;
+    background-color: #e0f2fe;
     background-image: 
+<<<<<<< HEAD
         radial-gradient(circle at 10% 40%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
         radial-gradient(circle at 90% 60%, rgba(37, 99, 235, 0.15) 0%, transparent 45%);
+=======
+        radial-gradient(circle at 15% 25%, rgba(37, 99, 235, 0.22) 0%, transparent 50%),
+        radial-gradient(circle at 85% 75%, rgba(14, 165, 233, 0.22) 0%, transparent 50%),
+        linear-gradient(135deg, #e2e8f0 0%, #dbeafe 50%, #eff6ff 100%);
+>>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .login-page::before,
 [data-theme="light"] .login-page::after {
+<<<<<<< HEAD
     border-color: rgba(0, 0, 0, 0.06);
     box-shadow: inset 0 0 100px rgba(37, 99, 235, 0.06);
+=======
+    border-color: rgba(30, 58, 138, 0.12);
+    box-shadow: inset 0 0 120px rgba(37, 99, 235, 0.08);
+>>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .sso-container {
     background-color: #ffffff;
-    box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(226, 232, 240, 0.8);
+    box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(191, 219, 254, 0.9);
 }
 
 [data-theme="light"] .sso-left {
@@ -2819,11 +3036,11 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .sso-welcome-desc {
-    color: #475569;
+    color: #334155;
 }
 
 [data-theme="light"] .sso-left-footer {
-    color: #94a3b8;
+    color: #64748b;
 }
 
 [data-theme="light"] .sso-theme-btn-corner {
@@ -2848,7 +3065,11 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .login-orb.orb-3 {
+<<<<<<< HEAD
     background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, transparent 70%);
+=======
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+>>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .shape-ring {
@@ -2856,11 +3077,16 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .shape-sparkle {
+<<<<<<< HEAD
     color: rgba(37, 99, 235, 0.55);
+=======
+    color: rgba(37, 99, 235, 0.65);
+>>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .login-bg-grid-left,
 [data-theme="light"] .login-bg-grid-right {
+<<<<<<< HEAD
     color: rgba(30, 58, 138, 0.2);
 }
 
@@ -2878,7 +3104,194 @@ input[type="number"]::-webkit-outer-spin-button {
 
 [data-theme="light"] .ambient-wave {
     color: rgba(37, 99, 235, 0.25);
+=======
+    color: rgba(30, 58, 138, 0.28);
+    opacity: 0.85;
 }
+
+[data-theme="light"] .ambient-wave {
+    color: rgba(37, 99, 235, 0.28);
+}
+
+[data-theme="light"] .shooting-star {
+    background: linear-gradient(-45deg, rgba(37, 99, 235, 1), rgba(37, 99, 235, 0));
+    filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.8));
+}
+
+[data-theme="light"] .glow-particle {
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.9) 0%, transparent 70%);
+}
+
+[data-theme="light"] .shape-badge {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1.5px solid rgba(37, 99, 235, 0.35);
+    color: #0f172a;
+    box-shadow: 0 12px 32px rgba(30, 58, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+[data-theme="light"] .shape-badge span {
+    color: #0f172a;
+    font-weight: 800;
+}
+
+/* ============================================================
+   GLOBAL INTERACTIVE ANIMATIONS & RESPONSIVE TOUCH STYLING
+   (Buttons, Form Columns, Inputs, Selects, Cards & Clickable Elements)
+   ============================================================ */
+
+/* 1. Buttons & Clickable Elements */
+button, 
+[type='button'], 
+[type='reset'], 
+[type='submit'],
+[role='button'],
+.btn,
+a,
+select,
+.cursor-pointer,
+.nav-link,
+summary,
+.badge-clickable {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: manipulation;
+}
+
+button:hover, 
+[type='button']:hover, 
+[type='reset']:hover, 
+[type='submit']:hover,
+[role='button']:hover,
+.btn:hover,
+a:hover,
+select:hover,
+.cursor-pointer:hover,
+.nav-link:hover,
+summary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
+}
+
+button:active, 
+[type='button']:active, 
+[type='reset']:active, 
+[type='submit']:active,
+[role='button']:active,
+.btn:active,
+a:active,
+select:active,
+.cursor-pointer:active,
+.nav-link:active,
+summary:active {
+    transform: scale(0.96) translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 2. Form Columns & Inputs (Text, Password, Number, Email, Select, Textarea) */
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='number'],
+input[type='search'],
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'],
+input[type='file'],
+textarea,
+select,
+.form-control,
+.form-select,
+.sso-input-pill {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: manipulation;
+}
+
+input[type='text']:hover,
+input[type='password']:hover,
+input[type='email']:hover,
+input[type='number']:hover,
+input[type='search']:hover,
+input[type='date']:hover,
+input[type='time']:hover,
+input[type='datetime-local']:hover,
+textarea:hover,
+select:hover,
+.form-control:hover,
+.form-select:hover,
+.sso-input-pill:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='search']:focus,
+input[type='date']:focus,
+input[type='time']:focus,
+input[type='datetime-local']:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus,
+.sso-input-pill:focus-within {
+    transform: translateY(-1px) scale(1.005);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3), 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 3. Checkboxes & Radio Buttons */
+input[type='checkbox'],
+input[type='radio'] {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+input[type='checkbox']:hover,
+input[type='radio']:hover {
+    transform: scale(1.15);
+}
+
+input[type='checkbox']:active,
+input[type='radio']:active {
+    transform: scale(0.9);
+}
+
+/* 4. Table Rows, Columns, Cards & Containers */
+table tbody tr,
+.card,
+.stat-card,
+.box,
+.panel {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.04);
+}
+
+.card:hover,
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure mobile screen responsive tap target padding */
+@media (max-width: 768px) {
+    button, 
+    .btn, 
+    input[type='button'], 
+    input[type='submit'], 
+    .form-control, 
+    select {
+        min-height: 42px;
+    }
+>>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
+}
+
 
 
 
