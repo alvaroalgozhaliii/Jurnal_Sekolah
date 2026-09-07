@@ -55,6 +55,13 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Content Area Background Ornaments (Light Mode) */
+    --content-orb-1: rgba(37, 99, 235, 0.08);
+    --content-orb-2: rgba(99, 102, 241, 0.06);
+    --content-orb-3: rgba(14, 165, 233, 0.06);
+    --content-dot-color: rgba(30, 58, 138, 0.09);
+    --content-ring-color: rgba(30, 58, 138, 0.09);
 }
 
 /* Base Setup */
@@ -370,6 +377,51 @@ a:hover {
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: #cbd5e1 transparent;
+    position: relative;
+
+    /* Subtle ambient gradient orbs di sudut-sudut — Elegan & masuk tema */
+    background-color: var(--bg-app);
+    background-image:
+        radial-gradient(circle at 10% 15%, var(--content-orb-1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, var(--content-orb-3) 0%, transparent 35%),
+        radial-gradient(circle at 85% 85%, var(--content-orb-2) 0%, transparent 45%),
+        radial-gradient(circle at 25% 90%, var(--content-orb-1) 0%, transparent 35%);
+    background-attachment: fixed;
+}
+
+/* Subtle dot grid pattern overlay */
+.content-area::before {
+    content: '';
+    position: fixed;
+    top: 56px;
+    left: var(--sidebar-width);
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, var(--content-dot-color) 1.2px, transparent 1.2px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Subtle decorative accent ring di pojok kanan atas */
+.content-area::after {
+    content: '';
+    position: fixed;
+    top: 20px;
+    right: -70px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--content-ring-color);
+    box-shadow: 0 0 60px var(--content-orb-3);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Pastikan semua elemen konten di atas dekorasi */
+.content-area > * {
+    position: relative;
+    z-index: 1;
 }
 
 .content-area::-webkit-scrollbar {
@@ -542,8 +594,8 @@ a:hover {
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: none;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-icon-box {
@@ -921,7 +973,7 @@ input[type="number"]::-webkit-outer-spin-button {
     background: #3b82f6;
     border-color: #3b82f6;
     color: #ffffff;
-    transform: scale(1.08);
+    transform: none;
 }
 
 .jurnal-cal-grid {
@@ -1009,11 +1061,6 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #ffffff;
     border-color: #ef4444;
 }
-    border: none;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-}
 
 .jurnal-cal-btn-today { color: var(--navy-primary); }
 .jurnal-cal-btn-clear { color: #dc2626; }
@@ -1083,6 +1130,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
     .topbar { padding: 0 14px; }
     .content-area { padding: 14px; }
+    .content-area::before { left: 0; top: 50px; }
+    .content-area::after { display: none; }
 
     /* Grid: 2 kolom untuk stat, 1 kolom untuk yang lain */
     .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -1366,6 +1415,13 @@ input[type="number"]::-webkit-outer-spin-button {
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 10px -1px rgba(0, 0, 0, 0.6);
     --shadow-lg: 0 12px 24px -3px rgba(0, 0, 0, 0.7);
+
+    /* Content Area Background Ornaments (Dark Mode) */
+    --content-orb-1: rgba(37, 99, 235, 0.16);
+    --content-orb-2: rgba(99, 102, 241, 0.11);
+    --content-orb-3: rgba(14, 165, 233, 0.09);
+    --content-dot-color: rgba(148, 163, 184, 0.09);
+    --content-ring-color: rgba(59, 130, 246, 0.15);
 }
 
 [data-theme="dark"] body {
@@ -1747,7 +1803,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .theme-toggle-btn:hover {
     background-color: var(--border);
     color: var(--gold-accent);
-    transform: scale(1.05);
+    transform: none;
 }
 
 [data-theme="dark"] .theme-toggle-btn .sun-icon {
@@ -2986,8 +3042,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .sso-theme-btn-corner:hover {
     background-color: rgba(255, 255, 255, 0.18) !important;
     border-color: rgba(255, 255, 255, 0.3) !important;
-    transform: scale(1.06);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
 }
 
 /* ============================================================
@@ -2996,25 +3052,15 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme="light"] .login-page {
     background-color: #e0f2fe;
     background-image: 
-<<<<<<< HEAD
-        radial-gradient(circle at 10% 40%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 90% 60%, rgba(37, 99, 235, 0.15) 0%, transparent 45%);
-=======
         radial-gradient(circle at 15% 25%, rgba(37, 99, 235, 0.22) 0%, transparent 50%),
         radial-gradient(circle at 85% 75%, rgba(14, 165, 233, 0.22) 0%, transparent 50%),
         linear-gradient(135deg, #e2e8f0 0%, #dbeafe 50%, #eff6ff 100%);
->>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .login-page::before,
 [data-theme="light"] .login-page::after {
-<<<<<<< HEAD
-    border-color: rgba(0, 0, 0, 0.06);
-    box-shadow: inset 0 0 100px rgba(37, 99, 235, 0.06);
-=======
     border-color: rgba(30, 58, 138, 0.12);
     box-shadow: inset 0 0 120px rgba(37, 99, 235, 0.08);
->>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .sso-container {
@@ -3065,11 +3111,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .login-orb.orb-3 {
-<<<<<<< HEAD
     background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, transparent 70%);
-=======
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
->>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .shape-ring {
@@ -3077,34 +3119,11 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .shape-sparkle {
-<<<<<<< HEAD
-    color: rgba(37, 99, 235, 0.55);
-=======
     color: rgba(37, 99, 235, 0.65);
->>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
 }
 
 [data-theme="light"] .login-bg-grid-left,
 [data-theme="light"] .login-bg-grid-right {
-<<<<<<< HEAD
-    color: rgba(30, 58, 138, 0.2);
-}
-
-[data-theme="light"] .shape-badge {
-    background: rgba(255, 255, 255, 0.92);
-    border: 1.5px solid rgba(56, 189, 248, 0.6);
-    color: #1e293b;
-    box-shadow: 0 10px 28px rgba(30, 58, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-[data-theme="light"] .shape-badge.badge-bottom-right {
-    border-color: rgba(34, 197, 94, 0.65);
-    box-shadow: 0 10px 28px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-[data-theme="light"] .ambient-wave {
-    color: rgba(37, 99, 235, 0.25);
-=======
     color: rgba(30, 58, 138, 0.28);
     opacity: 0.85;
 }
@@ -3140,50 +3159,13 @@ input[type="number"]::-webkit-outer-spin-button {
    ============================================================ */
 
 /* 1. Buttons & Clickable Elements */
-button, 
-[type='button'], 
-[type='reset'], 
-[type='submit'],
-[role='button'],
-.btn,
-a,
-select,
-.cursor-pointer,
-.nav-link,
-summary,
-.badge-clickable {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-amber {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     touch-action: manipulation;
-}
-
-button:hover, 
-[type='button']:hover, 
-[type='reset']:hover, 
-[type='submit']:hover,
-[role='button']:hover,
-.btn:hover,
-a:hover,
-select:hover,
-.cursor-pointer:hover,
-.nav-link:hover,
-summary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
-}
-
-button:active, 
-[type='button']:active, 
-[type='reset']:active, 
-[type='submit']:active,
-[role='button']:active,
-.btn:active,
-a:active,
-select:active,
-.cursor-pointer:active,
-.nav-link:active,
-summary:active {
-    transform: scale(0.96) translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 2. Form Columns & Inputs (Text, Password, Number, Email, Select, Textarea) */
@@ -3273,10 +3255,8 @@ table tbody tr:hover {
     background-color: rgba(59, 130, 246, 0.04);
 }
 
-.card:hover,
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
+.card:hover {
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
 /* Ensure mobile screen responsive tap target padding */
@@ -3289,7 +3269,76 @@ table tbody tr:hover {
     select {
         min-height: 42px;
     }
->>>>>>> c21b5982290bda33f3a1819463667428c9bcb435
+}
+
+/* ============================================================
+   DISABLE HOVER / TRANSFORM EFFECTS ON ALL ICONS & ICON BOXES
+   ============================================================ */
+.svg-icon,
+.stat-icon-box,
+.sidebar-brand-icon,
+.sso-brand-icon,
+.sso-input-icon,
+.theme-toggle-btn,
+.theme-toggle-btn svg,
+.sso-theme-btn-corner,
+.sso-theme-btn-corner svg,
+.topbar-hamburger,
+.topbar-hamburger svg,
+.btn-toggle-password,
+.sso-eye-btn,
+.cal-nav-arrow,
+.jurnal-cal-nav-btn,
+.nav-item .svg-icon,
+.nav-item-logout .svg-icon,
+.card-header .svg-icon,
+.stat-card .svg-icon,
+.pat-icon,
+svg {
+    transform: none !important;
+}
+
+.svg-icon:hover,
+.stat-icon-box:hover,
+.sidebar-brand-icon:hover,
+.sso-brand-icon:hover,
+.sso-input-icon:hover,
+.theme-toggle-btn:hover,
+.theme-toggle-btn:hover svg,
+.sso-theme-btn-corner:hover,
+.sso-theme-btn-corner:hover svg,
+.topbar-hamburger:hover,
+.topbar-hamburger:hover svg,
+.btn-toggle-password:hover,
+.sso-eye-btn:hover,
+.cal-nav-arrow:hover,
+.jurnal-cal-nav-btn:hover,
+.nav-item:hover .svg-icon,
+.nav-item-logout:hover .svg-icon,
+.card-header:hover .svg-icon,
+.stat-card:hover .stat-icon-box,
+.stat-card:hover .svg-icon,
+.btn:hover .svg-icon,
+a:hover .svg-icon,
+button:hover .svg-icon,
+.pat-icon:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* Stat card (kartu icon) — tetap kokoh tanpa efek gerak/hover */
+.stat-card:hover {
+    transform: none !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Sidebar navigation item (menu icon) — tanpa loncat/shadow */
+.nav-item:hover,
+.nav-item-logout:hover,
+.sidebar-brand:hover {
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 

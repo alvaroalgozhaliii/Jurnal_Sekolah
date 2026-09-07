@@ -28,19 +28,12 @@
         touch-action: manipulation;
     }
     
-    a:hover,
-    button:hover, 
-    [type='button']:hover, 
-    [type='reset']:hover, 
-    [type='submit']:hover,
-    [role='button']:hover,
-    .btn:hover,
-    select:hover,
-    .cursor-pointer:hover,
-    .nav-link:hover,
-    summary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-success:hover,
+    .btn-danger:hover,
+    .btn-amber:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
     a:active,
@@ -144,9 +137,7 @@
         background-color: rgba(59, 130, 246, 0.04);
     }
 
-    .card:hover,
-    .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
+    .card:hover {
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
     }
 }
