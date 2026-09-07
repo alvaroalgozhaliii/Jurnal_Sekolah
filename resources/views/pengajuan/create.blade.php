@@ -101,7 +101,7 @@
                 <label class="form-label" for="id_siswa">Pilih Siswa <span class="req">*</span></label>
                 <select id="id_siswa" name="id_siswa" class="form-control select-search" placeholder="Ketik Nama / NISN / Kelas Siswa...">
                     @if(!Auth::user()->isOrtu())
-                        <option value="">-- Cari Nama / NISN / Kelas Siswa --</option>
+                        <option value="">Cari Nama / NISN / Kelas Siswa</option>
                     @endif
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}" {{ old('id_siswa') == $s->id_siswa ? 'selected' : '' }}>
@@ -115,7 +115,7 @@
             <div class="form-group mb-16" id="group-pilih-guru" style="display:none;">
                 <label class="form-label" for="id_guru">Pilih Guru yang Meminta Dispen <span class="req">*</span></label>
                 <select id="id_guru" name="id_guru" class="form-control select-search" placeholder="Ketik Nama Guru / NIP / Bidang Studi...">
-                    <option value="">-- Cari Nama Guru / NIP / Bidang Studi --</option>
+                    <option value="">Cari Nama Guru / NIP / Bidang Studi</option>
                     @foreach($gurus as $g)
                     <option value="{{ $g->id_guru }}" {{ old('id_guru') == $g->id_guru ? 'selected' : '' }}>
                         {{ $g->nama }} (NIP: {{ $g->nip ?? '-' }} | {{ $g->bidang_studi ?? 'Guru' }})

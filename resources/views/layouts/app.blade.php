@@ -474,15 +474,20 @@
                 Profil Akun
             </a>
 
-            <form action="{{ route('logout') }}" method="POST" style="margin-top: 16px;">
-                @csrf
-                <button type="submit" class="nav-item" style="width: 100%; border: none; background: none; text-align: left; cursor: pointer; color: #f87171;">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    Keluar Sistem
-                </button>
-            </form>
             @endauth
         </nav>
+
+        @auth
+        <div class="sidebar-footer">
+            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                @csrf
+                <button type="submit" class="nav-item nav-item-logout" style="width: 100%; border: none; background: none; text-align: left; cursor: pointer;">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Keluar
+                </button>
+            </form>
+        </div>
+        @endauth
     </aside>
 
     <!-- MAIN CONTENT AREA -->

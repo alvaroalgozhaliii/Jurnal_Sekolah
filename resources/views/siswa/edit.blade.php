@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <label class="form-label" for="jenis_kelamin">Jenis Kelamin</label>
                     <select id="jenis_kelamin" name="jenis_kelamin" class="form-control">
-                        <option value="">-- Pilih --</option>
+                        <option value="">Pilih</option>
                         <option value="L" {{ $siswa->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
                         <option value="P" {{ $siswa->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
                     </select>

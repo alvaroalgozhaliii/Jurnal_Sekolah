@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label class="form-label" for="id_guru_piket">Guru Piket yang Bertugas (Opsional)</label>
                     <select class="form-control select-search" id="id_guru_piket" name="id_guru_piket" placeholder="Ketik nama Guru Piket...">
-                        <option value="">-- Pilih Guru Piket (Opsional) --</option>
+                        <option value="">Pilih Guru Piket (Opsional)</option>
                         @foreach($gurus as $guru)
                             <option value="{{ $guru->id_guru }}" @selected(old('id_guru_piket', $jadwalWaka->id_guru_piket) == $guru->id_guru)>
                                 {{ $guru->nama }} ({{ $guru->nip ? 'NIP: '.$guru->nip : ($guru->bidang_studi ?? 'Guru') }})
