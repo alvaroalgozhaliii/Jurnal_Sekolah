@@ -19,7 +19,7 @@
     <div class="card-body">
         <form action="{{ route('admin.pengaturan.update') }}" method="POST">
             @csrf
-            
+
             <h4 class="text-navy mb-12">1. Hak Akses & Batas Waktu Pengisian Jurnal</h4>
             <div class="form-group">
                 <label class="form-label" for="batas_waktu_jurnal_menit">Batas Waktu Pengisian Jurnal (Menit setelah KBM selesai)</label>
@@ -30,7 +30,7 @@
             </div>
 
             <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
-            
+
             <h4 class="text-navy mb-12">2. Pengaturan Jam Pelajaran</h4>
             <div class="form-row">
                 <div class="form-group">
@@ -146,5 +146,63 @@
         </form>
     </div>
 @endif
+</div>
+
+{{-- AKUN: UBAH USERNAME & PASSWORD (SEMUA ROLE) --}}
+<div class="grid-2" style="margin-top:24px;">
+
+    {{-- UBAH USERNAME --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Akun — Ubah Username</h3>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('profil.username') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label class="form-label" for="username">Username <span class="req">*</span></label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value="{{ old('username', $user->username) }}"
+                        class="form-control"
+                        required
+                    >
+                    <small class="text-muted">Username digunakan untuk login ke sistem.</small>
+                </div>
+                @error('username')
+                    <div class="alert alert-danger" style="padding:8px 12px; font-size:13px;">{{ $message }}</div>
+                @enderror
+                <button type="submit" class="btn btn-primary mt-16">SIMPAN USERNAME</button>
+            </form>
+        </div>
+    </div>
+
+    {{-- UBAH PASSWORD --}}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Akun — Ubah Password</h3>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('profil.password') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label class="form-label" for="password_lama">Password Lama <span class="req">*</span></label>
+                    <input type="password" id="password_lama" name="password_lama" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password_baru">Password Baru <span class="req">*</span></label>
+                    <input type="password" id="password_baru" name="password_baru" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password_baru_confirmation">Konfirmasi Password Baru <span class="req">*</span></label>
+                    <input type="password" id="password_baru_confirmation" name="password_baru_confirmation" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-amber mt-16">UBAH PASSWORD</button>
+            </form>
+        </div>
+    </div>
+
 </div>
 @endsection
