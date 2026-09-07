@@ -30,7 +30,7 @@
                 <div class="form-group">
                     <label class="form-label" for="hari">Hari <span class="req">*</span></label>
                     <select id="hari" name="hari" class="form-control" required onchange="updateWaktuDisplay();">
-                        <option value="">-- Pilih Hari --</option>
+                        <option value="">Pilih Hari</option>
                         @foreach(['Senin','Selasa','Rabu','Kamis','Jumat'] as $h)
                         <option value="{{ $h }}" {{ old('hari', $jadwal->hari) == $h ? 'selected' : '' }}>{{ $h }}</option>
                         @endforeach
@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label class="form-label" for="jam_ke">Jam Ke <span class="req">*</span></label>
                     <select id="jam_ke" name="jam_ke" class="form-control" required onchange="updateWaktuDisplay();">
-                        <option value="">-- Pilih Jam --</option>
+                        <option value="">Pilih Jam</option>
                         @for($i = 1; $i <= 13; $i++)
                         <option value="{{ $i }}" {{ old('jam_ke', $jadwal->jam_ke) == $i ? 'selected' : '' }}>Jam {{ $i }}</option>
                         @endfor
@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <label class="form-label" for="id_mapel">Mata Pelajaran <span class="req">*</span></label>
                     <select id="id_mapel" name="mapel" class="form-control select-search" required placeholder="Ketik / Pilih Mata Pelajaran">
-                        <option value="">-- Pilih Mata Pelajaran --</option>
+                        <option value="">Pilih Mata Pelajaran</option>
                         @foreach($mapel as $m)
                         <option value="{{ $m->nama_mapel }}" {{ old('mapel', $jadwal->mapel) == $m->nama_mapel ? 'selected' : '' }}>{{ $m->nama_mapel }}</option>
                         @endforeach
@@ -83,7 +83,7 @@
                 <div class="form-group">
                     <label class="form-label" for="id_guru">Guru Pengajar <span class="req">*</span></label>
                     <select id="id_guru" name="id_guru" class="form-control select-search" required placeholder="Ketik / Pilih Guru Pengajar">
-                        <option value="">-- Pilih Guru --</option>
+                        <option value="">Pilih Guru</option>
                         @foreach($guru as $g)
                         <option value="{{ $g->id_guru }}" {{ old('id_guru', $jadwal->id_guru) == $g->id_guru ? 'selected' : '' }}>{{ $g->nama }} ({{ $g->nip ?: ($g->bidang_studi ?: 'Guru') }})</option>
                         @endforeach

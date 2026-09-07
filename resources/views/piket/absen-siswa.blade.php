@@ -7,7 +7,7 @@
     <form action="{{ route('piket.absen-siswa') }}" method="GET">
         <label style="font-weight: bold; font-size: 15px;">1. Pilih Kelas * :</label>
         <select name="id_kelas" class="form-control select-search" required style="min-width: 250px;" placeholder="Ketik / Pilih Kelas..." onchange="this.form.submit()">
-            <option value="">-- Pilih Kelas --</option>
+            <option value="">Pilih Kelas</option>
             @foreach($kelasList as $k)
                 <option value="{{ $k->id_kelas }}" {{ $idKelas == $k->id_kelas ? 'selected' : '' }}>
                     {{ $k->nama_kelas }} ({{ $k->tingkat }})
