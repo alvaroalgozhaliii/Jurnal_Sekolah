@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             @if(Auth::user()->isAdmin() || Auth::user()->isPiket() || Auth::user()->isWaka())
             <div class="form-group" style="margin:0;">
                 <label for="id_guru" class="form-label" style="margin-bottom:2px;">Filter Guru</label>
-                <select id="id_guru" name="id_guru" class="form-control">
+                <select id="id_guru" name="id_guru" class="form-control select-search" data-searchable="true">
                     <option value="">Semua Guru</option>
                     @foreach($guruList as $g)
                     <option value="{{ $g->id_guru }}" {{ $id_guru == $g->id_guru ? 'selected' : '' }}>{{ $g->nama }}</option>
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="form-group" style="margin:0;">
                 <label for="id_kelas" class="form-label" style="margin-bottom:2px;">Filter Kelas</label>
-                <select id="id_kelas" name="id_kelas" class="form-control">
+                <select id="id_kelas" name="id_kelas" class="form-control select-search" data-searchable="true">
                     <option value="">Semua Kelas</option>
                     @foreach($kelasList as $k)
                     <option value="{{ $k->id_kelas }}" {{ $id_kelas == $k->id_kelas ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>

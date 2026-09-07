@@ -20,7 +20,7 @@
             @csrf
             <div class="form-group">
                 <label class="form-label" for="id_siswa">Pilih Siswa <span class="req">*</span></label>
-                <select id="id_siswa" name="id_siswa" class="form-control" required>
+                <select id="id_siswa" name="id_siswa" class="form-control select-search" data-searchable="true" required>
                     <option value="">-- Pilih Siswa --</option>
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}">

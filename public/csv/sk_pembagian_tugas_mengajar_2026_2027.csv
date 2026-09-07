@@ -1,0 +1,129 @@
+no,nama_guru,nip,mata_pelajaran,kelas_mengajar,jumlah_jam,tahun_pelajaran
+1,"Trisno Wibowo, S.Pd, M.M",19810115 200312 1 003,Kepala Sekolah,-,0,2026/2027
+2,"Martiin, S.Pd",19670604 198903 2 009,Konsentrasi Keahlian,"XI MP 1, XII MP 1",26,2026/2027
+3,"Yani, S.Pd.",19661207 199412 1 003,Bahasa Indonesia,"X TKI 1, X TKI 2, XI MP 1, XII MP 4",26,2026/2027
+4,"Siti Umiharsih, S.Pd",19700825 199512 2 001,"Kreativitas, Inovasi, dan Kewirausahaan","XI PSPT 1, XI PSPT 2, XII AK 2, XII PSPT 1, XII PSPT 2",25,2026/2027
+5,"Winarsih, S.Pd, M.Pd",19700325 200312 2 007,BK,"X PSPT 1, X PSPT 2, XI PSPT 1, XI PSPT 2, XI AK 2, XII PSPT 1, XII PSPT 2",24,2026/2027
+6,"Dwi Rini Manfaati, S.Pd",19701017 199703 2 004,Bahasa Inggris,"X BD 2, X BD 3, XI BD 1, XI BD 2, XI BD 3, XII BD 1, XII BD 2, XII BD 3, XII TKI 1",36,2026/2027
+7,Dra. Anik Indriani,19681128 200501 2 004,Sejarah,"XI AK 1, XI AK 2, XI AK 3, XI AK 4, XI MP 1, XI MP 2, XI MP 3, XI MP 4, XI BD 1, XI BD 2, XI BD 3, XI PSPT 1, XI PSPT 2",26,2026/2027
+8,"Sri Rahayu, S.Pd",19700304 200501 2 006,Bahasa Indonesia,"X TKJ 1, X TKJ 2, X ULW, XI TKJ 1, XI TKJ 2, XII TKJ 1, XII TKJ 2, XII PSPT 1",27,2026/2027
+9,"Arvia Rienetasary, S.Pd",19750304 200604 2 017,Matematika,"X TKI 1, X TKI 2, X AN 1, XI BD 1, XI BD 2, XI AK 3, XII BD 1, XII BD 2, XII BD 3",30,2026/2027
+10,"Peni Wulandari, S.Pd",19730601 200604 2 024,"Dasar Program Keahlian, Konsentrasi Keahlian","X MP 2, XII MP 1, XII MP 2",30,2026/2027
+11,"Rindang Rejeki, S.Pd",19691006 200701 2 022,"Dasar Program Keahlian, Konsentrasi Keahlian","X MP 4, XII MP 3, XII MP 4",30,2026/2027
+12,"Erna Rinawati, S.Pd",19710520 200604 2 018,Bahasa Indonesia,"X DKV 1, X DKV 2, XI BD 1, XI BD 2, XII BD 1, XII BD 2, XII DKV 1, XII DKV 2",26,2026/2027
+13,"Sunarti, S.Pd",19730108 200604 2 015,Konsentrasi Keahlian,"XI MP 2, XII MP 2",30,2026/2027
+14,"Setiyo Winarko, S.Pd",19721030 200312 1 002,"Dasar Program Keahlian, Konsentrasi Keahlian","X AK 3, XI AK 2, XI AK 3, XII AK 3, XII AK 4, XII AK 1",24,2026/2027
+15,"Isti Mufadah, S.Pd",19780202 200604 2 027,Bahasa Inggris,"X TKJ 1, X TKJ 2, XI TKJ 1, XI TKJ 2, XI RPL 1, XII TKJ 1, XII TKJ 2, XII RPL 2, XII MP 3",36,2026/2027
+16,"Indayah, S.Pd., M.Pd",19731001 200604 2 012,"Dasar Program Keahlian, Konsentrasi Keahlian","X AK 2, XI AK 1, XI AK 3, XI AK 4, XII AK 1, XII AK 2",24,2026/2027
+17,"Umi Kulsum, S.Pd",19690425 200701 2 025,Bahasa Indonesia,"X RPL 2, X PSPT 1, XI PSPT 1, XI RPL 1, XI BD 3, XII RPL 1, XII RPL 2",26,2026/2027
+18,"Rulik Indrawati, S.Pd",19691126 200701 2 007,Matematika,"X MP 1, X MP 2, X DKV 1, XI MP 3, XI MP 4, XII MP 3, XII MP 4, XII ULW",27,2026/2027
+19,"Lilik Suratmi, S.Pd",19690814 200701 2 026,"Dasar Program Keahlian, Konsentrasi Keahlian","X MP 3, XII MP 1, XII MP 2",26,2026/2027
+20,"Basuki Sarjono, S.Pd",19670421 200701 1 026,Matematika,"X TKJ 1, X TKJ 2, X MP 3, XI TKI 1, XI TKI 2, XI AK 4, XII TKI 1, XII TKI 2",27,2026/2027
+21,"Titik Samsistini, S.Pd",19680825 2008012 019,Konsentrasi Keahlian,"XI MP 3, XII MP 3",30,2026/2027
+22,"Endang Ary Handayani, S.T., M.Pd",19760210 200801 2 017,"Dasar Program Keahlian, Konsentrasi Keahlian","X TKJ 1, X TKJ 2, XI TKJ 1, XI TKJ 2, XII TKJ 1, XII TKJ 2",27,2026/2027
+23,"Purwati, S.Pd",19690616 200701 2 026,Bahasa Indonesia,"X MP 1, X MP 2, XI MP 1, XI MP 2, XI ULW, XII AK 3, XII AK 4, XII ULW",26,2026/2027
+24,"Ninik Sriwidayati, S.Pd., M.Pd",19750409 200701 2 010,"Kreativitas & Kewirausahaan, Konsentrasi Keahlian","XI AK 3, XI AK 4, XII AK 4, XII AK 1, XII AK 4, XII AK 3",24,2026/2027
+25,"Agustina Mardika Rini, S.Pd, M.Pd.",19770817 200701 2 012,"Dasar Program Keahlian, Konsentrasi Keahlian","X AK 1, X AK 2, XI AK 1, XII AK 1, XII AK 2",24,2026/2027
+26,"Komariyah, S.Pd",19690805 200801 2 025,Bahasa Inggris,"X MP 1, X MP 2, X MP 3, XI TKI 2, XI MP 1, XI MP 2, XII AK 1, XII MP 1, XII MP 2",36,2026/2027
+27,"Muashofah, M.Pd",19710806 200801 2 012,Pendidikan Agama Islam dan Budi Pekerti,"X TKI 1, X AK 4, X AN 1, X AN 2, XI AK 4, XI ULW, XI AN 1, XI AN 2, XII AK 4, XII ULW, XII AN 1, XII AN 2",36,2026/2027
+28,"Atih Wilupi, S.E, M.Pd",19690915 200801 2 028,"Dasar Program Keahlian, Konsentrasi Keahlian","X AK 1, XI AK 3, XI AK 3, XI AK 4, XII AK 2, XII AK 3",24,2026/2027
+29,"Winartin, S.Pd",19801224 200801 2 016,Bahasa Indonesia,"X RPL 1, X PSPT 1, XI AK 1, XI AK 2, XI AK 3, XI RPL 2, XII AK 1, XII AK 2, XII PSPT 2",29,2026/2027
+30,"Siti Khoiriyah, S.Pd",19681014 200801 2 011,Bahasa Indonesia,"X AN 1, X AN 2, X AK 4, X BD 3, XI AK 4, XII AN 2, XII TKI 1, XII TKI 2",28,2026/2027
+31,"Sri Subekti, S.Pd",19690917 200701 2 012,Projek IPAS,"X MP 1, X MP 2, X AK 1, X AK 2, X BD 3",30,2026/2027
+32,"Kasmi, S.Pd., M.Pd",19700831 200801 2 017,"Kreativitas & Kewirausahaan, Konsentrasi Keahlian","XI AK 1, XI AK 2, XII AK 3, XII AK 4",24,2026/2027
+33,"Ilham Sungeidi, S.Pd",19700824 200801 1 008,PJOK,"X DKV 1, X DKV 2, X TKJ 1, X TKJ 2, X TKI 1, X TKI 2, XI DKV 1, XI DKV 2, XI TKJ 1, XI TKJ 2, XI TKI 1, XI TKI 2",30,2026/2027
+34,"Lutfia Marsalina, S.Pd.I, M.Pd.",19800329 200901 2 006,"Matematika, Informatika","X AK 1, X AK 2, XI RPL 1, XI RPL 2, XI TKJ 1, XII RPL 1, XII RPL 2, XII MP 2, X TKI 1, X TKJ 2",34,2026/2027
+35,"Indriati, S.Pd",19850910 200903 2 009,"Projek IPAS, Sejarah","X AN 1, X AN 2, X BD 1, X BD 2, X RPL 1, XI DKV 1, XI DKV 2",34,2026/2027
+36,"Agus Fahruddy, S.Pd., M.Pd",19761118 200701 1 004,PJOK,"X AK 1, X AK 2, X AK 3, X AK 4, X BD 1, X BD 2, XI AK 1, XI AK 2, XI AK 3, XI AK 4, XI BD 1, XI BD 2",30,2026/2027
+37,"Titin Sukmasari, S.Pd., M.Pd",19790202 200701 2 025,"Dasar Program Keahlian, Konsentrasi Keahlian","X AK 3, X AK 4, XI AK 4, XII AK 3, XII AK 3, XII AK 4",24,2026/2027
+38,"Dian Mawarti, S.Pd",19800410 200901 2 007,BK,"X BD 1, X BD 2, XI BD 2, XI BD 3, XII BD 1, XII BD 2, XII MP 2",24,2026/2027
+39,"Niken Hari Pratiwi, S.Psi.,M.Pd",19820303 200901 2 009,BK,"X BD 3, X ULW, XI ULW, XII ULW",24,2026/2027
+40,"Siti Munawaroh, S.Kom.,M.Pd",19740914 200901 2 001,"Dasar Program Keahlian, Konsentrasi Keahlian","X TKJ 1, X TKJ 2, XI TKJ 1, XI TKJ 2, XII TKJ 1, XII TKJ 2, X BD 1, X BD 2, X BD 3",35,2026/2027
+41,"Dwi Nova Setyandari, S.Pd",19821103 201001 2 025,Matematika,"X AK 3, X AK 4, X ULW, XI ULW, XI AN 1, XI AN 2, XII AK 2, XII AK 3, XII AK 4",30,2026/2027
+42,"Diana Hartanti, S.T., M.Pd",19801026 201001 2 016,Konsentrasi Keahlian,"XI TKI 1, XI TKI 2, XII TKI 1, XII TKI 2",28,2026/2027
+43,"Andri Retno Yuli Astuti, S.Pd",19730719 201001 2 002,Bahasa Inggris,"X AK 3, X AK 4, XI MP 3, XII AK 2, XII AK 3, XII AK 4, XII RPL 1",36,2026/2027
+44,"Siswanti Purwaningsih, S.T., M.Pd",19770426 201001 2 008,"Dasar Program Keahlian, Konsentrasi Keahlian","X TKJ 1, X TKJ 2, XI TKJ 1, XI TKJ 2, XII TKJ 1, XII TKJ 2, X ULW",34,2026/2027
+45,"Ayu Puspitorini, ST",19760826 201001 2 010,Konsentrasi Keahlian,"XI TKI 1, XI TKI 2, XII TKI 1, XII TKI 2",24,2026/2027
+46,"Elysa Yuli Nur'aini, S.Si",19800723 201001 2 016,"Matematika, Informatika","X RPL 1, X RPL 2, XI DKV 1, XI DKV 2, XI TKJ 2, XII DKV 1, XII DKV 2, XII MP 1, X DKV 1, X DKV 2, X AN 1, X AN 2",34,2026/2027
+47,"Agus Muharyanto, M.Pd",19710826 200604 1 011,Bahasa Inggris,"XI AN 1, XI AN 2, XI AK 1, XI AK 2, XI TKI 1, XII AN 1, XII AN 2",36,2026/2027
+48,"Septiani, S.Pd.,M.Pd",19781001 200604 2 021,"Dasar Program Keahlian, Konsentrasi Keahlian","X AK 4, XI AK 1, XI AK 4, XII AK 4, XII AK 1",26,2026/2027
+49,"Retno Widyastuti, S.Pd., M.Pd",19870316 200901 2 002,"Dasar Program Keahlian, Konsentrasi Keahlian","X BD 1, X BD 2, X BD 3, XII BD 1, XII BD 2, XII BD 3",24,2026/2027
+50,"Ratih Dian Irawati, SE",19840222 200902 2 007,"Dasar Program Keahlian, Konsentrasi Keahlian","X BD 1, X BD 2, X BD 3, XII BD 1, XII BD 2, XII BD 3",24,2026/2027
+51,"Andri Krisdianto, SE.,M.Pd",19830101 201001 1 042,"Mata Pelajaran Pilihan, Konsentrasi Keahlian","XI BD 1, XI BD 2, XII BD 1, XII BD 2, XII BD 3",24,2026/2027
+52,"Ruly Dwi Setyaningrum, S.Kom",19850418 201001 2 031,"Dasar Program Keahlian, Konsentrasi Keahlian, Koding","X RPL 1, X RPL 2, XII RPL 1, XII RPL 2, X AK 3, X AK 4",36,2026/2027
+53,"Ary Sunaryo, ST.,M.Pd",19770306 201101 1 003,"Konsentrasi Keahlian, Informatika","XI TKJ 1, XI TKJ 2, XII TKJ 1, XII TKJ 2, X AK 3, X AK 4, X MP 2",34,2026/2027
+54,"Listyana Hartati, S.Kom.,M.Pd",19820204 201101 2 006,"Dasar Program Keahlian, Konsentrasi Keahlian","X TKJ 1, X TKJ 2, XI TKJ 1, XI TKJ 2, XII TKJ 1, XII TKJ 2, XII TKJ 1",34,2026/2027
+55,"Dhuana Putri Puspitasary, S.Pd",19870217 201101 2 012,"Dasar Program Keahlian, Konsentrasi Keahlian","X AN 1, X AN 2, XI AN 1, XI AN 2, XII AN 1, XII AN 2",26,2026/2027
+56,"Angga Widhy Wirawan, S.Pd.,M.Pd",19860127 201101 1 013,Seni Budaya,"X BD 1, X BD 2, X BD 3, X MP 1, X MP 2, X MP 3, X MP 4, X AK 1, X AK 2, X AK 3, X AK 4, X ULW",24,2026/2027
+57,"Mas'an Widodo, S.Pd. M.T",19830113 200901 1 003,"Kewirausahaan, Konsentrasi Keahlian","XI DKV 1, XI DKV 2, XII DKV 1, XII DKV 2, XII AN 1, XII AN 2",34,2026/2027
+58,"Endik Kuswantoro, S.Kom.,M.T",19850203 201101 1 012,"Mata Pelajaran Pilihan, Konsentrasi Keahlian","XI DKV 1, XI DKV 2, XII DKV 1, XII DKV 2, XI AN 1, XI AN 2, XII AN 1, XII AN 2",34,2026/2027
+59,"Anang Prasetyo, S.Pd",19711129 201101 1 002,Seni Budaya,"X TKI 1, X TKI 2, X RPL 1, X RPL 2, X TKJ 1, X TKJ 2, X DKV 1, X DKV 2, X PSPT 1, X PSPT 2, X AN 1, X AN 2",24,2026/2027
+60,"Arif Setyobudi, S.Pd",19780830 200701 1 017,Bahasa Indonesia,"X BD 1, X BD 2, X MP 3, X MP 4, XI AN 1, XI AN 2, XII AN 1, XII BD 3",28,2026/2027
+61,"Benny Mamora, S.Kom",19760719 200901 1 003,"Dasar Program Keahlian, Konsentrasi Keahlian","X PSPT 1, XI PSPT 1, XI PSPT 2, XII PSPT 1, XII PSPT 2",32,2026/2027
+62,"Danang Anjar Hymawanto, S.Pd",19850316 201101 1 012,"Dasar Program Keahlian, Konsentrasi Keahlian","X DKV 1, X DKV 2, XI DKV 1, XI DKV 2",26,2026/2027
+63,"Hardini Indahing Budi, S.E., M.Pd.",19820822 201407 2 002,Konsentrasi Keahlian,"XII DKV 1, XII DKV 2, XII BD 1, XII BD 2, XII BD 3",12,2026/2027
+64,"Erwan Septiyono, S.Pd",19900907 201903 1 004,Konsentrasi Keahlian,"XI AN 1, XI AN 2, XII AN 1, XII AN 2",26,2026/2027
+65,"Istiana Suhartati, S.T",19910708 201903 2 017,Konsentrasi Keahlian,"XI DKV 1, XI DKV 2, XII DKV 1, XII DKV 2",26,2026/2027
+66,"Risqi Nur Imama, S.Tr.Par",19960728 202012 2 013,"Dasar Program Keahlian, Konsentrasi Keahlian","X ULW, XI ULW, XII ULW",34,2026/2027
+67,"Badrus Sulaiman, S.Pd.",19900418 202012 1 017,"Dasar Program Keahlian, Konsentrasi Keahlian, Informatika","X RPL 1, X RPL 2, XI RPL 2, XII RPL 2, X MP 3, X MP 4",36,2026/2027
+68,"Nurul Azizah, S.Pd",19780822 202221 2 006,"Konsentrasi Keahlian, Pendidikan Pancasila","XI BD 1, XI BD 1, XI BD 2, XI BD 3, XII BD 3, XII BD 1, XII BD 3, XI BD 3, XII BD 3, XII TKJ 1, XII TKJ 2",34,2026/2027
+69,"Hendro Suwignyo, ST",19771112 202221 1 007,"Mata Pelajaran Pilihan, Konsentrasi Keahlian","XI RPL 1, XI RPL 2, XII RPL 1, XII RPL 2, XI AK1, XI AK 2, XI AK 3, XII AK 2, XII AK 4",20,2026/2027
+70,"Dyah Esti Rahayu, S.Pd",19740805 202221 2 008,"Kreativitas & Kewirausahaan, Konsentrasi Keahlian",XII AK 1,27,2026/2027
+71,"Baskoro, S.Si",19810124 202221 1 012,"Pendidikan Pancasila, Konsentrasi Keahlian, Sejarah","XII AK 3, XI TKI 1, XI TKI 2, XII TKI 1, XII TKI 2, XI TKI 1, XI TKI 2, XI TKJ 1, XI TKJ 2",32,2026/2027
+72,"Luluk Munfarida, S.Pd",19830306 202221 2 048,"Konsentrasi Keahlian, Bahasa Jawa","XI BD 1, XI BD 2, XI BD 3, XII BD 1, XII BD 2, XII BD 3, XI AN 2, XI TKJ 1, XI TKJ 2, XI BD 3, XII AN 1, XII AN 2",36,2026/2027
+73,"Khuriyatul Kamila, S.Si",19830707 202221 2 027,"Pendidikan Pancasila, Projek IPAS","X MP 3, XI AN 1, XII ULW, X DKV 1, X MP 3, X MP 4, X TKI 1, X TKI 2",36,2026/2027
+74,"Veronica Damay Rulitasari, S.Pd",19880521 202221 2 020,BK,"X MP 1, XI MP 1, XI MP 3, XI MP 4, XII MP 3, XII MP 4, XII AK 3, XII AK 4",24,2026/2027
+75,"Nur Nastutisari, S.ST.Par.",19870303 202221 2 026,"Konsentrasi Keahlian, Kewirausahaan","XI ULW, XII ULW",27,2026/2027
+76,"Alfinu Farikh Abdillah, S.Pd.I",19820318 202221 1 012,Pendidikan Agama Islam dan Budi Pekerti,"X MP 4, X AK 1, X AK 2, X AK 3, XI MP 4, XI AK 1, XI AK 2, XI AK 3, XII MP 4, XII AK 1, XII AK 2, XII AK 3",36,2026/2027
+77,"Khoyrotun Hisani, S.Sn",19910914 202221 2 015,"Dasar Program Keahlian, Konsentrasi Keahlian, Bahasa Jawa","X DKV 1, X DKV 2, XI DKV 1, XI DKV 2, XII DKV 1, XII DKV 2, X PSPT 1, X DKV 1, X AK 2, X DKV 2, XI DKV 1, XI DKV 2",36,2026/2027
+78,"Joko Priyanto, S.Kom",19911103 202221 1 007,Konsentrasi Keahlian,"XI PSPT 1, XI PSPT 2, XII PSPT 1, XII PSPT 2, XII PSPT 1",28,2026/2027
+79,"Elyana Frisca Monica, S.Pd",19920504 202221 2 022,"Informatika, Koding, Kewirausahaan","X PSPT 1, X PSPT 2, X RPL 2, X PSPT 1, X PSPT 2, X RPL 1, X RPL 2, XII RPL 1, XII RPL 2",30,2026/2027
+80,"Rika Okta Maulida, S.Ds.",19951027 202221 2 012,"Dasar Program Keahlian, Konsentrasi Keahlian, Informatika","X AN 1, X AN 2, XI AN 1, XI AN 2, XII AN 1, XII AN 2, X AN 2, X DKV 1, X DKV2, X PSPT 1, X PSPT 2",32,2026/2027
+81,Dra. Hanik Pangestuti,19670512 202221 2 003,Pendidikan Agama Islam dan Budi Pekerti,"XI TKJ 1, XI TKJ 2, XI PSPT 1, XI PSPT 2, XII DKV 1, XII DKV 2, XII PSPT 1, XII RPL 1",36,2026/2027
+82,"Sa'ad Wazis Hiedayat, S.Pd",19850112 202221 1 020,"Dasar Program Keahlian, Konsentrasi Keahlian","X PSPT 2, XI PSPT 1, XI PSPT 2, XII PSPT 1, XII PSPT 2, XII PSPT 2, XI RPL 1, XII RPL 1",32,2026/2027
+83,"Shinta Indyar Shanty Susanto, S.Kom",19850121 202221 2 037,"Informatika, Koding","X AK 1, X AK 2, X AK 1, X AK 2, X ULW",38,2026/2027
+84,"Widodo, S.Pd",19871014 202221 1 014,BK,"X RPL 1, X RPL 2, XI RPL 1, XI RPL 2, XII RPL 1, XII RPL 2, XII AK 2",24,2026/2027
+85,"Nur Eko Wahyuningsih, S.Pd",19940101 202221 2 024,BK,"X AK 1, X AK 2, X MP 3, X DKV 1, XI AK 3, XI AK 4, XI BD 1, XII BD 3",24,2026/2027
+86,"Kurnila Putri Islamawati, S.Pd",19970318 202221 2 010,"Konsentrasi Keahlian, Informatika, Koding","XI RPL 1, XI RPL 2, X MP 1, X RPL 1, X MP 1, X MP 2",28,2026/2027
+87,"Sulistyowati, SS",19710728 202321 2 004,"Bahasa Jepang, Bahasa Jawa","XI RPL 1, XI RPL 2, XI TKJ 1, XI TKJ 2, XI MP 1, XI MP 2, XI MP 3, XI MP 4, XI AK1, XI AK 2, XI AK 3, XI AK 4, XI ULW, XII DKV 1, XII DKV 2, XII BD 3",34,2026/2027
+88,"Wiwik Yuniarsih, S.Pd",19750616 202321 2 007,Pendidikan Pancasila,"X TKI 1, X TKJ 2, X DKV 1, X DKV 2, X ULW, X TKJ 1, X TKJ 2, XI AK1, XI AK 2, XI AK 3, XI AK 4, XI AN 2, XI ULW, XI RPL 1, XI RPL2, XI PSPT 2",32,2026/2027
+89,"Fajar Luthfianto, S.Pd",19780810 202321 1 005,Sejarah,"X TKI 1, X MP 1, X MP 2, X MP 4, AK 1, X AK 2, X ULW",14,2026/2027
+90,"Fajar Wahyu Pratiwi, S.S",19820529 202321 2 015,Bahasa Inggris,"X DKV 1, X DKV 2, X RPL 2, XI DKV 1, XI DKV 2, XI RPL 2, XI PSPT 1, XII DKV 1, XII PSPT 1",36,2026/2027
+91,"Agung Yulianto, S.Pd",19820718 202321 1 006,Konsentrasi Keahlian,"XI BD 1, XI BD 2, XI BD 3, XII BD 1, XII BD 2, XII BD 3",24,2026/2027
+92,"Sri Kusumastuti, S.Pd",19830331 202321 2 015,"Dasar Program Keahlian, Konsentrasi Keahlian, Pendidikan Pancasila","X TKI 1, X TKI 2, XI TKI 1, XI TKI 2, XII TKI 1, XII TKI 2, XI TKI 1, XI TKI 2, XII TKI 1",36,2026/2027
+93,"Yuli Ratnasari, S.Pd",19840730 202321 2 018,"Konsentrasi Keahlian, Pendidikan Pancasila","XI AK 2, XI AK 1, XI AK 2, XI AK 3, XI AK 4, XII AK 1, XII AK 2, XII AK 4, X AK 1, X AK 2, XII AK 4, XII AK1, XII DKV2",34,2026/2027
+94,"Fitria Renytasari, S.Pd",19850627 202321 2 020,Bahasa Inggris,"X ULW, X AK 1, X AK 2, X RPL 1, X TKI 2, XI ULW, XII ULW, XII MP 4, XII DKV 2",36,2026/2027
+95,"Tutut Sriatin, S.Pd",19710523 202421 2 002,"Kewirausahaan, Pendidikan Pancasila","XI MP 1, XI MP 2, XI MP 3, XI MP 4, XII MP 1, XII MP 2, XII MP 3, XII MP 4, X MP 1, X MP 2, XII RPL 2, XII MP 2",36,2026/2027
+96,"Dwi Kuswanto, S.Pd",19751113 202421 1 001,"Dasar Program Keahlian, Konsentrasi Keahlian","X MP 1, XII MP 1, XII MP 2",26,2026/2027
+97,"Erna Qoriah, S.E.",19751211 202421 2 008,"Kewirausahaan, Sejarah, Bahasa Jawa","XI BD 1, XI BD 2, XI BD 3, XI TKJ 2, XI RPL 1, XI RPL 2, XI ULW, X BD 2, XI PSPT 1, XI PSPT 2, XII TKJ 1, XII TKJ 2",36,2026/2027
+98,"Pipit Ambarwati, S.Pd",19780701 202421 2 002,"Dasar Program Keahlian, Konsentrasi Keahlian, Sejarah, Pendidikan Pancasila","X AK 2, X AK 3, X AK 4, X AK 1, XI AK 2, XII AK 3, X BD 1, X BD 2, X AK 3, X AK 4, XI PSPT 1, XI TKJ 1, XI TKJ 2, XII TKI 2",32,2026/2027
+99,"Fitri Amaliyah, S.Pd",19800312 202421 2 013,"Projek IPAS, Bahasa Jawa","X TKJ 1, X TKJ 2, X RPL 2, X DKV 2, X AK 1, X AK 2",36,2026/2027
+100,"Niken Dewi Hastika, S.Pd",19880113 202421 2 002,"Konsentrasi Keahlian, Kewirausahaan, Pendidikan Pancasila","XI BD 1, XI BD 2, XI BD 1, XI BD 2, XI BD 3, XI BD 3, XII BD 3, XI TKJ 1, XII AK 2, XII MP1, XII AN 1, XII AN 2, XII DKV1",35,2026/2027
+101,"Ista Nofasari, S.Pd",19880503 202421 2 030,"Projek IPAS, Sejarah","X PSPT 1, X PSPT 2, X AK 3, X AK 4, X ULW, X TKI 2, X TKJ 1",34,2026/2027
+102,"Anisa Kusumawati, S.Pd",19880521 202421 2 009,"Dasar Program Keahlian, Kewirausahaan, Konsentrasi Keahlian, Pendidikan Pancasila","X BD 1, X BD 2, X BD 3, XI RPL 1, XI RPL 2, XI BD 3, XII BD 2, X BD 1, X BD 2, XII BD 1",35,2026/2027
+103,"Mega Mahardika, S.Pd",19920423 202421 2 010,"Konsentrasi Keahlian, Pendidikan Pancasila","XI MP 4, XII MP 4, X AN 1, X AN 2, XII MP 3, XII MP 4",34,2026/2027
+104,"Rifkotin Na'imah, S.Pd",19940415 202421 2 053,"Dasar Program Keahlian, Konsentrasi Keahlian, Kewirausahaan, Pendidikan Pancasila","X TKI 1, X TKI 2, XI TKI 1, XI TKI 2, XII TKI 1, XII TKI 2, XII TKI 1, XII TKI 2, XII RPL1, XII PSPT 1, XII PSPT 2",36,2026/2027
+105,"Sinta Lestari, S.Pd.I",19901031 202521 2 015,Pendidikan Agama Islam dan Budi Pekerti,"X TKJ 1, X TKJ 2, X BD 1, X BD 2, XI DKV 1, XI DKV 2, XI BD 1, XI BD 2, XII TKJ 1, XII TKJ 2, XII BD 1, XII BD 2",36,2026/2027
+106,"Astra Bella Flamboyan, S.Psi",19900806 202521 2 028,BK,"X AK 3, X AK 4, XI DKV 1, XI DKV 2, XI AK 1, XII DKV 1, XII DKV 2, XII MP 1, X BD 3, X MP 1, X MP 2, X MP 3",24,2026/2027
+107,"Fitria Diah Ayu Hartati, S.Pd",19970204 202521 2 014,Pendidikan Agama Islam dan Budi Pekerti,"XI BD 3, XI MP 1, XI MP 2, XI MP 3, XII BD 3, XII MP 1, XII MP 2, XII MP 3",36,2026/2027
+108,Dra. Susakti Yuharini,19661108 202521 2 001,Kewirausahaan,"XI MP 1, XI MP 2, XI MP 3, XI MP 4, XII ULW",25,2026/2027
+109,"Agus Pramono, S.Sn",19700717 202521 1 036,"Dasar Program Keahlian, Konsentrasi Keahlian","X DKV 1, X DKV 2, XI DKV 1, XI DKV 2, XII DKV 1, XII DKV 2",26,2026/2027
+110,"Ajeng Okvitasari, S.Pd",19871004 202521 2 098,"Bahasa Jawa, Matematika","XI ULW, XI AN 1, XII MP 1, XII MP 2, XII RPL 1, XII RPL 2, X AN 2, X DKV 2, XI BD 3, XI AK 2, XI PSPT 1, XII AN 1, XII AN 2, XII AK 1",38,2026/2027
+111,"Nishfu Laili, S.Pd",19860414 202521 2 103,BK,"X TKJ 1, X TKJ 2, X MP 2, XI TKJ 1, XI TKJ 2, XII TKJ 1, XII TKJ 2",24,2026/2027
+112,"Andika Christian Sasmita, S.ST",19830102 202521 1 100,"Konsentrasi Keahlian, Kewirausahaan, Mapel Pilihan","X AN 1, X AN 2, XI AN 1, XI AN 2, XII AN 1, XII AN 2",36,2026/2027
+113,"Muto'atul Khosi'ah, S.Pd",19821215 202521 2 065,Bahasa Inggris,"X MP 4, X BD 1, X TKI 1, X PSPT 1, X PSPT 2, XI MP 4, XI PSPT 2, XII PSPT 2, XII TKI 2",36,2026/2027
+114,"Bella Prakoso, S.Pd",19871213 202521 1 096,PJOK,"X PSPT 1, X PSPT 2, X AN 1, X AN 2, X BD 3, X ULW, XI PSPT 1, XI PSPT 2, XI AN 1, XI AN 2, XI BD 3, XI ULW",30,2026/2027
+115,"Yustin Febrini, S.Pd",19920205 202521 2 129,"Sejarah, Bahasa Jawa","X MP 3, X TKJ 2, X RPL 1, X RPL 2, X AN 1, X AN 2, X DKV 1, X DKV 2, X PSPT 1, X PSPT 2, X BD 3, XI AN 1, XI AN 2, X TKI 1, X TKI 2, XI TKI 1, XI TKI 2, XII MP 3",36,2026/2027
+116,"Siti Maisaroh, S.Pd",19850926 202521 2 055,BK,"X AN 1, X AN 2, X MP 4, XI AN 1, XI AN 2, XI MP 2, XII AN 1, XII AN 2",24,2026/2027
+117,"Laili Ermawati, S.Pd",19890418 202521 2 117,"Bahasa Jawa, Matematika","X ULW, X RPL 2, XI RPL 1, XI RPL 2, XII BD 1, XII BD 2, X BD 1, X BD 2, X PSPT 2, XI MP 1, XI MP 2, XII TKJ 1, XII TKJ 2",36,2026/2027
+118,"Muhammad Fajar Assidiqi, S.Pd",19971223 202521 1 078,Bahasa Jawa,"X AN 1, X AN 2, X TKJ 1, X TKJ 2, X MP 1, XMP 2, X PSPT 2, X BD 3, XI MP 1, XI MP 2, XI AK 1, XI AK 2, XI BD 1, XI BD 2, XII TKI 1, XII TKI 2, XII PSPT 1, XII PSPT 2, XII ULW",38,2026/2027
+119,"Yuni Jiastuti, S.Pd",19820609 202521 2 057,BK,"X TKI 1, X TKI 2, X DKV 2, XI TKI 1, XI TKI 2, XII TKI 1, XII TKI 2, XII AK 1",24,2026/2027
+120,"Tuhu Eries Kudori, S.Sn",19781006 202521 1 046,"Konsentrasi Keahlian, Informatika","XI PSPT 1, XI PSPT 2, XII PSPT 1, XII PSPT 2, X AN 1",32,2026/2027
+121,"Eko Saputro, S.Pd.",19961117 202521 1 096,"Matematika, Informatika","X BD 3, X PSPT 1, X MP 4, XI PSPT 2, XI AK 1, XII PSPT 1, XII PSPT 2, X PSPT 1, X BD 3",36,2026/2027
+122,"Zainul Arifin,S.Pd",19871116 202521 1 085,PJOK,"X MP 1, X MP 2, X MP 3, X MP 4, X RPL 1, X RPL 2, XI MP 1, XI MP 2, XI MP 3, XI MP 4, XI RPL 1, XI RPL 2",30,2026/2027
+123,"Endang Safitri, S.Pd",-,Bahasa Indonesia,"X AK 1, X AK 2, X AK 3, XI MP 3, XI MP 4, XI DKV 1, XI DKV 2, X TKI 2, X RPL 1, X RPL 2, X ULW",24,2026/2027
+124,"Mufatiroh, S.Ag",-,Pendidikan Agama Islam dan Budi Pekerti,"XI TKI 1, XI TKI 2, XI RPL 1, XI RPL 2, XII TKI 1, XII TKI 2, XII PSPT 2, XII RPL 2",36,2026/2027
+125,"Abdul Rohman, S.Pd",-,Pendidikan Pancasila,"X PSPT 1, X PSPT 2, X RPL 1, X RPL 2, X MP 4, X AK 4,X AK 3 X BD3, XI DKV 1, XI DKV 2, XI MP 1, XI MP 2, XI MP 3, XI MP 4, XI BD 1, XI BD 2",32,2026/2027
+126,"Rizki Putri Wulandari, S.Pd",-,"Bahasa Jepang, Bahasa Jawa","XI TKI 1, XI TKI 2, X RPL 1, X BD 1, X AK 3, X AK 4, X MP 3, X MP 4, XI MP 3, XI MP 4, XI AK 3, XI AK 4, XII AK 1, XII AK 2, XII AK 3, XII AK 4, XII MP 4",34,2026/2027
+127,"Pdt. Juklianus Steven Immanuel Bahihi, S.Pdk., M.Pd",-,Pendidikan Agama Kristen dan Budi Pekerti,Semua Kelas Kristen,12,2026/2027
+128,"Sukamto, S.Ag",-,Pendidikan Agama Katholik dan Budi Pekerti,Semua Kelas Katholik,12,2026/2027

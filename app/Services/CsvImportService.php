@@ -71,8 +71,8 @@ class CsvImportService
 
         $header = array_map(function($h) {
             $normalized = strtolower(trim(preg_replace('/[\x00-\x1F\x7F\xEF\xBB\xBF]/', '', $h)));
-            // Normalkan spasi (dan tanda hubung) menjadi underscore agar "nama kelas" == "nama_kelas"
-            return preg_replace('/[\s\-]+/', '_', $normalized);
+            // Normalkan spasi, tanda hubung, dan garis miring menjadi underscore agar "nama kelas" == "nama_kelas", "L/P" == "l_p"
+            return preg_replace('/[\s\-\/]+/', '_', $normalized);
         }, $rawHeader);
 
         $rows = [];
