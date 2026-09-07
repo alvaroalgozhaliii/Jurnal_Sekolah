@@ -1044,32 +1044,250 @@ input[type="number"]::-webkit-outer-spin-button {
         justify-content: center;
     }
 
-    .topbar { padding: 0 16px; }
-    .content-area { padding: 16px; }
+    .topbar { padding: 0 14px; }
+    .content-area { padding: 14px; }
 
-    .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
+    /* Grid: 2 kolom untuk stat, 1 kolom untuk yang lain */
+    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 12px; }
+    .form-row { grid-template-columns: 1fr; gap: 10px; }
 
-    .page-header { flex-direction: column; align-items: flex-start; }
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .page-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .page-actions .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+    /* Card header: wrap jika dua elemen */
+    .card-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 
     /* Hide user info text on small screens */
     .user-info { display: none; }
+
+    /* Topbar kanan: reduce gap */
+    .topbar-right { gap: 10px; }
+
+    /* Table: pastikan scroll horizontal aktif */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Action column di tabel */
+    .action-col {
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    /* Stat card layout tetap compact */
+    .stat-card {
+        padding: 12px;
+        gap: 10px;
+    }
+    .stat-num { font-size: 20px; }
+
+    /* Filter bar: wrap ke bawah */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-bar .form-control,
+    .filter-bar select,
+    .filter-bar .btn {
+        width: 100%;
+    }
+
+    /* Form search wrap */
+    .d-flex.gap-8 { flex-wrap: wrap; }
+    .d-flex.gap-8 .form-control { flex: 1 1 100%; }
+
+    /* Chart lebih pendek di mobile */
+    .chart-container { height: 200px; }
+
+    /* Card margin bottom lebih kecil */
+    .card { margin-bottom: 14px; }
 }
 
 /* Mobile: ≤600px */
 @media (max-width: 600px) {
-    .topbar-title { font-size: 14px; }
-    .page-title { font-size: 16px; }
-    .card-body { padding: 14px; }
+    .topbar-title { font-size: 13px; }
+    .page-title { font-size: 15px; }
+    .page-subtitle { font-size: 11px; }
+    .card-body { padding: 12px; }
+    .card-header { padding: 10px 14px; }
 
-    .btn { padding: 6px 11px; font-size: 11.5px; }
+    .btn { padding: 6px 10px; font-size: 11.5px; }
     .btn-sm { padding: 4px 8px; font-size: 11px; }
+    .btn-lg { padding: 8px 14px; font-size: 12px; }
 
-    .table th, .table td { padding: 9px 10px; }
+    .table th, .table td { padding: 8px 10px; font-size: 12px; }
+    .table th { font-size: 10px; }
 
-    /* Stack action buttons vertically if needed */
+    /* Action buttons di tabel */
     .action-col { text-align: left; }
+    .action-col .btn { margin-bottom: 2px; }
+
+    /* Stat card 2-kolom tetap, tapi lebih compact */
+    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-card { padding: 10px; gap: 8px; }
+    .stat-icon-box { width: 34px; height: 34px; }
+    .stat-num { font-size: 18px; }
+    .stat-label { font-size: 10px; }
+
+    /* Content area padding lebih kecil */
+    .content-area { padding: 12px; }
+
+    /* Badge lebih kecil */
+    .badge { font-size: 10px; padding: 2px 7px; }
+
+    /* Topbar compact */
+    .user-pill { padding: 2px 6px 2px 2px; }
+    .user-avatar { width: 26px; height: 26px; font-size: 10px; }
+
+    /* Import bar stack vertikal */
+    div[style*="justify-content:space-between"] {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    /* Form full width di mobile */
+    form[style*="display:flex"] {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    form[style*="display:flex"] input[type="file"] {
+        width: 100%;
+    }
+
+    /* Page actions full-width stack */
+    .page-actions { flex-direction: column; }
+    .page-actions .btn { width: 100%; text-align: center; justify-content: center; }
+
+    /* Topbar */
+    .topbar { height: 50px; padding: 0 12px; }
+    .topbar-right { gap: 8px; }
 }
+
+/* ============================================================
+   RESPONSIVE TAMBAHAN — Override inline styles di mobile
+   ============================================================ */
+
+/* Input search yang pakai inline max-width:420px jadi full-width di mobile */
+@media (max-width: 767px) {
+    .form-control[style*="max-width"] {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* Info table: stack jadi dua baris di mobile (label atas, nilai bawah) */
+    .info-table,
+    .info-table tbody,
+    .info-table tr,
+    .info-table th,
+    .info-table td {
+        display: block;
+        width: 100%;
+    }
+    .info-table tr {
+        border-bottom: 1px solid var(--border);
+    }
+    .info-table th {
+        border-bottom: none;
+        padding-bottom: 4px;
+        color: var(--text-secondary);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .info-table td {
+        padding-top: 4px;
+        padding-bottom: 12px;
+        border-bottom: none;
+    }
+
+    /* Card header dengan badge/span yang biasanya sejajar title */
+    .card-header > * {
+        min-width: 0;
+    }
+
+    /* Tabel jadwal dan rekap yang sangat lebar */
+    .table-wrapper {
+        min-width: 0;
+    }
+
+    /* Sembunyikan kolom "No" di tabel pada layar kecil jika kurang penting */
+    /* Dinonaktifkan agar tetap terlihat - hanya kurangi ukuran */
+    .no-col { width: 32px; font-size: 11px; }
+
+    /* Tahun pelajaran badge di page-header wrap dengan benar */
+    .page-header .badge[style] {
+        font-size: 11px !important;
+        padding: 5px 10px !important;
+        display: inline-block;
+        width: auto;
+    }
+
+    /* Tombol dalam action-col wrap ke bawah jika terlalu panjang */
+    .action-col {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    /* Prevent topbar-title clipping */
+    .topbar-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 180px;
+    }
+}
+
+/* Extra small mobile ≤480px */
+@media (max-width: 480px) {
+    /* Stat card: ikut 2-kolom tapi konten minimal */
+    .stat-card {
+        padding: 8px;
+        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .stat-num { font-size: 22px; }
+
+    /* Action col: tombol kecil semua */
+    .action-col .btn-sm {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    /* Topbar title max-width lebih kecil */
+    .topbar-title { max-width: 140px; }
+
+    /* Hide search label / placeholder untuk hemat ruang */
+    .form-control { font-size: 12px; }
+
+    /* Pastikan page-actions wrap dengan benar */
+    .page-actions { gap: 5px; }
+}
+
+
 
 /* ============================================================
    DARK MODE SYSTEM [data-theme="dark"] — HARMONIOUS & MODERN
@@ -2572,14 +2790,14 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme="light"] .login-page {
     background-color: #f1f5f9;
     background-image: 
-        radial-gradient(circle at 10% 40%, rgba(37, 99, 235, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 90% 60%, rgba(37, 99, 235, 0.08) 0%, transparent 45%);
+        radial-gradient(circle at 10% 40%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 90% 60%, rgba(37, 99, 235, 0.15) 0%, transparent 45%);
 }
 
 [data-theme="light"] .login-page::before,
 [data-theme="light"] .login-page::after {
-    border-color: rgba(0, 0, 0, 0.04);
-    box-shadow: inset 0 0 100px rgba(37, 99, 235, 0.03);
+    border-color: rgba(0, 0, 0, 0.06);
+    box-shadow: inset 0 0 100px rgba(37, 99, 235, 0.06);
 }
 
 [data-theme="light"] .sso-container {
@@ -2620,46 +2838,46 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #ffffff !important;
 }
 
-/* Light mode aesthetic background nuances */
+/* Light mode aesthetic background nuances — Lebih terlihat / kontras */
 [data-theme="light"] .login-orb.orb-1 {
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(59, 130, 246, 0.05) 70%, transparent 100%);
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.35) 0%, rgba(59, 130, 246, 0.12) 70%, transparent 100%);
 }
 
 [data-theme="light"] .login-orb.orb-2 {
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, rgba(99, 102, 241, 0.05) 70%, transparent 100%);
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.35) 0%, rgba(99, 102, 241, 0.12) 70%, transparent 100%);
 }
 
 [data-theme="light"] .login-orb.orb-3 {
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, transparent 70%);
 }
 
 [data-theme="light"] .shape-ring {
-    border-color: rgba(30, 58, 138, 0.08);
+    border-color: rgba(30, 58, 138, 0.22);
 }
 
 [data-theme="light"] .shape-sparkle {
-    color: rgba(37, 99, 235, 0.35);
+    color: rgba(37, 99, 235, 0.55);
 }
 
 [data-theme="light"] .login-bg-grid-left,
 [data-theme="light"] .login-bg-grid-right {
-    color: rgba(30, 58, 138, 0.08);
+    color: rgba(30, 58, 138, 0.2);
 }
 
 [data-theme="light"] .shape-badge {
-    background: rgba(255, 255, 255, 0.82);
-    border: 1.5px solid rgba(56, 189, 248, 0.4);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1.5px solid rgba(56, 189, 248, 0.6);
     color: #1e293b;
-    box-shadow: 0 10px 28px rgba(30, 58, 138, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 28px rgba(30, 58, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 [data-theme="light"] .shape-badge.badge-bottom-right {
-    border-color: rgba(34, 197, 94, 0.45);
-    box-shadow: 0 10px 28px rgba(34, 197, 94, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border-color: rgba(34, 197, 94, 0.65);
+    box-shadow: 0 10px 28px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 [data-theme="light"] .ambient-wave {
-    color: rgba(37, 99, 235, 0.12);
+    color: rgba(37, 99, 235, 0.25);
 }
 
 
