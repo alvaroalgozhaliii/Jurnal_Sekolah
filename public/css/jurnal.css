@@ -192,6 +192,30 @@ a:hover {
     border-radius: 4px;
 }
 
+/* Logout button pinned at bottom of sidebar */
+.sidebar-footer {
+    flex-shrink: 0;
+    padding: 10px 10px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.nav-item-logout {
+    color: #f87171 !important;
+}
+
+.nav-item-logout .svg-icon {
+    color: #f87171 !important;
+}
+
+.nav-item-logout:hover {
+    background-color: rgba(248, 113, 113, 0.12) !important;
+    color: #fca5a5 !important;
+}
+
+.nav-item-logout:hover .svg-icon {
+    color: #fca5a5 !important;
+}
+
 .nav-section-label {
     font-size: 10px;
     font-weight: 600;
