@@ -11,6 +11,7 @@
     </div>
     <div class="page-actions">
         <a href="{{ route('siswa.create') }}" class="btn btn-primary">+ Tambah Siswa</a>
+        <a href="{{ route('siswa.export-csv', request()->query()) }}" class="btn btn-secondary">⬇️ Export CSV</a>
         <a href="{{ route('siswa.trash') }}" class="btn btn-secondary">Lihat Trash</a>
     </div>
 </div>

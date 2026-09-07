@@ -101,4 +101,18 @@ class PenggunaController extends Controller
         $pengguna->delete();
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
     }
+
+    public function resetPassword(Request $request, $id)
+    {
+        $request->validate([
+            'new_password' => 'required|string|min:6',
+        ]);
+
+        $pengguna = User::findOrFail($id);
+        $pengguna->password = Hash::make($request->new_password);
+        $pengguna->save();
+
+        return redirect()->route('pengguna.index')
+            ->with('success', "Password akun \"{$pengguna->nama}\" ({$pengguna->username}) berhasil direset.");
+    }
 }

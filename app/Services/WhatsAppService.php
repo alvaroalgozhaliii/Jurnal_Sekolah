@@ -15,9 +15,9 @@ class WhatsAppService
 
     public function __construct()
     {
-        $this->apiUrl = config('services.whatsapp.api_url', env('WHATSAPP_API_URL'));
-        $this->apiKey = config('services.whatsapp.api_key', env('WHATSAPP_API_KEY'));
-        $this->sender = config('services.whatsapp.sender', env('WHATSAPP_SENDER'));
+        $this->apiUrl = \App\Models\Pengaturan::getVal('wa_api_url') ?: config('services.whatsapp.api_url', env('WHATSAPP_API_URL'));
+        $this->apiKey = \App\Models\Pengaturan::getVal('wa_api_key') ?: config('services.whatsapp.api_key', env('WHATSAPP_API_KEY'));
+        $this->sender = \App\Models\Pengaturan::getVal('wa_sender') ?: config('services.whatsapp.sender', env('WHATSAPP_SENDER'));
     }
 
     /**
