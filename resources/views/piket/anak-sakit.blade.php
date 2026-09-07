@@ -20,8 +20,13 @@
             @csrf
             <div class="form-group">
                 <label class="form-label" for="id_siswa">Pilih Siswa <span class="req">*</span></label>
+<<<<<<< HEAD
+                <select id="id_siswa" name="id_siswa" class="form-control select-search" data-searchable="true" required>
+                    <option value="">-- Pilih Siswa --</option>
+=======
                 <select id="id_siswa" name="id_siswa" class="form-control" required>
                     <option value="">Pilih Siswa</option>
+>>>>>>> 5a2cadca71a8b6ed9ed1939d196668009226b51f
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}">
                         {{ $s->nama }} (NISN: {{ $s->NISN }} - Kelas {{ $s->kelas->nama_kelas ?? '-' }})

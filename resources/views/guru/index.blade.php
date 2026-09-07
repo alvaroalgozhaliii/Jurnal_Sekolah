@@ -11,6 +11,7 @@
     </div>
     <div class="page-actions">
         <a href="{{ route('guru.create') }}" class="btn btn-primary">+ Tambah Guru</a>
+        <a href="{{ route('guru.export-csv', request()->query()) }}" class="btn btn-secondary">⬇️ Export CSV</a>
         <a href="{{ route('guru.trash') }}" class="btn btn-secondary">Lihat Trash</a>
     </div>
 </div>

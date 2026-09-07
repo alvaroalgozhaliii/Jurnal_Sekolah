@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\Jadwal;
 use App\Models\Pengaturan;
 use App\Models\Notifikasi;
+use App\Models\PengajuanIzin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ class JurnalHarianController extends Controller
     {
         $user = Auth::user();
         $search = $request->get('search');
+        $activeTab = $request->input('tab', 'jurnal');
         $query = JurnalHarian::with(['guru', 'jadwal.kelas']);
 
         if ($user->isGuru() && !$user->isAdmin()) {
@@ -54,17 +56,38 @@ class JurnalHarianController extends Controller
         }
 
         $jurnal_harian = $query->orderBy('tanggal', 'desc')->get();
+<<<<<<< HEAD
+
+        // Load Pengajuan List for merging inside Jurnal view
+        $pengajuanQuery = PengajuanIzin::with(['siswa.kelas', 'guru', 'pengaju', 'wakaApprover', 'satpam']);
+        if ($user->isGuru() && !$user->isAdmin()) {
+            $idGuru = $user->guru?->id_guru;
+            $pengajuanQuery->where(function ($q) use ($idGuru, $user) {
+                if ($idGuru) $q->where('id_guru', $idGuru);
+                $q->orWhere('id_user_pengaju', $user->id_user);
+            });
+        }
+        $pengajuanList = $pengajuanQuery->orderBy('created_at', 'desc')->get();
+
+        $guruList = Guru::all();
+        $kelasList = Kelas::all();
+=======
         // Hanya tampilkan guru yang memiliki jadwal mengajar aktif di filter
         $guruList = Guru::whereHas('jadwal', fn($q) => $q->where('aktif', 1))->orderBy('nama', 'asc')->get();
         if ($guruList->isEmpty()) {
             $guruList = Guru::orderBy('nama', 'asc')->get();
         }
         $kelasList = Kelas::orderBy('nama_kelas', 'asc')->get();
+>>>>>>> 6eb11de1427b8af784f55e263c0e76acd5514f66
         $tanggal = $request->input('tanggal');
         $id_guru = $request->input('id_guru');
         $id_kelas = $request->input('id_kelas');
 
+<<<<<<< HEAD
+        return view('jurnal_harian.index', compact('jurnal_harian', 'pengajuanList', 'activeTab', 'guruList', 'kelasList', 'tanggal', 'id_guru', 'id_kelas', 'search'));
+=======
         return view('jurnal_harian.index', compact('jurnal_harian', 'guruList', 'kelasList', 'tanggal', 'id_guru', 'id_kelas', 'search'));
+>>>>>>> 6eb11de1427b8af784f55e263c0e76acd5514f66
     }
 
     public function create(Request $request)
@@ -105,10 +128,18 @@ class JurnalHarianController extends Controller
         }
 
         $jadwalSelected = null;
+<<<<<<< HEAD
+        if ($request->filled('id_jadwal')) {
+            $jadwalSelected = $jadwalList->firstWhere('id_jadwal', (int) $request->id_jadwal);
+        } else {
+            // Auto-select first schedule matching current day if available
+            $jadwalSelected = $jadwalList->firstWhere('hari', $currentDayIndo);
+=======
         if ($currentSlot['status'] === 'kbm' && !empty($currentSlot['jam_ke'])) {
             $jadwalSelected = $jadwalList->first(function ($j) use ($currentDayIndo, $currentSlot) {
                 return $j->hari === $currentDayIndo && (int)$j->jam_ke === (int)$currentSlot['jam_ke'];
             });
+>>>>>>> 6eb11de1427b8af784f55e263c0e76acd5514f66
         }
 
         return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected', 'currentSlot', 'currentDayIndo', 'now'));
@@ -132,11 +163,21 @@ class JurnalHarianController extends Controller
         $jadwal = Jadwal::findOrFail($request->id_jadwal);
         $user = Auth::user();
 
+<<<<<<< HEAD
+        // Check ownership if guru
+        if ($user->isGuru() && !$user->isAdmin()) {
+            $guru = $user->guru;
+            if ($guru && $jadwal->id_guru != $guru->id_guru) {
+                return back()->with('error', 'Anda hanya dapat mengisi jurnal untuk jadwal mengajar Anda sendiri.');
+            }
+        }
+=======
         $days = [
             'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
             'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
         ];
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+>>>>>>> 6eb11de1427b8af784f55e263c0e76acd5514f66
 
         $idGuru = $user->isGuru() ? ($user->guru->id_guru ?? $jadwal->id_guru) : $jadwal->id_guru;
 
