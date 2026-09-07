@@ -47,7 +47,7 @@
                     <thead>
                         <tr>
                             <th class="no-col">No</th>
-                            <th>NIS</th>
+                            <th>NISN</th>
                             <th>Nama Siswa</th>
                             <th>JK</th>
                         </tr>
@@ -56,7 +56,7 @@
                         @foreach($kelas->siswa as $s)
                         <tr>
                             <td class="no-col">{{ $loop->iteration }}</td>
-                            <td class="text-muted fw-bold">{{ $s->nis }}</td>
+                            <td class="text-muted fw-bold">{{ $s->nisn }}</td>
                             <td class="fw-bold text-navy">{{ $s->nama }}</td>
                             <td>{{ $s->jenis_kelamin }}</td>
                         </tr>
@@ -85,7 +85,7 @@
         <form action="{{ route('kelas.attach-mapel', $kelas->id_kelas) }}" method="POST" class="d-flex gap-8" style="align-items:center; flex-wrap:wrap;">
             @csrf
             <select name="id_mapel" class="form-control select-search" style="min-width:320px;" required placeholder="Ketik / Pilih Mata Pelajaran">
-                <option value="">-- Pilih Mata Pelajaran --</option>
+                <option value="">Pilih Mata Pelajaran</option>
                 @foreach($availableMapel as $m)
                 <option value="{{ $m->id_mapel }}">{{ $m->nama_mapel }} ({{ $m->kode_mapel ?? '-' }})</option>
                 @endforeach
@@ -135,7 +135,7 @@
 {{-- BAGIAN 3: JADWAL PELAJARAN PER HARI --}}
 <div class="card">
     <div class="card-header d-flex justify-between align-center">
-        <h3 class="card-title">📅 Jadwal Pelajaran</h3>
+        <h3 class="card-title"> Jadwal Pelajaran</h3>
         <a href="{{ route('jadwal.create', ['id_kelas' => $kelas->id_kelas]) }}" class="btn btn-primary btn-sm">+ Tambah Jadwal</a>
     </div>
     <div class="card-body" style="padding:0 0 8px 0;">
@@ -195,7 +195,7 @@
                                 @if(isset($mapIstirahat[$j->jam_ke]))
                                 <tr style="background:#fff7ed;">
                                     <td colspan="6" style="text-align:center; font-style:italic; color:#92400e; padding:6px; font-size:12px;">
-                                        ☕ {{ $mapIstirahat[$j->jam_ke] }}
+                                         {{ $mapIstirahat[$j->jam_ke] }}
                                     </td>
                                 </tr>
                                 @endif

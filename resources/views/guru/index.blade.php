@@ -11,7 +11,27 @@
     </div>
     <div class="page-actions">
         <a href="{{ route('guru.create') }}" class="btn btn-primary">+ Tambah Guru</a>
+        <a href="{{ route('guru.export-csv', request()->query()) }}" class="btn btn-secondary">⬇️ Export CSV</a>
         <a href="{{ route('guru.trash') }}" class="btn btn-secondary">Lihat Trash</a>
+    </div>
+</div>
+
+{{-- CSV Import Card --}}
+<div class="card mb-16">
+    <div class="card-body" style="padding:12px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <strong class="text-navy" style="font-size:14px;">Import Data Guru via CSV:</strong>
+                <a href="{{ route('guru.import-template') }}" class="btn btn-secondary btn-sm" style="font-size:12px; padding:4px 10px;">
+                    Download Template CSV
+                </a>
+            </div>
+            <form action="{{ route('guru.import-csv') }}" method="POST" enctype="multipart/form-data" style="display:flex; align-items:center; gap:8px;">
+                @csrf
+                <input type="file" name="csv_file" accept=".csv,text/csv,text/plain" required style="font-size:12px;">
+                <button type="submit" class="btn btn-primary btn-sm">Upload &amp; Import</button>
+            </form>
+        </div>
     </div>
 </div>
 

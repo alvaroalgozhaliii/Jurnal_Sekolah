@@ -25,7 +25,7 @@
     <form action="{{ route('login.proses') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label class="form-label" for="username">Username / NIS</label>
+            <label class="form-label" for="username">Username / NISN</label>
             <div class="input-icon-wrapper">
                 <span class="input-icon-left">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -33,7 +33,7 @@
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </span>
-                <input type="text" id="username" name="username" value="{{ old('username') }}" class="form-control" placeholder="Username / NIS" required autofocus>
+                <input type="text" id="username" name="username" value="{{ old('username') }}" class="form-control" placeholder="Username / NISN" required autofocus>
             </div>
         </div>
 

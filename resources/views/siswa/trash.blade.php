@@ -22,7 +22,7 @@
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
-                        <th>NIS</th>
+                        <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Kelas</th>
                         <th class="action-col">Aksi</th>
@@ -32,7 +32,7 @@
                     @foreach($siswa as $item)
                     <tr>
                         <td class="no-col">{{ $loop->iteration }}</td>
-                        <td class="text-muted fw-bold">{{ $item->nis }}</td>
+                        <td class="text-muted fw-bold">{{ $item->NISN }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
                         <td><span class="badge badge-navy">{{ $item->kelas->nama_kelas ?? '-' }}</span></td>
                         <td class="action-col">

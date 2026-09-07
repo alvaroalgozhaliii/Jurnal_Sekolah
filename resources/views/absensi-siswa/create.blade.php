@@ -19,7 +19,7 @@
         <form action="{{ route('absensi-siswa.create') }}" method="GET" class="d-flex align-center gap-12 flex-wrap">
             <label class="form-label" style="margin:0; white-space:nowrap;">Pilih Jurnal Harian:</label>
             <select name="id_jurnal" onchange="this.form.submit()" class="form-control" style="max-width:500px;">
-                <option value="">-- Pilih Jurnal --</option>
+                <option value="">Pilih Jurnal</option>
                 @foreach($jurnalList as $j)
                 <option value="{{ $j->id_jurnal }}" {{ ($jurnalSelected && $jurnalSelected->id_jurnal == $j->id_jurnal) ? 'selected' : '' }}>
                     {{ $j->tanggal }} | {{ $j->mapel }} | Kelas {{ $j->jadwal->kelas->nama_kelas ?? '-' }}
@@ -59,7 +59,7 @@
                     <thead>
                         <tr>
                             <th class="no-col">No</th>
-                            <th>NIS</th>
+                            <th>NISN</th>
                             <th>Nama Siswa</th>
                             <th>Status Kehadiran *</th>
                             <th>Jam Masuk (jika Terlambat)</th>
@@ -71,7 +71,7 @@
                     @foreach($siswaList as $s)
                     <tr>
                         <td class="no-col">{{ $loop->iteration }}</td>
-                        <td class="text-muted fw-bold">{{ $s->nis }}</td>
+                        <td class="text-muted fw-bold">{{ $s->nisn }}</td>
                         <td class="fw-bold text-navy">{{ $s->nama }}</td>
                         <td>
                             <select name="absensi[{{ $s->id_siswa }}]" class="form-control" required style="padding:4px 8px;">

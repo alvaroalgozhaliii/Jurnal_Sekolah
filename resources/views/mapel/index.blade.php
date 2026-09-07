@@ -38,6 +38,7 @@
                         <th class="no-col">No</th>
                         <th>Kode Mapel</th>
                         <th>Nama Mata Pelajaran</th>
+                        <th>Tingkat</th>
                         <th class="action-col">Aksi</th>
                     </tr>
                 </thead>
@@ -45,8 +46,9 @@
                     @foreach($mapel as $item)
                     <tr>
                         <td class="no-col">{{ $loop->iteration }}</td>
-                        <td class="text-muted fw-bold">{{ $item->kode_mapel ?? '-' }}</td>
+                        <td><span class="badge" style="background:#e0f2fe;color:#0369a1;font-weight:700;font-family:monospace;font-size:13px;padding:4px 8px;border-radius:4px;">{{ $item->kode_mapel ?? '-' }}</span></td>
                         <td class="fw-bold text-navy">{{ $item->nama_mapel }}</td>
+                        <td><span class="badge" style="background:#f1f5f9;color:#475569;font-weight:600;padding:3px 8px;border-radius:4px;">Kelas {{ $item->tingkat ?? '-' }}</span></td>
                         <td class="action-col">
                             <a href="{{ route('mapel.show', $item->id_mapel) }}" class="btn btn-secondary btn-sm">Detail</a>
                             <a href="{{ route('mapel.edit', $item->id_mapel) }}" class="btn btn-primary btn-sm">Edit</a>
