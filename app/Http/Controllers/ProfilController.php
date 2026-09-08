@@ -67,6 +67,24 @@ class ProfilController extends Controller
     }
 
     /**
+     * Hapus foto profil (halaman Profil Akun).
+     */
+    public function deleteFoto(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->foto_profil) {
+            if (Storage::disk('public')->exists($user->foto_profil)) {
+                Storage::disk('public')->delete($user->foto_profil);
+            }
+            $user->update(['foto_profil' => null]);
+            return back()->with('success', 'Foto profil berhasil dihapus.');
+        }
+
+        return back()->with('error', 'Anda tidak memiliki foto profil untuk dihapus.');
+    }
+
+    /**
      * Ubah username (dari halaman Pengaturan).
      */
     public function updateUsername(Request $request)

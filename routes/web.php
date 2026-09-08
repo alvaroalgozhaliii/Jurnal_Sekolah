@@ -75,6 +75,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
     Route::post('/profil/update', [ProfilController::class, 'updateProfil'])->name('profil.update');
+    Route::delete('/profil/foto', [ProfilController::class, 'deleteFoto'])->name('profil.foto.delete');
     Route::post('/profil/username', [ProfilController::class, 'updateUsername'])->name('profil.username');
     Route::post('/profil/password', [ProfilController::class, 'updatePassword'])->name('profil.password');
     Route::post('/profil/preferensi', [PengaturanController::class, 'updateGeneralPreferences'])->name('profil.preferensi.update');
