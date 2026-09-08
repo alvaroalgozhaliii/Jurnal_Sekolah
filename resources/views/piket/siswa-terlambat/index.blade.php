@@ -37,10 +37,10 @@
                 <label class="form-label" style="margin-bottom:2px;">Tanggal</label>
                 <input type="date" name="tanggal" value="{{ $tanggal }}" class="form-control">
             </div>
-            <div class="form-group" style="margin:0;">
+            <div class="form-group" style="margin:0; width:fit-content;">
                 <label class="form-label" style="margin-bottom:2px;">Filter Kelas</label>
-                <select name="id_kelas" class="form-control select-search" data-searchable="true">
-                    <option value="">-- Semua Kelas --</option>
+                <select name="id_kelas" class="form-control select-search" data-searchable="true" style="width:fit-content; min-width:130px;">
+                    <option value="">Semua Kelas</option>
                     @foreach($kelasList as $k)
                         <option value="{{ $k->id_kelas }}" {{ $idKelas == $k->id_kelas ? 'selected' : '' }}>
                             {{ $k->nama_kelas }}
