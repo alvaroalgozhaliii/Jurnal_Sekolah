@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\TahunPelajaran;
 
@@ -55,8 +56,8 @@ class ProfilController extends Controller
             $path = $file->storeAs('uploads/profil', $filename, 'public');
 
             // Hapus foto lama jika ada
-            if ($user->foto_profil && \Storage::disk('public')->exists($user->foto_profil)) {
-                \Storage::disk('public')->delete($user->foto_profil);
+            if ($user->foto_profil && Storage::disk('public')->exists($user->foto_profil)) {
+                Storage::disk('public')->delete($user->foto_profil);
             }
 
             $user->update(['foto_profil' => $path]);

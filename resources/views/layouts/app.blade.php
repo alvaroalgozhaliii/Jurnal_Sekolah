@@ -550,7 +550,11 @@
                 </button>
 
                 <a href="{{ route('profil.show') }}" class="user-pill" style="text-decoration: none; cursor: pointer;" title="Buka Profil Akun">
-                    <div class="user-avatar">{{ strtoupper(substr(Auth::user()->nama ?? 'U', 0, 1)) }}</div>
+                    @if(Auth::user()->foto_profil_url)
+                        <img src="{{ Auth::user()->foto_profil_url }}" alt="{{ Auth::user()->nama }}" class="user-avatar" style="object-fit: cover; flex-shrink: 0;">
+                    @else
+                        <div class="user-avatar">{{ strtoupper(substr(Auth::user()->nama ?? 'U', 0, 1)) }}</div>
+                    @endif
                     <div class="user-info">
                         <div class="user-name">{{ Auth::user()->nama }}</div>
                         <div class="user-role">{{ strtoupper(str_replace('_', ' ', Auth::user()->role)) }}</div>
