@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="sso-container">
+
     <!-- LEFT SIDE: Branding & Welcome -->
     <div class="sso-left">
         <div class="sso-brand">
@@ -49,6 +50,7 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         </button>
+
 
         <!-- Animated 3-Layered Wave Divider (Smooth, No Clipping, Synchronized) -->
         <svg class="sso-wave-svg" viewBox="0 0 80 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
