@@ -501,19 +501,7 @@
 
 <div class="profile-wrapper">
 
-    {{-- FLASH MESSAGES --}}
-    @if(session('success'))
-        <div class="alert alert-success" style="margin-bottom: 20px;">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            <div>{{ session('success') }}</div>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger" style="margin-bottom: 20px;">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-            <div>{{ session('error') }}</div>
-        </div>
-    @endif
+    {{-- Flash messages sudah ditampilkan oleh layouts/app.blade.php, tidak perlu duplikasi di sini --}}
 
     {{-- ====================================================== --}}
     {{-- HERO HEADER CARD (AVATAR, NAME, ROLE, DIRECT PHOTO EDIT) --}}
