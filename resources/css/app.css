@@ -403,39 +403,4 @@
             transform: scale(0.99) !important;
         }
     }
-
-    /* 9. Fixed Viewport Login Page & Top-Right Theme Toggle */
-    .login-page {
-        height: 100vh;
-        height: 100dvh;
-        width: 100vw;
-        position: fixed;
-        top: 0;
-        left: 0;
-        overflow: hidden !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        box-sizing: border-box;
-        z-index: 1;
-    }
-
-    .sso-theme-btn-corner {
-        position: absolute !important;
-        top: 18px !important;
-        right: 20px !important;
-        width: 42px !important;
-        height: 42px !important;
-        border-radius: 13px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        cursor: pointer !important;
-        z-index: 100 !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-    }
 }
-
-

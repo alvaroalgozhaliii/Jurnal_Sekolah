@@ -226,7 +226,6 @@
 </div>
 
 @if($kelas)
-<<<<<<< HEAD
 @php
     $today     = \Carbon\Carbon::today()->toDateString();
     $navCarbon = \Carbon\Carbon::create($tahun, $bulan, 1);
@@ -258,21 +257,6 @@
                     <button type="button" class="cal-nav-arrow" onclick="navigateCal(-1)" title="Bulan sebelumnya">&#8592;</button>
                     <button type="button" class="cal-nav-arrow" onclick="navigateCal(1)" title="Bulan berikutnya">&#8594;</button>
                 </div>
-=======
-<div class="card mb-24">
-    <div class="card-body">
-        <form action="{{ route('walikelas.rekap-presensi') }}" method="GET" class="filter-bar">
-            <div class="form-group" style="margin:0;">
-                <label class="form-label" style="margin-bottom:2px;">Filter Siswa</label>
-                <select name="id_siswa" class="form-control">
-                    <option value="">Semua Siswa Kelas {{ $kelas->nama_kelas }}</option>
-                    @foreach($siswaList as $s)
-                    <option value="{{ $s->id_siswa }}" {{ $selectedSiswaId == $s->id_siswa ? 'selected' : '' }}>
-                        {{ $s->nama }} (NISN: {{ $s->NISN }})
-                    </option>
-                    @endforeach
-                </select>
->>>>>>> 5a2cadca71a8b6ed9ed1939d196668009226b51f
             </div>
 
             {{-- Weekday labels --}}
