@@ -1845,6 +1845,7 @@ input[type="number"]::-webkit-outer-spin-button {
    ============================================================ */
 .login-page {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1853,8 +1854,10 @@ input[type="number"]::-webkit-outer-spin-button {
         radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 90% 60%, rgba(30, 58, 138, 0.18) 0%, transparent 45%);
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 /* Aesthetic Floating Ambient Orbs (Lebih Jelas & Cerah) */
@@ -2957,96 +2960,257 @@ input[type="number"]::-webkit-outer-spin-button {
     letter-spacing: 0.3px;
 }
 
-/* RESPONSIVE LAYOUT */
-@media (max-width: 860px) {
-    .sso-container {
-        flex-direction: column;
-        max-width: 440px;
-        min-height: auto;
-    }
-
-    .sso-wave-svg {
-        display: none;
-    }
-
-    .sso-left {
-        padding: 32px 24px 20px 24px;
-        text-align: center;
-        align-items: center;
-    }
-
-    .sso-brand {
-        margin-bottom: 8px;
-    }
-
-    .sso-welcome-box {
-        margin: 8px 0;
-        padding: 12px 0;
-    }
-
-    .sso-welcome-title {
-        font-size: 24px;
-        margin-bottom: 8px;
-    }
-
-    .sso-welcome-desc {
-        max-width: 100%;
-        font-size: 13px;
-    }
-
-    .sso-left-footer {
-        display: none;
-    }
-
-    .sso-right {
-        padding: 32px 24px 28px 24px;
-        border-radius: 20px 20px 0 0;
-    }
-
-    .sso-form-wrap {
-        max-width: 100%;
-    }
-
-    .shape-badge.badge-accurate,
-    .shape-badge.badge-direct-alert,
-    .shape-badge.badge-discipline,
-    .shape-badge.badge-transparent,
-    .shape-badge.badge-realtime,
-    .shape-badge.badge-secure {
-        display: none;
-    }
-
-    .shape-badge {
-        font-size: 11px;
-        padding: 6px 14px;
-    }
-}
-
 /* Theme Toggle Button as a sleek small box in top-right corner */
 .sso-theme-btn-corner {
     position: absolute;
     top: 20px;
     right: 20px;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: #f8fafc !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 20;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 30;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .sso-theme-btn-corner:hover {
     background-color: rgba(255, 255, 255, 0.25) !important;
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    transform: scale(1.15) rotate(8deg) !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    transform: scale(1.1) rotate(8deg) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* RESPONSIVE LAYOUT (MOBILE & TABLET) */
+@media (max-width: 860px) {
+    /* Hide all floating badges, dot grids, & small geometric shapes to keep mobile screen clean */
+    .shape-badge,
+    .login-bg-grid-left,
+    .login-bg-grid-right,
+    .shape-ring,
+    .shape-cube,
+    .shape-sparkle,
+    .shape-plus {
+        display: none !important;
+    }
+
+    .login-page {
+        padding: 24px 16px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Unified, Modern Mobile Login Card */
+    .sso-container {
+        flex-direction: column;
+        width: 100%;
+        max-width: 410px;
+        min-height: auto;
+        margin: auto;
+        border-radius: 24px;
+        background: linear-gradient(180deg, #0b1329 0%, #0f1e42 100%) !important;
+        border: 1.5px solid rgba(56, 189, 248, 0.25) !important;
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 30px rgba(37, 99, 235, 0.2) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sso-wave-svg {
+        display: none !important;
+    }
+
+    /* Top Brand Section */
+    .sso-left {
+        padding: 32px 24px 8px 24px !important;
+        text-align: center !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+        flex: none;
+    }
+
+    .sso-brand {
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 0;
+    }
+
+    .sso-brand-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .sso-brand-text .brand-name {
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+    }
+
+    .sso-brand-text .brand-tag {
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+    }
+
+    /* Sembunyikan welcome box dobel di mobile agar ringkas & rapi */
+    .sso-welcome-box {
+        display: none !important;
+    }
+
+    .sso-left-footer {
+        display: none !important;
+    }
+
+    /* Bottom Form Section */
+    .sso-right {
+        padding: 10px 24px 30px 24px !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        flex: none;
+    }
+
+    .sso-form-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .sso-form-header {
+        margin-bottom: 22px;
+    }
+
+    .sso-title {
+        font-size: 22px;
+        letter-spacing: 1.5px;
+        margin-bottom: 4px;
+    }
+
+    .sso-subtitle {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        color: #94a3b8;
+    }
+
+    .sso-input-pill {
+        height: 48px !important;
+        padding: 4px 14px 4px 16px !important;
+        border-radius: 50px !important;
+    }
+
+    .sso-submit-btn {
+        height: 48px;
+        font-size: 15px;
+        border-radius: 50px;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+    }
+
+    .sso-right-footer {
+        margin-top: 22px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+        text-align: center;
+    }
+
+    /* Posisikan tombol tema rapi di pojok kanan atas kartu */
+    .sso-theme-btn-corner {
+        top: 18px !important;
+        right: 18px !important;
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    /* Light Mode Overrides khusus tampilan Mobile */
+    [data-theme="light"] .sso-container {
+        background: #ffffff !important;
+        border: 1.5px solid rgba(191, 219, 254, 0.8) !important;
+        box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.15) !important;
+    }
+
+    [data-theme="light"] .sso-left,
+    [data-theme="light"] .sso-right {
+        background: transparent !important;
+    }
+
+    [data-theme="light"] .sso-title {
+        color: #0f172a !important;
+    }
+
+    [data-theme="light"] .sso-subtitle {
+        color: #64748b !important;
+    }
+
+    [data-theme="light"] .sso-right-footer {
+        color: #64748b !important;
+    }
+
+    [data-theme="light"] .sso-theme-btn-corner {
+        background-color: rgba(15, 23, 42, 0.08) !important;
+        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        color: #1e293b !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    [data-theme="light"] .sso-input-pill {
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    [data-theme="light"] .sso-input-pill:focus-within {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+    }
+}
+
+/* Penyesuaian untuk layar sangat kecil (< 400px, e.g. iPhone SE) */
+@media (max-width: 400px) {
+    .login-page {
+        padding: 16px 12px;
+    }
+
+    .sso-container {
+        border-radius: 20px;
+    }
+
+    .sso-left {
+        padding: 26px 16px 6px 16px !important;
+    }
+
+    .sso-right {
+        padding: 8px 16px 24px 16px !important;
+    }
+
+    .sso-title {
+        font-size: 20px;
+    }
+
+    .sso-input-pill {
+        height: 46px !important;
+    }
+
+    .sso-submit-btn {
+        height: 46px;
+        font-size: 14.5px;
+    }
+
+    .sso-theme-btn-corner {
+        top: 14px !important;
+        right: 14px !important;
+        width: 34px !important;
+        height: 34px !important;
+    }
 }
 
 /* ============================================================
@@ -3632,23 +3796,282 @@ input[type='radio']:active,
     color: var(--navy-primary) !important;
 }
 
-/* 8. Responsiveness & Touch Optimizations */
+/* Sidebar Close Button (Hidden on Desktop) */
+.sidebar-close-btn {
+    display: none;
+}
+
+/* ============================================================
+   8. MASTER COMPREHENSIVE RESPONSIVENESS & MOBILE SYSTEM
+   ============================================================ */
 @media (max-width: 768px) {
+    /* 1. App Shell & Mobile Sidebar Drawer */
+    .app-shell {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 100vh;
+        height: 100dvh;
+        width: min(85vw, 290px) !important;
+        max-width: 290px !important;
+        transform: translateX(-100%);
+        z-index: 999 !important;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.6) !important;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    .sidebar-overlay {
+        z-index: 990 !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    .sidebar-brand {
+        padding: 14px 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .sidebar-close-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        margin-left: auto !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 8px !important;
+        color: #ffffff !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .sidebar-close-btn:active {
+        background: rgba(255, 255, 255, 0.25) !important;
+        transform: scale(0.92) !important;
+    }
+
+    .sidebar-nav {
+        padding-bottom: 40px !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* 2. Topbar & Header on Mobile */
+    .topbar {
+        height: 54px !important;
+        padding: 0 12px !important;
+    }
+
+    .topbar-hamburger {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
+        background: var(--bg-app) !important;
+    }
+
+    .topbar-title {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        max-width: 170px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .topbar-right {
+        gap: 8px !important;
+    }
+
+    .user-pill {
+        padding: 2px 4px 2px 2px !important;
+    }
+
+    .user-info {
+        display: none !important;
+    }
+
+    .user-avatar {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 12px !important;
+    }
+
+    /* 3. Content Area & Viewport Scrolling */
+    .main-area {
+        height: 100vh;
+        height: 100dvh;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .content-area {
+        padding: 14px 12px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* 4. Page Header & Actions */
+    .page-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .page-title {
+        font-size: 18px !important;
+        line-height: 1.3 !important;
+    }
+
+    .page-subtitle {
+        font-size: 11.5px !important;
+        line-height: 1.4 !important;
+    }
+
+    .page-actions {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .page-actions .btn {
+        flex: 1 1 auto !important;
+        min-width: 120px !important;
+        text-align: center !important;
+        justify-content: center !important;
+        min-height: 42px !important;
+        font-size: 12.5px !important;
+        font-weight: 600 !important;
+    }
+
+    /* 5. Cards & Panels */
+    .card {
+        margin-bottom: 14px !important;
+        border-radius: 12px !important;
+    }
+
+    .card-header {
+        padding: 12px 14px !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .card-body {
+        padding: 14px 12px !important;
+    }
+
+    .card-footer {
+        padding: 10px 14px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* 6. Grids & Metric Boxes */
+    .grid-4, .grid-5 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .grid-2, .grid-3 {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    div[style*="minmax(250px"],
+    div[style*="minmax(280px"],
+    div[style*="minmax(300px"],
+    div[style*="minmax(320px"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .stat-card {
+        padding: 10px 12px !important;
+        gap: 8px !important;
+        min-width: 0 !important;
+        border-radius: 10px !important;
+    }
+
+    .stat-icon-box {
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 8px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .stat-num {
+        font-size: 19px !important;
+    }
+
+    .stat-label {
+        font-size: 10.5px !important;
+    }
+
+    /* 7. Tables & Data Lists (Smooth Horizontal Scroll) */
+    .table-wrapper,
+    .table-responsive,
+    [class*="-table-wrapper"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 10px !important;
+        position: relative !important;
+    }
+
+    .card-body:has(> table) {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .table th, .table td {
+        padding: 9px 10px !important;
+        font-size: 12px !important;
+    }
+
+    .table th {
+        font-size: 10px !important;
+        white-space: nowrap !important;
+        letter-spacing: 0.4px !important;
+    }
+
+    .action-col {
+        white-space: nowrap !important;
+        text-align: right !important;
+    }
+
+    .action-col .btn-sm {
+        min-height: 32px !important;
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+    }
+
+    /* 8. Forms & Inputs Touch Optimization (Avoid iOS Zoom & Squishing) */
     .form-row {
         grid-template-columns: 1fr !important;
-        gap: 12px !important;
+        gap: 10px !important;
     }
 
-    .btn {
-        min-height: 42px;
-        padding: 9px 16px;
-        font-size: 13px;
-    }
-
-    .btn-sm {
-        min-height: 36px;
-        padding: 6px 12px;
-        font-size: 12px;
+    .form-group {
+        margin-bottom: 12px !important;
     }
 
     .form-control,
@@ -3662,19 +4085,121 @@ input[type='radio']:active,
     input[type='time'],
     textarea,
     .ts-control {
-        font-size: 14px !important;
+        font-size: 15px !important;
         min-height: 44px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        border-radius: 8px !important;
     }
 
-    .table-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+    select[style*="min-width"],
+    .form-control[style*="min-width"],
+    .ts-wrapper[style*="min-width"],
+    div[style*="min-width: 450px"],
+    div[style*="min-width:450px"],
+    div[style*="min-width: 320px"] {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .filter-bar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .filter-bar .form-control,
+    .filter-bar select,
+    .filter-bar .btn {
+        width: 100% !important;
+    }
+
+    /* 9. Modals & Popups on Mobile */
+    .modal-overlay {
+        padding: 14px !important;
+        z-index: 9999 !important;
+    }
+
+    .modal-box,
+    .modal-dialog,
+    .modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 20px 16px !important;
+        border-radius: 16px !important;
+        max-height: 88vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* 10. Datepicker Calendar Popover */
+    .jurnal-calendar-popover {
+        max-width: calc(100vw - 28px) !important;
+        left: 0 !important;
+        right: auto !important;
+        width: 290px !important;
+    }
+
+    /* 11. Tabs Navigation on Mobile */
+    .profile-tabs-bar,
+    .nav-tabs,
+    .tab-bar,
+    .tab-nav {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+    }
+
+    /* 12. Universal Buttons & Interactive Feedback on Touch */
+    .btn {
+        min-height: 42px;
+        padding: 9px 16px;
+        font-size: 13px;
+        touch-action: manipulation;
+    }
+
+    .btn-sm {
+        min-height: 34px;
+        padding: 5px 10px;
+        font-size: 11.5px;
     }
 
     .card:active,
     .stat-card:active,
     .table tbody tr:active {
         transform: scale(0.99) !important;
+    }
+}
+
+/* Extra Compact Screens (≤ 400px: iPhone SE, Galaxy A series) */
+@media (max-width: 400px) {
+    .content-area {
+        padding: 10px 8px !important;
+    }
+
+    .topbar-title {
+        max-width: 130px !important;
+        font-size: 13px !important;
+    }
+
+    .page-title {
+        font-size: 16px !important;
+    }
+
+    .grid-4, .grid-5 {
+        gap: 6px !important;
+    }
+
+    .stat-card {
+        padding: 8px 10px !important;
+    }
+
+    .stat-num {
+        font-size: 17px !important;
     }
 }
 
