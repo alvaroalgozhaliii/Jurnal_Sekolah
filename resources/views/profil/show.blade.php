@@ -138,6 +138,21 @@
     height: 18px;
 }
 
+/* Delete Photo Pill Button */
+.profile-pill-item.btn-delete-photo {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-pill-item.btn-delete-photo:hover {
+    background: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+}
+
 /* Upload Prompt / Pending Actions Pill */
 .avatar-upload-actions {
     display: none;
@@ -544,6 +559,14 @@
                            onchange="handleFotoSelected(this)">
                 </form>
 
+                {{-- FORM HAPUS FOTO TERSEMBUNYI --}}
+                @if($user->foto_profil)
+                    <form id="deleteFotoForm" action="{{ route('profil.foto.delete') }}" method="POST" style="display:none;">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                @endif
+
                 {{-- IDENTITAS & STATUS --}}
                 <div class="profile-meta-main">
                     <div class="profile-name-row">
@@ -563,6 +586,12 @@
                             </span>
                         @endif
                         <span class="badge badge-success" style="font-size:11px;">● Akun Aktif</span>
+                        @if($user->foto_profil)
+                            <button type="button" class="profile-pill-item btn-delete-photo" onclick="if(confirm('Apakah Anda yakin ingin menghapus foto profil?')) document.getElementById('deleteFotoForm').submit();" title="Hapus foto profil saat ini">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px; height:13px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                Hapus Foto
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>
