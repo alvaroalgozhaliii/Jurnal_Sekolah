@@ -55,6 +55,13 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Content Area Background Ornaments (Light Mode) */
+    --content-orb-1: rgba(37, 99, 235, 0.08);
+    --content-orb-2: rgba(99, 102, 241, 0.06);
+    --content-orb-3: rgba(14, 165, 233, 0.06);
+    --content-dot-color: rgba(30, 58, 138, 0.09);
+    --content-ring-color: rgba(30, 58, 138, 0.09);
 }
 
 /* Base Setup */
@@ -370,6 +377,51 @@ a:hover {
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: #cbd5e1 transparent;
+    position: relative;
+
+    /* Subtle ambient gradient orbs di sudut-sudut — Elegan & masuk tema */
+    background-color: var(--bg-app);
+    background-image:
+        radial-gradient(circle at 10% 15%, var(--content-orb-1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, var(--content-orb-3) 0%, transparent 35%),
+        radial-gradient(circle at 85% 85%, var(--content-orb-2) 0%, transparent 45%),
+        radial-gradient(circle at 25% 90%, var(--content-orb-1) 0%, transparent 35%);
+    background-attachment: fixed;
+}
+
+/* Subtle dot grid pattern overlay */
+.content-area::before {
+    content: '';
+    position: fixed;
+    top: 56px;
+    left: var(--sidebar-width);
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, var(--content-dot-color) 1.2px, transparent 1.2px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Subtle decorative accent ring di pojok kanan atas */
+.content-area::after {
+    content: '';
+    position: fixed;
+    top: 20px;
+    right: -70px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--content-ring-color);
+    box-shadow: 0 0 60px var(--content-orb-3);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Pastikan semua elemen konten di atas dekorasi */
+.content-area > * {
+    position: relative;
+    z-index: 1;
 }
 
 .content-area::-webkit-scrollbar {
@@ -542,8 +594,8 @@ a:hover {
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: none;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-icon-box {
@@ -921,7 +973,7 @@ input[type="number"]::-webkit-outer-spin-button {
     background: #3b82f6;
     border-color: #3b82f6;
     color: #ffffff;
-    transform: scale(1.08);
+    transform: none;
 }
 
 .jurnal-cal-grid {
@@ -1009,11 +1061,6 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #ffffff;
     border-color: #ef4444;
 }
-    border: none;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-}
 
 .jurnal-cal-btn-today { color: var(--navy-primary); }
 .jurnal-cal-btn-clear { color: #dc2626; }
@@ -1081,32 +1128,252 @@ input[type="number"]::-webkit-outer-spin-button {
         justify-content: center;
     }
 
-    .topbar { padding: 0 16px; }
-    .content-area { padding: 16px; }
+    .topbar { padding: 0 14px; }
+    .content-area { padding: 14px; }
+    .content-area::before { left: 0; top: 50px; }
+    .content-area::after { display: none; }
 
-    .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
+    /* Grid: 2 kolom untuk stat, 1 kolom untuk yang lain */
+    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 12px; }
+    .form-row { grid-template-columns: 1fr; gap: 10px; }
 
-    .page-header { flex-direction: column; align-items: flex-start; }
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .page-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .page-actions .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+    /* Card header: wrap jika dua elemen */
+    .card-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 
     /* Hide user info text on small screens */
     .user-info { display: none; }
+
+    /* Topbar kanan: reduce gap */
+    .topbar-right { gap: 10px; }
+
+    /* Table: pastikan scroll horizontal aktif */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Action column di tabel */
+    .action-col {
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    /* Stat card layout tetap compact */
+    .stat-card {
+        padding: 12px;
+        gap: 10px;
+    }
+    .stat-num { font-size: 20px; }
+
+    /* Filter bar: wrap ke bawah */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-bar .form-control,
+    .filter-bar select,
+    .filter-bar .btn {
+        width: 100%;
+    }
+
+    /* Form search wrap */
+    .d-flex.gap-8 { flex-wrap: wrap; }
+    .d-flex.gap-8 .form-control { flex: 1 1 100%; }
+
+    /* Chart lebih pendek di mobile */
+    .chart-container { height: 200px; }
+
+    /* Card margin bottom lebih kecil */
+    .card { margin-bottom: 14px; }
 }
 
 /* Mobile: ≤600px */
 @media (max-width: 600px) {
-    .topbar-title { font-size: 14px; }
-    .page-title { font-size: 16px; }
-    .card-body { padding: 14px; }
+    .topbar-title { font-size: 13px; }
+    .page-title { font-size: 15px; }
+    .page-subtitle { font-size: 11px; }
+    .card-body { padding: 12px; }
+    .card-header { padding: 10px 14px; }
 
-    .btn { padding: 6px 11px; font-size: 11.5px; }
+    .btn { padding: 6px 10px; font-size: 11.5px; }
     .btn-sm { padding: 4px 8px; font-size: 11px; }
+    .btn-lg { padding: 8px 14px; font-size: 12px; }
 
-    .table th, .table td { padding: 9px 10px; }
+    .table th, .table td { padding: 8px 10px; font-size: 12px; }
+    .table th { font-size: 10px; }
 
-    /* Stack action buttons vertically if needed */
+    /* Action buttons di tabel */
     .action-col { text-align: left; }
+    .action-col .btn { margin-bottom: 2px; }
+
+    /* Stat card 2-kolom tetap, tapi lebih compact */
+    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-card { padding: 10px; gap: 8px; }
+    .stat-icon-box { width: 34px; height: 34px; }
+    .stat-num { font-size: 18px; }
+    .stat-label { font-size: 10px; }
+
+    /* Content area padding lebih kecil */
+    .content-area { padding: 12px; }
+
+    /* Badge lebih kecil */
+    .badge { font-size: 10px; padding: 2px 7px; }
+
+    /* Topbar compact */
+    .user-pill { padding: 2px 6px 2px 2px; }
+    .user-avatar { width: 26px; height: 26px; font-size: 10px; }
+
+    /* Import bar stack vertikal */
+    div[style*="justify-content:space-between"] {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    /* Form full width di mobile */
+    form[style*="display:flex"] {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    form[style*="display:flex"] input[type="file"] {
+        width: 100%;
+    }
+
+    /* Page actions full-width stack */
+    .page-actions { flex-direction: column; }
+    .page-actions .btn { width: 100%; text-align: center; justify-content: center; }
+
+    /* Topbar */
+    .topbar { height: 50px; padding: 0 12px; }
+    .topbar-right { gap: 8px; }
 }
+
+/* ============================================================
+   RESPONSIVE TAMBAHAN — Override inline styles di mobile
+   ============================================================ */
+
+/* Input search yang pakai inline max-width:420px jadi full-width di mobile */
+@media (max-width: 767px) {
+    .form-control[style*="max-width"] {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* Info table: stack jadi dua baris di mobile (label atas, nilai bawah) */
+    .info-table,
+    .info-table tbody,
+    .info-table tr,
+    .info-table th,
+    .info-table td {
+        display: block;
+        width: 100%;
+    }
+    .info-table tr {
+        border-bottom: 1px solid var(--border);
+    }
+    .info-table th {
+        border-bottom: none;
+        padding-bottom: 4px;
+        color: var(--text-secondary);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .info-table td {
+        padding-top: 4px;
+        padding-bottom: 12px;
+        border-bottom: none;
+    }
+
+    /* Card header dengan badge/span yang biasanya sejajar title */
+    .card-header > * {
+        min-width: 0;
+    }
+
+    /* Tabel jadwal dan rekap yang sangat lebar */
+    .table-wrapper {
+        min-width: 0;
+    }
+
+    /* Sembunyikan kolom "No" di tabel pada layar kecil jika kurang penting */
+    /* Dinonaktifkan agar tetap terlihat - hanya kurangi ukuran */
+    .no-col { width: 32px; font-size: 11px; }
+
+    /* Tahun pelajaran badge di page-header wrap dengan benar */
+    .page-header .badge[style] {
+        font-size: 11px !important;
+        padding: 5px 10px !important;
+        display: inline-block;
+        width: auto;
+    }
+
+    /* Tombol dalam action-col wrap ke bawah jika terlalu panjang */
+    .action-col {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    /* Prevent topbar-title clipping */
+    .topbar-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 180px;
+    }
+}
+
+/* Extra small mobile ≤480px */
+@media (max-width: 480px) {
+    /* Stat card: ikut 2-kolom tapi konten minimal */
+    .stat-card {
+        padding: 8px;
+        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .stat-num { font-size: 22px; }
+
+    /* Action col: tombol kecil semua */
+    .action-col .btn-sm {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    /* Topbar title max-width lebih kecil */
+    .topbar-title { max-width: 140px; }
+
+    /* Hide search label / placeholder untuk hemat ruang */
+    .form-control { font-size: 12px; }
+
+    /* Pastikan page-actions wrap dengan benar */
+    .page-actions { gap: 5px; }
+}
+
+
 
 /* ============================================================
    DARK MODE SYSTEM [data-theme="dark"] — HARMONIOUS & MODERN
@@ -1148,6 +1415,13 @@ input[type="number"]::-webkit-outer-spin-button {
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 10px -1px rgba(0, 0, 0, 0.6);
     --shadow-lg: 0 12px 24px -3px rgba(0, 0, 0, 0.7);
+
+    /* Content Area Background Ornaments (Dark Mode) */
+    --content-orb-1: rgba(37, 99, 235, 0.16);
+    --content-orb-2: rgba(99, 102, 241, 0.11);
+    --content-orb-3: rgba(14, 165, 233, 0.09);
+    --content-dot-color: rgba(148, 163, 184, 0.09);
+    --content-ring-color: rgba(59, 130, 246, 0.15);
 }
 
 [data-theme="dark"] body {
@@ -1529,7 +1803,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .theme-toggle-btn:hover {
     background-color: var(--border);
     color: var(--gold-accent);
-    transform: scale(1.05);
+    transform: none;
 }
 
 [data-theme="dark"] .theme-toggle-btn .sun-icon {
@@ -2768,8 +3042,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .sso-theme-btn-corner:hover {
     background-color: rgba(255, 255, 255, 0.18) !important;
     border-color: rgba(255, 255, 255, 0.3) !important;
-    transform: scale(1.06);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
 }
 
 /* ============================================================
@@ -2827,7 +3101,7 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #ffffff !important;
 }
 
-/* Light mode aesthetic background nuances */
+/* Light mode aesthetic background nuances — Lebih terlihat / kontras */
 [data-theme="light"] .login-orb.orb-1 {
     background: radial-gradient(circle, rgba(37, 99, 235, 0.35) 0%, rgba(59, 130, 246, 0.12) 70%, transparent 100%);
 }
@@ -2837,7 +3111,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .login-orb.orb-3 {
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, transparent 70%);
 }
 
 [data-theme="light"] .shape-ring {
@@ -2885,50 +3159,13 @@ input[type="number"]::-webkit-outer-spin-button {
    ============================================================ */
 
 /* 1. Buttons & Clickable Elements */
-button, 
-[type='button'], 
-[type='reset'], 
-[type='submit'],
-[role='button'],
-.btn,
-a,
-select,
-.cursor-pointer,
-.nav-link,
-summary,
-.badge-clickable {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-amber {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     touch-action: manipulation;
-}
-
-button:hover, 
-[type='button']:hover, 
-[type='reset']:hover, 
-[type='submit']:hover,
-[role='button']:hover,
-.btn:hover,
-a:hover,
-select:hover,
-.cursor-pointer:hover,
-.nav-link:hover,
-summary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
-}
-
-button:active, 
-[type='button']:active, 
-[type='reset']:active, 
-[type='submit']:active,
-[role='button']:active,
-.btn:active,
-a:active,
-select:active,
-.cursor-pointer:active,
-.nav-link:active,
-summary:active {
-    transform: scale(0.96) translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 2. Form Columns & Inputs (Text, Password, Number, Email, Select, Textarea) */
@@ -3018,10 +3255,8 @@ table tbody tr:hover {
     background-color: rgba(59, 130, 246, 0.04);
 }
 
-.card:hover,
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
+.card:hover {
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
 /* Ensure mobile screen responsive tap target padding */
@@ -3034,6 +3269,76 @@ table tbody tr:hover {
     select {
         min-height: 42px;
     }
+}
+
+/* ============================================================
+   DISABLE HOVER / TRANSFORM EFFECTS ON ALL ICONS & ICON BOXES
+   ============================================================ */
+.svg-icon,
+.stat-icon-box,
+.sidebar-brand-icon,
+.sso-brand-icon,
+.sso-input-icon,
+.theme-toggle-btn,
+.theme-toggle-btn svg,
+.sso-theme-btn-corner,
+.sso-theme-btn-corner svg,
+.topbar-hamburger,
+.topbar-hamburger svg,
+.btn-toggle-password,
+.sso-eye-btn,
+.cal-nav-arrow,
+.jurnal-cal-nav-btn,
+.nav-item .svg-icon,
+.nav-item-logout .svg-icon,
+.card-header .svg-icon,
+.stat-card .svg-icon,
+.pat-icon,
+svg {
+    transform: none !important;
+}
+
+.svg-icon:hover,
+.stat-icon-box:hover,
+.sidebar-brand-icon:hover,
+.sso-brand-icon:hover,
+.sso-input-icon:hover,
+.theme-toggle-btn:hover,
+.theme-toggle-btn:hover svg,
+.sso-theme-btn-corner:hover,
+.sso-theme-btn-corner:hover svg,
+.topbar-hamburger:hover,
+.topbar-hamburger:hover svg,
+.btn-toggle-password:hover,
+.sso-eye-btn:hover,
+.cal-nav-arrow:hover,
+.jurnal-cal-nav-btn:hover,
+.nav-item:hover .svg-icon,
+.nav-item-logout:hover .svg-icon,
+.card-header:hover .svg-icon,
+.stat-card:hover .stat-icon-box,
+.stat-card:hover .svg-icon,
+.btn:hover .svg-icon,
+a:hover .svg-icon,
+button:hover .svg-icon,
+.pat-icon:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* Stat card (kartu icon) — tetap kokoh tanpa efek gerak/hover */
+.stat-card:hover {
+    transform: none !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Sidebar navigation item (menu icon) — tanpa loncat/shadow */
+.nav-item:hover,
+.nav-item-logout:hover,
+.sidebar-brand:hover {
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 
