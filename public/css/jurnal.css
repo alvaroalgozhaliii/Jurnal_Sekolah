@@ -55,6 +55,13 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Content Area Background Ornaments (Light Mode) */
+    --content-orb-1: rgba(37, 99, 235, 0.08);
+    --content-orb-2: rgba(99, 102, 241, 0.06);
+    --content-orb-3: rgba(14, 165, 233, 0.06);
+    --content-dot-color: rgba(30, 58, 138, 0.09);
+    --content-ring-color: rgba(30, 58, 138, 0.09);
 }
 
 /* Base Setup */
@@ -370,6 +377,51 @@ a:hover {
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: #cbd5e1 transparent;
+    position: relative;
+
+    /* Subtle ambient gradient orbs di sudut-sudut — Elegan & masuk tema */
+    background-color: var(--bg-app);
+    background-image:
+        radial-gradient(circle at 10% 15%, var(--content-orb-1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, var(--content-orb-3) 0%, transparent 35%),
+        radial-gradient(circle at 85% 85%, var(--content-orb-2) 0%, transparent 45%),
+        radial-gradient(circle at 25% 90%, var(--content-orb-1) 0%, transparent 35%);
+    background-attachment: fixed;
+}
+
+/* Subtle dot grid pattern overlay */
+.content-area::before {
+    content: '';
+    position: fixed;
+    top: 56px;
+    left: var(--sidebar-width);
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, var(--content-dot-color) 1.2px, transparent 1.2px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Subtle decorative accent ring di pojok kanan atas */
+.content-area::after {
+    content: '';
+    position: fixed;
+    top: 20px;
+    right: -70px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--content-ring-color);
+    box-shadow: 0 0 60px var(--content-orb-3);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Pastikan semua elemen konten di atas dekorasi */
+.content-area > * {
+    position: relative;
+    z-index: 1;
 }
 
 .content-area::-webkit-scrollbar {
@@ -542,8 +594,9 @@ a:hover {
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px) scale(1.008);
+    box-shadow: 0 14px 28px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08);
+    border-color: rgba(59, 130, 246, 0.35);
 }
 
 .stat-icon-box {
@@ -921,7 +974,8 @@ input[type="number"]::-webkit-outer-spin-button {
     background: #3b82f6;
     border-color: #3b82f6;
     color: #ffffff;
-    transform: scale(1.08);
+    transform: translateY(-2px) scale(1.08);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .jurnal-cal-grid {
@@ -1009,11 +1063,6 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #ffffff;
     border-color: #ef4444;
 }
-    border: none;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-}
 
 .jurnal-cal-btn-today { color: var(--navy-primary); }
 .jurnal-cal-btn-clear { color: #dc2626; }
@@ -1081,32 +1130,252 @@ input[type="number"]::-webkit-outer-spin-button {
         justify-content: center;
     }
 
-    .topbar { padding: 0 16px; }
-    .content-area { padding: 16px; }
+    .topbar { padding: 0 14px; }
+    .content-area { padding: 14px; }
+    .content-area::before { left: 0; top: 50px; }
+    .content-area::after { display: none; }
 
-    .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
+    /* Grid: 2 kolom untuk stat, 1 kolom untuk yang lain */
+    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 12px; }
+    .form-row { grid-template-columns: 1fr; gap: 10px; }
 
-    .page-header { flex-direction: column; align-items: flex-start; }
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .page-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .page-actions .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+    /* Card header: wrap jika dua elemen */
+    .card-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 
     /* Hide user info text on small screens */
     .user-info { display: none; }
+
+    /* Topbar kanan: reduce gap */
+    .topbar-right { gap: 10px; }
+
+    /* Table: pastikan scroll horizontal aktif */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Action column di tabel */
+    .action-col {
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    /* Stat card layout tetap compact */
+    .stat-card {
+        padding: 12px;
+        gap: 10px;
+    }
+    .stat-num { font-size: 20px; }
+
+    /* Filter bar: wrap ke bawah */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-bar .form-control,
+    .filter-bar select,
+    .filter-bar .btn {
+        width: 100%;
+    }
+
+    /* Form search wrap */
+    .d-flex.gap-8 { flex-wrap: wrap; }
+    .d-flex.gap-8 .form-control { flex: 1 1 100%; }
+
+    /* Chart lebih pendek di mobile */
+    .chart-container { height: 200px; }
+
+    /* Card margin bottom lebih kecil */
+    .card { margin-bottom: 14px; }
 }
 
 /* Mobile: ≤600px */
 @media (max-width: 600px) {
-    .topbar-title { font-size: 14px; }
-    .page-title { font-size: 16px; }
-    .card-body { padding: 14px; }
+    .topbar-title { font-size: 13px; }
+    .page-title { font-size: 15px; }
+    .page-subtitle { font-size: 11px; }
+    .card-body { padding: 12px; }
+    .card-header { padding: 10px 14px; }
 
-    .btn { padding: 6px 11px; font-size: 11.5px; }
+    .btn { padding: 6px 10px; font-size: 11.5px; }
     .btn-sm { padding: 4px 8px; font-size: 11px; }
+    .btn-lg { padding: 8px 14px; font-size: 12px; }
 
-    .table th, .table td { padding: 9px 10px; }
+    .table th, .table td { padding: 8px 10px; font-size: 12px; }
+    .table th { font-size: 10px; }
 
-    /* Stack action buttons vertically if needed */
+    /* Action buttons di tabel */
     .action-col { text-align: left; }
+    .action-col .btn { margin-bottom: 2px; }
+
+    /* Stat card 2-kolom tetap, tapi lebih compact */
+    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-card { padding: 10px; gap: 8px; }
+    .stat-icon-box { width: 34px; height: 34px; }
+    .stat-num { font-size: 18px; }
+    .stat-label { font-size: 10px; }
+
+    /* Content area padding lebih kecil */
+    .content-area { padding: 12px; }
+
+    /* Badge lebih kecil */
+    .badge { font-size: 10px; padding: 2px 7px; }
+
+    /* Topbar compact */
+    .user-pill { padding: 2px 6px 2px 2px; }
+    .user-avatar { width: 26px; height: 26px; font-size: 10px; }
+
+    /* Import bar stack vertikal */
+    div[style*="justify-content:space-between"] {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    /* Form full width di mobile */
+    form[style*="display:flex"] {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    form[style*="display:flex"] input[type="file"] {
+        width: 100%;
+    }
+
+    /* Page actions full-width stack */
+    .page-actions { flex-direction: column; }
+    .page-actions .btn { width: 100%; text-align: center; justify-content: center; }
+
+    /* Topbar */
+    .topbar { height: 50px; padding: 0 12px; }
+    .topbar-right { gap: 8px; }
 }
+
+/* ============================================================
+   RESPONSIVE TAMBAHAN — Override inline styles di mobile
+   ============================================================ */
+
+/* Input search yang pakai inline max-width:420px jadi full-width di mobile */
+@media (max-width: 767px) {
+    .form-control[style*="max-width"] {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* Info table: stack jadi dua baris di mobile (label atas, nilai bawah) */
+    .info-table,
+    .info-table tbody,
+    .info-table tr,
+    .info-table th,
+    .info-table td {
+        display: block;
+        width: 100%;
+    }
+    .info-table tr {
+        border-bottom: 1px solid var(--border);
+    }
+    .info-table th {
+        border-bottom: none;
+        padding-bottom: 4px;
+        color: var(--text-secondary);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .info-table td {
+        padding-top: 4px;
+        padding-bottom: 12px;
+        border-bottom: none;
+    }
+
+    /* Card header dengan badge/span yang biasanya sejajar title */
+    .card-header > * {
+        min-width: 0;
+    }
+
+    /* Tabel jadwal dan rekap yang sangat lebar */
+    .table-wrapper {
+        min-width: 0;
+    }
+
+    /* Sembunyikan kolom "No" di tabel pada layar kecil jika kurang penting */
+    /* Dinonaktifkan agar tetap terlihat - hanya kurangi ukuran */
+    .no-col { width: 32px; font-size: 11px; }
+
+    /* Tahun pelajaran badge di page-header wrap dengan benar */
+    .page-header .badge[style] {
+        font-size: 11px !important;
+        padding: 5px 10px !important;
+        display: inline-block;
+        width: auto;
+    }
+
+    /* Tombol dalam action-col wrap ke bawah jika terlalu panjang */
+    .action-col {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    /* Prevent topbar-title clipping */
+    .topbar-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 180px;
+    }
+}
+
+/* Extra small mobile ≤480px */
+@media (max-width: 480px) {
+    /* Stat card: ikut 2-kolom tapi konten minimal */
+    .stat-card {
+        padding: 8px;
+        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .stat-num { font-size: 22px; }
+
+    /* Action col: tombol kecil semua */
+    .action-col .btn-sm {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    /* Topbar title max-width lebih kecil */
+    .topbar-title { max-width: 140px; }
+
+    /* Hide search label / placeholder untuk hemat ruang */
+    .form-control { font-size: 12px; }
+
+    /* Pastikan page-actions wrap dengan benar */
+    .page-actions { gap: 5px; }
+}
+
+
 
 /* ============================================================
    DARK MODE SYSTEM [data-theme="dark"] — HARMONIOUS & MODERN
@@ -1148,6 +1417,13 @@ input[type="number"]::-webkit-outer-spin-button {
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 10px -1px rgba(0, 0, 0, 0.6);
     --shadow-lg: 0 12px 24px -3px rgba(0, 0, 0, 0.7);
+
+    /* Content Area Background Ornaments (Dark Mode) */
+    --content-orb-1: rgba(37, 99, 235, 0.16);
+    --content-orb-2: rgba(99, 102, 241, 0.11);
+    --content-orb-3: rgba(14, 165, 233, 0.09);
+    --content-dot-color: rgba(148, 163, 184, 0.09);
+    --content-ring-color: rgba(59, 130, 246, 0.15);
 }
 
 [data-theme="dark"] body {
@@ -1529,7 +1805,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .theme-toggle-btn:hover {
     background-color: var(--border);
     color: var(--gold-accent);
-    transform: scale(1.05);
+    transform: scale(1.15) rotate(8deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="dark"] .theme-toggle-btn .sun-icon {
@@ -1568,6 +1845,7 @@ input[type="number"]::-webkit-outer-spin-button {
    ============================================================ */
 .login-page {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1576,8 +1854,10 @@ input[type="number"]::-webkit-outer-spin-button {
         radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 90% 60%, rgba(30, 58, 138, 0.18) 0%, transparent 45%);
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 /* Aesthetic Floating Ambient Orbs (Lebih Jelas & Cerah) */
@@ -1683,61 +1963,251 @@ input[type="number"]::-webkit-outer-spin-button {
     filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
 }
 
-.shape-badge.badge-top-left {
-    top: 9%;
-    left: 7%;
-    animation: floatBadgeWideLeft 8s ease-in-out infinite;
+/* Animated Shooting Stars & Particles */
+.shooting-stars-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
 }
 
-.shape-badge.badge-bottom-right {
-    bottom: 9%;
-    right: 7%;
+.shooting-star {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(-45deg, rgba(56, 189, 248, 1), rgba(56, 189, 248, 0));
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
+    animation: shootingStarAnim 7s ease-in-out infinite;
+    border-radius: 999px;
+}
+
+.shooting-star.star-1 {
+    top: 15%;
+    left: 20%;
+    width: 120px;
+    animation-delay: 0s;
+}
+
+.shooting-star.star-2 {
+    top: 35%;
+    right: 15%;
+    width: 150px;
+    background: linear-gradient(-45deg, rgba(192, 132, 252, 1), rgba(192, 132, 252, 0));
+    filter: drop-shadow(0 0 6px rgba(192, 132, 252, 0.8));
+    animation-delay: 2.5s;
+    animation-duration: 6s;
+}
+
+.shooting-star.star-3 {
+    top: 70%;
+    left: 10%;
+    width: 100px;
+    background: linear-gradient(-45deg, rgba(52, 211, 153, 1), rgba(52, 211, 153, 0));
+    filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.8));
+    animation-delay: 4.8s;
+    animation-duration: 8s;
+}
+
+@keyframes shootingStarAnim {
+    0% {
+        transform: translateX(-100px) translateY(-100px) rotate(-45deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    40% {
+        transform: translateX(300px) translateY(300px) rotate(-45deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(300px) translateY(300px) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+.glow-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.8) 0%, transparent 70%);
+    animation: particleGlow 4s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.glow-particle.p-1 { width: 8px; height: 8px; top: 22%; left: 18%; animation-delay: 0s; }
+.glow-particle.p-2 { width: 12px; height: 12px; top: 68%; right: 22%; animation-delay: 1.2s; background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, transparent 70%); }
+.glow-particle.p-3 { width: 10px; height: 10px; top: 12%; right: 30%; animation-delay: 2.4s; background: radial-gradient(circle, rgba(251, 113, 133, 0.8) 0%, transparent 70%); }
+.glow-particle.p-4 { width: 7px; height: 7px; bottom: 18%; left: 32%; animation-delay: 0.8s; background: radial-gradient(circle, rgba(52, 211, 153, 0.8) 0%, transparent 70%); }
+
+@keyframes particleGlow {
+    0% { transform: scale(0.8) translateY(0); opacity: 0.3; }
+    100% { transform: scale(1.5) translateY(-15px); opacity: 0.9; }
+}
+
+/* 10 Floating Frosted Glass Badges */
+.shape-badge.badge-live-update {
+    top: 8%;
+    left: 4%;
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeLiveUpdate 8.5s ease-in-out infinite;
+}
+.shape-badge.badge-live-update svg { color: #38bdf8; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
+
+.shape-badge.badge-accurate {
+    top: 5%;
+    left: 28%;
+    border-color: rgba(251, 113, 133, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(251, 113, 133, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeAccurate 10.5s ease-in-out infinite;
+}
+.shape-badge.badge-accurate svg { color: #fb7185; filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.6)); }
+
+.shape-badge.badge-direct-alert {
+    top: 5%;
+    right: 28%;
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeDirectAlert 9s ease-in-out infinite;
+}
+.shape-badge.badge-direct-alert svg { color: #f87171; filter: drop-shadow(0 0 8px rgba(248, 113, 113, 0.7)); }
+
+.shape-badge.badge-presensi {
+    top: 8%;
+    right: 4%;
+    border-color: rgba(192, 132, 252, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(192, 132, 252, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgePresensi 10s ease-in-out infinite;
+}
+.shape-badge.badge-presensi svg { color: #c084fc; filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.6)); }
+
+.shape-badge.badge-realtime {
+    top: 48%;
+    left: 2%;
+    border-color: rgba(251, 191, 36, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(251, 191, 36, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeRealtime 9.5s ease-in-out infinite;
+}
+.shape-badge.badge-realtime svg { color: #fbbf24; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6)); }
+
+.shape-badge.badge-secure {
+    top: 48%;
+    right: 2%;
+    border-color: rgba(96, 165, 250, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(96, 165, 250, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeSecure 8.5s ease-in-out infinite;
+}
+.shape-badge.badge-secure svg { color: #60a5fa; filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6)); }
+
+.shape-badge.badge-recap {
+    bottom: 8%;
+    left: 4%;
+    border-color: rgba(45, 212, 191, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(45, 212, 191, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeRecap 11s ease-in-out infinite;
+}
+.shape-badge.badge-recap svg { color: #2dd4bf; filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.6)); }
+
+.shape-badge.badge-discipline {
+    bottom: 5%;
+    left: 28%;
+    border-color: rgba(250, 204, 21, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(250, 204, 21, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeDiscipline 10.2s ease-in-out infinite;
+}
+.shape-badge.badge-discipline svg { color: #facc15; filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.6)); }
+
+.shape-badge.badge-transparent {
+    bottom: 5%;
+    right: 28%;
+    border-color: rgba(129, 140, 248, 0.45);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(129, 140, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeTransparent 9.8s ease-in-out infinite;
+}
+.shape-badge.badge-transparent svg { color: #818cf8; filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.6)); }
+
+.shape-badge.badge-terverifikasi {
+    bottom: 8%;
+    right: 4%;
     border-color: rgba(34, 197, 94, 0.45);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(34, 197, 94, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    animation: floatBadgeWideRight 9s ease-in-out infinite;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(34, 197, 94, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: floatBadgeTerverifikasi 9s ease-in-out infinite;
+}
+.shape-badge.badge-terverifikasi svg { color: #4ade80; filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6)); }
+
+/* Animations for each badge */
+@keyframes floatBadgeLiveUpdate {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(20px, -24px) rotate(2deg); }
+    50% { transform: translate(35px, -8px) rotate(-2deg); }
+    75% { transform: translate(15px, 18px) rotate(1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
-.shape-badge.badge-bottom-right svg {
-    color: #4ade80;
-    filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6));
+@keyframes floatBadgeTerverifikasi {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(-22px, 22px) rotate(-2deg); }
+    50% { transform: translate(-38px, 6px) rotate(2deg); }
+    75% { transform: translate(-16px, -20px) rotate(-1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
-/* Gerakan melayang luas & dinamis untuk KBM Online */
-@keyframes floatBadgeWideLeft {
-    0% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
-    25% {
-        transform: translate(24px, -32px) rotate(3deg);
-    }
-    50% {
-        transform: translate(45px, -12px) rotate(-2deg);
-    }
-    75% {
-        transform: translate(18px, 24px) rotate(2deg);
-    }
-    100% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
+@keyframes floatBadgeAccurate {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(-15px, 15px) rotate(-2deg); }
+    66% { transform: translate(15px, 18px) rotate(2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
-/* Gerakan melayang luas & dinamis untuk Terverifikasi */
-@keyframes floatBadgeWideRight {
-    0% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
-    25% {
-        transform: translate(-28px, 28px) rotate(-3deg);
-    }
-    50% {
-        transform: translate(-48px, 8px) rotate(2deg);
-    }
-    75% {
-        transform: translate(-20px, -28px) rotate(-2deg);
-    }
-    100% {
-        transform: translate(0px, 0px) rotate(0deg);
-    }
+@keyframes floatBadgeDirectAlert {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(18px, 15px) rotate(2deg); }
+    66% { transform: translate(-12px, 20px) rotate(-2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgePresensi {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(-18px, 22px) rotate(-2deg); }
+    50% { transform: translate(-30px, -12px) rotate(2deg); }
+    75% { transform: translate(-10px, -25px) rotate(-1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeRealtime {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    30% { transform: translate(20px, -16px) rotate(2.5deg); }
+    60% { transform: translate(12px, 20px) rotate(-2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeSecure {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    30% { transform: translate(-20px, -20px) rotate(-2.5deg); }
+    60% { transform: translate(-12px, 16px) rotate(2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeRecap {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    25% { transform: translate(18px, -18px) rotate(1.5deg); }
+    50% { transform: translate(32px, 8px) rotate(-2deg); }
+    75% { transform: translate(12px, 20px) rotate(1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeDiscipline {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(-15px, -15px) rotate(-2deg); }
+    66% { transform: translate(15px, -18px) rotate(2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+@keyframes floatBadgeTransparent {
+    0% { transform: translate(0px, 0px) rotate(0deg); }
+    33% { transform: translate(16px, -15px) rotate(2deg); }
+    66% { transform: translate(-15px, -18px) rotate(-2deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
 }
 
 /* Floating Geometric Cubes */
@@ -2237,13 +2707,13 @@ input[type="number"]::-webkit-outer-spin-button {
     z-index: 3;
 }
 
-/* SVG Multi-Layer Animated Ocean Wave Divider */
+/* SVG 3-Layered Wave Divider */
 .sso-wave-svg {
     position: absolute;
-    top: -1px;
-    bottom: -1px;
-    left: -79px;
-    height: calc(100% + 2px);
+    top: 0;
+    bottom: 0;
+    left: -80px;
+    height: 100%;
     width: 80px;
     color: #1d4ed8;
     pointer-events: none;
@@ -2251,68 +2721,33 @@ input[type="number"]::-webkit-outer-spin-button {
     overflow: visible;
 }
 
-/* Animasi Ombak Utama (Front Layer) - Mengalun Halus & Rapi Menyatu */
-.sso-wave-layer-front {
-    transform-origin: 100% 50%;
-    animation: waveSwayFront 6.5s ease-in-out infinite alternate;
-}
-
-/* Animasi Ombak Tengah (Mid Layer - Cyan Glow) */
-.sso-wave-layer-mid {
-    transform-origin: 100% 50%;
-    animation: waveSwayMid 8.5s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4));
-}
-
-/* Animasi Ombak Belakang (Back Layer - Soft Sky) */
+/* Layer 1: Back Layer (Light Periwinkle Blue Wave - Widest) */
 .sso-wave-layer-bg {
-    transform-origin: 100% 50%;
-    animation: waveSwayBg 10.5s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.35));
+    filter: none !important;
 }
 
-/* Gelombang mengalun melengkung tanpa patah di perbatasan panel */
-@keyframes waveSwayFront {
-    0% {
-        transform: scaleX(1);
-    }
-    50% {
-        transform: scaleX(1.14);
-    }
-    100% {
-        transform: scaleX(0.94);
-    }
+/* Layer 2: Middle Layer (Medium Royal Blue Wave) */
+.sso-wave-layer-mid {
+    filter: none !important;
 }
 
-@keyframes waveSwayMid {
-    0% {
-        transform: scaleX(0.96);
-        opacity: 0.6;
-    }
-    50% {
-        transform: scaleX(1.24);
-        opacity: 0.85;
-    }
-    100% {
-        transform: scaleX(1.06);
-        opacity: 0.7;
-    }
+/* Layer 3: Front Layer (Dark Solid Royal Blue Wave - Narrowest) */
+.sso-wave-layer-front {
+    filter: none !important;
 }
 
-@keyframes waveSwayBg {
-    0% {
-        transform: scaleX(1.1);
-        opacity: 0.5;
-    }
-    50% {
-        transform: scaleX(0.9);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scaleX(1.26);
-        opacity: 0.6;
-    }
+/* Light mode specific wave color palette to match reference image */
+[data-theme="light"] .sso-wave-layer-bg {
+    fill: rgba(147, 197, 253, 0.65) !important;
 }
+[data-theme="light"] .sso-wave-layer-mid {
+    fill: rgba(59, 130, 246, 0.85) !important;
+}
+[data-theme="light"] .sso-wave-layer-front {
+    fill: #1d4ed8 !important;
+}
+
+/* Wave keyframes removed — all animation handled via SVG <animate> on path d attribute */
 
 /* Watermark Pattern Icons */
 .sso-pattern-bg {
@@ -2525,103 +2960,279 @@ input[type="number"]::-webkit-outer-spin-button {
     letter-spacing: 0.3px;
 }
 
-/* RESPONSIVE LAYOUT */
-@media (max-width: 860px) {
-    .sso-container {
-        flex-direction: column;
-        max-width: 440px;
-        min-height: auto;
-    }
-
-    .sso-wave-svg {
-        display: none;
-    }
-
-    .sso-left {
-        padding: 32px 24px 20px 24px;
-        text-align: center;
-        align-items: center;
-    }
-
-    .sso-brand {
-        margin-bottom: 8px;
-    }
-
-    .sso-welcome-box {
-        margin: 8px 0;
-        padding: 12px 0;
-    }
-
-    .sso-welcome-title {
-        font-size: 24px;
-        margin-bottom: 8px;
-    }
-
-    .sso-welcome-desc {
-        max-width: 100%;
-        font-size: 13px;
-    }
-
-    .sso-left-footer {
-        display: none;
-    }
-
-    .sso-right {
-        padding: 32px 24px 28px 24px;
-        border-radius: 20px 20px 0 0;
-    }
-
-    .sso-form-wrap {
-        max-width: 100%;
-    }
-}
-
 /* Theme Toggle Button as a sleek small box in top-right corner */
 .sso-theme-btn-corner {
     position: absolute;
     top: 20px;
     right: 20px;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: #f8fafc !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 20;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 30;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .sso-theme-btn-corner:hover {
-    background-color: rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
-    transform: scale(1.06);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    transform: scale(1.1) rotate(8deg) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* RESPONSIVE LAYOUT (MOBILE & TABLET) */
+@media (max-width: 860px) {
+    /* Hide all floating badges, dot grids, & small geometric shapes to keep mobile screen clean */
+    .shape-badge,
+    .login-bg-grid-left,
+    .login-bg-grid-right,
+    .shape-ring,
+    .shape-cube,
+    .shape-sparkle,
+    .shape-plus {
+        display: none !important;
+    }
+
+    .login-page {
+        padding: 24px 16px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Unified, Modern Mobile Login Card */
+    .sso-container {
+        flex-direction: column;
+        width: 100%;
+        max-width: 410px;
+        min-height: auto;
+        margin: auto;
+        border-radius: 24px;
+        background: linear-gradient(180deg, #0b1329 0%, #0f1e42 100%) !important;
+        border: 1.5px solid rgba(56, 189, 248, 0.25) !important;
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 30px rgba(37, 99, 235, 0.2) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sso-wave-svg {
+        display: none !important;
+    }
+
+    /* Top Brand Section */
+    .sso-left {
+        padding: 32px 24px 8px 24px !important;
+        text-align: center !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+        flex: none;
+    }
+
+    .sso-brand {
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 0;
+    }
+
+    .sso-brand-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .sso-brand-text .brand-name {
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+    }
+
+    .sso-brand-text .brand-tag {
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+    }
+
+    /* Sembunyikan welcome box dobel di mobile agar ringkas & rapi */
+    .sso-welcome-box {
+        display: none !important;
+    }
+
+    .sso-left-footer {
+        display: none !important;
+    }
+
+    /* Bottom Form Section */
+    .sso-right {
+        padding: 10px 24px 30px 24px !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        flex: none;
+    }
+
+    .sso-form-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .sso-form-header {
+        margin-bottom: 22px;
+    }
+
+    .sso-title {
+        font-size: 22px;
+        letter-spacing: 1.5px;
+        margin-bottom: 4px;
+    }
+
+    .sso-subtitle {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        color: #94a3b8;
+    }
+
+    .sso-input-pill {
+        height: 48px !important;
+        padding: 4px 14px 4px 16px !important;
+        border-radius: 50px !important;
+    }
+
+    .sso-submit-btn {
+        height: 48px;
+        font-size: 15px;
+        border-radius: 50px;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+    }
+
+    .sso-right-footer {
+        margin-top: 22px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+        text-align: center;
+    }
+
+    /* Posisikan tombol tema rapi di pojok kanan atas kartu */
+    .sso-theme-btn-corner {
+        top: 18px !important;
+        right: 18px !important;
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    /* Light Mode Overrides khusus tampilan Mobile */
+    [data-theme="light"] .sso-container {
+        background: #ffffff !important;
+        border: 1.5px solid rgba(191, 219, 254, 0.8) !important;
+        box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.15) !important;
+    }
+
+    [data-theme="light"] .sso-left,
+    [data-theme="light"] .sso-right {
+        background: transparent !important;
+    }
+
+    [data-theme="light"] .sso-title {
+        color: #0f172a !important;
+    }
+
+    [data-theme="light"] .sso-subtitle {
+        color: #64748b !important;
+    }
+
+    [data-theme="light"] .sso-right-footer {
+        color: #64748b !important;
+    }
+
+    [data-theme="light"] .sso-theme-btn-corner {
+        background-color: rgba(15, 23, 42, 0.08) !important;
+        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        color: #1e293b !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    [data-theme="light"] .sso-input-pill {
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    [data-theme="light"] .sso-input-pill:focus-within {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+    }
+}
+
+/* Penyesuaian untuk layar sangat kecil (< 400px, e.g. iPhone SE) */
+@media (max-width: 400px) {
+    .login-page {
+        padding: 16px 12px;
+    }
+
+    .sso-container {
+        border-radius: 20px;
+    }
+
+    .sso-left {
+        padding: 26px 16px 6px 16px !important;
+    }
+
+    .sso-right {
+        padding: 8px 16px 24px 16px !important;
+    }
+
+    .sso-title {
+        font-size: 20px;
+    }
+
+    .sso-input-pill {
+        height: 46px !important;
+    }
+
+    .sso-submit-btn {
+        height: 46px;
+        font-size: 14.5px;
+    }
+
+    .sso-theme-btn-corner {
+        top: 14px !important;
+        right: 14px !important;
+        width: 34px !important;
+        height: 34px !important;
+    }
 }
 
 /* ============================================================
    LIGHT MODE OVERRIDES FOR SSO LOGIN CONTAINER
    ============================================================ */
 [data-theme="light"] .login-page {
-    background-color: #f1f5f9;
+    background-color: #e0f2fe;
     background-image: 
-        radial-gradient(circle at 10% 40%, rgba(37, 99, 235, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 90% 60%, rgba(37, 99, 235, 0.08) 0%, transparent 45%);
+        radial-gradient(circle at 15% 25%, rgba(37, 99, 235, 0.22) 0%, transparent 50%),
+        radial-gradient(circle at 85% 75%, rgba(14, 165, 233, 0.22) 0%, transparent 50%),
+        linear-gradient(135deg, #e2e8f0 0%, #dbeafe 50%, #eff6ff 100%);
 }
 
 [data-theme="light"] .login-page::before,
 [data-theme="light"] .login-page::after {
-    border-color: rgba(0, 0, 0, 0.04);
-    box-shadow: inset 0 0 100px rgba(37, 99, 235, 0.03);
+    border-color: rgba(30, 58, 138, 0.12);
+    box-shadow: inset 0 0 120px rgba(37, 99, 235, 0.08);
 }
 
 [data-theme="light"] .sso-container {
     background-color: #ffffff;
-    box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(226, 232, 240, 0.8);
+    box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(191, 219, 254, 0.9);
 }
 
 [data-theme="light"] .sso-left {
@@ -2638,11 +3249,11 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .sso-welcome-desc {
-    color: #475569;
+    color: #334155;
 }
 
 [data-theme="light"] .sso-left-footer {
-    color: #94a3b8;
+    color: #64748b;
 }
 
 [data-theme="light"] .sso-theme-btn-corner {
@@ -2657,48 +3268,939 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #ffffff !important;
 }
 
-/* Light mode aesthetic background nuances */
+/* Light mode aesthetic background nuances — Lebih terlihat / kontras */
 [data-theme="light"] .login-orb.orb-1 {
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(59, 130, 246, 0.05) 70%, transparent 100%);
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.35) 0%, rgba(59, 130, 246, 0.12) 70%, transparent 100%);
 }
 
 [data-theme="light"] .login-orb.orb-2 {
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, rgba(99, 102, 241, 0.05) 70%, transparent 100%);
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.35) 0%, rgba(99, 102, 241, 0.12) 70%, transparent 100%);
 }
 
 [data-theme="light"] .login-orb.orb-3 {
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, transparent 70%);
 }
 
 [data-theme="light"] .shape-ring {
-    border-color: rgba(30, 58, 138, 0.08);
+    border-color: rgba(30, 58, 138, 0.22);
 }
 
 [data-theme="light"] .shape-sparkle {
-    color: rgba(37, 99, 235, 0.35);
+    color: rgba(37, 99, 235, 0.65);
 }
 
 [data-theme="light"] .login-bg-grid-left,
 [data-theme="light"] .login-bg-grid-right {
-    color: rgba(30, 58, 138, 0.08);
-}
-
-[data-theme="light"] .shape-badge {
-    background: rgba(255, 255, 255, 0.82);
-    border: 1.5px solid rgba(56, 189, 248, 0.4);
-    color: #1e293b;
-    box-shadow: 0 10px 28px rgba(30, 58, 138, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-[data-theme="light"] .shape-badge.badge-bottom-right {
-    border-color: rgba(34, 197, 94, 0.45);
-    box-shadow: 0 10px 28px rgba(34, 197, 94, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    color: rgba(30, 58, 138, 0.28);
+    opacity: 0.85;
 }
 
 [data-theme="light"] .ambient-wave {
-    color: rgba(37, 99, 235, 0.12);
+    color: rgba(37, 99, 235, 0.28);
 }
 
+[data-theme="light"] .shooting-star {
+    background: linear-gradient(-45deg, rgba(37, 99, 235, 1), rgba(37, 99, 235, 0));
+    filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.8));
+}
 
+[data-theme="light"] .glow-particle {
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.9) 0%, transparent 70%);
+}
+
+[data-theme="light"] .shape-badge {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1.5px solid rgba(37, 99, 235, 0.35);
+    color: #0f172a;
+    box-shadow: 0 12px 32px rgba(30, 58, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+[data-theme="light"] .shape-badge span {
+    color: #0f172a;
+    font-weight: 800;
+}
+
+/* ============================================================
+   GLOBAL INTERACTIVE ANIMATIONS & RESPONSIVE TOUCH STYLING
+   (Buttons, Form Columns, Inputs, Selects, Cards & Clickable Elements)
+   ============================================================ */
+
+/* 1. Buttons & Clickable Elements */
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-amber {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: manipulation;
+}
+
+/* 2. Form Columns & Inputs (Text, Password, Number, Email, Select, Textarea) */
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='number'],
+input[type='search'],
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'],
+input[type='file'],
+textarea,
+select,
+.form-control,
+.form-select,
+.sso-input-pill {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    touch-action: manipulation;
+}
+
+input[type='text']:hover,
+input[type='password']:hover,
+input[type='email']:hover,
+input[type='number']:hover,
+input[type='search']:hover,
+input[type='date']:hover,
+input[type='time']:hover,
+input[type='datetime-local']:hover,
+textarea:hover,
+select:hover,
+.form-control:hover,
+.form-select:hover,
+.sso-input-pill:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='search']:focus,
+input[type='date']:focus,
+input[type='time']:focus,
+input[type='datetime-local']:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus,
+.sso-input-pill:focus-within {
+    transform: translateY(-1px) scale(1.005);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3), 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 3. Checkboxes & Radio Buttons */
+input[type='checkbox'],
+input[type='radio'] {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+input[type='checkbox']:hover,
+input[type='radio']:hover {
+    transform: scale(1.15);
+}
+
+input[type='checkbox']:active,
+input[type='radio']:active {
+    transform: scale(0.9);
+}
+
+/* 4. Table Rows, Columns, Cards & Containers */
+table tbody tr,
+.card,
+.stat-card,
+.box,
+.panel {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.04);
+}
+
+.card:hover {
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure mobile screen responsive tap target padding */
+@media (max-width: 768px) {
+    button, 
+    .btn, 
+    input[type='button'], 
+    input[type='submit'], 
+    .form-control, 
+    select {
+        min-height: 42px;
+    }
+}
+
+/* ============================================================
+   MASTER INTERACTIVE, ANIMATED & RESPONSIVE DESIGN SYSTEM
+   ============================================================ */
+
+/* 1. Universal Cursor Pointer & Touch Optimizations */
+a,
+button,
+[type='button'],
+[type='reset'],
+[type='submit'],
+[role='button'],
+.btn,
+select,
+.form-select,
+.cursor-pointer,
+.nav-link,
+.tab-btn,
+.pagination a,
+.pagination button,
+.badge-clickable,
+.badge-action,
+summary,
+.theme-toggle-btn,
+.jurnal-cal-nav-btn,
+.jurnal-cal-btn-today,
+.jurnal-cal-btn-clear,
+.btn-toggle-password,
+.close-btn,
+.modal-close-btn,
+.dropdown-toggle,
+.dropdown-item,
+.sidebar-nav a,
+.nav-item,
+.table th.sortable,
+table tbody tr,
+.stat-card,
+.card-clickable,
+.sso-theme-btn-corner,
+.sso-btn,
+.form-check-input,
+input[type='checkbox'],
+input[type='radio'] {
+    cursor: pointer !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 2. Interactive Button Animations (Hover, Click, Touch & Micro-animations) */
+.btn,
+button:not(:disabled),
+[type='button']:not(:disabled),
+[type='reset']:not(:disabled),
+[type='submit']:not(:disabled),
+[role='button']:not(:disabled),
+.tab-btn,
+.sso-btn,
+.pagination a,
+.pagination button {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease !important;
+    position: relative;
+    will-change: transform, box-shadow;
+}
+
+.btn:hover,
+button:hover:not(:disabled),
+[type='submit']:hover:not(:disabled),
+[type='button']:hover:not(:disabled),
+.tab-btn:hover,
+.sso-btn:hover {
+    transform: translateY(-2.5px) scale(1.02) !important;
+    box-shadow: 0 8px 22px -3px rgba(30, 58, 138, 0.25), 0 3px 8px -2px rgba(0, 0, 0, 0.08) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--navy-primary-hover, #172554) !important;
+    box-shadow: 0 8px 22px -3px rgba(30, 58, 138, 0.38), 0 3px 8px -2px rgba(30, 58, 138, 0.25) !important;
+}
+
+.btn-amber:hover {
+    background-color: var(--gold-hover, #b45309) !important;
+    box-shadow: 0 8px 22px -3px rgba(217, 119, 6, 0.38), 0 3px 8px -2px rgba(217, 119, 6, 0.25) !important;
+}
+
+.btn-success:hover {
+    background-color: #15803d !important;
+    box-shadow: 0 8px 22px -3px rgba(22, 163, 74, 0.38), 0 3px 8px -2px rgba(22, 163, 74, 0.25) !important;
+}
+
+.btn-danger:hover {
+    background-color: #b91c1c !important;
+    box-shadow: 0 8px 22px -3px rgba(220, 38, 38, 0.38), 0 3px 8px -2px rgba(220, 38, 38, 0.25) !important;
+}
+
+.btn-secondary:hover {
+    background-color: #f1f5f9 !important;
+    border-color: #94a3b8 !important;
+    color: var(--navy-primary) !important;
+    box-shadow: 0 6px 18px -2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Button Active / Press Down Feedback */
+.btn:active,
+button:active:not(:disabled),
+[type='submit']:active:not(:disabled),
+[type='button']:active:not(:disabled),
+.tab-btn:active,
+.sso-btn:active {
+    transform: translateY(1px) scale(0.96) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Icons inside buttons micro-animation */
+.btn svg,
+.btn i,
+button svg,
+button i,
+.tab-btn svg {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn:hover svg,
+.btn:hover i,
+button:hover svg,
+button:hover i {
+    transform: scale(1.15) !important;
+}
+
+/* 3. Form Input Columns & Select Fields Animations */
+.form-control,
+.form-select,
+textarea,
+select,
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='number'],
+input[type='search'],
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'],
+input[type='file'],
+.sso-input-pill,
+.ts-control {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.2s ease,
+                background-color 0.2s ease !important;
+    will-change: transform, box-shadow;
+}
+
+/* Hover state on input columns */
+.form-control:hover,
+.form-select:hover,
+textarea:hover,
+select:hover,
+input[type='text']:hover,
+input[type='password']:hover,
+input[type='email']:hover,
+input[type='number']:hover,
+input[type='search']:hover,
+input[type='date']:hover,
+input[type='time']:hover,
+input[type='datetime-local']:hover,
+.sso-input-pill:hover,
+.ts-control:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15) !important;
+    transform: translateY(-1.5px) !important;
+}
+
+/* Focus state on input columns */
+.form-control:focus,
+.form-select:focus,
+textarea:focus,
+select:focus,
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='search']:focus,
+input[type='date']:focus,
+input[type='time']:focus,
+input[type='datetime-local']:focus,
+.ts-wrapper.focus .ts-control {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.25), 0 8px 22px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-1.5px) scale(1.003) !important;
+    outline: none !important;
+}
+
+/* Input icon illumination on focus/hover */
+.input-icon-wrapper:focus-within .input-icon-left svg,
+.input-icon-wrapper:focus-within .input-icon-left i,
+.input-icon-wrapper:hover .input-icon-left svg,
+.sso-input-pill:focus-within .sso-input-icon svg,
+.sso-input-pill:hover .sso-input-icon svg {
+    color: #2563eb !important;
+    transform: scale(1.15) !important;
+    transition: transform 0.2s ease, color 0.2s ease !important;
+}
+
+/* Checkboxes & Radio Buttons */
+input[type='checkbox'],
+input[type='radio'],
+.form-check-input {
+    cursor: pointer !important;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease !important;
+}
+
+input[type='checkbox']:hover,
+input[type='radio']:hover,
+.form-check-input:hover {
+    transform: scale(1.25) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+}
+
+input[type='checkbox']:active,
+input[type='radio']:active,
+.form-check-input:active {
+    transform: scale(0.9) !important;
+}
+
+/* 4. Data Cards, Stat Boxes & Content Panels */
+.card,
+.stat-card,
+.info-card,
+.dashboard-card,
+.box,
+.panel,
+.widget,
+.piket-card,
+.jadwal-card,
+.distribusi-box,
+.card-folder {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease !important;
+    will-change: transform, box-shadow;
+}
+
+.card:hover,
+.stat-card:hover,
+.info-card:hover,
+.dashboard-card:hover,
+.box:hover,
+.panel:hover,
+.widget:hover,
+.piket-card:hover,
+.jadwal-card:hover,
+.distribusi-box:hover,
+.card-folder:hover {
+    transform: translateY(-4px) scale(1.008) !important;
+    box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08) !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+}
+
+.stat-card:hover .stat-icon-box,
+.stat-card:hover .svg-icon,
+.card:hover .card-header .svg-icon,
+.card-folder:hover .card-folder-icon {
+    transform: scale(1.15) rotate(4deg) !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* 5. Table Rows & Headers Animations */
+.table-wrapper {
+    transition: box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+
+.table-wrapper:hover {
+    box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.08) !important;
+}
+
+.table th {
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.table th.sortable,
+.table th[onclick] {
+    cursor: pointer !important;
+}
+
+.table th.sortable:hover,
+.table th[onclick]:hover {
+    background-color: rgba(59, 130, 246, 0.09) !important;
+    color: var(--navy-primary) !important;
+}
+
+.table tbody tr {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.2s ease,
+                box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: transform;
+    cursor: pointer !important;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.06) !important;
+    transform: scale(1.002) translateX(3px) !important;
+    box-shadow: inset 3.5px 0 0 #2563eb, 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="dark"] .table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.12) !important;
+    box-shadow: inset 3.5px 0 0 #60a5fa, 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 6. Sidebar Menu Items, Nav Links & Badges */
+.sidebar-nav a,
+.nav-item,
+.nav-link {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.2s ease,
+                color 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.sidebar-nav a:hover,
+.nav-item:hover,
+.nav-link:hover {
+    transform: translateX(5px) !important;
+}
+
+.sidebar-nav a:hover svg,
+.nav-item:hover .svg-icon {
+    transform: scale(1.18) !important;
+    transition: transform 0.2s ease !important;
+}
+
+.badge,
+.badge-clickable {
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.badge-clickable:hover,
+.badge[onclick]:hover {
+    transform: scale(1.08) translateY(-1px) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    cursor: pointer !important;
+}
+
+/* 7. Dropdown Items Animations */
+.dropdown-menu .dropdown-item,
+.ts-dropdown .option {
+    transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease !important;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.ts-dropdown .option:hover {
+    transform: translateX(4px) !important;
+    background-color: rgba(59, 130, 246, 0.1) !important;
+    color: var(--navy-primary) !important;
+}
+
+/* Sidebar Close Button (Hidden on Desktop) */
+.sidebar-close-btn {
+    display: none;
+}
+
+/* ============================================================
+   8. MASTER COMPREHENSIVE RESPONSIVENESS & MOBILE SYSTEM
+   ============================================================ */
+@media (max-width: 768px) {
+    /* 1. App Shell & Mobile Sidebar Drawer */
+    .app-shell {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 100vh;
+        height: 100dvh;
+        width: min(85vw, 290px) !important;
+        max-width: 290px !important;
+        transform: translateX(-100%);
+        z-index: 999 !important;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.6) !important;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    .sidebar-overlay {
+        z-index: 990 !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    .sidebar-brand {
+        padding: 14px 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .sidebar-close-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        margin-left: auto !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 8px !important;
+        color: #ffffff !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .sidebar-close-btn:active {
+        background: rgba(255, 255, 255, 0.25) !important;
+        transform: scale(0.92) !important;
+    }
+
+    .sidebar-nav {
+        padding-bottom: 40px !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* 2. Topbar & Header on Mobile */
+    .topbar {
+        height: 54px !important;
+        padding: 0 12px !important;
+    }
+
+    .topbar-hamburger {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
+        background: var(--bg-app) !important;
+    }
+
+    .topbar-title {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        max-width: 170px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .topbar-right {
+        gap: 8px !important;
+    }
+
+    .user-pill {
+        padding: 2px 4px 2px 2px !important;
+    }
+
+    .user-info {
+        display: none !important;
+    }
+
+    .user-avatar {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 12px !important;
+    }
+
+    /* 3. Content Area & Viewport Scrolling */
+    .main-area {
+        height: 100vh;
+        height: 100dvh;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .content-area {
+        padding: 14px 12px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* 4. Page Header & Actions */
+    .page-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .page-title {
+        font-size: 18px !important;
+        line-height: 1.3 !important;
+    }
+
+    .page-subtitle {
+        font-size: 11.5px !important;
+        line-height: 1.4 !important;
+    }
+
+    .page-actions {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .page-actions .btn {
+        flex: 1 1 auto !important;
+        min-width: 120px !important;
+        text-align: center !important;
+        justify-content: center !important;
+        min-height: 42px !important;
+        font-size: 12.5px !important;
+        font-weight: 600 !important;
+    }
+
+    /* 5. Cards & Panels */
+    .card {
+        margin-bottom: 14px !important;
+        border-radius: 12px !important;
+    }
+
+    .card-header {
+        padding: 12px 14px !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .card-body {
+        padding: 14px 12px !important;
+    }
+
+    .card-footer {
+        padding: 10px 14px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* 6. Grids & Metric Boxes */
+    .grid-4, .grid-5 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .grid-2, .grid-3 {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    div[style*="minmax(250px"],
+    div[style*="minmax(280px"],
+    div[style*="minmax(300px"],
+    div[style*="minmax(320px"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .stat-card {
+        padding: 10px 12px !important;
+        gap: 8px !important;
+        min-width: 0 !important;
+        border-radius: 10px !important;
+    }
+
+    .stat-icon-box {
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 8px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .stat-num {
+        font-size: 19px !important;
+    }
+
+    .stat-label {
+        font-size: 10.5px !important;
+    }
+
+    /* 7. Tables & Data Lists (Smooth Horizontal Scroll) */
+    .table-wrapper,
+    .table-responsive,
+    [class*="-table-wrapper"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 10px !important;
+        position: relative !important;
+    }
+
+    .card-body:has(> table) {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .table th, .table td {
+        padding: 9px 10px !important;
+        font-size: 12px !important;
+    }
+
+    .table th {
+        font-size: 10px !important;
+        white-space: nowrap !important;
+        letter-spacing: 0.4px !important;
+    }
+
+    .action-col {
+        white-space: nowrap !important;
+        text-align: right !important;
+    }
+
+    .action-col .btn-sm {
+        min-height: 32px !important;
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+    }
+
+    /* 8. Forms & Inputs Touch Optimization (Avoid iOS Zoom & Squishing) */
+    .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    .form-group {
+        margin-bottom: 12px !important;
+    }
+
+    .form-control,
+    .form-select,
+    select,
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='number'],
+    input[type='date'],
+    input[type='time'],
+    textarea,
+    .ts-control {
+        font-size: 15px !important;
+        min-height: 44px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        border-radius: 8px !important;
+    }
+
+    select[style*="min-width"],
+    .form-control[style*="min-width"],
+    .ts-wrapper[style*="min-width"],
+    div[style*="min-width: 450px"],
+    div[style*="min-width:450px"],
+    div[style*="min-width: 320px"] {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .filter-bar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .filter-bar .form-control,
+    .filter-bar select,
+    .filter-bar .btn {
+        width: 100% !important;
+    }
+
+    /* 9. Modals & Popups on Mobile */
+    .modal-overlay {
+        padding: 14px !important;
+        z-index: 9999 !important;
+    }
+
+    .modal-box,
+    .modal-dialog,
+    .modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 20px 16px !important;
+        border-radius: 16px !important;
+        max-height: 88vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* 10. Datepicker Calendar Popover */
+    .jurnal-calendar-popover {
+        max-width: calc(100vw - 28px) !important;
+        left: 0 !important;
+        right: auto !important;
+        width: 290px !important;
+    }
+
+    /* 11. Tabs Navigation on Mobile */
+    .profile-tabs-bar,
+    .nav-tabs,
+    .tab-bar,
+    .tab-nav {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+    }
+
+    /* 12. Universal Buttons & Interactive Feedback on Touch */
+    .btn {
+        min-height: 42px;
+        padding: 9px 16px;
+        font-size: 13px;
+        touch-action: manipulation;
+    }
+
+    .btn-sm {
+        min-height: 34px;
+        padding: 5px 10px;
+        font-size: 11.5px;
+    }
+
+    .card:active,
+    .stat-card:active,
+    .table tbody tr:active {
+        transform: scale(0.99) !important;
+    }
+}
+
+/* Extra Compact Screens (≤ 400px: iPhone SE, Galaxy A series) */
+@media (max-width: 400px) {
+    .content-area {
+        padding: 10px 8px !important;
+    }
+
+    .topbar-title {
+        max-width: 130px !important;
+        font-size: 13px !important;
+    }
+
+    .page-title {
+        font-size: 16px !important;
+    }
+
+    .grid-4, .grid-5 {
+        gap: 6px !important;
+    }
+
+    .stat-card {
+        padding: 8px 10px !important;
+    }
+
+    .stat-num {
+        font-size: 17px !important;
+    }
+}
 
 

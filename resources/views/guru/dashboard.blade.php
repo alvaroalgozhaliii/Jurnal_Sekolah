@@ -4,10 +4,14 @@
 @section('page-title', 'Dashboard Guru')
 
 @section('content')
-<div class="page-header">
+<div class="page-header d-flex justify-between align-center flex-wrap gap-12">
     <div>
         <h1 class="page-title">Selamat Datang, {{ $guru->nama ?? Auth::user()->nama }}</h1>
         <p class="page-subtitle">Sistem Monitoring Mengajar KBM & Presensi Harian</p>
+    </div>
+    <div class="alert alert-info py-8 px-16 m-0 d-flex align-center gap-8" style="border-radius: 20px;">
+        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span id="dashboard-laptop-clock" class="fw-bold" style="font-size: 13px;">Memuat jam laptop...</span>
     </div>
 </div>
 
@@ -177,17 +181,18 @@
         <div class="card-header">
             <h3 class="card-title">
                 <svg class="svg-icon text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
-                Aksi Cepat Jurnal & KBM
+                Aksi Cepat Jurnal & Pengajuan Izin
             </h3>
         </div>
         <div class="card-body">
-            <p class="mb-16 text-muted">Akses langsung formulir pengisian jurnal harian dan presensi siswa KBM hari ini:</p>
+            <p class="mb-16 text-muted">Akses langsung formulir pengisian jurnal mengajar otomatis dan pengajuan izin:</p>
             <div class="d-flex gap-12 flex-wrap mb-16">
                 <a href="{{ route('jurnal-harian.create') }}" class="btn btn-primary btn-lg">Form Isi Jurnal Mengajar</a>
-                <a href="{{ route('absensi-siswa.create') }}" class="btn btn-secondary btn-lg">Absensi Siswa Batch</a>
+                <a href="{{ route('pengajuan.create') }}" class="btn btn-amber btn-lg">+ Buat Pengajuan Izin</a>
+                <a href="{{ route('jurnal-harian.index', ['tab' => 'pengajuan']) }}" class="btn btn-secondary btn-lg">Lihat Pengajuan Saya</a>
             </div>
             <div class="alert alert-info" style="margin: 0;">
-                <div>Isi jurnal harian tepat waktu sesuai jadwal mata pelajaran yang diampu.</div>
+                <div>Jurnal otomatis mencocokkan jam & hari dari laptop Anda. Pengajuan izin kini digabung di menu Jurnal.</div>
             </div>
         </div>
     </div>
@@ -258,6 +263,27 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const monthsIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    function updateDashboardClock() {
+        const now = new Date();
+        const dayName = daysIndo[now.getDay()];
+        const dateNum = String(now.getDate()).padStart(2, '0');
+        const monthName = monthsIndo[now.getMonth()];
+        const year = now.getFullYear();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        const clockEl = document.getElementById('dashboard-laptop-clock');
+        if (clockEl) {
+            clockEl.textContent = `${dayName}, ${dateNum} ${monthName} ${year} (${hours}:${minutes}:${seconds})`;
+        }
+    }
+    updateDashboardClock();
+    setInterval(updateDashboardClock, 1000);
+
     const ctx = document.getElementById('chartAktivitasMengajar').getContext('2d');
     new Chart(ctx, {
         type: 'bar',

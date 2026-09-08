@@ -7,3 +7,401 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer base {
+    /* 1. Universal Cursor Pointer & Touch Optimizations */
+    a,
+    button,
+    [type='button'],
+    [type='reset'],
+    [type='submit'],
+    [role='button'],
+    .btn,
+    select,
+    .form-select,
+    .cursor-pointer,
+    .nav-link,
+    .tab-btn,
+    .pagination a,
+    .pagination button,
+    .badge-clickable,
+    .badge-action,
+    summary,
+    .theme-toggle-btn,
+    .jurnal-cal-nav-btn,
+    .jurnal-cal-btn-today,
+    .jurnal-cal-btn-clear,
+    .btn-toggle-password,
+    .close-btn,
+    .modal-close-btn,
+    .dropdown-toggle,
+    .dropdown-item,
+    .sidebar-nav a,
+    .nav-item,
+    .table th.sortable,
+    table tbody tr,
+    .stat-card,
+    .card-clickable,
+    .sso-theme-btn-corner,
+    .sso-btn,
+    .form-check-input,
+    input[type='checkbox'],
+    input[type='radio'] {
+        cursor: pointer !important;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 2. Interactive Button Animations */
+    .btn,
+    button:not(:disabled),
+    [type='button']:not(:disabled),
+    [type='reset']:not(:disabled),
+    [type='submit']:not(:disabled),
+    [role='button']:not(:disabled),
+    .tab-btn,
+    .sso-btn,
+    .pagination a,
+    .pagination button {
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 0.2s ease,
+                    border-color 0.2s ease,
+                    color 0.2s ease !important;
+        position: relative;
+        will-change: transform, box-shadow;
+    }
+
+    .btn:hover,
+    button:hover:not(:disabled),
+    [type='submit']:hover:not(:disabled),
+    [type='button']:hover:not(:disabled),
+    .tab-btn:hover,
+    .sso-btn:hover {
+        transform: translateY(-2.5px) scale(1.02) !important;
+        box-shadow: 0 8px 22px -3px rgba(30, 58, 138, 0.25), 0 3px 8px -2px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--navy-primary-hover, #172554) !important;
+        box-shadow: 0 8px 22px -3px rgba(30, 58, 138, 0.38), 0 3px 8px -2px rgba(30, 58, 138, 0.25) !important;
+    }
+
+    .btn-amber:hover {
+        background-color: var(--gold-hover, #b45309) !important;
+        box-shadow: 0 8px 22px -3px rgba(217, 119, 6, 0.38), 0 3px 8px -2px rgba(217, 119, 6, 0.25) !important;
+    }
+
+    .btn-success:hover {
+        background-color: #15803d !important;
+        box-shadow: 0 8px 22px -3px rgba(22, 163, 74, 0.38), 0 3px 8px -2px rgba(22, 163, 74, 0.25) !important;
+    }
+
+    .btn-danger:hover {
+        background-color: #b91c1c !important;
+        box-shadow: 0 8px 22px -3px rgba(220, 38, 38, 0.38), 0 3px 8px -2px rgba(220, 38, 38, 0.25) !important;
+    }
+
+    .btn-secondary:hover {
+        background-color: #f1f5f9 !important;
+        border-color: #94a3b8 !important;
+        color: var(--navy-primary) !important;
+        box-shadow: 0 6px 18px -2px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Button Active / Press Down Feedback */
+    .btn:active,
+    button:active:not(:disabled),
+    [type='submit']:active:not(:disabled),
+    [type='button']:active:not(:disabled),
+    .tab-btn:active,
+    .sso-btn:active {
+        transform: translateY(1px) scale(0.96) !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    /* Icons inside buttons micro-animation */
+    .btn svg,
+    .btn i,
+    button svg,
+    button i,
+    .tab-btn svg {
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .btn:hover svg,
+    .btn:hover i,
+    button:hover svg,
+    button:hover i {
+        transform: scale(1.15) !important;
+    }
+
+    /* 3. Form Input Columns & Select Fields Animations */
+    .form-control,
+    .form-select,
+    textarea,
+    select,
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='number'],
+    input[type='search'],
+    input[type='date'],
+    input[type='time'],
+    input[type='datetime-local'],
+    input[type='file'],
+    .sso-input-pill,
+    .ts-control {
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 0.2s ease,
+                    background-color 0.2s ease !important;
+        will-change: transform, box-shadow;
+    }
+
+    /* Hover state on input columns */
+    .form-control:hover,
+    .form-select:hover,
+    textarea:hover,
+    select:hover,
+    input[type='text']:hover,
+    input[type='password']:hover,
+    input[type='email']:hover,
+    input[type='number']:hover,
+    input[type='search']:hover,
+    input[type='date']:hover,
+    input[type='time']:hover,
+    input[type='datetime-local']:hover,
+    .sso-input-pill:hover,
+    .ts-control:hover {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15) !important;
+        transform: translateY(-1.5px) !important;
+    }
+
+    /* Focus state on input columns */
+    .form-control:focus,
+    .form-select:focus,
+    textarea:focus,
+    select:focus,
+    input[type='text']:focus,
+    input[type='password']:focus,
+    input[type='email']:focus,
+    input[type='number']:focus,
+    input[type='search']:focus,
+    input[type='date']:focus,
+    input[type='time']:focus,
+    input[type='datetime-local']:focus,
+    .ts-wrapper.focus .ts-control {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.25), 0 8px 22px rgba(0, 0, 0, 0.1) !important;
+        transform: translateY(-1.5px) scale(1.003) !important;
+        outline: none !important;
+    }
+
+    /* Input icon illumination on focus/hover */
+    .input-icon-wrapper:focus-within .input-icon-left svg,
+    .input-icon-wrapper:focus-within .input-icon-left i,
+    .input-icon-wrapper:hover .input-icon-left svg,
+    .sso-input-pill:focus-within .sso-input-icon svg,
+    .sso-input-pill:hover .sso-input-icon svg {
+        color: #2563eb !important;
+        transform: scale(1.15) !important;
+        transition: transform 0.2s ease, color 0.2s ease !important;
+    }
+
+    /* Checkboxes & Radio Buttons */
+    input[type='checkbox'],
+    input[type='radio'],
+    .form-check-input {
+        cursor: pointer !important;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease !important;
+    }
+
+    input[type='checkbox']:hover,
+    input[type='radio']:hover,
+    .form-check-input:hover {
+        transform: scale(1.25) !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    input[type='checkbox']:active,
+    input[type='radio']:active,
+    .form-check-input:active {
+        transform: scale(0.9) !important;
+    }
+
+    /* 4. Data Cards, Stat Boxes & Content Panels */
+    .card,
+    .stat-card,
+    .info-card,
+    .dashboard-card,
+    .box,
+    .panel,
+    .widget,
+    .piket-card,
+    .jadwal-card,
+    .distribusi-box,
+    .card-folder {
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 0.25s ease !important;
+        will-change: transform, box-shadow;
+    }
+
+    .card:hover,
+    .stat-card:hover,
+    .info-card:hover,
+    .dashboard-card:hover,
+    .box:hover,
+    .panel:hover,
+    .widget:hover,
+    .piket-card:hover,
+    .jadwal-card:hover,
+    .distribusi-box:hover,
+    .card-folder:hover {
+        transform: translateY(-4px) scale(1.008) !important;
+        box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08) !important;
+        border-color: rgba(59, 130, 246, 0.35) !important;
+    }
+
+    .stat-card:hover .stat-icon-box,
+    .stat-card:hover .svg-icon,
+    .card:hover .card-header .svg-icon,
+    .card-folder:hover .card-folder-icon {
+        transform: scale(1.15) rotate(4deg) !important;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* 5. Table Rows & Headers Animations */
+    .table-wrapper {
+        transition: box-shadow 0.25s ease, border-color 0.25s ease !important;
+    }
+
+    .table-wrapper:hover {
+        box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .table th {
+        transition: background-color 0.2s ease, color 0.2s ease !important;
+    }
+
+    .table th.sortable,
+    .table th[onclick] {
+        cursor: pointer !important;
+    }
+
+    .table th.sortable:hover,
+    .table th[onclick]:hover {
+        background-color: rgba(59, 130, 246, 0.09) !important;
+        color: var(--navy-primary) !important;
+    }
+
+    .table tbody tr {
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 0.2s ease,
+                    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        will-change: transform;
+        cursor: pointer !important;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(59, 130, 246, 0.06) !important;
+        transform: scale(1.002) translateX(3px) !important;
+        box-shadow: inset 3.5px 0 0 #2563eb, 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* 6. Sidebar Menu Items, Nav Links & Badges */
+    .sidebar-nav a,
+    .nav-item,
+    .nav-link {
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 0.2s ease,
+                    color 0.2s ease !important;
+        cursor: pointer !important;
+    }
+
+    .sidebar-nav a:hover,
+    .nav-item:hover,
+    .nav-link:hover {
+        transform: translateX(5px) !important;
+    }
+
+    .sidebar-nav a:hover svg,
+    .nav-item:hover .svg-icon {
+        transform: scale(1.18) !important;
+        transition: transform 0.2s ease !important;
+    }
+
+    .badge,
+    .badge-clickable {
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .badge-clickable:hover,
+    .badge[onclick]:hover {
+        transform: scale(1.08) translateY(-1px) !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+        cursor: pointer !important;
+    }
+
+    /* 7. Dropdown Items Animations */
+    .dropdown-menu .dropdown-item,
+    .ts-dropdown .option {
+        transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease !important;
+    }
+
+    .dropdown-menu .dropdown-item:hover,
+    .ts-dropdown .option:hover {
+        transform: translateX(4px) !important;
+        background-color: rgba(59, 130, 246, 0.1) !important;
+        color: var(--navy-primary) !important;
+    }
+
+    /* 8. Responsiveness & Touch Optimizations */
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+
+        .btn {
+            min-height: 42px;
+            padding: 9px 16px;
+            font-size: 13px;
+        }
+
+        .btn-sm {
+            min-height: 36px;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .form-control,
+        .form-select,
+        select,
+        input[type='text'],
+        input[type='password'],
+        input[type='email'],
+        input[type='number'],
+        input[type='date'],
+        input[type='time'],
+        textarea,
+        .ts-control {
+            font-size: 14px !important;
+            min-height: 44px !important;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card:active,
+        .stat-card:active,
+        .table tbody tr:active {
+            transform: scale(0.99) !important;
+        }
+    }
+}
+

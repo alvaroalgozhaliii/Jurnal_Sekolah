@@ -97,6 +97,39 @@
 .calendar-day.selected .data-dot {
     background: #ffffff;
 }
+@media (max-width: 600px) {
+    .calendar-wrapper {
+        padding: 12px;
+        margin-bottom: 16px;
+        border-radius: 10px;
+    }
+    .calendar-header {
+        margin-bottom: 14px;
+    }
+    .calendar-title {
+        font-size: 1rem;
+    }
+    .calendar-nav-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .calendar-grid {
+        gap: 4px;
+    }
+    .calendar-day-header {
+        font-size: 0.75rem;
+        padding-bottom: 6px;
+    }
+    .calendar-day {
+        font-size: 0.85rem;
+        border-radius: 6px;
+    }
+    .calendar-day .data-dot {
+        width: 4px;
+        height: 4px;
+        bottom: 4px;
+    }
+}
 </style>
 
 @php

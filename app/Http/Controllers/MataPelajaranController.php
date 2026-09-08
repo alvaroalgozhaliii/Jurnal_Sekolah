@@ -9,18 +9,32 @@ class MataPelajaranController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
-        $query = MataPelajaran::query();
+        $search  = $request->get('search');
+        $tingkat = $request->get('tingkat');
+        $query   = MataPelajaran::query();
 
         if ($search) {
-            $query->where('nama_mapel', 'like', "%{$search}%")
-                ->orWhere('kode_mapel', 'like', "%{$search}%")
-                ->orWhere('tingkat', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_mapel', 'like', "%{$search}%")
+                  ->orWhere('kode_mapel', 'like', "%{$search}%")
+                  ->orWhere('tingkat',    'like', "%{$search}%");
+            });
         }
 
-                $mapel = $query->orderBy('tingkat', 'asc')->orderBy('nama_mapel', 'asc')->get();
+        if ($tingkat && in_array($tingkat, ['X', 'XI', 'XII'])) {
+            $query->where('tingkat', $tingkat);
+        }
 
-        return view('mapel.index', compact('mapel', 'search'));
+        $mapel = $query->orderBy('tingkat', 'asc')->orderBy('nama_mapel', 'asc')->get();
+
+        // Group by tingkat for stat cards
+        $totalMapel = $mapel->count();
+        $groupByTingkat = MataPelajaran::selectRaw('tingkat, COUNT(*) as total')
+            ->whereNull('deleted_at')
+            ->groupBy('tingkat')
+            ->pluck('total', 'tingkat');
+
+        return view('mapel.index', compact('mapel', 'search', 'tingkat', 'totalMapel', 'groupByTingkat'));
     }
 
     public function create()
