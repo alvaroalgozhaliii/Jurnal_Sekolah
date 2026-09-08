@@ -1844,8 +1844,13 @@ input[type="number"]::-webkit-outer-spin-button {
    LOGIN PAGE STYLES (PREMIUM DARK AMBIENT DESIGN)
    ============================================================ */
 .login-page {
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1853,11 +1858,9 @@ input[type="number"]::-webkit-outer-spin-button {
     background-image: 
         radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 90% 60%, rgba(30, 58, 138, 0.18) 0%, transparent 45%);
-    position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
     padding: 20px;
     box-sizing: border-box;
+    z-index: 1;
 }
 
 /* Aesthetic Floating Ambient Orbs (Lebih Jelas & Cerah) */
@@ -2960,33 +2963,47 @@ input[type="number"]::-webkit-outer-spin-button {
     letter-spacing: 0.3px;
 }
 
-/* Theme Toggle Button as a sleek small box in top-right corner */
+/* Theme Toggle Button positioned in top-right corner of the central card container */
 .sso-theme-btn-corner {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 38px;
-    height: 38px;
-    border-radius: 12px !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    position: absolute !important;
+    top: 18px !important;
+    right: 20px !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 13px !important;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
     color: #f8fafc !important;
     display: flex !important;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 30;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 100 !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+[data-theme="light"] .sso-theme-btn-corner {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    border: 1.5px solid rgba(203, 213, 225, 0.8) !important;
+    color: #1e293b !important;
+    box-shadow: 0 6px 18px -4px rgba(15, 23, 42, 0.15) !important;
 }
 
 .sso-theme-btn-corner:hover {
-    background-color: rgba(255, 255, 255, 0.25) !important;
-    border-color: rgba(255, 255, 255, 0.45) !important;
-    transform: scale(1.1) rotate(8deg) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+    background-color: rgba(255, 255, 255, 0.28) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: scale(1.1) rotate(6deg) !important;
+    box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="light"] .sso-theme-btn-corner:hover {
+    background-color: #ffffff !important;
+    border-color: #3b82f6 !important;
+    color: #2563eb !important;
+    box-shadow: 0 10px 24px -4px rgba(37, 99, 235, 0.25) !important;
 }
 
 /* RESPONSIVE LAYOUT (MOBILE & TABLET) */
@@ -3206,10 +3223,10 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 
     .sso-theme-btn-corner {
-        top: 14px !important;
-        right: 14px !important;
-        width: 34px !important;
-        height: 34px !important;
+        top: 16px !important;
+        right: 16px !important;
+        width: 38px !important;
+        height: 38px !important;
     }
 }
 
@@ -3257,15 +3274,17 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 [data-theme="light"] .sso-theme-btn-corner {
-    background-color: rgba(255, 255, 255, 0.22) !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2) !important;
+    background-color: rgba(15, 23, 42, 0.06) !important;
+    border: 1.5px solid rgba(203, 213, 225, 0.8) !important;
+    color: #1e293b !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1) !important;
 }
 
 [data-theme="light"] .sso-theme-btn-corner:hover {
-    background-color: rgba(255, 255, 255, 0.35) !important;
-    color: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #3b82f6 !important;
+    color: #2563eb !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.2) !important;
 }
 
 /* Light mode aesthetic background nuances — Lebih terlihat / kontras */
