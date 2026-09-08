@@ -1844,13 +1844,8 @@ input[type="number"]::-webkit-outer-spin-button {
    LOGIN PAGE STYLES (PREMIUM DARK AMBIENT DESIGN)
    ============================================================ */
 .login-page {
-    height: 100vh;
-    height: 100dvh;
-    width: 100vw;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow: hidden !important;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1858,9 +1853,11 @@ input[type="number"]::-webkit-outer-spin-button {
     background-image: 
         radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 90% 60%, rgba(30, 58, 138, 0.18) 0%, transparent 45%);
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 20px;
     box-sizing: border-box;
-    z-index: 1;
 }
 
 /* Aesthetic Floating Ambient Orbs (Lebih Jelas & Cerah) */
@@ -3005,6 +3002,7 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #2563eb !important;
     box-shadow: 0 10px 24px -4px rgba(37, 99, 235, 0.25) !important;
 }
+}
 
 /* RESPONSIVE LAYOUT (MOBILE & TABLET) */
 @media (max-width: 860px) {
@@ -3285,6 +3283,7 @@ input[type="number"]::-webkit-outer-spin-button {
     border-color: #3b82f6 !important;
     color: #2563eb !important;
     box-shadow: 0 6px 18px rgba(37, 99, 235, 0.2) !important;
+}
 }
 
 /* Light mode aesthetic background nuances — Lebih terlihat / kontras */

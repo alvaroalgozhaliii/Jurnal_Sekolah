@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="login-card">
-    <!-- Theme Toggle Button (Pojok Kanan Atas Persegi Panjang Di Tengah) -->
+    <!-- Theme Toggle Button -->
     <button type="button" id="themeToggleBtn" class="theme-toggle-btn sso-theme-btn-corner" aria-label="Toggle Mode Gelap/Terang" title="Ganti Mode Gelap / Terang">
         <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px;">
             <circle cx="12" cy="12" r="5"></circle>

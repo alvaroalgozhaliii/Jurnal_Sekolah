@@ -10,7 +10,6 @@
         <p class="page-subtitle">Otomatis terkoneksi dengan jam laptop/perangkat &amp; jadwal mengajar saat ini</p>
     </div>
     <div class="page-actions">
-<<<<<<< HEAD
         <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary">&larr; Kembali ke Jurnal</a>
     </div>
 </div>
@@ -45,35 +44,14 @@
         </form>
     </div>
 </div>
-=======
-        <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary">&larr; Kembali ke Daftar Jurnal</a>
-    </div>
-</div>
-
-@php
-    $slotStatus = $currentSlot['status'] ?? 'jam_pulang';
-    $bannerColor = match($slotStatus) {
-        'kbm' => $jadwalSelected ? 'linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)' : 'linear-gradient(135deg, #0284c7 0%, #0f172a 100%)',
-        'istirahat' => 'linear-gradient(135deg, #d97706 0%, #78350f 100%)',
-        'sebelum_kbm' => 'linear-gradient(135deg, #475569 0%, #1e293b 100%)',
-        'libur' => 'linear-gradient(135deg, #059669 0%, #064e3b 100%)',
-        default => 'linear-gradient(135deg, #334155 0%, #0f172a 100%)',
-    };
-@endphp
->>>>>>> 6eb11de1427b8af784f55e263c0e76acd5514f66
 
 {{-- Banner Jam Digital & Status Jam KBM --}}
 <div class="card mb-24" style="background: {{ $bannerColor }}; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);">
     <div class="card-body" style="padding: 22px 26px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
-<<<<<<< HEAD
                 <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700;">
                     🕒 Waktu Laptop / Perangkat Saat Ini
-=======
-                <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 600;">
-                     Waktu Perangkat / Laptop Saat Ini
->>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
                 </div>
                 <div style="font-size: 32px; font-weight: 800; letter-spacing: 0.5px; font-family: monospace; margin-top: 2px;" id="liveClockDisplay">
                     {{ $now->format('H:i:s') }} WIB
@@ -83,15 +61,9 @@
                 </div>
             </div>
 
-<<<<<<< HEAD
             <div style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); padding: 14px 20px; border-radius: 12px; min-width: 280px;">
                 <div style="font-size: 11.5px; text-transform: uppercase; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px;">
                     📌 Status Jam KBM Saat Ini
-=======
-            <div style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); padding: 12px 18px; border-radius: 10px; min-width: 260px;">
-                <div style="font-size: 11.5px; text-transform: uppercase; color: #93c5fd; font-weight: 700; letter-spacing: 0.5px;">
-                     Status Jam KBM Terdeteksi
->>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
                 </div>
                 <div style="font-size: 17px; font-weight: 700; margin-top: 4px;">
                     @if($slotStatus === 'kbm')
@@ -123,7 +95,6 @@
                         <span style="color: #a7f3d0;">Tidak Ada Jadwal Mengajar</span>
                     @endif
                 </div>
-<<<<<<< HEAD
 =======
                 @if($jadwalSelected)
                     <div style="font-size: 12px; color: #60a5fa; margin-top: 4px; font-weight: 600;">
@@ -188,11 +159,6 @@
             <div class="form-group">
                 <label class="form-label" for="materi">Materi Pelajaran Utama <span class="req">*</span></label>
                 <input type="text" id="materi" name="materi" value="{{ old('materi') }}" class="form-control" placeholder="Contoh: Bab 3 Persamaan Kuadrat" required>
-=======
-            <div class="form-group mb-16">
-                <label class="form-label" for="materi">Materi Pelajaran Utama <span class="req">*</span></label>
-                <input type="text" id="materi" name="materi" value="{{ old('materi') }}" class="form-control" placeholder="Contoh: Bab 3 Pengenalan Dasar Algoritma &amp; Pemrograman" required autofocus>
->>>>>>> 6eb11de1427b8af784f55e263c0e76acd5514f66
             </div>
 
             <div class="form-group mb-16">
@@ -218,13 +184,8 @@
             </div>
 
             <div class="d-flex gap-12 align-center flex-wrap">
-<<<<<<< HEAD
                 <button type="submit" class="btn btn-primary btn-lg" style="font-weight:700; padding:10px 24px;">
                     💾 SIMPAN JURNAL MENGAJAR
-=======
-                <button type="submit" class="btn btn-primary btn-lg" style="font-weight:700;">
-                     SIMPAN JURNAL &amp; LANJUT ABSENSI SISWA
->>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
                 </button>
                 <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary btn-lg">Batal</a>
             </div>
@@ -234,7 +195,6 @@
 
 {{-- JIKA BUKAN JAM MENGAJAR / ISTIRAHAT / PULANG / LIBUR --}}
 @else
-<<<<<<< HEAD
 <div class="card" style="max-width: 800px;">
     <div class="card-body" style="padding: 32px 24px; text-align: center;">
         @if($slotStatus === 'istirahat')
@@ -282,15 +242,9 @@
         <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary">
             &larr; Lihat Riwayat Jurnal Mengajar Saya
         </a>
-=======
-<div class="alert alert-info" style="max-width: 800px;">
-    <div>
-        <strong> Informasi Jadwal:</strong> Tidak ditemukan jadwal mengajar otomatis pada jam ini. Silakan pilih jadwal mengajar KBM dari dropdown di atas untuk mengisi jurnal.
->>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
     </div>
 </div>
 @endif
-<<<<<<< HEAD
 @endsection
 
 @push('scripts')
@@ -372,22 +326,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
-=======
-
-<script>
-    // Live clock script untuk jam laptop/perangkat
-    function updateLiveClock() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const clockEl = document.getElementById('liveClockDisplay');
-        if (clockEl) {
-            clockEl.textContent = `${hours}:${minutes}:${seconds} WIB`;
-        }
-    }
-    setInterval(updateLiveClock, 1000);
-    updateLiveClock();
-</script>
-@endsection
->>>>>>> 6eb11de1427b8af784f55e263c0e76acd5514f66

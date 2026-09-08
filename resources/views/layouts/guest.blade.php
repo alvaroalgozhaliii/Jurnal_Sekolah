@@ -156,12 +156,7 @@ function togglePasswordVisibility(inputId, btn) {
 
 // Dark / Light Mode Toggle Controller
 (function() {
-    let toggleBtn = document.getElementById('themeToggleBtn');
-    const container = document.querySelector('.sso-container, .login-card');
-    if (toggleBtn && container && toggleBtn.parentElement !== container) {
-        container.appendChild(toggleBtn);
-    }
-    toggleBtn = document.getElementById('themeToggleBtn');
+    const toggleBtn = document.getElementById('themeToggleBtn');
     if (!toggleBtn) return;
 
     toggleBtn.addEventListener('click', function() {
