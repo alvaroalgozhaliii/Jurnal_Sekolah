@@ -18,6 +18,7 @@ class Guru extends Model
         'id_user',
         'nama',
         'nip',
+        'nik',
         'bidang_studi',
         'no_telp',
         'created_at',

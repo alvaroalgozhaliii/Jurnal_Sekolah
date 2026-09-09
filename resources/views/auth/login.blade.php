@@ -189,6 +189,13 @@
                 <button type="submit" class="sso-submit-btn">
                     Login
                 </button>
+
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="{{ route('lupa-password') }}" class="lupa-link-btn" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 20px; color: var(--accent, #2563eb); font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='rgba(59,130,246,0.16)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(59,130,246,0.08)'; this.style.transform='none';">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span>Lupa Password atau Username?</span>
+                    </a>
+                </div>
             </form>
 
             <div class="sso-right-footer">
@@ -197,4 +204,28 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    const token = getCookie('reset_token') || localStorage.getItem('reset_token');
+
+    if (token) {
+        fetch(`{{ route('lupa-password.check-status') }}?token=${encodeURIComponent(token)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'approved' && data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch(err => console.error('Status check error:', err));
+    }
+});
+</script>
 @endsection
