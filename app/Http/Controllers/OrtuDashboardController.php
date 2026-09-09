@@ -30,7 +30,7 @@ class OrtuDashboardController extends Controller
         return $anakList;
     }
 
-    public function index(Request $request = null)
+    public function index(?Request $request = null)
     {
         $request = $request ?: request();
         $user = Auth::user();
@@ -147,29 +147,35 @@ class OrtuDashboardController extends Controller
         $selectedSiswaId = $request->get('id_siswa', $anakList->first()?->id_siswa);
         $selectedSiswa = $anakList->where('id_siswa', $selectedSiswaId)->first() ?? $anakList->first();
 
-        $bulan = (int)$request->get('bulan', Carbon::now()->month);
-        $tahun = (int)$request->get('tahun', Carbon::now()->year);
+        $bulan   = (int)$request->get('bulan', Carbon::now()->month);
+        $tahun   = (int)$request->get('tahun', Carbon::now()->year);
+        $tanggal = $request->get('tanggal');
 
         $rekapData = collect();
-        $summary = ['hadir' => 0, 'terlambat' => 0, 'izin' => 0, 'sakit' => 0, 'alpa' => 0];
+        $summary   = ['hadir' => 0, 'terlambat' => 0, 'izin' => 0, 'sakit' => 0, 'alpa' => 0];
 
         if ($selectedSiswa) {
-            $rekapData = AbsensiSiswa::with(['jurnal.guru'])
+            $allRekapBulan = AbsensiSiswa::with(['jurnal.guru'])
                 ->where('id_siswa', $selectedSiswa->id_siswa)
                 ->whereHas('jurnal', function ($q) use ($bulan, $tahun) {
                     $q->whereMonth('tanggal', $bulan)
                       ->whereYear('tanggal', $tahun);
                 })
-                ->get()
-                ->sortBy(function ($item) {
-                    return $item->jurnal->tanggal ?? '';
-                });
+                ->get();
 
-            foreach ($rekapData as $r) {
+            foreach ($allRekapBulan as $r) {
                 $st = strtolower($r->status);
                 if (isset($summary[$st])) {
                     $summary[$st]++;
                 }
+            }
+
+            if ($tanggal) {
+                $rekapData = $allRekapBulan->filter(function ($item) use ($tanggal) {
+                    return substr($item->jurnal->tanggal ?? '', 0, 10) === $tanggal;
+                })->sortBy(fn($item) => $item->jurnal->tanggal ?? '');
+            } else {
+                $rekapData = $allRekapBulan->sortBy(fn($item) => $item->jurnal->tanggal ?? '');
             }
         }
 
