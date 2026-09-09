@@ -22,12 +22,12 @@
         </div>
 
         <div class="sso-welcome-box">
-            <h1 class="sso-welcome-title">WELCOME !</h1>
-            <p class="sso-welcome-desc">Masukkan username dan password Anda untuk melanjutkan ke sistem</p>
+            <h1 class="sso-welcome-title">Selamat Datang!</h1>
+            <p class="sso-welcome-desc">Silakan masukkan username dan password Anda untuk masuk ke sistem jurnal dan presensi sekolah.</p>
         </div>
 
         <div class="sso-left-footer">
-            <span>&copy; {{ date('Y') }} Jurnal Sekolah. All rights reserved.</span>
+            <span>&copy; {{ date('Y') }} Jurnal Sekolah. Seluruh hak cipta dilindungi.</span>
         </div>
     </div>
 
@@ -51,10 +51,19 @@
             </svg>
         </button>
 
-
-        <!-- Animated 3-Layered Wave Divider (Smooth, No Clipping, Synchronized) -->
+        <!-- Animated 3-Layered Wave Divider (Seamlessly Blended with Right Panel) -->
         <svg class="sso-wave-svg" viewBox="0 0 80 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
+                <linearGradient id="waveFrontGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#1d4ed8"/>
+                    <stop offset="45%" stop-color="#1e3a8a"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+                <linearGradient id="waveFrontGradLight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#1d4ed8"/>
+                    <stop offset="50%" stop-color="#2563eb"/>
+                    <stop offset="100%" stop-color="#1e40af"/>
+                </linearGradient>
                 <clipPath id="waveClip">
                     <rect x="-50" y="0" width="130" height="600"/>
                 </clipPath>
@@ -97,8 +106,8 @@
                     />
                 </path>
 
-                <!-- Layer 3 (Front - Dark solid, narrowest, offset phase -4s) -->
-                <path class="sso-wave-layer-front" fill="currentColor" stroke="none">
+                <!-- Layer 3 (Front - Solid royal blue gradient matching panel) -->
+                <path class="sso-wave-layer-front" stroke="none">
                     <animate
                         attributeName="d"
                         dur="9s"
@@ -130,9 +139,16 @@
 
         <div class="sso-form-wrap">
             <div class="sso-form-header">
-                <h2 class="sso-title">SIGN IN</h2>
-                <p class="sso-subtitle">TO ACCESS THE PORTAL</p>
+                <h2 class="sso-title">LOGIN PORTAL</h2>
+                <p class="sso-subtitle">SISTEM KBM & PRESENSI</p>
             </div>
+
+            @if(session('success'))
+                <div class="sso-alert sso-alert-success">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
 
             @if(session('error'))
                 <div class="sso-alert sso-alert-danger">
@@ -147,10 +163,10 @@
                 </div>
             @endif
 
-            @if($errors->any())
+            @if($errors->any() && !session('error'))
                 <div class="sso-alert sso-alert-danger">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                    <span>Username atau password salah.</span>
+                    <span>{{ $errors->first() }}</span>
                 </div>
             @endif
 
@@ -165,7 +181,7 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                     </span>
-                    <input type="text" id="username" name="username" value="{{ old('username') }}" class="sso-input" placeholder="Enter User Name Here" required autofocus autocomplete="username">
+                    <input type="text" id="username" name="username" value="{{ old('username') }}" class="sso-input" placeholder="Masukkan username" required autofocus autocomplete="username">
                 </div>
 
                 <!-- Password Pill Input -->
@@ -176,7 +192,7 @@
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
                     </span>
-                    <input type="password" id="password" name="password" class="sso-input" placeholder="Enter Password" required autocomplete="current-password">
+                    <input type="password" id="password" name="password" class="sso-input" placeholder="Masukkan password" required autocomplete="current-password">
                     <button type="button" class="sso-eye-btn" onclick="togglePasswordVisibility('password', this)" title="Tampilkan/Sembunyikan Password" tabindex="-1">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -185,9 +201,9 @@
                     </button>
                 </div>
 
-                <!-- Green Pill Submit Button -->
+                <!-- Pill Submit Button -->
                 <button type="submit" class="sso-submit-btn">
-                    Login
+                    Masuk ke Sistem
                 </button>
 
                 <div style="text-align: center; margin-top: 16px;">
@@ -199,7 +215,7 @@
             </form>
 
             <div class="sso-right-footer">
-                <span>Copyright &copy; {{ date('Y') }} Jurnal Sekolah. All rights reserved.</span>
+                <span>Hak Cipta &copy; {{ date('Y') }} Jurnal Sekolah. Seluruh hak cipta dilindungi.</span>
             </div>
         </div>
     </div>
