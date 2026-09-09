@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -22,14 +24,23 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt(['username' => $credentials['username'], 'password' => $credentials['password']])) {
+        $username = trim($credentials['username']);
+        $throttleKey = Str::transliterate(Str::lower($username) . '|' . $request->ip());
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            return back()->withInput($request->only('username'))->with('error', "Terlalu banyak percobaan login salah. Silakan coba lagi dalam {$seconds} detik.");
+        }
+
+        if (Auth::attempt(['username' => $username, 'password' => $credentials['password']])) {
+            RateLimiter::clear($throttleKey);
             $user = Auth::user();
 
             if (!$user->aktif) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-                return back()->with('error', 'Akun Anda tidak aktif.');
+                return back()->with('error', 'Akun Anda telah dinonaktifkan oleh administrator.');
             }
 
             $request->session()->regenerate();
@@ -37,7 +48,9 @@ class AuthController extends Controller
             return redirect()->intended(route($defaultRoute));
         }
 
-        return back()->with('error', 'Username atau password salah.');
+        RateLimiter::hit($throttleKey, 60);
+
+        return back()->withInput($request->only('username'))->with('error', 'Username atau password salah.');
     }
 
     public function logout(Request $request)

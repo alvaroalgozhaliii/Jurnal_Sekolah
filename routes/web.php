@@ -35,6 +35,8 @@ use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\RekapController;
 
 use App\Http\Controllers\PiketSiswaTerlambatController;
+use App\Http\Controllers\LupaPasswordController;
+use App\Http\Controllers\Admin\ResetPasswordAdminController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -66,6 +68,13 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Lupa Password & Username Public Routes
+Route::get('/lupa-password', [LupaPasswordController::class, 'showForm'])->name('lupa-password');
+Route::post('/lupa-password', [LupaPasswordController::class, 'submitRequest'])->name('lupa-password.submit');
+Route::get('/lupa-password/check-status', [LupaPasswordController::class, 'checkStatusApi'])->name('lupa-password.check-status');
+Route::get('/reset-password/{token}', [LupaPasswordController::class, 'showResetForm'])->name('reset-password.form');
+Route::post('/reset-password/{token}', [LupaPasswordController::class, 'processReset'])->name('reset-password.process');
 
 
 // ======================================================
@@ -154,6 +163,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/whatsapp/gateway', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'updateGateway'])->name('admin.whatsapp.gateway.update');
     Route::post('/whatsapp/test', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'testKirim'])->name('admin.whatsapp.test');
     Route::post('/whatsapp/user/{id}', [\App\Http\Controllers\Admin\WhatsAppAdminController::class, 'updateUserWa'])->name('admin.whatsapp.user.update');
+
+    // Pengajuan Reset Password (Admin Approval)
+    Route::get('/reset-password-requests', [ResetPasswordAdminController::class, 'index'])->name('admin.reset-password.index');
+    Route::post('/reset-password-requests/{id}/approve', [ResetPasswordAdminController::class, 'approve'])->name('admin.reset-password.approve');
+    Route::post('/reset-password-requests/{id}/reject', [ResetPasswordAdminController::class, 'reject'])->name('admin.reset-password.reject');
 });
 
 
