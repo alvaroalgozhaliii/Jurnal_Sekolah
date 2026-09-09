@@ -220,28 +220,4 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-        return null;
-    }
-
-    const token = getCookie('reset_token') || localStorage.getItem('reset_token');
-
-    if (token) {
-        fetch(`{{ route('lupa-password.check-status') }}?token=${encodeURIComponent(token)}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'approved' && data.redirect_url) {
-                    window.location.href = data.redirect_url;
-                }
-            })
-            .catch(err => console.error('Status check error:', err));
-    }
-});
-</script>
 @endsection

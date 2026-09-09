@@ -22,7 +22,7 @@
 
         <div class="sso-welcome-box">
             <h1 class="sso-welcome-title">LUPA AKUN ?</h1>
-            <p class="sso-welcome-desc">Masukkan NISN (untuk Orang Tua) atau NIK (untuk Guru/Staf) untuk mengajukan reset kata sandi ke Admin</p>
+            <p class="sso-welcome-desc">Pilih kategori permohonan (NISN Anak untuk Orang Tua atau NIP/NIK untuk Guru/Staf) dan masukkan nomor identifikasi Anda untuk diverifikasi Admin</p>
         </div>
 
         <div class="sso-left-footer">
@@ -62,7 +62,7 @@
                     <animate attributeName="d" dur="9s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.25; 0.5; 0.75; 1" values="M80,0 L10,0 Q-30,150 10,300 Q55,450 80,600 Z; M80,0 L10,0 Q55,150 10,300 Q-30,450 80,600 Z; M80,0 L10,0 Q-30,150 10,300 Q55,450 80,600 Z; M80,0 L10,0 Q55,150 10,300 Q-30,450 80,600 Z; M80,0 L10,0 Q-30,150 10,300 Q55,450 80,600 Z"/>
                 </path>
                 <path class="sso-wave-layer-mid" fill="rgba(59, 130, 246, 0.7)" stroke="none">
-                    <animate attributeName="d" dur="9s" begin="-3s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.25; 0.5; 0.75; 1" values="M80,0 L20,0 Q-20,150 20,300 Q62,450 80,600 Z; M80,0 L20,0 Q62,150 20,300 Q-20,450 80,600 Z; M80,0 L20,0 Q-20,150 20,300 Q62,450 80,600 Z; M80,0 L20,0 Q62,150 20,300 Q-20,450 80,600 Z; M80,0 L20,0 Q-20,150 20,300 Q62,450 80,600 Z"/>
+                    <animate attributeName="d" dur="9s" begin="-3s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.25; 0.5; 0.75; 1" values="M80,0 L20,0 Q-20,150 20,300 Q62,450 80,600 Z; M80,0 L20,0 Q62,150 20,300 Q-20,450 80,600 Z; M80,0 L10,0 Q-20,150 20,300 Q62,450 80,600 Z; M80,0 L10,0 Q62,150 20,300 Q-20,450 80,600 Z; M80,0 L10,0 Q-20,150 20,300 Q62,450 80,600 Z"/>
                 </path>
                 <path class="sso-wave-layer-front" fill="currentColor" stroke="none">
                     <animate attributeName="d" dur="9s" begin="-6s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.25; 0.5; 0.75; 1" values="M80,0 L32,0 Q-8,150 32,300 Q68,450 80,600 Z; M80,0 L32,0 Q68,150 32,300 Q-8,450 80,600 Z; M80,0 L32,0 Q-8,150 32,300 Q68,450 80,600 Z; M80,0 L32,0 Q68,150 32,300 Q-8,450 80,600 Z; M80,0 L32,0 Q-8,150 32,300 Q68,450 80,600 Z"/>
@@ -83,7 +83,7 @@
         <div class="sso-form-wrap">
             <div class="sso-form-header">
                 <h2 class="sso-title">RESET ACCOUNT</h2>
-                <p class="sso-subtitle">SUBMIT REQUEST TO ADMIN</p>
+                <p class="sso-subtitle">CHOOSE CATEGORY & ENTER IDENTIFICATION</p>
             </div>
 
             @if(session('error'))
@@ -102,38 +102,30 @@
 
             @if(session('info'))
                 <div class="sso-alert sso-alert-info">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                     <span>{{ session('info') }}</span>
                 </div>
             @endif
 
-            <!-- PENDING STATUS CARD (Auto-Polled) -->
-            <div id="pendingStatusCard" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 20px; padding: 14px 16px; margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-                    <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #f59e0b; animation: pulse 1.5s infinite;"></span>
-                    <strong style="font-size: 13.5px; color: var(--text-primary, #1e293b);">Menunggu Persetujuan Admin</strong>
-                </div>
-                <div id="pengajuDetailText" style="font-size: 12px; color: var(--text-secondary, #64748b);">Sedang memproses permohonan...</div>
-            </div>
-
             <form action="{{ route('lupa-password.submit') }}" method="POST" class="sso-form" id="lupaForm">
                 @csrf
 
-                <!-- Role Segmented Selector (Sleek Pill Style) -->
+                <!-- SELECTION TABS: NISN vs NIP / NIK -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: rgba(0,0,0,0.04); padding: 4px; border-radius: 24px; margin-bottom: 14px; border: 1px solid var(--border, #e2e8f0);">
                     <label id="tabOrtu" style="display: flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 12px; border-radius: 20px; cursor: pointer; font-size: 12.5px; font-weight: 700; transition: all 0.25s;">
-                        <input type="radio" name="role_tipe" value="ortu" {{ old('role_tipe', 'ortu') === 'ortu' ? 'checked' : '' }} onchange="toggleRoleInput('ortu')" style="display: none;">
+                        <input type="radio" name="role_tipe" value="ortu" {{ old('role_tipe', 'ortu') === 'ortu' ? 'checked' : '' }} onchange="selectCategory('ortu')" style="display: none;">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                        <span>Ortu / Siswa</span>
+                        <span>NISN Anak (Ortu)</span>
                     </label>
 
                     <label id="tabGuru" style="display: flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 12px; border-radius: 20px; cursor: pointer; font-size: 12.5px; font-weight: 700; transition: all 0.25s;">
-                        <input type="radio" name="role_tipe" value="guru_staf" {{ old('role_tipe') === 'guru_staf' ? 'checked' : '' }} onchange="toggleRoleInput('guru_staf')" style="display: none;">
+                        <input type="radio" name="role_tipe" value="guru_staf" {{ old('role_tipe') === 'guru_staf' ? 'checked' : '' }} onchange="selectCategory('guru_staf')" style="display: none;">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                        <span>Guru / Staf</span>
+                        <span>NIP / NIK (Guru)</span>
                     </label>
                 </div>
 
-                <!-- NISN / NIK Input Pill (Identical dimensions to login username pill) -->
+                <!-- NISN / NIP Input Pill -->
                 <div class="sso-input-pill">
                     <span class="sso-input-icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -144,15 +136,15 @@
                     <input type="text" id="nisn_nik" name="nisn_nik" value="{{ old('nisn_nik') }}" class="sso-input" placeholder="Masukkan NISN Anak Anda" required autofocus autocomplete="off">
                 </div>
 
-                <!-- Green Pill Submit Button (Identical dimensions to login submit button) -->
+                <!-- Submit Button -->
                 <button type="submit" class="sso-submit-btn">
-                    Kirim Permohonan
+                    Proses & Verifikasi
                 </button>
 
-                <div style="text-align: center; margin-top: 14px;">
-                    <a href="{{ route('login') }}" class="lupa-link-btn" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 20px; color: var(--accent, #2563eb); font-size: 12.5px; font-weight: 600; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='rgba(59,130,246,0.16)'" onmouseout="this.style.background='rgba(59,130,246,0.08)'">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                        <span>Kembali ke Login</span>
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="{{ route('login') }}" class="lupa-link-btn" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 20px; color: var(--accent, #2563eb); font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.25s ease;" onmouseover="this.style.background='rgba(59,130,246,0.16)'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(59,130,246,0.08)'; this.style.transform='none';">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Kembali ke Halaman Login</span>
                     </a>
                 </div>
             </form>
@@ -164,21 +156,13 @@
     </div>
 </div>
 
-<style>
-@keyframes pulse {
-    0% { opacity: 0.4; }
-    50% { opacity: 1; }
-    100% { opacity: 0.4; }
-}
-</style>
-
 <script>
-function toggleRoleInput(role) {
+function selectCategory(category) {
     const input = document.getElementById('nisn_nik');
     const tabOrtu = document.getElementById('tabOrtu');
     const tabGuru = document.getElementById('tabGuru');
 
-    if (role === 'ortu') {
+    if (category === 'ortu') {
         input.placeholder = 'Masukkan NISN Anak Anda';
         tabOrtu.style.background = '#2563eb';
         tabOrtu.style.color = '#ffffff';
@@ -188,7 +172,7 @@ function toggleRoleInput(role) {
         tabGuru.style.color = 'var(--text-secondary, #64748b)';
         tabGuru.style.boxShadow = 'none';
     } else {
-        input.placeholder = 'Masukkan NIK atau NIP Anda';
+        input.placeholder = 'Masukkan NIP atau NIK Anda';
         tabGuru.style.background = '#2563eb';
         tabGuru.style.color = '#ffffff';
         tabGuru.style.boxShadow = '0 3px 10px rgba(37, 99, 235, 0.3)';
@@ -200,46 +184,8 @@ function toggleRoleInput(role) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const initialRole = document.querySelector('input[name="role_tipe"]:checked')?.value || 'ortu';
-    toggleRoleInput(initialRole);
-
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-        return null;
-    }
-
-    const currentToken = "{{ $token ?? '' }}" || getCookie('reset_token') || localStorage.getItem('reset_token');
-
-    if (currentToken) {
-        localStorage.setItem('reset_token', currentToken);
-
-        function checkStatus() {
-            fetch(`{{ route('lupa-password.check-status') }}?token=${encodeURIComponent(currentToken)}`)
-                .then(res => res.json())
-                .then(data => {
-                    const statusCard = document.getElementById('pendingStatusCard');
-                    const pengajuText = document.getElementById('pengajuDetailText');
-
-                    if (data.status === 'pending') {
-                        if (statusCard) statusCard.style.display = 'block';
-                        if (pengajuText && data.nama_pengaju) {
-                            pengajuText.innerText = data.nama_pengaju + ' (' + data.updated_at + ')';
-                        }
-                    } else if (data.status === 'approved' && data.redirect_url) {
-                        window.location.href = data.redirect_url;
-                    } else if (data.status === 'completed' || data.status === 'rejected' || data.status === 'not_found') {
-                        if (statusCard) statusCard.style.display = 'none';
-                        localStorage.removeItem('reset_token');
-                    }
-                })
-                .catch(err => console.error('Status check error:', err));
-        }
-
-        checkStatus();
-        setInterval(checkStatus, 5000);
-    }
+    const initialCategory = document.querySelector('input[name="role_tipe"]:checked')?.value || 'ortu';
+    selectCategory(initialCategory);
 });
 </script>
 @endsection
