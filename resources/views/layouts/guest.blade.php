@@ -22,7 +22,7 @@
         })();
     </script>
 
-    <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}?v={{ file_exists(public_path('css/jurnal.css')) ? filemtime(public_path('css/jurnal.css')) : time() }}">
 </head>
 <body>
 <div class="login-page">
@@ -71,18 +71,20 @@
             <path d="M0,192L60,181.3C120,171,240,149,360,160C480,171,600,213,720,213.3C840,213,960,171,1080,154.7C1200,139,1320,149,1380,154.7L1440,160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
         </svg>
 
-        <!-- Animated Background Shooting Stars & Particles -->
+        <!-- Animated Background Shooting Stars / Meteors (Jatuh Lurus) -->
         <div class="shooting-stars-container" aria-hidden="true">
             <div class="shooting-star star-1"></div>
             <div class="shooting-star star-2"></div>
             <div class="shooting-star star-3"></div>
+            <div class="shooting-star star-4"></div>
+            <div class="shooting-star star-5"></div>
             <div class="glow-particle p-1"></div>
             <div class="glow-particle p-2"></div>
             <div class="glow-particle p-3"></div>
             <div class="glow-particle p-4"></div>
         </div>
 
-        <!-- Floating Isometric Cubes / Badges (10 Neatly Positioned Badges) -->
+        <!-- Floating Isometric Badges (10 Badges Berjarak Rapi) -->
         <div class="shape-badge badge-live-update">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 16"/><polyline points="17 6 23 6 23 12"/></svg>
             <span>Live Update</span>
@@ -99,7 +101,6 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
             <span>Presensi Digital</span>
         </div>
-
         <div class="shape-badge badge-realtime">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             <span>Real Time</span>
@@ -108,7 +109,6 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
             <span>Secure Data</span>
         </div>
-
         <div class="shape-badge badge-recap">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             <span>Auto Recap</span>
