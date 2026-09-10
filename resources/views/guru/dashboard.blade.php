@@ -124,7 +124,7 @@
 
 <div class="grid-3 mb-24">
     <!-- PRESENSI MASUK/KELUAR STAT CARD -->
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid {{ $presensiHariIni ? '#16a34a' : '#d97706' }};">
         <div class="stat-icon-box {{ $presensiHariIni ? 'green' : 'amber' }}">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
         </div>
@@ -141,7 +141,7 @@
     </div>
 
     <!-- TOTAL JURNAL TERLAKSANA -->
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #1e3a8a;">
         <div class="stat-icon-box navy">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
         </div>

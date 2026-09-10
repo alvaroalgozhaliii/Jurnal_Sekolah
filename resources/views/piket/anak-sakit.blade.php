@@ -82,10 +82,6 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.sakit-stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
 
 .sakit-stat-icon {
     width: 44px;
@@ -506,7 +502,7 @@
 @endphp
 
 <div class="sakit-stats-grid mb-24">
-    <div class="sakit-stat-card">
+    <div class="sakit-stat-card" style="border-left: 4px solid #dc2626;">
         <div class="sakit-stat-icon red">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </div>
@@ -515,7 +511,7 @@
             <div class="sakit-stat-lbl">Siswa Sakit Hari Ini</div>
         </div>
     </div>
-    <div class="sakit-stat-card">
+    <div class="sakit-stat-card" style="border-left: 4px solid #d97706;">
         <div class="sakit-stat-icon amber">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
         </div>
@@ -524,7 +520,7 @@
             <div class="sakit-stat-lbl">Total Riwayat Sakit</div>
         </div>
     </div>
-    <div class="sakit-stat-card">
+    <div class="sakit-stat-card" style="border-left: 4px solid #0284c7;">
         <div class="sakit-stat-icon blue">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         </div>

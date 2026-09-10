@@ -13,7 +13,7 @@
 
 <!-- STAT CARDS -->
 <div class="grid-3 mb-24">
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #d97706;">
         <div class="stat-icon-box amber">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
         </div>
@@ -22,7 +22,7 @@
             <div class="stat-label">Menunggu Persetujuan Anda</div>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #16a34a;">
         <div class="stat-icon-box green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
@@ -31,7 +31,7 @@
             <div class="stat-label">Telah Disetujui Resmi</div>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #dc2626;">
         <div class="stat-icon-box red">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </div>
