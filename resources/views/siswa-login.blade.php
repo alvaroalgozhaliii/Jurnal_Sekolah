@@ -22,11 +22,8 @@
         </svg>
     </button>
     <div class="login-header">
-        <div class="login-logo">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-            </svg>
+        <div class="login-logo" style="background: #ffffff; padding: 6px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo Jurnal Sekolah" style="width: 100%; height: 100%; object-fit: contain; display: block;">
         </div>
         <div class="login-title">PORTAL ORANG TUA / SISWA</div>
         <div class="login-subtitle">Jurnal Sekolah & Informasi Presensi</div>

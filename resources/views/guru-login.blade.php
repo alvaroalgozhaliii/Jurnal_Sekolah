@@ -22,13 +22,8 @@
         </svg>
     </button>
     <div class="login-header">
-        <div class="login-logo">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
+        <div class="login-logo" style="background: #ffffff; padding: 6px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo Jurnal Sekolah" style="width: 100%; height: 100%; object-fit: contain; display: block;">
         </div>
         <div class="login-title">LOGIN GURU</div>
         <div class="login-subtitle">Jurnal Sekolah & Presensi KBM</div>

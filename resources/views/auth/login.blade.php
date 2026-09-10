@@ -8,12 +8,8 @@
     <!-- LEFT SIDE: Branding & Welcome -->
     <div class="sso-left">
         <div class="sso-brand">
-            <div class="sso-brand-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M16 12l-4-4-4 4"></path>
-                    <path d="M12 16V8"></path>
-                </svg>
+            <div class="sso-brand-icon" style="background: #ffffff; padding: 4px; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.25);">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo Jurnal Sekolah" style="width: 100%; height: 100%; object-fit: contain; display: block;">
             </div>
             <div class="sso-brand-text">
                 <span class="brand-name">Jurnal Sekolah</span>
