@@ -8,9 +8,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; background: #fff; color: #000; }
         .container { width: 148mm; min-height: 95mm; margin: 10mm auto; padding: 8mm 10mm; border: 2px solid #000; }
-        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; }
-        .header h2 { font-size: 14pt; letter-spacing: 1px; text-transform: uppercase; }
-        .header p { font-size: 10pt; }
+        .header { display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; }
+        .header-logo { width: 46px; height: 46px; flex-shrink: 0; }
+        .header-logo img { width: 100%; height: 100%; object-fit: contain; }
+        .header-text { flex: 1; text-align: center; }
+        .header-text h2 { font-size: 14pt; letter-spacing: 1px; text-transform: uppercase; }
+        .header-text p { font-size: 10pt; }
         .slip-title { text-align: center; font-size: 13pt; font-weight: bold; text-decoration: underline; margin: 10px 0 14px; text-transform: uppercase; }
         table.info { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
         table.info td { padding: 3px 4px; font-size: 11.5pt; vertical-align: top; }
@@ -32,8 +35,13 @@
 <body>
 <div class="container">
     <div class="header">
-        <h2>SURAT IZIN MASUK KELAS</h2>
-        <p>Petugas Piket — {{ config('app.name', 'SMK / SMA') }}</p>
+        <div class="header-logo">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        </div>
+        <div class="header-text">
+            <h2>SURAT IZIN MASUK KELAS</h2>
+            <p>Petugas Piket — {{ config('app.name', 'SMK / SMA') }}</p>
+        </div>
     </div>
 
     <div class="slip-title">Surat Keterangan Terlambat</div>

@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Jurnal Sekolah — Sistem Manajemen Information KBM')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+
     <!-- Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,8 +180,8 @@
     <!-- SIDEBAR NAVY -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <div class="sidebar-brand-icon">
-                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <div class="sidebar-brand-icon" style="background: #ffffff; padding: 3px; border-radius: 9px; box-shadow: 0 4px 12px rgba(0,0,0,0.25);">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo Jurnal Sekolah" style="width: 100%; height: 100%; object-fit: contain; display: block;">
             </div>
             <div>
                 <div class="sidebar-brand-title">JURNAL SEKOLAH</div>
