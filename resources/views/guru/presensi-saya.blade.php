@@ -32,7 +32,7 @@
             </form>
         @else
             <div class="grid-2 mb-16">
-                <div class="stat-card">
+                <div class="stat-card" style="border-left: 4px solid #16a34a;">
                     <div class="stat-icon-box green">
                         <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
                     </div>
@@ -41,7 +41,7 @@
                         <div class="stat-label">Jam Masuk</div>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" style="border-left: 4px solid {{ $presensiHariIni->jam_keluar ? '#0284c7' : '#d97706' }};">
                     <div class="stat-icon-box {{ $presensiHariIni->jam_keluar ? 'blue' : 'amber' }}">
                         <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     </div>

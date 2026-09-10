@@ -104,7 +104,7 @@
 
 {{-- STAT CARDS --}}
 <div class="stat-summary-grid">
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #1e3a8a;">
         <div class="stat-icon" style="background:#e0e7ff; color:#3730a3;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         </div>
@@ -113,7 +113,7 @@
             <span class="stat-value">{{ $totalKelas }}</span>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #16a34a;">
         <div class="stat-icon" style="background:#dcfce7; color:#15803d;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
         </div>
@@ -122,7 +122,7 @@
             <span class="stat-value">{{ $totalAssigned }}</span>
         </div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #dc2626;">
         <div class="stat-icon" style="background:#fee2e2; color:#b91c1c;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
         </div>

@@ -51,7 +51,6 @@
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     transition: height 0.3s ease;
 }
-.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 .stat-card:hover::before { height: 4px; }
 
 .stat-card.all::before   { background: linear-gradient(90deg, #2563eb, #1d4ed8); }
