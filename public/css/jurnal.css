@@ -616,6 +616,81 @@ a:hover {
 .stat-icon-box.purple { background-color: #f3e8ff; color: #9333ea; }
 .stat-icon-box.red { background-color: #fee2e2; color: #dc2626; }
 
+/* Stat Card Left Accent Borders - Auto-matched with Icon Box Colors */
+.stat-card:has(.stat-icon-box.navy),
+.stat-card:has(.stat-icon.navy),
+.stat-card.navy,
+.sakit-stat-card:has(.sakit-stat-icon.navy),
+.sakit-stat-card.navy {
+    border-left: 4px solid #1e3a8a !important;
+}
+
+.stat-card:has(.stat-icon-box.blue),
+.stat-card:has(.stat-icon.blue),
+.stat-card.blue,
+.sakit-stat-card:has(.sakit-stat-icon.blue),
+.sakit-stat-card.blue {
+    border-left: 4px solid #0284c7 !important;
+}
+
+.stat-card:has(.stat-icon-box.green),
+.stat-card:has(.stat-icon.green),
+.stat-card.green,
+.sakit-stat-card:has(.sakit-stat-icon.green),
+.sakit-stat-card.green {
+    border-left: 4px solid #16a34a !important;
+}
+
+.stat-card:has(.stat-icon-box.amber),
+.stat-card:has(.stat-icon.amber),
+.stat-card.amber,
+.sakit-stat-card:has(.sakit-stat-icon.amber),
+.sakit-stat-card.amber {
+    border-left: 4px solid #d97706 !important;
+}
+
+.stat-card:has(.stat-icon-box.purple),
+.stat-card:has(.stat-icon.purple),
+.stat-card.purple,
+.sakit-stat-card:has(.sakit-stat-icon.purple),
+.sakit-stat-card.purple {
+    border-left: 4px solid #9333ea !important;
+}
+
+.stat-card:has(.stat-icon-box.red),
+.stat-card:has(.stat-icon.red),
+.stat-card.red,
+.sakit-stat-card:has(.sakit-stat-icon.red),
+.sakit-stat-card.red {
+    border-left: 4px solid #dc2626 !important;
+}
+
+/* Dark Mode Left Accent Border Glow */
+[data-theme="dark"] .stat-card:has(.stat-icon-box.navy),
+[data-theme="dark"] .stat-card.navy {
+    border-left-color: #3b82f6 !important;
+}
+[data-theme="dark"] .stat-card:has(.stat-icon-box.blue),
+[data-theme="dark"] .stat-card.blue {
+    border-left-color: #38bdf8 !important;
+}
+[data-theme="dark"] .stat-card:has(.stat-icon-box.green),
+[data-theme="dark"] .stat-card.green {
+    border-left-color: #22c55e !important;
+}
+[data-theme="dark"] .stat-card:has(.stat-icon-box.amber),
+[data-theme="dark"] .stat-card.amber {
+    border-left-color: #f59e0b !important;
+}
+[data-theme="dark"] .stat-card:has(.stat-icon-box.purple),
+[data-theme="dark"] .stat-card.purple {
+    border-left-color: #a855f7 !important;
+}
+[data-theme="dark"] .stat-card:has(.stat-icon-box.red),
+[data-theme="dark"] .stat-card.red {
+    border-left-color: #ef4444 !important;
+}
+
 .stat-num {
     font-size: 22px;
     font-weight: 800;
@@ -3725,8 +3800,17 @@ input[type='radio']:active,
 }
 
 /* 4. Data Cards, Stat Boxes & Content Panels */
+.stat-icon-box,
+.stat-icon,
+.sakit-stat-icon,
+.stat-card .svg-icon,
+.stat-card svg {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
 .card,
 .stat-card,
+.sakit-stat-card,
 .info-card,
 .dashboard-card,
 .box,
@@ -3744,6 +3828,7 @@ input[type='radio']:active,
 
 .card:hover,
 .stat-card:hover,
+.sakit-stat-card:hover,
 .info-card:hover,
 .dashboard-card:hover,
 .box:hover,
@@ -3758,8 +3843,28 @@ input[type='radio']:active,
     border-color: rgba(59, 130, 246, 0.35) !important;
 }
 
+.stat-card:hover,
+.sakit-stat-card:hover {
+    border-top-color: rgba(59, 130, 246, 0.4) !important;
+    border-right-color: rgba(59, 130, 246, 0.4) !important;
+    border-bottom-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"] .stat-card:hover,
+[data-theme="dark"] .sakit-stat-card:hover {
+    box-shadow: 0 16px 32px -4px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.25) !important;
+    border-top-color: rgba(59, 130, 246, 0.55) !important;
+    border-right-color: rgba(59, 130, 246, 0.55) !important;
+    border-bottom-color: rgba(59, 130, 246, 0.55) !important;
+}
+
 .stat-card:hover .stat-icon-box,
+.stat-card:hover .stat-icon,
+.stat-card:hover .sakit-stat-icon,
+.sakit-stat-card:hover .sakit-stat-icon,
 .stat-card:hover .svg-icon,
+.stat-card:hover svg,
+.sakit-stat-card:hover svg,
 .card:hover .card-header .svg-icon,
 .card-folder:hover .card-folder-icon {
     transform: scale(1.15) rotate(4deg) !important;

@@ -14,6 +14,8 @@
     gap: 20px;
     margin-bottom: 24px;
     align-items: stretch;
+    position: relative;
+    z-index: 50;
 }
 @media (max-width: 991px) {
     .cal-dashboard-grid {
@@ -31,7 +33,7 @@
     flex-direction: column;
     height: 100%;
     position: relative;
-    z-index: 10;
+    z-index: 50;
 }
 .cal-head {
     padding: 16px 20px 14px;
@@ -91,6 +93,28 @@
     border-top: 1px solid var(--border); background: var(--bg-page);
     padding: 12px 16px; margin-top: auto; display: flex; flex-direction: column; gap: 10px;
     border-radius: 0 0 16px 16px; overflow: visible;
+    position: relative; z-index: 60;
+}
+.cal-filter-strip .form-group {
+    position: relative;
+}
+.cal-filter-strip .form-group:first-child {
+    z-index: 25;
+}
+.cal-filter-strip .form-group:last-child {
+    z-index: 20;
+}
+.cal-filter-strip .form-group:focus-within,
+.cal-filter-strip .form-group:has(.dropdown-active) {
+    z-index: 40 !important;
+}
+.cal-filter-strip .ts-wrapper.focus,
+.cal-filter-strip .ts-wrapper.dropdown-active {
+    z-index: 100 !important;
+    position: relative !important;
+}
+.cal-filter-strip .ts-dropdown {
+    z-index: 99999 !important;
 }
 
 /* Diagram Card */
@@ -146,7 +170,7 @@
 
 <div class="cal-dashboard-grid">
     {{-- COMPACT CALENDAR --}}
-    <form action="{{ route('admin.rekap-kehadiran') }}" method="GET" id="calForm" style="margin:0;">
+    <form action="{{ route('admin.rekap-kehadiran') }}" method="GET" id="calForm" style="margin:0; position:relative; z-index:50;">
         <input type="hidden" name="tanggal" id="hiddenTanggal" value="{{ $selDate }}">
         <input type="hidden" name="id_kelas" id="hiddenKelas" value="{{ $kelasId }}">
         <input type="hidden" name="id_guru" id="hiddenGuru" value="{{ $guruId }}">
