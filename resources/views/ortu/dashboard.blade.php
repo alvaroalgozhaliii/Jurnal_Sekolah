@@ -11,6 +11,8 @@
     </div>
 </div>
 
+@include('partials.kbm-clock-banner')
+
 @if($anakList->count() > 1)
 <div class="card mb-24">
     <div class="card-body">

@@ -198,7 +198,14 @@
 
         <nav class="sidebar-nav">
             @auth
-            @php $role = Auth::user()->role; @endphp
+            @php
+                $activeAccess = session('active_access');
+                $user = Auth::user();
+                $role = $activeAccess ?: $user->role;
+                if ($role === 'waka') {
+                    $role = str_starts_with($user->role, 'waka_') ? $user->role : 'waka_sdm';
+                }
+            @endphp
 
             <!-- ADMIN -->
             @if($role === 'admin')
@@ -228,6 +235,10 @@
                 <a href="{{ route('admin.wali-kelas.index') }}" class="nav-item {{ request()->routeIs('admin.wali-kelas.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     Data Wali Kelas
+                </a>
+                <a href="{{ route('admin.waka.index') }}" class="nav-item {{ request()->routeIs('admin.waka.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Data Waka & Pejabat
                 </a>
                 <a href="{{ route('jurusan.index') }}" class="nav-item {{ request()->routeIs('jurusan.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
@@ -266,6 +277,10 @@
                 <a href="{{ route('pengajuan.index') }}" class="nav-item {{ request()->routeIs('pengajuan.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     Persetujuan Izin
+                </a>
+                <a href="{{ route('admin.jam-sekolah.index') }}" class="nav-item {{ request()->routeIs('admin.jam-sekolah.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Atur Jam Sekolah
                 </a>
                 <a href="{{ route('admin.backup') }}" class="nav-item {{ request()->routeIs('admin.backup*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
@@ -386,29 +401,64 @@
                     Pengajuan Izin Anak
                 </a>
 
-            <!-- WALI KELAS -->
-            @elseif($role === 'walikelas')
-                <div class="nav-section-label">Area Wali Kelas</div>
+            <!-- WALI KELAS (diperlakukan sama seperti Guru, dengan tambahan menu Wali Kelas) -->
+            @elseif($role === 'wali_kelas' || $role === 'walikelas')
+                <div class="nav-section-label">Dashboard & Presensi</div>
+                <a href="{{ route('guru.dashboard') }}" class="nav-item {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Dashboard Guru & Wali Kelas
+                </a>
+                <a href="{{ route('guru.presensi-saya') }}" class="nav-item {{ request()->routeIs('guru.presensi-saya') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Presensi Masuk / Keluar
+                </a>
+
+                <div class="nav-section-label">Aktivitas Mengajar & Pengajuan</div>
+                <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') && !request()->fullUrlIs('*tab=pengajuan*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Jurnal Mengajar Saya
+                </a>
+                <a href="{{ route('absensi-siswa.index') }}" class="nav-item {{ request()->routeIs('absensi-siswa.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+                    Absensi Siswa KBM
+                </a>
+                <a href="{{ route('jurnal-harian.index', ['tab' => 'pengajuan']) }}" class="nav-item {{ request()->fullUrlIs('*tab=pengajuan*') || request()->routeIs('pengajuan.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    Daftar Pengajuan Izin
+                </a>
+
+                @php
+                    $guruModelNavWK = Auth::user()->guru;
+                    if (!$guruModelNavWK) {
+                        $guruModelNavWK = \App\Models\Guru::where('nama', Auth::user()->nama)->orWhere('nip', Auth::user()->nip)->first();
+                    }
+                    $kelasWaliNavWK = $guruModelNavWK ? \App\Models\Kelas::where('id_guru_walikelas', $guruModelNavWK->id_guru)->orWhere('wali_kelas', $guruModelNavWK->nama)->first() : null;
+                    if (!$kelasWaliNavWK) {
+                        $kelasWaliNavWK = \App\Models\Kelas::where('wali_kelas', Auth::user()->nama)->first();
+                    }
+                @endphp
+                <div class="nav-section-label">Wali Kelas {{ $kelasWaliNavWK?->nama_kelas ?? '' }}</div>
                 <a href="{{ route('walikelas.dashboard') }}" class="nav-item {{ request()->routeIs('walikelas.dashboard') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    Dashboard Wali Kelas
+                    Dashboard Kelas Bimbingan
                 </a>
                 <a href="{{ route('walikelas.data-kelas') }}" class="nav-item {{ request()->routeIs('walikelas.data-kelas') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                    Data Siswa Kelas
+                    Monitoring Siswa Kelas
+                </a>
+                <a href="{{ route('walikelas.rekap-presensi') }}" class="nav-item {{ request()->routeIs('walikelas.rekap-presensi*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Rekap Presensi Siswa
+                </a>
+                <a href="{{ route('walikelas.siswa-terlambat') }}" class="nav-item {{ request()->routeIs('walikelas.siswa-terlambat*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Siswa Terlambat
                 </a>
                 <a href="{{ route('walikelas.jurnal') }}" class="nav-item {{ request()->routeIs('walikelas.jurnal') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     Jurnal KBM Kelas
                 </a>
-                <a href="{{ route('walikelas.rekap-presensi') }}" class="nav-item {{ request()->routeIs('walikelas.rekap-presensi') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    Rekap Presensi Kelas
-                </a>
-                <a href="{{ route('walikelas.siswa-terlambat') }}" class="nav-item {{ request()->routeIs('walikelas.siswa-terlambat') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    Siswa Terlambat
-                </a>
+
 
             <!-- WAKA SDM -->
             @elseif($role === 'waka_sdm')
@@ -419,7 +469,17 @@
                 </a>
                 <a href="{{ route('waka.persetujuan.index') }}" class="nav-item {{ request()->routeIs('waka.persetujuan.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    Persetujuan Dispen
+                    Persetujuan Izin Guru & Dispen
+                </a>
+
+                <div class="nav-section-label">Ketenagaan & KBM</div>
+                <a href="{{ route('guru.index') }}" class="nav-item {{ request()->routeIs('guru.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Data Guru & Pendidik
+                </a>
+                <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Jurnal Harian KBM
                 </a>
 
             <!-- WAKA KESISWAAN -->
@@ -432,6 +492,20 @@
                 <a href="{{ route('waka.persetujuan.index') }}" class="nav-item {{ request()->routeIs('waka.persetujuan.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     Persetujuan Dispen
+                </a>
+
+                <div class="nav-section-label">Data Siswa & KBM</div>
+                <a href="{{ route('siswa.index') }}" class="nav-item {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    Data Siswa
+                </a>
+                <a href="{{ route('kelas.index') }}" class="nav-item {{ request()->routeIs('kelas.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Data Kelas
+                </a>
+                <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Jurnal Harian KBM
                 </a>
 
             <!-- WAKA KURIKULUM -->
@@ -450,6 +524,28 @@
                     Persetujuan Dispen
                 </a>
 
+                <div class="nav-section-label">Manajemen KBM</div>
+                <a href="{{ route('jadwal.index') }}" class="nav-item {{ request()->routeIs('jadwal.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Jadwal Pelajaran
+                </a>
+                <a href="{{ route('mapel.index') }}" class="nav-item {{ request()->routeIs('mapel.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    Mata Pelajaran
+                </a>
+                <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Jurnal Harian KBM
+                </a>
+                <a href="{{ route('guru.index') }}" class="nav-item {{ request()->routeIs('guru.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Data Guru
+                </a>
+                <a href="{{ route('kelas.index') }}" class="nav-item {{ request()->routeIs('kelas.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Data Kelas
+                </a>
+
             <!-- WAKA SARPRAS -->
             @elseif($role === 'waka_sarpras')
                 <div class="nav-section-label">Waka Sarpras</div>
@@ -460,6 +556,16 @@
                 <a href="{{ route('waka.persetujuan.index') }}" class="nav-item {{ request()->routeIs('waka.persetujuan.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     Persetujuan Dispen
+                </a>
+
+                <div class="nav-section-label">Fasilitas KBM</div>
+                <a href="{{ route('kelas.index') }}" class="nav-item {{ request()->routeIs('kelas.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Data Kelas & Ruangan
+                </a>
+                <a href="{{ route('jurusan.index') }}" class="nav-item {{ request()->routeIs('jurusan.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    Data Jurusan
                 </a>
 
             <!-- WAKA HUMAS -->
@@ -474,6 +580,16 @@
                     Persetujuan Dispen
                 </a>
 
+                <div class="nav-section-label">Data Sekolah</div>
+                <a href="{{ route('siswa.index') }}" class="nav-item {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    Data Siswa
+                </a>
+                <a href="{{ route('jurusan.index') }}" class="nav-item {{ request()->routeIs('jurusan.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    Data Jurusan
+                </a>
+
             <!-- KEPALA SEKOLAH -->
             @elseif($role === 'kepala_sekolah')
                 <div class="nav-section-label">Kepala Sekolah</div>
@@ -484,6 +600,24 @@
                 <a href="{{ route('kepala.persetujuan.index') }}" class="nav-item {{ request()->routeIs('kepala.persetujuan.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     Persetujuan Dispen
+                </a>
+
+                <div class="nav-section-label">Supervisi & Monitoring</div>
+                <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Supervisi Jurnal KBM
+                </a>
+                <a href="{{ route('guru.index') }}" class="nav-item {{ request()->routeIs('guru.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Data Guru
+                </a>
+                <a href="{{ route('siswa.index') }}" class="nav-item {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    Data Siswa
+                </a>
+                <a href="{{ route('kelas.index') }}" class="nav-item {{ request()->routeIs('kelas.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Data Kelas
                 </a>
 
             <!-- SATPAM -->
@@ -506,6 +640,12 @@
 
         @auth
         <div class="sidebar-footer">
+            @if(count(Auth::user()->getAvailableAccesses()) > 1)
+                <a href="{{ route('pilih-akses') }}" class="nav-item" style="color: var(--accent, #3b82f6); margin-bottom: 4px;">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                    Ganti Akses / Peran
+                </a>
+            @endif
             <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                 @csrf
                 <button type="submit" class="nav-item nav-item-logout" style="width: 100%; border: none; background: none; text-align: left; cursor: pointer;">
@@ -565,6 +705,14 @@
                     </svg>
                 </button>
 
+                <!-- Switch Access Button (jika guru memiliki tugas tambahan / multi-akses) -->
+                @if(count(Auth::user()->getAvailableAccesses()) > 1)
+                    <a href="{{ route('pilih-akses') }}" class="btn-ganti-akses" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 10px; color: var(--accent, #2563eb); font-size: 12.5px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;" title="Ganti Peran / Tugas Tambahan">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                        <span>Ganti Akses</span>
+                    </a>
+                @endif
+
                 <a href="{{ route('profil.show') }}" class="user-pill" style="text-decoration: none; cursor: pointer;" title="Buka Profil Akun">
                     @if(Auth::user()->foto_profil_url)
                         <img src="{{ Auth::user()->foto_profil_url }}" alt="{{ Auth::user()->nama }}" class="user-avatar" style="object-fit: cover; flex-shrink: 0;">
@@ -573,7 +721,7 @@
                     @endif
                     <div class="user-info">
                         <div class="user-name">{{ Auth::user()->nama }}</div>
-                        <div class="user-role">{{ strtoupper(str_replace('_', ' ', Auth::user()->role)) }}</div>
+                        <div class="user-role">{{ strtoupper(str_replace('_', ' ', session('active_access', Auth::user()->role))) }}</div>
                     </div>
                 </a>
                 @endauth

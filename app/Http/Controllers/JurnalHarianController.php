@@ -93,8 +93,23 @@ class JurnalHarianController extends Controller
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
         $currentSlot = \App\Services\KbmService::getCurrentSlotInfo($now);
 
+        $slotStatus = $currentSlot['status'] ?? 'unknown';
+
+        $bannerColor = match ($slotStatus) {
+            'kbm' => 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+            'istirahat' => 'linear-gradient(135deg, #b45309 0%, #f59e0b 100%)',
+            'jam_pulang', 'sebelum_kbm' => 'linear-gradient(135deg, #334155 0%, #64748b 100%)',
+            'libur' => 'linear-gradient(135deg, #065f46 0%, #10b981 100%)',
+            default => 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+        };
+
         if ($user->isGuru() && !$user->isAdmin()) {
             $guru = $user->guru;
+            if (!$guru) {
+                $guru = \App\Models\Guru::where('nama', $user->nama)
+                    ->orWhere('nip', $user->nip)
+                    ->first();
+            }
             if (!$guru) {
                 return back()->with('error', 'Profil guru Anda tidak ditemukan.');
             }
@@ -129,7 +144,7 @@ class JurnalHarianController extends Controller
             $jadwalSelected = $jadwalList->firstWhere('hari', $currentDayIndo);
         }
 
-        return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected', 'currentSlot', 'currentDayIndo', 'now'));
+        return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected', 'currentSlot', 'slotStatus', 'bannerColor', 'currentDayIndo', 'now'));
     }
 
     public function store(Request $request)
@@ -153,6 +168,11 @@ class JurnalHarianController extends Controller
         // Check ownership if guru
         if ($user->isGuru() && !$user->isAdmin()) {
             $guru = $user->guru;
+            if (!$guru) {
+                $guru = \App\Models\Guru::where('nama', $user->nama)
+                    ->orWhere('nip', $user->nip)
+                    ->first();
+            }
             if ($guru && $jadwal->id_guru != $guru->id_guru) {
                 return back()->with('error', 'Anda hanya dapat mengisi jurnal untuk jadwal mengajar Anda sendiri.');
             }
@@ -164,7 +184,13 @@ class JurnalHarianController extends Controller
         ];
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
 
-        $idGuru = $user->isGuru() ? ($user->guru->id_guru ?? $jadwal->id_guru) : $jadwal->id_guru;
+        $guruForStore = $user->guru;
+        if (!$guruForStore && $user->isGuru()) {
+            $guruForStore = \App\Models\Guru::where('nama', $user->nama)
+                ->orWhere('nip', $user->nip)
+                ->first();
+        }
+        $idGuru = $guruForStore ? $guruForStore->id_guru : $jadwal->id_guru;
 
         $jurnal = JurnalHarian::create([
             'id_jadwal' => $jadwal->id_jadwal,
@@ -174,7 +200,7 @@ class JurnalHarianController extends Controller
             'materi' => $request->materi,
             'sub_materi' => $request->sub_materi,
             'catatan_pengajaran' => $request->catatan_pengajaran,
-            'status_keterlaksanaan' => $request->input('status_keterlaksanaan', 'terlaksana'),
+            'status_keterlaksanaan' => 'terlaksana',
             'created_by' => $user->id_user,
         ]);
 

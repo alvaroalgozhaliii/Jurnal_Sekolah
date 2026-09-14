@@ -18,6 +18,8 @@
     @endif
 </div>
 
+@include('partials.kbm-clock-banner')
+
 <!-- STATS MASTER DATA GRID -->
 <div class="grid-4 mb-24">
     <div class="stat-card" style="border-left: 4px solid #1e3a8a;">

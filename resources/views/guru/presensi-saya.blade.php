@@ -12,13 +12,16 @@
 </div>
 
 <div class="card mb-24" style="max-width: 600px;">
-    <div class="card-header">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
         <h3 class="card-title">Presensi Hari Ini ({{ date('d/m/Y') }})</h3>
+        <span class="badge badge-navy" style="font-size: 11px;">
+            🕒 Masuk: {{ $jamMasuk }} | Pulang: {{ $jamPulang }} WIB
+        </span>
     </div>
     <div class="card-body">
         @if(!$presensiHariIni)
             <div class="alert alert-warning mb-16">
-                <div>Anda belum melakukan presensi masuk hari ini.</div>
+                <div>Anda belum melakukan presensi masuk hari ini. Batas waktu masuk: <strong>{{ $jamMasuk }} WIB</strong> (Toleransi +{{ $toleransiTerlambat }} menit).</div>
             </div>
             <form action="{{ route('guru.presensi-masuk') }}" method="POST">
                 @csrf

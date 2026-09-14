@@ -11,6 +11,8 @@
     </div>
 </div>
 
+@include('partials.kbm-clock-banner')
+
 @if($siswa)
 <div class="card mb-24">
     <div class="card-header">
