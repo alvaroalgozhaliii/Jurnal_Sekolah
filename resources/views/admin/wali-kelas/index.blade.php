@@ -14,12 +14,14 @@
 .stat-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
+    border-left: 4px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 16px 20px;
     display: flex;
     align-items: center;
     gap: 16px;
     box-shadow: var(--shadow-sm);
+    transition: var(--transition);
 }
 .stat-icon {
     width: 46px;
@@ -30,7 +32,11 @@
     justify-content: center;
     flex-shrink: 0;
 }
-.stat-icon svg { width: 22px; height: 22px; }
+.stat-icon svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .stat-content { display: flex; flex-direction: column; }
 .stat-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); }
 .stat-value { font-size: 24px; font-weight: 800; color: var(--text-primary); margin-top: 2px; }
