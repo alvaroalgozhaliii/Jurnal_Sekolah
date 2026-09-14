@@ -114,7 +114,7 @@
 <div class="trash-page-header">
     <div>
         <h1 class="page-title">
-            🗑️ Trash — Mata Pelajaran
+            Trash — Mata Pelajaran
         </h1>
         <p class="page-subtitle">Data mapel yang dihapus sementara. Bisa di-restore atau dihapus permanen.</p>
     </div>
@@ -176,7 +176,7 @@
                 @foreach($mapel as $item)
                 @php
                     $t = $item->tingkat;
-                    $emoji = match($t) { 'X' => '🟢', 'XI' => '🟡', 'XII' => '🟣', default => '⚪' };
+                    $emoji = match($t) { 'X' => '', 'XI' => '', 'XII' => '', default => '' };
                 @endphp
                 <tr>
                     <td style="color:var(--text-muted);font-weight:600;font-size:12px;">{{ $loop->iteration }}</td>
@@ -231,7 +231,7 @@
 
     @else
     <div class="empty-trash">
-        <div class="empty-trash-icon">✅</div>
+        <div class="empty-trash-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
         <h4>Trash Kosong</h4>
         <p>Tidak ada data mata pelajaran yang dihapus.</p>
         <a href="{{ route('mapel.index') }}" class="btn btn-primary">← Kembali ke Daftar Mapel</a>

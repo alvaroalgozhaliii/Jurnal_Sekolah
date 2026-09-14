@@ -171,7 +171,7 @@
     <div class="cal-chart-card">
         <div class="chart-header">
             <div>
-                <div class="chart-title">📊 Visualisasi Pelaksanaan KBM</div>
+                <div class="chart-title">Visualisasi Pelaksanaan KBM</div>
                 <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
                     Statistik Mata Pelajaran & Sesi Pembelajaran
                 </div>

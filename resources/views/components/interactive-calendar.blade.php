@@ -156,7 +156,7 @@
             ◀ <span>Bulan Sebelumnya</span>
         </button>
         <div class="calendar-title">
-            📅 <span class="month-year-display"></span>
+            <span class="month-year-display"></span>
         </div>
         <button type="button" class="calendar-nav-btn next-btn">
             <span>Bulan Berikutnya</span> ▶

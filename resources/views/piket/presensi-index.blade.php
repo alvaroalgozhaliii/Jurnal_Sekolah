@@ -157,7 +157,7 @@
     <div class="cal-chart-card">
         <div class="chart-header">
             <div>
-                <div class="chart-title">📊 Diagram Presensi Piket Guru</div>
+                <div class="chart-title">Diagram Presensi Piket Guru</div>
                 <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
                     Tanggal: {{ \Carbon\Carbon::parse($selDate)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
                 </div>
@@ -174,19 +174,19 @@
 
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#10b981;">🟢 Guru Hadir</span>
+                    <span style="font-weight:600; color:#10b981;">Guru Hadir</span>
                     <span style="font-weight:700;">{{ $cHadir }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#f59e0b;">🟠 Terlambat</span>
+                    <span style="font-weight:600; color:#f59e0b;">Terlambat</span>
                     <span style="font-weight:700;">{{ $cTerlambat }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#8b5cf6;">🟣 Digantikan</span>
+                    <span style="font-weight:600; color:#8b5cf6;">Digantikan</span>
                     <span style="font-weight:700;">{{ $cDigantikan }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#ef4444;">🔴 Belum Dicatat / Kosong</span>
+                    <span style="font-weight:600; color:#ef4444;">Belum Dicatat / Kosong</span>
                     <span style="font-weight:700;">{{ $cBelum }}</span>
                 </div>
             </div>

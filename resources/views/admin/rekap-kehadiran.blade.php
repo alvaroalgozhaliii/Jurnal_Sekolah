@@ -149,7 +149,7 @@
     </div>
     <div class="page-actions">
         <a href="{{ route('admin.rekap-kehadiran.export-csv', request()->query()) }}"
-           class="btn btn-secondary">⬇️ Export CSV</a>
+           class="btn btn-secondary">Export CSV</a>
     </div>
 </div>
 
@@ -196,7 +196,7 @@
             {{-- Filter Strip with Searchable Selects --}}
             <div class="cal-filter-strip">
                 <div class="form-group" style="margin:0;">
-                    <label class="form-label" style="margin-bottom:4px; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">🔍 Cari / Pilih Kelas</label>
+                    <label class="form-label" style="margin-bottom:4px; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Cari / Pilih Kelas</label>
                     <select name="_kelas_ui" class="form-control select-search" data-searchable="true" id="uiKelas" onchange="document.getElementById('hiddenKelas').value=this.value; document.getElementById('calForm').submit();">
                         <option value="">Semua Kelas</option>
                         @foreach($kelas as $k)
@@ -205,7 +205,7 @@
                     </select>
                 </div>
                 <div class="form-group" style="margin:0;">
-                    <label class="form-label" style="margin-bottom:4px; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">🔍 Cari / Pilih Guru</label>
+                    <label class="form-label" style="margin-bottom:4px; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Cari / Pilih Guru</label>
                     <select name="_guru_ui" class="form-control select-search" data-searchable="true" id="uiGuru" onchange="document.getElementById('hiddenGuru').value=this.value; document.getElementById('calForm').submit();">
                         <option value="">Semua Guru</option>
                         @foreach($guru as $g)
@@ -221,7 +221,7 @@
     <div class="cal-chart-card">
         <div class="chart-header">
             <div>
-                <div class="chart-title">📊 Diagram Presensi Harian</div>
+                <div class="chart-title">Diagram Presensi Harian</div>
                 <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
                     Tanggal: {{ \Carbon\Carbon::parse($selDate)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
                 </div>
@@ -238,23 +238,23 @@
 
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#10b981;">🟢 Siswa Hadir</span>
+                    <span style="font-weight:600; color:#10b981;">Siswa Hadir</span>
                     <span style="font-weight:700;">{{ $siswaHadir }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#f59e0b;">🟠 Siswa Terlambat</span>
+                    <span style="font-weight:600; color:#f59e0b;">Siswa Terlambat</span>
                     <span style="font-weight:700;">{{ $siswaTerlambat }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#3b82f6;">🔵 Siswa Izin / Sakit</span>
+                    <span style="font-weight:600; color:#3b82f6;">Siswa Izin / Sakit</span>
                     <span style="font-weight:700;">{{ $siswaIzin + $siswaSakit }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#ef4444;">🔴 Siswa Alpa</span>
+                    <span style="font-weight:600; color:#ef4444;">Siswa Alpa</span>
                     <span style="font-weight:700;">{{ $siswaAlpa }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:8px 12px; border-radius:8px; background:var(--bg-page); font-size:13px;">
-                    <span style="font-weight:600; color:#1e3a8a;">👨‍🏫 Guru Hadir</span>
+                    <span style="font-weight:600; color:#1e3a8a;">Guru Hadir</span>
                     <span style="font-weight:700;">{{ $rekapGuru->count() }} Guru</span>
                 </div>
             </div>
