@@ -186,6 +186,14 @@
 }
 </style>
 
+@php
+    $nowServer = \Carbon\Carbon::now('Asia/Jakarta');
+    $daysIndoServer = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    $monthsIndoServer = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    $initialDateStr = $daysIndoServer[$nowServer->dayOfWeek] . ', ' . $nowServer->format('d') . ' ' . $monthsIndoServer[$nowServer->month - 1] . ' ' . $nowServer->year;
+    $initialTimeStr = $nowServer->format('H:i:s');
+@endphp
+
 <div class="card mb-24 kbm-clock-card">
     <div class="card-body" style="padding: 20px 26px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px;">
@@ -203,7 +211,7 @@
                         Waktu Laptop / Perangkat Saat Ini
                     </div>
                     <div class="clock-time-display">
-                        <span class="clock-digits" id="globalLiveClock">--:--:--</span>
+                        <span class="clock-digits" id="globalLiveClock">{{ $initialTimeStr }}</span>
                         <span class="clock-tz-badge">WIB</span>
                     </div>
                     <div class="clock-date-display">
@@ -213,7 +221,7 @@
                             <line x1="8" y1="2" x2="8" y2="6"></line>
                             <line x1="3" y1="10" x2="21" y2="10"></line>
                         </svg>
-                        <span id="globalLiveDate">Memuat tanggal...</span>
+                        <span id="globalLiveDate">{{ $initialDateStr }}</span>
                     </div>
                 </div>
             </div>
@@ -238,7 +246,7 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+(function() {
     const daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     const monthsIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
@@ -289,14 +297,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!slotEl || !detailEl) return;
 
-        // Weekend check
-<<<<<<< HEAD
         if (dayIdx === 0 || dayIdx === 6) {
-            slotEl.innerHTML = 'Hari Libur Sekolah';
-=======
-        if (dayIdx === 0 || dayIdx === 0 || dayIdx === 6) {
             slotEl.innerHTML = '🏖️ Hari Libur Sekolah';
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
             detailEl.textContent = 'Tidak ada kegiatan belajar mengajar (KBM)';
             detailEl.style.color = '#a7f3d0';
             return;
@@ -330,13 +332,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (timeStr >= s.mulai && timeStr <= s.selesai) {
                 found = true;
                 if (s.istirahat) {
-<<<<<<< HEAD
-                    slotEl.innerHTML = `Sedang Waktu ${s.ket}`;
-                    detailEl.textContent = 'Jeda Kegiatan Belajar Mengajar';
-=======
                     slotEl.innerHTML = `☕ Sedang Waktu ${s.ket}`;
                     detailEl.textContent = isJumat && s.istirahat === 8 ? 'Jeda Solat Jumat & Istirahat' : 'Jeda Kegiatan Belajar Mengajar';
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                     detailEl.style.color = '#fed7aa';
                 } else {
                     if (isJumat && s.jam === 13) {
@@ -355,17 +352,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!found) {
             if (timeStr >= jamPulang) {
-<<<<<<< HEAD
-                slotEl.innerHTML = 'Jam Pulang Sekolah';
-                detailEl.textContent = `KBM Hari ini telah selesai (Pukul ${jamPulang} WIB)`;
-=======
                 slotEl.innerHTML = '🏠 Jam Pulang Sekolah';
                 if (isJumat && userIsKelasX === null) {
                     detailEl.textContent = `KBM Selesai (Kelas 11/12: ${jamPulangJumatXi} WIB • Kelas 10: ${jamPulangJumatX} WIB)`;
                 } else {
                     detailEl.textContent = `KBM Hari ini telah selesai (Pukul ${jamPulang} WIB)`;
                 }
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                 detailEl.style.color = '#fca5a5';
             } else {
                 slotEl.innerHTML = 'Di Luar Jam Sesi KBM';
@@ -377,5 +369,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateGlobalKbmClock();
     setInterval(updateGlobalKbmClock, 1000);
-});
+})();
 </script>

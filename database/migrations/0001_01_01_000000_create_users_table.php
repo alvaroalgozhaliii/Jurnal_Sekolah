@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'guru', 'piket', 'siswa'])->default('admin');
             $table->boolean('aktif')->default(true);
+            $table->rememberToken();
             $table->timestamp('created_at')->nullable();
         });
 
