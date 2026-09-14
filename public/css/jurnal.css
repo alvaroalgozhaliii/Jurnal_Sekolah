@@ -629,7 +629,8 @@ a:hover {
 .stat-card:has(.stat-icon.blue),
 .stat-card.blue,
 .sakit-stat-card:has(.sakit-stat-icon.blue),
-.sakit-stat-card.blue {
+.sakit-stat-card.blue,
+.jam-metric-card:has(.jam-metric-icon.blue) {
     border-left: 4px solid #0284c7 !important;
 }
 
@@ -637,7 +638,8 @@ a:hover {
 .stat-card:has(.stat-icon.green),
 .stat-card.green,
 .sakit-stat-card:has(.sakit-stat-icon.green),
-.sakit-stat-card.green {
+.sakit-stat-card.green,
+.jam-metric-card:has(.jam-metric-icon.emerald) {
     border-left: 4px solid #16a34a !important;
 }
 
@@ -645,7 +647,8 @@ a:hover {
 .stat-card:has(.stat-icon.amber),
 .stat-card.amber,
 .sakit-stat-card:has(.sakit-stat-icon.amber),
-.sakit-stat-card.amber {
+.sakit-stat-card.amber,
+.jam-metric-card:has(.jam-metric-icon.amber) {
     border-left: 4px solid #d97706 !important;
 }
 
@@ -653,7 +656,8 @@ a:hover {
 .stat-card:has(.stat-icon.purple),
 .stat-card.purple,
 .sakit-stat-card:has(.sakit-stat-icon.purple),
-.sakit-stat-card.purple {
+.sakit-stat-card.purple,
+.jam-metric-card:has(.jam-metric-icon.purple) {
     border-left: 4px solid #9333ea !important;
 }
 
@@ -667,27 +671,49 @@ a:hover {
 
 /* Dark Mode Left Accent Border Glow */
 [data-theme="dark"] .stat-card:has(.stat-icon-box.navy),
-[data-theme="dark"] .stat-card.navy {
+[data-theme="dark"] .stat-card:has(.stat-icon.navy),
+[data-theme="dark"] .stat-card.navy,
+[data-theme="dark"] .sakit-stat-card:has(.sakit-stat-icon.navy),
+[data-theme="dark"] .sakit-stat-card.navy {
     border-left-color: #3b82f6 !important;
 }
 [data-theme="dark"] .stat-card:has(.stat-icon-box.blue),
-[data-theme="dark"] .stat-card.blue {
+[data-theme="dark"] .stat-card:has(.stat-icon.blue),
+[data-theme="dark"] .stat-card.blue,
+[data-theme="dark"] .sakit-stat-card:has(.sakit-stat-icon.blue),
+[data-theme="dark"] .sakit-stat-card.blue,
+[data-theme="dark"] .jam-metric-card:has(.jam-metric-icon.blue) {
     border-left-color: #38bdf8 !important;
 }
 [data-theme="dark"] .stat-card:has(.stat-icon-box.green),
-[data-theme="dark"] .stat-card.green {
+[data-theme="dark"] .stat-card:has(.stat-icon.green),
+[data-theme="dark"] .stat-card.green,
+[data-theme="dark"] .sakit-stat-card:has(.sakit-stat-icon.green),
+[data-theme="dark"] .sakit-stat-card.green,
+[data-theme="dark"] .jam-metric-card:has(.jam-metric-icon.emerald) {
     border-left-color: #22c55e !important;
 }
 [data-theme="dark"] .stat-card:has(.stat-icon-box.amber),
-[data-theme="dark"] .stat-card.amber {
+[data-theme="dark"] .stat-card:has(.stat-icon.amber),
+[data-theme="dark"] .stat-card.amber,
+[data-theme="dark"] .sakit-stat-card:has(.sakit-stat-icon.amber),
+[data-theme="dark"] .sakit-stat-card.amber,
+[data-theme="dark"] .jam-metric-card:has(.jam-metric-icon.amber) {
     border-left-color: #f59e0b !important;
 }
 [data-theme="dark"] .stat-card:has(.stat-icon-box.purple),
-[data-theme="dark"] .stat-card.purple {
+[data-theme="dark"] .stat-card:has(.stat-icon.purple),
+[data-theme="dark"] .stat-card.purple,
+[data-theme="dark"] .sakit-stat-card:has(.sakit-stat-icon.purple),
+[data-theme="dark"] .sakit-stat-card.purple,
+[data-theme="dark"] .jam-metric-card:has(.jam-metric-icon.purple) {
     border-left-color: #a855f7 !important;
 }
 [data-theme="dark"] .stat-card:has(.stat-icon-box.red),
-[data-theme="dark"] .stat-card.red {
+[data-theme="dark"] .stat-card:has(.stat-icon.red),
+[data-theme="dark"] .stat-card.red,
+[data-theme="dark"] .sakit-stat-card:has(.sakit-stat-icon.red),
+[data-theme="dark"] .sakit-stat-card.red {
     border-left-color: #ef4444 !important;
 }
 
@@ -3803,14 +3829,19 @@ input[type='radio']:active,
 .stat-icon-box,
 .stat-icon,
 .sakit-stat-icon,
+.jam-metric-icon,
 .stat-card .svg-icon,
-.stat-card svg {
+.stat-card svg,
+.jam-metric-card svg,
+.stat-filter-card svg {
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .card,
 .stat-card,
 .sakit-stat-card,
+.jam-metric-card,
+.stat-filter-card,
 .info-card,
 .dashboard-card,
 .box,
@@ -3827,8 +3858,6 @@ input[type='radio']:active,
 }
 
 .card:hover,
-.stat-card:hover,
-.sakit-stat-card:hover,
 .info-card:hover,
 .dashboard-card:hover,
 .box:hover,
@@ -3844,14 +3873,20 @@ input[type='radio']:active,
 }
 
 .stat-card:hover,
-.sakit-stat-card:hover {
+.sakit-stat-card:hover,
+.jam-metric-card:hover,
+.stat-filter-card:hover {
+    transform: translateY(-4px) scale(1.008) !important;
+    box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08) !important;
     border-top-color: rgba(59, 130, 246, 0.4) !important;
     border-right-color: rgba(59, 130, 246, 0.4) !important;
     border-bottom-color: rgba(59, 130, 246, 0.4) !important;
 }
 
 [data-theme="dark"] .stat-card:hover,
-[data-theme="dark"] .sakit-stat-card:hover {
+[data-theme="dark"] .sakit-stat-card:hover,
+[data-theme="dark"] .jam-metric-card:hover,
+[data-theme="dark"] .stat-filter-card:hover {
     box-shadow: 0 16px 32px -4px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.25) !important;
     border-top-color: rgba(59, 130, 246, 0.55) !important;
     border-right-color: rgba(59, 130, 246, 0.55) !important;
@@ -3862,9 +3897,13 @@ input[type='radio']:active,
 .stat-card:hover .stat-icon,
 .stat-card:hover .sakit-stat-icon,
 .sakit-stat-card:hover .sakit-stat-icon,
+.stat-card:hover .jam-metric-icon,
+.jam-metric-card:hover .jam-metric-icon,
 .stat-card:hover .svg-icon,
 .stat-card:hover svg,
 .sakit-stat-card:hover svg,
+.jam-metric-card:hover svg,
+.stat-filter-card:hover svg,
 .card:hover .card-header .svg-icon,
 .card-folder:hover .card-folder-icon {
     transform: scale(1.15) rotate(4deg) !important;

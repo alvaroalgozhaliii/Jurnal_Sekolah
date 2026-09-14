@@ -9,21 +9,30 @@
 .stat-filter-card {
     margin: 0;
     text-decoration: none;
-    border-radius: 16px;
-    padding: 18px;
+    border-radius: 12px;
+    padding: 16px 18px;
     display: block;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease;
     cursor: pointer;
 }
 .stat-filter-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px) scale(1.008) !important;
+    box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08) !important;
+}
+.stat-filter-card:hover svg {
+    transform: scale(1.15) rotate(4deg);
+}
+.stat-filter-card svg {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 </style>
 
 <!-- TOP STAT METRIC CARDS -->
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
     <!-- Stat 1: Pending -->
-    <a href="{{ route('admin.reset-password.index', ['status' => 'pending']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.02)); border: 1.5px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b !important; {{ $status === 'pending' ? 'box-shadow: 0 0 0 2px #f59e0b, 0 8px 20px rgba(245, 158, 11, 0.2);' : '' }}">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'pending']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.02)); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 4px solid #f59e0b !important; {{ $status === 'pending' ? 'box-shadow: 0 0 0 2px #f59e0b, 0 8px 20px rgba(245, 158, 11, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #d97706; letter-spacing: 0.5px;">MENUNGGU APPROVAL</span>
@@ -36,7 +45,7 @@
     </a>
 
     <!-- Stat 2: Approved -->
-    <a href="{{ route('admin.reset-password.index', ['status' => 'approved']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.02)); border: 1.5px solid rgba(16, 185, 129, 0.3); border-left: 5px solid #10b981 !important; {{ $status === 'approved' ? 'box-shadow: 0 0 0 2px #10b981, 0 8px 20px rgba(16, 185, 129, 0.2);' : '' }}">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'approved']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.02)); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid #10b981 !important; {{ $status === 'approved' ? 'box-shadow: 0 0 0 2px #10b981, 0 8px 20px rgba(16, 185, 129, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #059669; letter-spacing: 0.5px;">DISETUJUI (APPROVED)</span>
@@ -49,7 +58,7 @@
     </a>
 
     <!-- Stat 3: Completed -->
-    <a href="{{ route('admin.reset-password.index', ['status' => 'completed']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.02)); border: 1.5px solid rgba(59, 130, 246, 0.3); border-left: 5px solid #3b82f6 !important; {{ $status === 'completed' ? 'box-shadow: 0 0 0 2px #3b82f6, 0 8px 20px rgba(59, 130, 246, 0.2);' : '' }}">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'completed']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.02)); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 4px solid #3b82f6 !important; {{ $status === 'completed' ? 'box-shadow: 0 0 0 2px #3b82f6, 0 8px 20px rgba(59, 130, 246, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #2563eb; letter-spacing: 0.5px;">SELESAI DIRESET</span>
@@ -62,7 +71,7 @@
     </a>
 
     <!-- Stat 4: Total -->
-    <a href="{{ route('admin.reset-password.index', ['status' => 'all']) }}" class="card stat-filter-card" style="background: var(--bg-card, #fff); border: 1.5px solid var(--border, #cbd5e1); border-left: 5px solid var(--navy-primary, #1e3a8a) !important; {{ $status === 'all' ? 'box-shadow: 0 0 0 2px var(--navy-primary, #1e3a8a), 0 8px 20px rgba(30, 58, 138, 0.2);' : '' }}">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'all']) }}" class="card stat-filter-card" style="background: var(--bg-card, #fff); border: 1px solid var(--border, #cbd5e1); border-left: 4px solid var(--navy-primary, #1e3a8a) !important; {{ $status === 'all' ? 'box-shadow: 0 0 0 2px var(--navy-primary, #1e3a8a), 0 8px 20px rgba(30, 58, 138, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary, #64748b); letter-spacing: 0.5px;">TOTAL PENGAJUAN</span>
