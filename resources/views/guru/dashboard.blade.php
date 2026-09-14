@@ -40,7 +40,7 @@
     <div class="card-header" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(59, 130, 246, 0.05)); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:14px 20px;">
         <div style="display:flex; align-items:center; gap:12px;">
             <div style="width:42px; height:42px; border-radius:10px; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px;">
-                🎓
+                
             </div>
             <div>
                 <h3 class="card-title" style="margin:0; font-size:16px; color:#10b981; font-weight:700;">
@@ -52,9 +52,9 @@
             </div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <a href="{{ route('walikelas.data-kelas') }}" class="btn btn-secondary btn-sm">👥 Data Siswa</a>
-            <a href="{{ route('walikelas.rekap-presensi') }}" class="btn btn-secondary btn-sm">📋 Rekap Presensi</a>
-            <a href="{{ route('walikelas.siswa-terlambat') }}" class="btn btn-secondary btn-sm">⏰ Terlambat</a>
+            <a href="{{ route('walikelas.data-kelas') }}" class="btn btn-secondary btn-sm">Data Siswa</a>
+            <a href="{{ route('walikelas.rekap-presensi') }}" class="btn btn-secondary btn-sm">Rekap Presensi</a>
+            <a href="{{ route('walikelas.siswa-terlambat') }}" class="btn btn-secondary btn-sm">Terlambat</a>
             <a href="{{ route('walikelas.dashboard') }}" class="btn btn-primary btn-sm" style="background:#10b981; border-color:#10b981;">Portal Wali Kelas &rarr;</a>
         </div>
     </div>
@@ -88,7 +88,7 @@
                 @if($waliMonitoring['siswaTerlambatList']->count() > 0)
                     <div style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:8px; padding:12px;">
                         <strong style="font-size:13px; color:#d97706; display:flex; align-items:center; gap:6px; margin-bottom:8px;">
-                            ⏰ Siswa Kelas Terlambat Hari Ini ({{ $waliMonitoring['siswaTerlambatList']->count() }}):
+                            Siswa Kelas Terlambat Hari Ini ({{ $waliMonitoring['siswaTerlambatList']->count() }}):
                         </strong>
                         <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6;">
                             @foreach($waliMonitoring['siswaTerlambatList'] as $st)
@@ -103,7 +103,7 @@
                 @if($waliMonitoring['siswaIzinList']->count() > 0)
                     <div style="background:rgba(59, 130, 246, 0.08); border:1px solid rgba(59, 130, 246, 0.3); border-radius:8px; padding:12px;">
                         <strong style="font-size:13px; color:#2563eb; display:flex; align-items:center; gap:6px; margin-bottom:8px;">
-                            📝 Siswa Izin / Sakit Hari Ini ({{ $waliMonitoring['siswaIzinList']->count() }}):
+                            Siswa Izin / Sakit Hari Ini ({{ $waliMonitoring['siswaIzinList']->count() }}):
                         </strong>
                         <ul style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.6;">
                             @foreach($waliMonitoring['siswaIzinList'] as $si)

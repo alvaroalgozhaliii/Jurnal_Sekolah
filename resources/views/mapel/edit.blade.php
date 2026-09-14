@@ -171,7 +171,7 @@
                             class="tingkat-card-input"
                             {{ old('tingkat', $mapel->tingkat) === 'X' ? 'checked' : '' }}>
                         <label for="tingkat_x" class="tingkat-card-label">
-                            <span class="tk-emoji">🟢</span>
+                            <span class="tk-emoji" style="font-weight:700; color:#10b981; font-size:16px;">X</span>
                             <span class="tk-label">Kelas X</span>
                             <span class="tk-sub">Kode: -01</span>
                         </label>
@@ -181,7 +181,7 @@
                             class="tingkat-card-input"
                             {{ old('tingkat', $mapel->tingkat) === 'XI' ? 'checked' : '' }}>
                         <label for="tingkat_xi" class="tingkat-card-label">
-                            <span class="tk-emoji">🟡</span>
+                            <span class="tk-emoji" style="font-weight:700; color:#f59e0b; font-size:16px;">XI</span>
                             <span class="tk-label">Kelas XI</span>
                             <span class="tk-sub">Kode: -02</span>
                         </label>
@@ -191,7 +191,7 @@
                             class="tingkat-card-input"
                             {{ old('tingkat', $mapel->tingkat) === 'XII' ? 'checked' : '' }}>
                         <label for="tingkat_xii" class="tingkat-card-label">
-                            <span class="tk-emoji">🟣</span>
+                            <span class="tk-emoji" style="font-weight:700; color:#8b5cf6; font-size:16px;">XII</span>
                             <span class="tk-label">Kelas XII</span>
                             <span class="tk-sub">Kode: -03</span>
                         </label>

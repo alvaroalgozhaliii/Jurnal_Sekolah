@@ -156,7 +156,7 @@
         {{-- Card Upload --}}
         <div class="card" style="margin-bottom:20px;">
             <div class="card-header">
-                <h3 class="card-title">📤 Upload File CSV Master</h3>
+                <h3 class="card-title">Upload File CSV Master</h3>
             </div>
             <div class="card-body">
                 <form action="{{ route('admin.csv-master.import') }}" method="POST"
@@ -174,7 +174,7 @@
                         <p class="dropzone-title">Klik atau drag file CSV ke sini</p>
                         <p class="dropzone-sub">Mendukung .CSV (UTF-8) hingga 5 MB</p>
                         <span id="fileBadge" style="display:none; margin-top:12px; background:rgba(59,130,246,.12); color:#3b82f6; border-radius:20px; padding:4px 14px; font-size:12.5px; font-weight:600;">
-                            📄 <span id="fileNameSpan"></span>
+                            <span id="fileNameSpan"></span>
                         </span>
                         <input type="file" id="csv_file_input" name="csv_file"
                                accept=".csv,text/csv" required
@@ -190,10 +190,10 @@
                     <div style="display:flex; justify-content:flex-end; margin-top:16px; gap:10px; flex-wrap:wrap;">
                         <a href="{{ route('admin.csv-master.template', 'template_master') }}"
                            class="btn btn-secondary" style="font-size:13px;">
-                            ⬇️ Download Template
+                            Download Template
                         </a>
                         <button type="submit" class="btn btn-primary" id="submitBtn">
-                            🚀 Proses & Simpan Data
+                            Proses & Simpan Data
                         </button>
                     </div>
                 </form>
@@ -203,7 +203,7 @@
         {{-- Card Format Kolom --}}
         <div class="card">
             <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <h3 class="card-title" style="margin:0;">📋 Format Kolom CSV Terpadu</h3>
+                <h3 class="card-title" style="margin:0;">Format Kolom CSV Terpadu</h3>
                 <span style="font-size:12px; color:var(--text-muted);">Scroll horizontal jika tabel terpotong →</span>
             </div>
             <div class="format-table-wrap">
@@ -255,7 +255,7 @@
                 </table>
             </div>
             <div style="padding:14px 20px; background:var(--bg-page); border-top:1px solid var(--border); font-size:12.5px; color:var(--text-secondary);">
-                <strong style="display:block; margin-bottom:6px; color:var(--text-primary);">📌 Keterangan Kolom:</strong>
+                <strong style="display:block; margin-bottom:6px; color:var(--text-primary);">Keterangan Kolom:</strong>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:4px 20px; line-height:1.8;">
                     <span><code style="background:var(--bg-card-header); border-radius:4px; padding:0 5px; font-size:11px; color:#ef4444;">role</code> → <code style="font-size:11px;">guru</code> / <code style="font-size:11px;">walikelas</code> / <code style="font-size:11px;">siswa</code></span>
                     <span><code style="background:var(--bg-card-header); border-radius:4px; padding:0 5px; font-size:11px; color:#ef4444;">nama_kelas</code> → wajib untuk siswa & wali kelas</span>
@@ -273,7 +273,7 @@
         {{-- Card SK Files --}}
         <div class="card" style="margin-bottom:20px;">
             <div class="card-header">
-                <h3 class="card-title">📁 File SK Penugasan 2026/2027</h3>
+                <h3 class="card-title">File SK Penugasan 2026/2027</h3>
             </div>
             <div class="card-body" style="padding:12px 16px;">
                 <p style="font-size:12px; color:var(--text-muted); margin:0 0 8px;">
@@ -295,7 +295,7 @@
                     </div>
                     <a href="{{ asset('csv/' . $f['filename']) }}" download
                        class="btn btn-secondary btn-sm file-dl-btn" title="Unduh">
-                        ⬇️
+                        Unduh
                     </a>
                 </div>
                 @endforeach
@@ -305,23 +305,23 @@
         {{-- Card Stats --}}
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">📊 Data Tersimpan Saat Ini</h3>
+                <h3 class="card-title">Data Tersimpan Saat Ini</h3>
             </div>
             <div class="card-body" style="padding:8px 16px 12px;">
                 <div class="stat-row">
-                    <span class="stat-row-label">👨‍🏫 Guru Terdaftar</span>
+                    <span class="stat-row-label">Guru Terdaftar</span>
                     <span class="stat-row-val">{{ $totalGuru }}</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-row-label">👨‍🎓 Siswa Terdaftar</span>
+                    <span class="stat-row-label">Siswa Terdaftar</span>
                     <span class="stat-row-val">{{ $totalSiswa }}</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-row-label">🏫 Rombongan Belajar</span>
+                    <span class="stat-row-label">Rombongan Belajar</span>
                     <span class="stat-row-val">{{ $totalKelas }}</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-row-label">🎓 Wali Kelas Ditugaskan</span>
+                    <span class="stat-row-label">Wali Kelas Ditugaskan</span>
                     <span class="stat-row-val" style="color:var(--navy-primary);">{{ $totalWaliKelas }}</span>
                 </div>
             </div>
@@ -330,13 +330,13 @@
         {{-- Quick links --}}
         <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
             <a href="{{ route('guru.index') }}" class="btn btn-secondary" style="justify-content:flex-start; font-size:13px;">
-                👨‍🏫 Kelola Data Guru →
+                Kelola Data Guru
             </a>
             <a href="{{ route('siswa.index') }}" class="btn btn-secondary" style="justify-content:flex-start; font-size:13px;">
-                👨‍🎓 Kelola Data Siswa →
+                Kelola Data Siswa
             </a>
             <a href="{{ route('admin.wali-kelas.index') }}" class="btn btn-secondary" style="justify-content:flex-start; font-size:13px;">
-                🎓 Manajemen Wali Kelas →
+                Manajemen Wali Kelas
             </a>
         </div>
 
@@ -386,7 +386,7 @@ function handleCsvPicked(input) {
 // Loading state on submit
 document.getElementById('csvUploadForm')?.addEventListener('submit', () => {
     const btn = document.getElementById('submitBtn');
-    if (btn) { btn.textContent = '⏳ Memproses...'; btn.disabled = true; }
+    if (btn) { btn.textContent = 'Memproses...'; btn.disabled = true; }
 });
 </script>
 @endsection

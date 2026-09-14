@@ -81,13 +81,13 @@
 
 @if(session('success'))
 <div class="alert alert-success mb-24" style="padding: 14px 18px; border-radius: 10px;">
-    <strong>✅ Sukses:</strong> {{ session('success') }}
+    <strong>Sukses:</strong> {{ session('success') }}
 </div>
 @endif
 
 @if(session('error'))
 <div class="alert alert-danger mb-24" style="padding: 14px 18px; border-radius: 10px;">
-    <strong>❌ Terjadi Kesalahan:</strong> {{ session('error') }}
+    <strong>Terjadi Kesalahan:</strong> {{ session('error') }}
 </div>
 @endif
 
@@ -98,11 +98,11 @@
         <div class="wa-card-header">
             <div>
                 <div class="wa-card-title">
-                    <span>📱 Nomor WhatsApp Penerima Notifikasi Pengajuan</span>
+                    <span>Nomor WhatsApp Penerima Notifikasi Pengajuan</span>
                 </div>
                 <div class="wa-card-subtitle">Nomor ini digunakan secara otomatis saat sistem mendistribusikan notifikasi pengajuan dispen/izin</div>
             </div>
-            <button type="submit" form="formPejabatWa" class="btn btn-primary">💾 Simpan Semua Nomor</button>
+            <button type="submit" form="formPejabatWa" class="btn btn-primary">Simpan Semua Nomor</button>
         </div>
 
         <form action="{{ route('admin.whatsapp.pejabat.update') }}" method="POST" id="formPejabatWa">
@@ -126,7 +126,7 @@
                     <div>
                         @if($u->no_hp)
                             <a href="https://wa.me/{{ \App\Services\WhatsAppService::formatNomor($u->no_hp) }}" target="_blank" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
-                                💬 Test Chat WA
+                                Test Chat WA
                             </a>
                         @else
                             <span class="text-muted" style="font-size:12px;">Belum diisi</span>
@@ -160,7 +160,7 @@
                     <div>
                         @if($u->no_hp)
                             <a href="https://wa.me/{{ \App\Services\WhatsAppService::formatNomor($u->no_hp) }}" target="_blank" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
-                                💬 Test Chat WA
+                                Test Chat WA
                             </a>
                         @else
                             <span class="text-muted" style="font-size:12px;">Belum diisi</span>
@@ -194,7 +194,7 @@
                     <div>
                         @if($u->no_hp)
                             <a href="https://wa.me/{{ \App\Services\WhatsAppService::formatNomor($u->no_hp) }}" target="_blank" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
-                                💬 Test Chat WA
+                                Test Chat WA
                             </a>
                         @else
                             <span class="text-muted" style="font-size:12px;">Belum diisi</span>
@@ -228,7 +228,7 @@
                     <div>
                         @if($u->no_hp)
                             <a href="https://wa.me/{{ \App\Services\WhatsAppService::formatNomor($u->no_hp) }}" target="_blank" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
-                                💬 Test Chat WA
+                                Test Chat WA
                             </a>
                         @else
                             <span class="text-muted" style="font-size:12px;">Belum diisi</span>
@@ -262,7 +262,7 @@
                     <div>
                         @if($u->no_hp)
                             <a href="https://wa.me/{{ \App\Services\WhatsAppService::formatNomor($u->no_hp) }}" target="_blank" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
-                                💬 Test Chat WA
+                                Test Chat WA
                             </a>
                         @else
                             <span class="text-muted" style="font-size:12px;">Belum diisi</span>
@@ -275,7 +275,7 @@
             </div>
 
             <div style="margin-top: 24px; text-align: right;">
-                <button type="submit" class="btn btn-primary" style="padding:10px 24px;">💾 Simpan Perubahan Nomor</button>
+                <button type="submit" class="btn btn-primary" style="padding:10px 24px;">Simpan Perubahan Nomor</button>
             </div>
         </form>
     </div>
@@ -285,7 +285,7 @@
         <div class="wa-card-header">
             <div>
                 <div class="wa-card-title">
-                    <span>🔍 Pencarian Cepat & Edit Nomor WA Akun Lainnya</span>
+                    <span>Pencarian Cepat & Edit Nomor WA Akun Lainnya</span>
                 </div>
                 <div class="wa-card-subtitle">Cari akun Guru, Wali Kelas, Orang Tua, atau Staf untuk mengganti nomor WhatsApp mereka dengan cepat</div>
             </div>
@@ -293,7 +293,7 @@
 
         <form action="{{ route('admin.whatsapp.index') }}" method="GET" class="quick-search-box">
             <input type="text" name="search" value="{{ $search }}" class="form-control" placeholder="Ketik nama, username, role, atau nomor HP...">
-            <button type="submit" class="btn btn-secondary">🔍 Cari Akun</button>
+            <button type="submit" class="btn btn-secondary">Cari Akun</button>
             @if($search)
                 <a href="{{ route('admin.whatsapp.index') }}" class="btn btn-secondary">Reset</a>
             @endif
@@ -326,13 +326,13 @@
                             <form action="{{ route('admin.whatsapp.user.update', $u->id_user) }}" method="POST" style="display:flex; gap:8px;">
                                 @csrf
                                 <input type="text" name="no_hp" value="{{ $u->no_hp }}" class="form-control form-control-sm" placeholder="08xxxxxxxxxx" style="max-width:180px;">
-                                <button type="submit" class="btn btn-secondary btn-sm" title="Simpan Nomor">💾 Simpan</button>
+                                <button type="submit" class="btn btn-secondary btn-sm" title="Simpan Nomor">Simpan</button>
                             </form>
                         </td>
                         <td style="text-align:right;">
                             @if($u->no_hp)
                                 <a href="https://wa.me/{{ \App\Services\WhatsAppService::formatNomor($u->no_hp) }}" target="_blank" class="btn btn-secondary btn-sm">
-                                    💬 Chat WA
+                                    Chat WA
                                 </a>
                             @else
                                 <span class="text-muted" style="font-size:12px;">-</span>
@@ -356,7 +356,7 @@
         <div class="wa-card">
             <div class="wa-card-header">
                 <div>
-                    <div class="wa-card-title">🌐 Pengaturan WhatsApp Gateway API</div>
+                    <div class="wa-card-title">Pengaturan WhatsApp Gateway API</div>
                     <div class="wa-card-subtitle">Fonnte / Gateway Multi-Device Provider API</div>
                 </div>
             </div>
@@ -379,7 +379,7 @@
                     <input type="text" name="sender" value="{{ old('sender', $gateway['sender']) }}" class="form-control" placeholder="081234567890">
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">💾 Simpan Konfigurasi Gateway</button>
+                <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Simpan Konfigurasi Gateway</button>
             </form>
         </div>
 
@@ -387,7 +387,7 @@
         <div class="wa-card">
             <div class="wa-card-header">
                 <div>
-                    <div class="wa-card-title">🚀 Uji Coba Pengiriman WA</div>
+                    <div class="wa-card-title">Uji Coba Pengiriman WA</div>
                     <div class="wa-card-subtitle">Tes apakah Gateway WhatsApp berhasil mengirim pesan secara otomatis</div>
                 </div>
             </div>
@@ -404,7 +404,7 @@
                     <textarea name="pesan_tes" class="form-control" rows="3" required>Halo! Ini adalah tes pengiriman pesan otomatis dari Sistem Jurnal Sekolah.</textarea>
                 </div>
 
-                <button type="submit" class="btn btn-success" style="width:100%; justify-content:center;">🚀 Kirim Pesan Tes Sekarang</button>
+                <button type="submit" class="btn btn-success" style="width:100%; justify-content:center;">Kirim Pesan Tes Sekarang</button>
             </form>
         </div>
 

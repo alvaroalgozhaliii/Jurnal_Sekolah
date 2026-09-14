@@ -599,7 +599,7 @@
             {{-- TOOLBAR KONFIRMASI UPLOAD FOTO (MUNCUL OTOMATIS SAAT GAMBAR DIPILIH) --}}
             <div id="avatarUploadActions" class="avatar-upload-actions">
                 <span class="avatar-upload-text">
-                    📸 Foto baru dipilih: <strong id="selectedPhotoName">foto.jpg</strong>
+                    Foto baru dipilih: <strong id="selectedPhotoName">foto.jpg</strong>
                 </span>
                 <div class="avatar-upload-btns">
                     <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('fotoProfilForm').submit()">
@@ -802,7 +802,7 @@
                             </div>
                         @enderror
                         <button type="submit" class="btn btn-primary mt-16">
-                            💾 Simpan Username
+                            Simpan Username
                         </button>
                     </form>
                 </div>
@@ -858,7 +858,7 @@
                         @enderror
 
                         <button type="submit" class="btn btn-amber mt-16" style="background:#d97706; color:#ffffff; font-weight:600;">
-                            🔑 Perbarui Password
+                            Perbarui Password
                         </button>
                     </form>
                 </div>

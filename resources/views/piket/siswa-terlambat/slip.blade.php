@@ -112,7 +112,7 @@
 </div>
 
 <div class="no-print" style="margin-top:20px;">
-    <button onclick="window.print()" style="padding:8px 24px; background:#1e3a8a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px;">🖨️ Cetak</button>
+    <button onclick="window.print()" style="padding:8px 24px; background:#1e3a8a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px;">Cetak</button>
     <a href="{{ route('piket.siswa-terlambat.index') }}" style="margin-left:12px; color:#1e3a8a;">← Kembali ke Daftar</a>
 </div>
 <script>
