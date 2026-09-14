@@ -24,6 +24,8 @@
     </div>
 </div>
 
+@include('partials.kbm-clock-banner')
+
 <!-- STAT CARDS -->
 <div class="grid-3 mb-24">
     <div class="stat-card" style="border-left: 4px solid #d97706;">

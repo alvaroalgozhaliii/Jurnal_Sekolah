@@ -37,6 +37,7 @@ use App\Http\Controllers\RekapController;
 use App\Http\Controllers\PiketSiswaTerlambatController;
 use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\Admin\ResetPasswordAdminController;
+use App\Http\Controllers\AksesController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -44,22 +45,10 @@ use App\Http\Controllers\Admin\ResetPasswordAdminController;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        $role = Auth::user()->role;
-        return match ($role) {
-            'admin' => redirect()->route('admin.dashboard'),
-            'guru' => redirect()->route('guru.dashboard'),
-            'piket' => redirect()->route('piket.dashboard'),
-            'ortu', 'siswa' => redirect()->route('ortu.dashboard'),
-            'wali_kelas' => redirect()->route('walikelas.dashboard'),
-            'waka_sdm' => redirect()->route('waka.dashboard'),
-            'waka_kesiswaan' => redirect()->route('waka.monitoring-siswa'),
-            'waka_kurikulum' => redirect()->route('waka-kurikulum.dashboard'),
-            'waka_sarpras' => redirect()->route('waka.sarpras'),
-            'waka_humas' => redirect()->route('waka.humas'),
-            'kepala_sekolah' => redirect()->route('kepala.dashboard'),
-            'satpam' => redirect()->route('satpam.dashboard'),
-            default => redirect()->route('login'),
-        };
+        $activeAccess = session('active_access');
+        $targetRole = $activeAccess ?: Auth::user()->role;
+        $routeName = AuthController::getDashboardRouteName($targetRole);
+        return redirect()->route($routeName);
     }
 
     return view('auth.login');
@@ -68,6 +57,12 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Seleksi Tugas Tambahan / Alih Peran Guru
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pilih-akses', [AksesController::class, 'showPilihAkses'])->name('pilih-akses');
+    Route::post('/pilih-akses', [AksesController::class, 'prosesPilihAkses'])->name('pilih-akses.simpan');
+});
 
 // Lupa Password & Username Public Routes
 Route::get('/lupa-password', [LupaPasswordController::class, 'showForm'])->name('lupa-password');
@@ -150,9 +145,20 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/wali-kelas/export-csv', [\App\Http\Controllers\Admin\WaliKelasAdminController::class, 'exportCsv'])->name('admin.wali-kelas.export-csv');
     Route::get('/wali-kelas/export', [\App\Http\Controllers\Admin\WaliKelasAdminController::class, 'exportCsv'])->name('admin.wali-kelas.export');
 
+    // Manajemen Waka & Pejabat Sekolah (Admin)
+    Route::get('/waka', [\App\Http\Controllers\Admin\WakaAdminController::class, 'index'])->name('admin.waka.index');
+    Route::put('/waka/{roleKey}', [\App\Http\Controllers\Admin\WakaAdminController::class, 'update'])->name('admin.waka.update');
+    Route::post('/waka/sync-sk', [\App\Http\Controllers\Admin\WakaAdminController::class, 'syncFromSk'])->name('admin.waka.sync-sk');
+    Route::get('/waka/export-csv', [\App\Http\Controllers\Admin\WakaAdminController::class, 'exportCsv'])->name('admin.waka.export-csv');
+
     // Export CSV Master Data
     Route::get('/guru/export-csv', [GuruController::class, 'exportCsv'])->name('guru.export-csv');
     Route::get('/siswa/export-csv', [SiswaController::class, 'exportCsv'])->name('siswa.export-csv');
+
+    // Pengaturan Jam Sekolah (Admin)
+    Route::get('/jam-sekolah', [PengaturanController::class, 'jamSekolahIndex'])->name('admin.jam-sekolah.index');
+    Route::post('/jam-sekolah', [PengaturanController::class, 'updateJamSekolah'])->name('admin.jam-sekolah.update');
+    Route::post('/jam-sekolah/reset', [PengaturanController::class, 'resetJamSekolah'])->name('admin.jam-sekolah.reset');
 
     // Pengaturan Admin
     Route::post('/pengaturan', [PengaturanController::class, 'updateAdminSettings'])->name('admin.pengaturan.update');
@@ -236,7 +242,7 @@ Route::middleware(['auth', 'role:admin,ortu,siswa'])->prefix('ortu-area')->group
 // WALI KELAS ROLE ROUTES
 // ======================================================
 
-Route::middleware(['auth', 'role:admin,guru,wali_kelas'])->prefix('walikelas-area')->group(function () {
+Route::middleware(['auth', 'role:admin,wali_kelas'])->prefix('walikelas-area')->group(function () {
     Route::get('/dashboard', [WaliKelasController::class, 'index'])->name('walikelas.dashboard');
     Route::get('/data-kelas', [WaliKelasController::class, 'dataKelas'])->name('walikelas.data-kelas');
     Route::get('/rekap-presensi', [WaliKelasController::class, 'rekapPresensi'])->name('walikelas.rekap-presensi');

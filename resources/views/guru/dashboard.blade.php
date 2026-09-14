@@ -9,11 +9,9 @@
         <h1 class="page-title">Selamat Datang, {{ $guru->nama ?? Auth::user()->nama }}</h1>
         <p class="page-subtitle">Sistem Monitoring Mengajar KBM & Presensi Harian</p>
     </div>
-    <div class="alert alert-info py-8 px-16 m-0 d-flex align-center gap-8" style="border-radius: 20px;">
-        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-        <span id="dashboard-laptop-clock" class="fw-bold" style="font-size: 13px;">Memuat jam laptop...</span>
-    </div>
 </div>
+
+@include('partials.kbm-clock-banner')
 
 @if(isset($error))
     <div class="alert alert-danger">
