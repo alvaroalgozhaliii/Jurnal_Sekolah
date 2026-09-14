@@ -23,7 +23,8 @@ class PengaturanController extends Controller
     {
         $jamMasuk = KbmService::getJamMasuk();
         $jamPulang = KbmService::getJamPulang('Senin');
-        $jamPulangJumat = KbmService::getJamPulang('Jumat');
+        $jamPulangJumatX = KbmService::getJamPulangJumatX();
+        $jamPulangJumatXi = KbmService::getJamPulangJumatXi();
         $durasiPelajaran = KbmService::getDurasiPelajaran('Senin');
         $durasiPelajaranJumat = KbmService::getDurasiPelajaran('Jumat');
         $toleransiTerlambat = KbmService::getToleransiTerlambat();
@@ -32,7 +33,12 @@ class PengaturanController extends Controller
 
         $seninKamisSlots = KbmService::getSlots('Senin');
         $seninKamisIstirahat = KbmService::getIstirahat('Senin');
-        $jumatSlots = KbmService::getSlots('Jumat');
+        
+        $jumatSlotsX = KbmService::getSlots('Jumat'); // Jam 1 s/d 13
+        $jumatSlotsXi = array_filter($jumatSlotsX, function($k) {
+            return (int)$k <= 12;
+        }, ARRAY_FILTER_USE_KEY); // Jam 1 s/d 12
+
         $jumatIstirahat = KbmService::getIstirahat('Jumat');
 
         $isCustomSeninKamis = Pengaturan::getVal('kbm_slots_senin_kamis') !== null;
@@ -41,7 +47,8 @@ class PengaturanController extends Controller
         return view('admin.jam-sekolah.index', compact(
             'jamMasuk',
             'jamPulang',
-            'jamPulangJumat',
+            'jamPulangJumatX',
+            'jamPulangJumatXi',
             'durasiPelajaran',
             'durasiPelajaranJumat',
             'toleransiTerlambat',
@@ -49,7 +56,8 @@ class PengaturanController extends Controller
             'toleransiKelasKosong',
             'seninKamisSlots',
             'seninKamisIstirahat',
-            'jumatSlots',
+            'jumatSlotsX',
+            'jumatSlotsXi',
             'jumatIstirahat',
             'isCustomSeninKamis',
             'isCustomJumat'
@@ -64,7 +72,8 @@ class PengaturanController extends Controller
         $request->validate([
             'jam_masuk' => 'required|string',
             'jam_pulang' => 'required|string',
-            'jam_pulang_jumat' => 'required|string',
+            'jam_pulang_jumat_x' => 'required|string',
+            'jam_pulang_jumat_xi' => 'required|string',
             'durasi_pelajaran_menit' => 'required|numeric|min:1',
             'durasi_pelajaran_jumat_menit' => 'required|numeric|min:1',
             'toleransi_keterlambatan_menit' => 'required|numeric|min:0',
@@ -74,7 +83,9 @@ class PengaturanController extends Controller
 
         Pengaturan::setVal('jam_masuk', $request->jam_masuk, 'admin');
         Pengaturan::setVal('jam_pulang', $request->jam_pulang, 'admin');
-        Pengaturan::setVal('jam_pulang_jumat', $request->jam_pulang_jumat, 'admin');
+        Pengaturan::setVal('jam_pulang_jumat_x', $request->jam_pulang_jumat_x, 'admin');
+        Pengaturan::setVal('jam_pulang_jumat_xi', $request->jam_pulang_jumat_xi, 'admin');
+        Pengaturan::setVal('jam_pulang_jumat', $request->jam_pulang_jumat_x, 'admin'); // Fallback sync
         Pengaturan::setVal('durasi_pelajaran_menit', $request->durasi_pelajaran_menit, 'admin');
         Pengaturan::setVal('durasi_pelajaran_jumat_menit', $request->durasi_pelajaran_jumat_menit, 'admin');
         Pengaturan::setVal('toleransi_keterlambatan_menit', $request->toleransi_keterlambatan_menit, 'admin');
@@ -117,6 +128,8 @@ class PengaturanController extends Controller
     {
         Pengaturan::setVal('jam_masuk', '07:00', 'admin');
         Pengaturan::setVal('jam_pulang', '15:00', 'admin');
+        Pengaturan::setVal('jam_pulang_jumat_x', '15:30', 'admin');
+        Pengaturan::setVal('jam_pulang_jumat_xi', '15:00', 'admin');
         Pengaturan::setVal('jam_pulang_jumat', '15:30', 'admin');
         Pengaturan::setVal('durasi_pelajaran_menit', 40, 'admin');
         Pengaturan::setVal('durasi_pelajaran_jumat_menit', 30, 'admin');
