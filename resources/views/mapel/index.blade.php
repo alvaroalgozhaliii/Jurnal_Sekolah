@@ -58,6 +58,11 @@
 .stat-card.xi::before    { background: linear-gradient(90deg, #f59e0b, #d97706); }
 .stat-card.xii::before   { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
 
+.stat-card.all  { border-left: 4px solid #2563eb; }
+.stat-card.x    { border-left: 4px solid #10b981; }
+.stat-card.xi   { border-left: 4px solid #f59e0b; }
+.stat-card.xii  { border-left: 4px solid #8b5cf6; }
+
 .stat-icon {
     width: 44px; height: 44px;
     border-radius: var(--radius-md);

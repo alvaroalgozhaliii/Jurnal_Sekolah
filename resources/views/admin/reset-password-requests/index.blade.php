@@ -5,9 +5,25 @@
 
 @section('content')
 <!-- TOP STAT METRIC CARDS -->
+<style>
+.stat-filter-card {
+    margin: 0;
+    text-decoration: none;
+    border-radius: 16px;
+    padding: 18px;
+    display: block;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+}
+.stat-filter-card:hover {
+    transform: translateY(-3px);
+}
+</style>
+
+<!-- TOP STAT METRIC CARDS -->
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
     <!-- Stat 1: Pending -->
-    <div class="card" style="margin: 0; background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.02)); border: 1.5px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; position: relative;">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'pending']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.02)); border: 1.5px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b !important; {{ $status === 'pending' ? 'box-shadow: 0 0 0 2px #f59e0b, 0 8px 20px rgba(245, 158, 11, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #d97706; letter-spacing: 0.5px;">MENUNGGU APPROVAL</span>
@@ -17,10 +33,10 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             </div>
         </div>
-    </div>
+    </a>
 
     <!-- Stat 2: Approved -->
-    <div class="card" style="margin: 0; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.02)); border: 1.5px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 18px;">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'approved']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.02)); border: 1.5px solid rgba(16, 185, 129, 0.3); border-left: 5px solid #10b981 !important; {{ $status === 'approved' ? 'box-shadow: 0 0 0 2px #10b981, 0 8px 20px rgba(16, 185, 129, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #059669; letter-spacing: 0.5px;">DISETUJUI (APPROVED)</span>
@@ -30,10 +46,10 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             </div>
         </div>
-    </div>
+    </a>
 
     <!-- Stat 3: Completed -->
-    <div class="card" style="margin: 0; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.02)); border: 1.5px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px;">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'completed']) }}" class="card stat-filter-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.02)); border: 1.5px solid rgba(59, 130, 246, 0.3); border-left: 5px solid #3b82f6 !important; {{ $status === 'completed' ? 'box-shadow: 0 0 0 2px #3b82f6, 0 8px 20px rgba(59, 130, 246, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #2563eb; letter-spacing: 0.5px;">SELESAI DIRESET</span>
@@ -43,20 +59,20 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             </div>
         </div>
-    </div>
+    </a>
 
     <!-- Stat 4: Total -->
-    <div class="card" style="margin: 0; background: var(--bg-card, #fff); border: 1.5px solid var(--border, #cbd5e1); border-radius: 16px; padding: 18px;">
+    <a href="{{ route('admin.reset-password.index', ['status' => 'all']) }}" class="card stat-filter-card" style="background: var(--bg-card, #fff); border: 1.5px solid var(--border, #cbd5e1); border-left: 5px solid var(--navy-primary, #1e3a8a) !important; {{ $status === 'all' ? 'box-shadow: 0 0 0 2px var(--navy-primary, #1e3a8a), 0 8px 20px rgba(30, 58, 138, 0.2);' : '' }}">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <div>
                 <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary, #64748b); letter-spacing: 0.5px;">TOTAL PENGAJUAN</span>
                 <h2 style="margin: 6px 0 0 0; font-size: 26px; font-weight: 800; color: var(--text-primary, #1e293b);">{{ $counts['all'] }}</h2>
             </div>
-            <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--border, #94a3b8); color: #fff; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--navy-primary, #1e3a8a); color: #fff; display: flex; align-items: center; justify-content: center;">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             </div>
         </div>
-    </div>
+    </a>
 </div>
 
 <div class="card">
