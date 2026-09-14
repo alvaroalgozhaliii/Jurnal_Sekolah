@@ -359,19 +359,11 @@
 
 <div class="jam-wrapper">
 
-<<<<<<< HEAD
 {{-- Banner Info Keterhubungan Antar Role --}}
 <div class="jam-card-hero">
     <div>
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700; margin-bottom: 4px;">
             INTEGRASI SISTEM REAL-TIME
-=======
-    {{-- Page Header --}}
-    <div class="page-header">
-        <div>
-            <h1 class="page-title">Pengaturan Jam Sekolah</h1>
-            <p class="page-subtitle">Konfigurasi Jam Masuk, Pulang, dan Alokasi Jam KBM Terhubung ke Seluruh Role (Guru, Piket, Wali Kelas, Siswa, Ortu)</p>
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
             <form action="{{ route('admin.jam-sekolah.reset') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mereset seluruh konfigurasi jam sekolah ke jadwal standar resmi SMKN 1 Boyolangu?');">
@@ -562,7 +554,6 @@
         <div class="friday-notice-callout">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             <div>
-<<<<<<< HEAD
                 <h3 class="card-title">Tabel & Editor Slot Jam KBM Real-Time</h3>
                 <p class="card-subtitle">Pratinjau detail alokasi waktu per jam pelajaran (Senin–Kamis & Jumat)</p>
             </div>
@@ -582,36 +573,6 @@
                 <button type="button" class="tab-pill-btn" onclick="switchJamTab('jumat', this)">
                     Jumat (Jam 1 s.d 13)
                 </button>
-=======
-                <div class="friday-notice-title">💡 Informasi Perbedaan Hari Jumat: Kelas 10 vs Kelas 11 & 12</div>
-                <p class="friday-notice-desc">
-                    Pada hari Jumat, <strong>Kelas X (10)</strong> memiliki total <strong>13 Jam Pelajaran (07:00 - 15:30 WIB)</strong> karena mencakup jam ke-13 khusus penguatan profil pelajar/pembiasaan. Sedangkan <strong>Kelas XI (11) & XII (12)</strong> selesai pada <strong>Jam ke-12 (07:00 - 15:00 WIB)</strong>. Jadwal dan Live Clock Banner otomatis menyesuaikan tingkat kelas masing-masing.
-                </p>
-            </div>
-        </div>
-
-        {{-- BLOK 4: INTERACTIVE TABS FOR KBM SLOTS --}}
-        <div class="jam-tabs-container">
-            <div class="jam-tabs-header">
-                <div class="jam-tab-pills">
-                    <button type="button" class="jam-tab-pill active" onclick="switchJamDetailTab('senin_kamis', this)">
-                        📅 Senin — Kamis (Semua Kelas: Jam 1–10)
-                    </button>
-                    <button type="button" class="jam-tab-pill" onclick="switchJamDetailTab('jumat_x', this)">
-                        🕌 Jumat — Kelas X (Jam 1–13 • Pulang 15:30)
-                    </button>
-                    <button type="button" class="jam-tab-pill" onclick="switchJamDetailTab('jumat_xi', this)">
-                        🕌 Jumat — Kelas XI & XII (Jam 1–12 • Pulang 15:00)
-                    </button>
-                </div>
-                <div>
-                    @if($isCustomSeninKamis || $isCustomJumat)
-                        <span class="badge badge-info">⚙️ Menggunakan Slot Kustom</span>
-                    @else
-                        <span class="badge badge-success">✓ Standar KBM Reguler</span>
-                    @endif
-                </div>
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
             </div>
 
             <div class="jam-tab-body">
@@ -634,7 +595,6 @@
                                     <th style="width: 150px;">Waktu Selesai</th>
                                     <th>Keterangan / Aktivitas Khusus</th>
                                 </tr>
-<<<<<<< HEAD
                                 @if(isset($seninKamisIstirahat[$jam]))
                                     <tr class="row-istirahat">
                                          <td>Istirahat</td>
@@ -646,37 +606,6 @@
                             @endforeach
                         </tbody>
                     </table>
-=======
-                            </thead>
-                            <tbody>
-                                @foreach($seninKamisSlots as $jam => $slot)
-                                    <tr>
-                                        <td>
-                                            <span class="badge-jp">Jam Ke-{{ $jam }}</span>
-                                        </td>
-                                        <td>
-                                            <input type="time" name="slots_senin_kamis[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                        </td>
-                                        <td>
-                                            <input type="time" name="slots_senin_kamis[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="slots_senin_kamis[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="Opsional (misal: Upacara/Apel)" class="form-control form-control-sm">
-                                        </td>
-                                    </tr>
-                                    @if(isset($seninKamisIstirahat[$jam]))
-                                        <tr class="row-break">
-                                            <td>☕ Istirahat</td>
-                                            <td colspan="3">
-                                                <strong>{{ $seninKamisIstirahat[$jam]['label'] }}</strong> ({{ $seninKamisIstirahat[$jam]['waktu'] }})
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                 </div>
 
                 {{-- TAB 2: JUMAT - KELAS X (10) --}}
@@ -697,7 +626,6 @@
                                     <th style="width: 150px;">Waktu Selesai</th>
                                     <th>Keterangan / Aktivitas Khusus</th>
                                 </tr>
-<<<<<<< HEAD
                                 @if(isset($jumatIstirahat[$jam]))
                                     <tr class="row-istirahat">
                                         <td>Istirahat</td>
@@ -709,46 +637,6 @@
                             @endforeach
                         </tbody>
                     </table>
-=======
-                            </thead>
-                            <tbody>
-                                @foreach($jumatSlotsX as $jam => $slot)
-                                    <tr class="{{ $jam == 13 ? 'row-highlight-x' : '' }}">
-                                        <td>
-                                            <span class="badge-jp" style="{{ $jam == 13 ? 'background:#ede9fe; color:#6d28d9;' : '' }}">
-                                                Jam Ke-{{ $jam }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <input type="time" name="slots_jumat[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                        </td>
-                                        <td>
-                                            <input type="time" name="slots_jumat[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                        </td>
-                                        <td>
-                                            @if($jam == 13)
-                                                <div style="display: flex; align-items: center; gap: 8px;">
-                                                    <input type="text" name="slots_jumat[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? 'Khusus Kelas X (Penguatan/P5)' }}" class="form-control form-control-sm">
-                                                    <span class="badge badge-warning" style="white-space:nowrap; font-size:11px;">⭐ Tambahan Kelas X</span>
-                                                </div>
-                                            @else
-                                                <input type="text" name="slots_jumat[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="Opsional (misal: Pembiasaan Hari Jumat)" class="form-control form-control-sm">
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    @if(isset($jumatIstirahat[$jam]))
-                                        <tr class="row-break">
-                                            <td>🕌 Istirahat</td>
-                                            <td colspan="3">
-                                                <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                 </div>
 
                 {{-- TAB 3: JUMAT - KELAS XI & XII (11 & 12) --}}
@@ -803,7 +691,6 @@
             </div>
         </div>
 
-<<<<<<< HEAD
     {{-- TOMBOL SUBMIT --}}
     <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 40px;">
         <button type="submit" class="btn btn-primary btn-lg" style="padding: 12px 28px; font-weight: 700; font-size: 15px; box-shadow: var(--shadow-md);">
@@ -813,17 +700,6 @@
             Batal
         </a>
     </div>
-=======
-        {{-- Action Submit Bar --}}
-        <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 40px;">
-            <button type="submit" class="btn btn-primary btn-lg" style="padding: 12px 30px; font-weight: 700; font-size: 15px; box-shadow: var(--shadow-md);">
-                💾 SIMPAN PENGATURAN JAM SEKOLAH
-            </button>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary btn-lg">
-                Batal
-            </a>
-        </div>
->>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
 
     </form>
 
