@@ -135,7 +135,7 @@
         <div class="mini-cal-wrapper">
             <div class="mini-cal-header">
                 <div>
-                    <div style="font-size:14px; font-weight:700;">📅 Filter Tanggal</div>
+                    <div style="font-size:14px; font-weight:700;">Filter Tanggal</div>
                     <div style="font-size:11px; opacity:.8;">Status Absensi Siswa</div>
                 </div>
                 <div style="display:flex; gap:8px; align-items:center;">
@@ -167,7 +167,7 @@
     <div class="cal-chart-card">
         <div class="chart-header">
             <div>
-                <div class="chart-title">📊 Diagram Status Absensi Siswa</div>
+                <div class="chart-title">Diagram Status Absensi Siswa</div>
                 <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
                     {{ \Carbon\Carbon::parse($selDate)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} · Kelas {{ $kelas->nama_kelas }}
                 </div>
@@ -184,23 +184,23 @@
 
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <div style="display:flex; justify-content:space-between; padding:6px 12px; border-radius:8px; background:var(--bg-page); font-size:12.5px;">
-                    <span style="font-weight:600; color:#10b981;">🟢 Hadir</span>
+                    <span style="font-weight:600; color:#10b981;">Hadir</span>
                     <span style="font-weight:700;">{{ $cHadir }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:6px 12px; border-radius:8px; background:var(--bg-page); font-size:12.5px;">
-                    <span style="font-weight:600; color:#f59e0b;">🟠 Terlambat</span>
+                    <span style="font-weight:600; color:#f59e0b;">Terlambat</span>
                     <span style="font-weight:700;">{{ $cTerlambat }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:6px 12px; border-radius:8px; background:var(--bg-page); font-size:12.5px;">
-                    <span style="font-weight:600; color:#3b82f6;">🔵 Izin / Sakit</span>
+                    <span style="font-weight:600; color:#3b82f6;">Izin / Sakit</span>
                     <span style="font-weight:700;">{{ $cIzin + $cSakit }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:6px 12px; border-radius:8px; background:var(--bg-page); font-size:12.5px;">
-                    <span style="font-weight:600; color:#ef4444;">🔴 Alpa</span>
+                    <span style="font-weight:600; color:#ef4444;">Alpa</span>
                     <span style="font-weight:700;">{{ $cAlpa }}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:6px 12px; border-radius:8px; background:var(--bg-page); font-size:12.5px;">
-                    <span style="font-weight:600; color:var(--text-secondary);">⚪ Belum Absen</span>
+                    <span style="font-weight:600; color:var(--text-secondary);">Belum Absen</span>
                     <span style="font-weight:700;">{{ $cBelum }}</span>
                 </div>
             </div>

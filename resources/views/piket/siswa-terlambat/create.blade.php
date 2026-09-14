@@ -146,7 +146,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
                 <div style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700;">
-                    🕒 Waktu Real-Time Laptop / Perangkat
+                    Waktu Real-Time Laptop / Perangkat
                 </div>
                 <div style="font-size: 32px; font-weight: 800; letter-spacing: 0.5px; font-family: monospace; margin-top: 2px;" id="liveClockDisplay">
                     {{ $now->format('H:i:s') }} WIB
@@ -158,21 +158,21 @@
 
             <div style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); padding: 14px 20px; border-radius: 12px; min-width: 300px;">
                 <div style="font-size: 11px; text-transform: uppercase; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px;">
-                    📌 Jam KBM Otomatis Terkoneksi
+                    Jam KBM Otomatis Terkoneksi
                 </div>
                 <div style="font-size: 17px; font-weight: 800; margin-top: 4px; color: #ffffff;" id="liveStatusDisplayBanner">
                     @if($slotStatus === 'kbm')
                         Jam Ke-{{ $currentSlot['jam_ke'] }} ({{ $currentSlot['waktu_label'] }})
                     @elseif($slotStatus === 'istirahat')
-                        ☕ {{ $currentSlot['keterangan'] }}
+                        {{ $currentSlot['keterangan'] }}
                     @elseif($slotStatus === 'jam_pulang')
-                        🏠 Jam Pulang Sekolah
+                        Jam Pulang Sekolah
                     @else
                         Jam Ke-1 (07:00 WIB)
                     @endif
                 </div>
                 <div style="font-size: 12px; margin-top: 4px; color: #86efac; font-weight: 600;">
-                    ⚡ Tanpa Perlu Memilih Jam Manual
+                    Tanpa Perlu Memilih Jam Manual
                 </div>
             </div>
         </div>
@@ -193,7 +193,7 @@
     <div class="card-header">
         <h3 class="card-title">Form Pencatatan Keterlambatan Siswa</h3>
         <span style="font-size:13px; color:var(--text-secondary);">
-            📅 {{ \Carbon\Carbon::parse($todayDate)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
+            {{ \Carbon\Carbon::parse($todayDate)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
         </span>
     </div>
     <div class="card-body">
@@ -246,7 +246,7 @@
                             @if($slotStatus === 'kbm')
                                 Jam Ke-{{ $currentSlot['jam_ke'] }} ({{ $currentSlot['waktu_label'] }})
                             @elseif($slotStatus === 'istirahat')
-                                ☕ {{ $currentSlot['keterangan'] }}
+                                {{ $currentSlot['keterangan'] }}
                             @else
                                 Jam Ke-1 (07:00 WIB)
                             @endif
@@ -271,7 +271,7 @@
             </div>
 
             <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:14px 18px; margin-bottom:20px;">
-                <div style="font-weight:600; margin-bottom:6px; color:var(--text-primary);">ℹ️ Informasi Otomatis Sistem</div>
+                <div style="font-weight:600; margin-bottom:6px; color:var(--text-primary);">Informasi Otomatis Sistem</div>
                 <ul style="margin:0; padding-left:18px; color:var(--text-secondary); font-size:13px; line-height:1.9;">
                     <li>Jam kedatangan & jam KBM otomatis terdeteksi dari jam digital perangkat</li>
                     <li>Status absensi siswa di jurnal KBM akan otomatis diubah menjadi <strong>Terlambat</strong></li>
@@ -281,7 +281,7 @@
             </div>
 
             <div style="display:flex; gap:12px;">
-                <button type="submit" class="btn btn-primary" id="btnSubmit">💾 Simpan & Buat Surat Izin</button>
+                <button type="submit" class="btn btn-primary" id="btnSubmit">Simpan & Buat Surat Izin</button>
                 <a href="{{ route('piket.siswa-terlambat.index') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>
@@ -358,7 +358,7 @@ function getSlotInfo(now) {
             if (slot.type === 'istirahat') {
                 return {
                     status: 'istirahat',
-                    label: `☕ Waktu ${slot.name} (${slot.start} - ${slot.end} WIB)`,
+                    label: `Waktu ${slot.name} (${slot.start} - ${slot.end} WIB)`,
                     jam_ke: slot.jam_ke,
                     waktu_mulai: slot.start,
                     gradient: 'linear-gradient(135deg, #d97706 0%, #78350f 100%)'
@@ -387,7 +387,7 @@ function getSlotInfo(now) {
 
     return {
         status: 'jam_pulang',
-        label: '🏠 Jam Pulang Sekolah',
+        label: 'Jam Pulang Sekolah',
         jam_ke: (day === 5 ? 12 : 10),
         waktu_mulai: timeStr,
         gradient: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)'
@@ -532,7 +532,7 @@ document.getElementById('formTerlambat').addEventListener('submit', function(e) 
         return;
     }
     document.getElementById('btnSubmit').disabled = true;
-    document.getElementById('btnSubmit').textContent = '⏳ Menyimpan...';
+    document.getElementById('btnSubmit').textContent = 'Menyimpan...';
 });
 </script>
 @endpush

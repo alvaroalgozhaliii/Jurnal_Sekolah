@@ -20,7 +20,7 @@
     @if(session('slip_id'))
         <a href="{{ route('piket.siswa-terlambat.slip', session('slip_id')) }}" target="_blank"
            class="btn btn-secondary btn-sm" style="margin-top:8px;">
-            🖨️ Cetak Surat Izin Masuk Kelas
+            Cetak Surat Izin Masuk Kelas
         </a>
     @endif
 </div>
@@ -133,7 +133,7 @@
                         <td class="text-muted" style="font-size:12px;">{{ $t->petugasPiket->nama ?? '-' }}</td>
                         <td class="action-col">
                             <a href="{{ route('piket.siswa-terlambat.slip', $t->id_terlambat) }}" target="_blank"
-                               class="btn btn-secondary btn-sm" title="Cetak Slip">🖨️</a>
+                               class="btn btn-secondary btn-sm" title="Cetak Slip">Cetak</a>
                             <form action="{{ route('piket.siswa-terlambat.destroy', $t->id_terlambat) }}" method="POST"
                                   style="display:inline;"
                                   onsubmit="return confirm('Hapus catatan keterlambatan ini?');">

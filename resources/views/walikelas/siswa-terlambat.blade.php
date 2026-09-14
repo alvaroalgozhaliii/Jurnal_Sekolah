@@ -134,7 +134,7 @@
     @if($kelas)
     <div class="page-actions">
         <a href="{{ route('walikelas.siswa-terlambat.export-csv', request()->query()) }}" class="btn btn-secondary">
-            ⬇️ Export CSV
+            Export CSV
         </a>
     </div>
     @endif
@@ -188,7 +188,7 @@
 
             <div class="cal-filter-strip">
                 <div class="form-group" style="margin:0;">
-                    <label class="form-label" style="margin-bottom:4px; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">🔍 Cari / Pilih Siswa</label>
+                    <label class="form-label" style="margin-bottom:4px; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Cari / Pilih Siswa</label>
                     <select class="form-control select-search" data-searchable="true" id="uiSiswa" onchange="document.getElementById('hiddenSiswa').value=this.value; document.getElementById('calForm').submit();">
                         <option value="">-- Semua Siswa --</option>
                         @foreach($siswaList as $s)
@@ -206,7 +206,7 @@
     <div class="cal-chart-card">
         <div class="chart-header">
             <div>
-                <div class="chart-title">📊 Diagram Keterlambatan Siswa</div>
+                <div class="chart-title">Diagram Keterlambatan Siswa</div>
                 <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
                     Tren & Top Siswa Sering Terlambat (Bulan Ini)
                 </div>
@@ -275,7 +275,7 @@
                         <td class="text-muted">{{ Str::limit($t->tindakan_piket ?? '-', 30) }}</td>
                         <td class="action-col">
                             <a href="{{ route('piket.siswa-terlambat.slip', $t->id_terlambat) }}" target="_blank"
-                               class="btn btn-secondary btn-sm" title="Cetak Slip">🖨️</a>
+                               class="btn btn-secondary btn-sm" title="Cetak Slip">Cetak</a>
                         </td>
                     </tr>
                     @endforeach
@@ -328,7 +328,7 @@
                             </span>
                         </td>
                         <td class="text-muted">
-                            @if($r['jumlah'] >= 5) ⚠️ Perlu perhatian khusus
+                            @if($r['jumlah'] >= 5) Perlu perhatian khusus
                             @elseif($r['jumlah'] >= 3) Perlu ditindaklanjuti
                             @else - @endif
                         </td>

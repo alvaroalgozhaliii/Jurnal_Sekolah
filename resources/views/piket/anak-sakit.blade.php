@@ -659,7 +659,7 @@
                 </div>
             </div>
             <div>
-                <input type="text" id="filterRiwayatInput" placeholder="🔍 Cari siswa / kelas..." onkeyup="filterRiwayatTable()" class="form-control" style="font-size: 12px; padding: 6px 12px; width: 180px; height: 32px; border-radius: 8px;">
+                <input type="text" id="filterRiwayatInput" placeholder="Cari siswa / kelas..." onkeyup="filterRiwayatTable()" class="form-control" style="font-size: 12px; padding: 6px 12px; width: 180px; height: 32px; border-radius: 8px;">
             </div>
         </div>
 

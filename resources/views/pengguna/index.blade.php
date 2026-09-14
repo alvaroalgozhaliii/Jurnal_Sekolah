@@ -57,7 +57,7 @@
 {{-- Modal Reset Password --}}
 <div class="modal-overlay" id="modalResetPw">
     <div class="modal-box">
-        <div class="modal-title">🔑 Reset Password</div>
+        <div class="modal-title">Reset Password</div>
         <div class="modal-sub" id="modalSubText">Mengubah password untuk akun <strong id="modalUsername"></strong></div>
         <form id="formResetPw" method="POST">
             @csrf
@@ -68,7 +68,7 @@
                     <input type="password" id="inputNewPw" name="new_password"
                            class="form-control" placeholder="Min. 6 karakter" required minlength="6">
                     <button type="button" class="pw-eye" onclick="togglePw('inputNewPw', this)">
-                        👁
+                        Show
                     </button>
                 </div>
             </div>
@@ -78,13 +78,13 @@
                     <input type="password" id="inputConfPw" name="new_password_confirmation"
                            class="form-control" placeholder="Ulangi password baru" required minlength="6">
                     <button type="button" class="pw-eye" onclick="togglePw('inputConfPw', this)">
-                        👁
+                        Show
                     </button>
                 </div>
-                <div id="pwMatchMsg" style="font-size:12px; margin-top:4px; color:#dc2626; display:none;">❌ Password tidak cocok!</div>
+                <div id="pwMatchMsg" style="font-size:12px; margin-top:4px; color:#dc2626; display:none;">Password tidak cocok!</div>
             </div>
             <div style="display:flex; gap:10px;">
-                <button type="submit" class="btn btn-primary" style="flex:1;">💾 Simpan Password</button>
+                <button type="submit" class="btn btn-primary" style="flex:1;">Simpan Password</button>
                 <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
             </div>
         </form>
@@ -103,12 +103,12 @@
 
 @if(session('success'))
 <div class="alert alert-success mb-16" style="padding:12px 16px; border-radius:8px;">
-    ✅ {{ session('success') }}
+    {{ session('success') }}
 </div>
 @endif
 @if(session('error'))
 <div class="alert alert-danger mb-16" style="padding:12px 16px; border-radius:8px;">
-    ❌ {{ session('error') }}
+    {{ session('error') }}
 </div>
 @endif
 
@@ -199,18 +199,18 @@
                             {{ $item->no_hp ?: '—' }}
                         </td>
                         <td class="action-col">
-                            <a href="{{ route('pengguna.edit', $item->id_user) }}" class="btn btn-secondary btn-sm" title="Edit">✏️ Edit</a>
+                            <a href="{{ route('pengguna.edit', $item->id_user) }}" class="btn btn-secondary btn-sm" title="Edit">Edit</a>
                             <button type="button" class="btn btn-warning btn-sm"
                                 style="background:#f59e0b; color:#fff; border-color:#f59e0b;"
                                 onclick="openResetModal({{ $item->id_user }}, '{{ addslashes($item->username) }}', '{{ addslashes($item->nama) }}')"
                                 title="Reset Password">
-                                🔑 Password
+                                Password
                             </button>
                             <form action="{{ route('pengguna.destroy', $item->id_user) }}" method="POST" style="display:inline;">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm"
                                     onclick="return confirm('Hapus akun {{ addslashes($item->nama) }}?')"
-                                    title="Hapus">🗑</button>
+                                    title="Hapus">Hapus</button>
                             </form>
                         </td>
                     </tr>
@@ -251,10 +251,10 @@ function togglePw(id, btn) {
     const input = document.getElementById(id);
     if (input.type === 'password') {
         input.type = 'text';
-        btn.textContent = '🙈';
+        btn.textContent = 'Hide';
     } else {
         input.type = 'password';
-        btn.textContent = '👁';
+        btn.textContent = 'Show';
     }
 }
 
