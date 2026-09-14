@@ -15,7 +15,7 @@
     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
         <h3 class="card-title">Presensi Hari Ini ({{ date('d/m/Y') }})</h3>
         <span class="badge badge-navy" style="font-size: 11px;">
-            🕒 Masuk: {{ $jamMasuk }} | Pulang: {{ $jamPulang }} WIB
+            Masuk: {{ $jamMasuk }} | Pulang: {{ $jamPulang }} WIB
         </span>
     </div>
     <div class="card-body">

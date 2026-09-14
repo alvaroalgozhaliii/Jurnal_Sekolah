@@ -141,7 +141,7 @@
     $autoWaktuMulai = $currentSlot['waktu_mulai'] ?? '07:00';
 @endphp
 
-<div class="card mb-24" id="topBannerCard" style="background: {{ $bannerGradient }}; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);">
+<div class="card mb-24" id="topBannerCard" style="background: {{ $bannerGradient }}; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 16px 32px -4px rgba(30, 58, 138, 0.35)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px -5px rgba(0,0,0,0.15)';">
     <div class="card-body" style="padding: 20px 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>

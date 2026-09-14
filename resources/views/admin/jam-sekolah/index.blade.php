@@ -129,7 +129,7 @@
 <div class="jam-card-hero">
     <div>
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700; margin-bottom: 4px;">
-            ⚡ INTEGRASI SISTEM REAL-TIME
+            INTEGRASI SISTEM REAL-TIME
         </div>
         <div style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">
             Pengaturan Jam Terhubung Otomatis ke Seluruh Role
@@ -246,7 +246,7 @@
             </div>
             <div>
                 @if($isCustomSeninKamis || $isCustomJumat)
-                    <span class="badge badge-info">⚙️ Menggunakan Slot Kustom</span>
+                    <span class="badge badge-info">Menggunakan Slot Kustom</span>
                 @else
                     <span class="badge badge-success">✓ Standar KBM Reguler</span>
                 @endif
@@ -255,10 +255,10 @@
         <div class="card-body">
             <div class="tab-pills-nav">
                 <button type="button" class="tab-pill-btn active" onclick="switchJamTab('senin_kamis', this)">
-                    📅 Senin — Kamis (Jam 1 s.d 10)
+                    Senin — Kamis (Jam 1 s.d 10)
                 </button>
                 <button type="button" class="tab-pill-btn" onclick="switchJamTab('jumat', this)">
-                    🕌 Jumat (Jam 1 s.d 13)
+                    Jumat (Jam 1 s.d 13)
                 </button>
             </div>
 
@@ -290,12 +290,12 @@
                                 </tr>
                                 @if(isset($seninKamisIstirahat[$jam]))
                                     <tr class="row-istirahat">
-                                        <td>☕ Istirahat</td>
-                                        <td colspan="3">
-                                            <strong>{{ $seninKamisIstirahat[$jam]['label'] }}</strong> ({{ $seninKamisIstirahat[$jam]['waktu'] }})
-                                        </td>
-                                    </tr>
-                                @endif
+                                         <td>Istirahat</td>
+                                         <td colspan="3">
+                                             <strong>{{ $seninKamisIstirahat[$jam]['label'] }}</strong> ({{ $seninKamisIstirahat[$jam]['waktu'] }})
+                                         </td>
+                                     </tr>
+                                 @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -330,12 +330,12 @@
                                 </tr>
                                 @if(isset($jumatIstirahat[$jam]))
                                     <tr class="row-istirahat">
-                                        <td>🕌 Istirahat</td>
+                                        <td>Istirahat</td>
                                         <td colspan="3">
-                                            <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
+                                             <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
                                         </td>
                                     </tr>
-                                @endif
+                                 @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -347,7 +347,7 @@
     {{-- TOMBOL SUBMIT --}}
     <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 40px;">
         <button type="submit" class="btn btn-primary btn-lg" style="padding: 12px 28px; font-weight: 700; font-size: 15px; box-shadow: var(--shadow-md);">
-            💾 SIMPAN PENGATURAN JAM SEKOLAH
+            SIMPAN PENGATURAN JAM SEKOLAH
         </button>
         <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary btn-lg">
             Batal
