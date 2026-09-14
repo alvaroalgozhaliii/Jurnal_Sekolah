@@ -69,16 +69,44 @@ class KbmService
         }
     }
 
-    public static function getJamPulang(string $hari = 'Senin'): string
+    public static function getJamPulang(string $hari = 'Senin', ?string $tingkat = null): string
     {
         $hariNorm = ucfirst(strtolower($hari));
         try {
             if ($hariNorm === 'Jumat') {
-                return Pengaturan::getVal('jam_pulang_jumat', '15:30') ?: '15:30';
+                if ($tingkat !== null) {
+                    if (self::isKelasX($tingkat)) {
+                        return Pengaturan::getVal('jam_pulang_jumat_x', '15:30') ?: '15:30';
+                    } else {
+                        return Pengaturan::getVal('jam_pulang_jumat_xi', '15:00') ?: '15:00';
+                    }
+                }
+                return Pengaturan::getVal('jam_pulang_jumat_x', Pengaturan::getVal('jam_pulang_jumat', '15:30')) ?: '15:30';
             }
             return Pengaturan::getVal('jam_pulang', '15:00') ?: '15:00';
         } catch (\Throwable $e) {
-            return ($hariNorm === 'Jumat') ? '15:30' : '15:00';
+            if ($hariNorm === 'Jumat') {
+                return ($tingkat !== null && !self::isKelasX($tingkat)) ? '15:00' : '15:30';
+            }
+            return '15:00';
+        }
+    }
+
+    public static function getJamPulangJumatX(): string
+    {
+        try {
+            return Pengaturan::getVal('jam_pulang_jumat_x', Pengaturan::getVal('jam_pulang_jumat', '15:30')) ?: '15:30';
+        } catch (\Throwable $e) {
+            return '15:30';
+        }
+    }
+
+    public static function getJamPulangJumatXi(): string
+    {
+        try {
+            return Pengaturan::getVal('jam_pulang_jumat_xi', '15:00') ?: '15:00';
+        } catch (\Throwable $e) {
+            return '15:00';
         }
     }
 
@@ -332,13 +360,22 @@ class KbmService
             return $list;
         };
 
+        $jumatSlotsX = $jumatSlots;
+        $jumatSlotsXi = array_filter($jumatSlots, function($k) {
+            return (int)$k <= 12;
+        }, ARRAY_FILTER_USE_KEY);
+
         return [
             'jam_masuk' => self::getJamMasuk(),
             'jam_pulang_senin_kamis' => self::getJamPulang('Senin'),
             'jam_pulang_jumat' => self::getJamPulang('Jumat'),
+            'jam_pulang_jumat_x' => self::getJamPulangJumatX(),
+            'jam_pulang_jumat_xi' => self::getJamPulangJumatXi(),
             'toleransi_terlambat' => self::getToleransiTerlambat(),
             'senin_kamis_list' => $formatList($seninKamisSlots, $seninKamisIst),
-            'jumat_list' => $formatList($jumatSlots, $jumatIst),
+            'jumat_list' => $formatList($jumatSlotsX, $jumatIst),
+            'jumat_x_list' => $formatList($jumatSlotsX, $jumatIst),
+            'jumat_xi_list' => $formatList($jumatSlotsXi, $jumatIst),
         ];
     }
 
