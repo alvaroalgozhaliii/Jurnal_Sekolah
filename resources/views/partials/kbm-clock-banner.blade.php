@@ -244,14 +244,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     @php
         $kbmConfigJs = \App\Services\KbmService::getSlotsForJs();
+        $userAuth = Auth::user();
+        $userTingkat = null;
+        if ($userAuth) {
+            if ($userAuth->siswa && $userAuth->siswa->kelas) {
+                $userTingkat = $userAuth->siswa->kelas->tingkat ?? $userAuth->siswa->kelas->nama_kelas;
+            } elseif ($userAuth->guru && $userAuth->guru->kelasWali) {
+                $userTingkat = $userAuth->guru->kelasWali->tingkat ?? $userAuth->guru->kelasWali->nama_kelas;
+            }
+        }
+        $isUserKelasX = $userTingkat ? \App\Services\KbmService::isKelasX($userTingkat) : null;
     @endphp
 
     const kbmConfig = @json($kbmConfigJs);
+    const userIsKelasX = @json($isUserKelasX);
     const seninKamisSlots = kbmConfig.senin_kamis_list || [];
-    const jumatSlots = kbmConfig.jumat_list || [];
+    const jumatXSlots = kbmConfig.jumat_x_list || kbmConfig.jumat_list || [];
+    const jumatXiSlots = kbmConfig.jumat_xi_list || [];
     const jamMasukGlobal = kbmConfig.jam_masuk || '07:00';
     const jamPulangSeninKamis = kbmConfig.jam_pulang_senin_kamis || '15:00';
-    const jamPulangJumat = kbmConfig.jam_pulang_jumat || '15:30';
+    const jamPulangJumatX = kbmConfig.jam_pulang_jumat_x || '15:30';
+    const jamPulangJumatXi = kbmConfig.jam_pulang_jumat_xi || '15:00';
 
     function updateGlobalKbmClock() {
         const now = new Date();
@@ -277,16 +290,33 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!slotEl || !detailEl) return;
 
         // Weekend check
+<<<<<<< HEAD
         if (dayIdx === 0 || dayIdx === 6) {
             slotEl.innerHTML = 'Hari Libur Sekolah';
+=======
+        if (dayIdx === 0 || dayIdx === 0 || dayIdx === 6) {
+            slotEl.innerHTML = '🏖️ Hari Libur Sekolah';
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
             detailEl.textContent = 'Tidak ada kegiatan belajar mengajar (KBM)';
             detailEl.style.color = '#a7f3d0';
             return;
         }
 
         const isJumat = (dayIdx === 5);
-        const activeSlots = isJumat ? jumatSlots : seninKamisSlots;
-        const jamPulang = isJumat ? jamPulangJumat : jamPulangSeninKamis;
+        let activeSlots = seninKamisSlots;
+        let jamPulang = jamPulangSeninKamis;
+
+        if (isJumat) {
+            if (userIsKelasX === false) {
+                // Khusus Kelas 11 & 12
+                activeSlots = jumatXiSlots;
+                jamPulang = jamPulangJumatXi;
+            } else {
+                // Kelas 10 atau Tampilan Umum
+                activeSlots = jumatXSlots;
+                jamPulang = jamPulangJumatX;
+            }
+        }
 
         if (timeStr < jamMasukGlobal) {
             slotEl.innerHTML = 'Belum Masuk Jam KBM';
@@ -300,13 +330,24 @@ document.addEventListener('DOMContentLoaded', function() {
             if (timeStr >= s.mulai && timeStr <= s.selesai) {
                 found = true;
                 if (s.istirahat) {
+<<<<<<< HEAD
                     slotEl.innerHTML = `Sedang Waktu ${s.ket}`;
                     detailEl.textContent = 'Jeda Kegiatan Belajar Mengajar';
+=======
+                    slotEl.innerHTML = `☕ Sedang Waktu ${s.ket}`;
+                    detailEl.textContent = isJumat && s.istirahat === 8 ? 'Jeda Solat Jumat & Istirahat' : 'Jeda Kegiatan Belajar Mengajar';
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                     detailEl.style.color = '#fed7aa';
                 } else {
-                    slotEl.innerHTML = `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai})`;
-                    detailEl.textContent = s.ket ? `KBM Aktif: ${s.ket}` : 'Jam Kegiatan Belajar Mengajar Aktif';
-                    detailEl.style.color = '#86efac';
+                    if (isJumat && s.jam === 13) {
+                        slotEl.innerHTML = `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai}) • Khusus Kelas X`;
+                        detailEl.textContent = 'Kelas XI & XII telah pulang pukul 15:00 WIB';
+                        detailEl.style.color = '#c4b5fd';
+                    } else {
+                        slotEl.innerHTML = `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai})`;
+                        detailEl.textContent = s.ket ? `KBM: ${s.ket}` : 'Jam Kegiatan Belajar Mengajar Aktif';
+                        detailEl.style.color = '#86efac';
+                    }
                 }
                 break;
             }
@@ -314,8 +355,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!found) {
             if (timeStr >= jamPulang) {
+<<<<<<< HEAD
                 slotEl.innerHTML = 'Jam Pulang Sekolah';
                 detailEl.textContent = `KBM Hari ini telah selesai (Pukul ${jamPulang} WIB)`;
+=======
+                slotEl.innerHTML = '🏠 Jam Pulang Sekolah';
+                if (isJumat && userIsKelasX === null) {
+                    detailEl.textContent = `KBM Selesai (Kelas 11/12: ${jamPulangJumatXi} WIB • Kelas 10: ${jamPulangJumatX} WIB)`;
+                } else {
+                    detailEl.textContent = `KBM Hari ini telah selesai (Pukul ${jamPulang} WIB)`;
+                }
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                 detailEl.style.color = '#fca5a5';
             } else {
                 slotEl.innerHTML = 'Di Luar Jam Sesi KBM';
