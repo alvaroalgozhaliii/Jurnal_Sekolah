@@ -1,32 +1,236 @@
-<div class="card mb-24" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); border: none;">
-    <div class="card-body" style="padding: 18px 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-            <div style="display: flex; align-items: center; gap: 14px;">
-                <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 28px; height: 28px; color: #ffffff;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 16 14"></polyline></svg>
+<style>
+.kbm-clock-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px -8px rgba(30, 58, 138, 0.35), 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.35s ease;
+    cursor: default;
+}
+
+/* Ambient subtle background glow */
+.kbm-clock-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(96, 165, 250, 0.22) 0%, rgba(30, 58, 138, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+/* Smooth Hover Effect */
+.kbm-clock-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 38px -6px rgba(30, 58, 138, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+.kbm-clock-card:hover .kbm-clock-icon-box {
+    transform: scale(1.06);
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.kbm-clock-card:hover .kbm-status-box {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Dedicated Hover Effect pada Box Status KBM */
+.kbm-status-box:hover {
+    background: rgba(255, 255, 255, 0.22) !important;
+    border-color: rgba(255, 255, 255, 0.50) !important;
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 14px 30px -4px rgba(0, 0, 0, 0.30), 0 0 24px rgba(255, 255, 255, 0.18) !important;
+}
+
+.kbm-status-box .kbm-status-header svg {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.kbm-status-box:hover .kbm-status-header svg {
+    transform: scale(1.2);
+    color: #ffffff;
+}
+
+/* Left Icon Box */
+.kbm-clock-icon-box {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Live pulse dot */
+.clock-live-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.1px;
+    color: #93c5fd;
+}
+
+.clock-live-dot {
+    width: 7px;
+    height: 7px;
+    background-color: #34d399;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+    animation: livePulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes livePulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+/* Clock Digits */
+.clock-time-display {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 3px;
+}
+
+.clock-digits {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    color: #ffffff;
+}
+
+.clock-tz-badge {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+.clock-date-display {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Right Status Box */
+.kbm-status-box {
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    border-radius: 14px;
+    padding: 14px 20px;
+    min-width: 270px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.kbm-status-header {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bfdbfe;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kbm-status-title {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 4px;
+    line-height: 1.3;
+}
+
+.kbm-detail-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 5px;
+}
+</style>
+
+<div class="card mb-24 kbm-clock-card">
+    <div class="card-body" style="padding: 20px 26px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px;">
+            {{-- Sisi Kiri: Jam & Tanggal --}}
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div class="kbm-clock-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; color: #ffffff;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
                 </div>
                 <div>
-                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700;">
-                        🕒 Waktu Laptop / Perangkat Saat Ini
+                    <div class="clock-live-tag">
+                        <span class="clock-live-dot"></span>
+                        Waktu Laptop / Perangkat Saat Ini
                     </div>
-                    <div style="font-size: 26px; font-weight: 800; letter-spacing: 0.5px; font-family: monospace; line-height: 1.2; margin-top: 2px;" id="globalLiveClock">
-                        --:--:-- WIB
+                    <div class="clock-time-display">
+                        <span class="clock-digits" id="globalLiveClock">--:--:--</span>
+                        <span class="clock-tz-badge">WIB</span>
                     </div>
-                    <div style="font-size: 13px; color: #e2e8f0; margin-top: 2px;" id="globalLiveDate">
-                        Memuat tanggal...
+                    <div class="clock-date-display">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span id="globalLiveDate">Memuat tanggal...</span>
                     </div>
                 </div>
             </div>
 
-            <div style="background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25); padding: 12px 20px; border-radius: 12px; min-width: 260px;">
-                <div style="font-size: 11px; text-transform: uppercase; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px;">
-                    📌 Status Jam KBM Saat Ini
+            {{-- Sisi Kanan: Status KBM --}}
+            <div class="kbm-status-box">
+                <div class="kbm-status-header">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    Status Jam KBM Saat Ini
                 </div>
-                <div style="font-size: 16px; font-weight: 700; margin-top: 4px; color: #ffffff;" id="globalKbmSlotText">
+                <div class="kbm-status-title" id="globalKbmSlotText">
                     Memuat status KBM...
                 </div>
-                <div style="font-size: 12px; margin-top: 4px; font-weight: 600; color: #86efac;" id="globalKbmDetailText">
-                    Otomatis Terdeteksi System
+                <div class="kbm-detail-badge">
+                    <span id="globalKbmDetailText" style="color: #86efac;">Otomatis Terdeteksi System</span>
                 </div>
             </div>
         </div>
@@ -67,14 +271,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const slotEl = document.getElementById('globalKbmSlotText');
         const detailEl = document.getElementById('globalKbmDetailText');
 
-        if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss} WIB`;
+        if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss}`;
         if (dateEl) dateEl.textContent = `${dayName}, ${dateNum} ${monthName} ${year}`;
 
         if (!slotEl || !detailEl) return;
 
         // Weekend check
         if (dayIdx === 0 || dayIdx === 6) {
-            slotEl.innerHTML = '🏖️ Hari Libur Sekolah';
+            slotEl.innerHTML = 'Hari Libur Sekolah';
             detailEl.textContent = 'Tidak ada kegiatan belajar mengajar (KBM)';
             detailEl.style.color = '#a7f3d0';
             return;
@@ -85,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const jamPulang = isJumat ? jamPulangJumat : jamPulangSeninKamis;
 
         if (timeStr < jamMasukGlobal) {
-            slotEl.innerHTML = '🌅 Belum Masuk Jam KBM';
+            slotEl.innerHTML = 'Belum Masuk Jam KBM';
             detailEl.textContent = `Kegiatan KBM Dimulai Pukul ${jamMasukGlobal} WIB`;
             detailEl.style.color = '#cbd5e1';
             return;
@@ -96,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (timeStr >= s.mulai && timeStr <= s.selesai) {
                 found = true;
                 if (s.istirahat) {
-                    slotEl.innerHTML = `☕ Sedang Waktu ${s.ket}`;
+                    slotEl.innerHTML = `Sedang Waktu ${s.ket}`;
                     detailEl.textContent = 'Jeda Kegiatan Belajar Mengajar';
                     detailEl.style.color = '#fed7aa';
                 } else {
@@ -110,11 +314,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!found) {
             if (timeStr >= jamPulang) {
-                slotEl.innerHTML = '🏠 Jam Pulang Sekolah';
+                slotEl.innerHTML = 'Jam Pulang Sekolah';
                 detailEl.textContent = `KBM Hari ini telah selesai (Pukul ${jamPulang} WIB)`;
                 detailEl.style.color = '#fca5a5';
             } else {
-                slotEl.innerHTML = '📖 Di Luar Jam Sesi KBM';
+                slotEl.innerHTML = 'Di Luar Jam Sesi KBM';
                 detailEl.textContent = 'Tidak Ada Sesi KBM Berjalan';
                 detailEl.style.color = '#e2e8f0';
             }
