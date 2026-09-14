@@ -43,6 +43,8 @@ class PengaturanController extends Controller
 
         $isCustomSeninKamis = Pengaturan::getVal('kbm_slots_senin_kamis') !== null;
         $isCustomJumat = Pengaturan::getVal('kbm_slots_jumat') !== null;
+        $isCustomIstirahatSeninKamis = Pengaturan::getVal('kbm_istirahat_senin_kamis') !== null;
+        $isCustomIstirahatJumat = Pengaturan::getVal('kbm_istirahat_jumat') !== null;
 
         return view('admin.jam-sekolah.index', compact(
             'jamMasuk',
@@ -60,7 +62,9 @@ class PengaturanController extends Controller
             'jumatSlotsXi',
             'jumatIstirahat',
             'isCustomSeninKamis',
-            'isCustomJumat'
+            'isCustomJumat',
+            'isCustomIstirahatSeninKamis',
+            'isCustomIstirahatJumat'
         ));
     }
 
@@ -115,6 +119,40 @@ class PengaturanController extends Controller
                 ];
             }
             Pengaturan::setVal('kbm_slots_jumat', json_encode($formattedJumat), 'admin');
+        }
+
+        // Simpan Jam Istirahat Senin-Kamis
+        if ($request->has('istirahat_senin_kamis') && is_array($request->istirahat_senin_kamis)) {
+            $formattedIstSenin = [];
+            foreach ($request->istirahat_senin_kamis as $oldKey => $data) {
+                $afterJam = (int)($data['setelah_jam'] ?? $oldKey);
+                $mulai = $data['mulai'] ?? '09:40';
+                $selesai = $data['selesai'] ?? '10:00';
+                $formattedIstSenin[$afterJam] = [
+                    'label' => $data['label'] ?? 'Istirahat',
+                    'waktu' => $mulai . ' - ' . $selesai,
+                    'waktu_mulai' => $mulai,
+                    'waktu_selesai' => $selesai,
+                ];
+            }
+            Pengaturan::setVal('kbm_istirahat_senin_kamis', json_encode($formattedIstSenin), 'admin');
+        }
+
+        // Simpan Jam Istirahat Jumat
+        if ($request->has('istirahat_jumat') && is_array($request->istirahat_jumat)) {
+            $formattedIstJumat = [];
+            foreach ($request->istirahat_jumat as $oldKey => $data) {
+                $afterJam = (int)($data['setelah_jam'] ?? $oldKey);
+                $mulai = $data['mulai'] ?? '09:30';
+                $selesai = $data['selesai'] ?? '09:50';
+                $formattedIstJumat[$afterJam] = [
+                    'label' => $data['label'] ?? 'Istirahat',
+                    'waktu' => $mulai . ' - ' . $selesai,
+                    'waktu_mulai' => $mulai,
+                    'waktu_selesai' => $selesai,
+                ];
+            }
+            Pengaturan::setVal('kbm_istirahat_jumat', json_encode($formattedIstJumat), 'admin');
         }
 
         return redirect()->route('admin.jam-sekolah.index')
