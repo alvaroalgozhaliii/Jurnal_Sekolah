@@ -22,6 +22,12 @@ class GuruDashboardController extends Controller
         $guru = $user->guru;
 
         if (!$guru) {
+            $guru = \App\Models\Guru::where('nama', $user->nama)
+                ->orWhere('nip', $user->nip)
+                ->first();
+        }
+
+        if (!$guru) {
             return view('guru.dashboard', [
                 'jadwalHariIni' => collect(),
                 'jurnalHariIni' => collect(),

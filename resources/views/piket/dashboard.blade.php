@@ -16,6 +16,8 @@
     </div>
 </div>
 
+@include('partials.kbm-clock-banner')
+
 <!-- BANNER WAKA BERTUGAS HARI INI -->
 <div style="background:var(--bg-card); border:1px solid #38bdf8; border-radius:8px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
     <div style="display:flex; align-items:center; gap:12px;">

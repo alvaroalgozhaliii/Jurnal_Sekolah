@@ -52,16 +52,6 @@
                 <textarea id="catatan_pengajaran" name="catatan_pengajaran" class="form-control" rows="4">{{ old('catatan_pengajaran', $jurnal_harian->catatan_pengajaran) }}</textarea>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="status_keterlaksanaan">Status Keterlaksanaan</label>
-                <select id="status_keterlaksanaan" name="status_keterlaksanaan" class="form-control">
-                    <option value="terlaksana" {{ $jurnal_harian->status_keterlaksanaan == 'terlaksana' ? 'selected' : '' }}>Terlaksana</option>
-                    <option value="tidak_terlaksana" {{ $jurnal_harian->status_keterlaksanaan == 'tidak_terlaksana' ? 'selected' : '' }}>Tidak Terlaksana</option>
-                    <option value="kosong" {{ $jurnal_harian->status_keterlaksanaan == 'kosong' ? 'selected' : '' }}>Kosong</option>
-                    <option value="pengganti" {{ $jurnal_harian->status_keterlaksanaan == 'pengganti' ? 'selected' : '' }}>Pengganti</option>
-                </select>
-            </div>
-
             <div class="d-flex gap-8 mt-24">
                 <button type="submit" class="btn btn-primary">UPDATE JURNAL</button>
                 <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary">Batal</a>

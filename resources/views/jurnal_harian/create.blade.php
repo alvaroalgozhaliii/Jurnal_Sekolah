@@ -95,13 +95,6 @@
                         <span style="color: #a7f3d0;">Tidak Ada Jadwal Mengajar</span>
                     @endif
                 </div>
-=======
-                @if($jadwalSelected)
-                    <div style="font-size: 12px; color: #60a5fa; margin-top: 4px; font-weight: 600;">
-                         Terkoneksi: Kelas {{ $jadwalSelected->kelas->nama_kelas ?? '-' }} — {{ $jadwalSelected->mapel }}
-                    </div>
-                @endif
->>>>>>> 78e988b10ce50ec303f72c4288dd910aceb5a3b5
             </div>
         </div>
     </div>
@@ -149,7 +142,6 @@
             @csrf
             <input type="hidden" name="id_jadwal" value="{{ $jadwalSelected->id_jadwal }}">
 
-<<<<<<< HEAD
             <div class="form-group">
                 <label class="form-label" for="tanggal">Tanggal Jurnal (Otomatis Laptop) <span class="req">*</span></label>
                 <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}" class="form-control" style="max-width:220px;" required>
@@ -169,18 +161,6 @@
             <div class="form-group mb-16">
                 <label class="form-label" for="catatan_pengajaran">Catatan Pengajaran &amp; Evaluasi Kelas</label>
                 <textarea id="catatan_pengajaran" name="catatan_pengajaran" class="form-control" rows="3" placeholder="Catatan respon siswa, keaktifan, kendala KBM, atau penugasan">{{ old('catatan_pengajaran') }}</textarea>
-            </div>
-
-            <div class="form-group mb-24">
-                <label class="form-label" for="status_keterlaksanaan">Status Keterlaksanaan &amp; Kehadiran Guru <span class="req">*</span></label>
-                <select id="status_keterlaksanaan" name="status_keterlaksanaan" class="form-control" required>
-                    <option value="terlaksana" {{ old('status_keterlaksanaan') == 'terlaksana' ? 'selected' : '' }}> Terlaksana (Hadir Mengajar)</option>
-                    <option value="izin_guru" {{ old('status_keterlaksanaan') == 'izin_guru' ? 'selected' : '' }}> Izin Guru (Ada Keperluan / Penugasan)</option>
-                    <option value="sakit_guru" {{ old('status_keterlaksanaan') == 'sakit_guru' ? 'selected' : '' }}> Sakit Guru</option>
-                    <option value="dispen_guru" {{ old('status_keterlaksanaan') == 'dispen_guru' ? 'selected' : '' }}> Dispensasi Guru / Tugas Luar</option>
-                    <option value="pengganti" {{ old('status_keterlaksanaan') == 'pengganti' ? 'selected' : '' }}> Digantikan Guru Piket / Pengganti</option>
-                    <option value="tidak_terlaksana" {{ old('status_keterlaksanaan') == 'tidak_terlaksana' ? 'selected' : '' }}> Tidak Terlaksana</option>
-                </select>
             </div>
 
             <div class="d-flex gap-12 align-center flex-wrap">
