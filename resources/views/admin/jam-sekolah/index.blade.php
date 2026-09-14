@@ -550,12 +550,31 @@
 
         </div>
 
-        {{-- Special Callout Alert for Friday Grade 10 vs 11/12 --}}
-        <div class="friday-notice-callout">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <div>
-                <h3 class="card-title">Tabel & Editor Slot Jam KBM Real-Time</h3>
-                <p class="card-subtitle">Pratinjau detail alokasi waktu per jam pelajaran (Senin–Kamis & Jumat)</p>
+    {{-- Notice Callout for Friday Grade Rules --}}
+    <div class="friday-notice-callout">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <div>
+            <div class="friday-notice-title">Ketentuan Khusus Hari Jumat (Perbedaan Tingkat Kelas)</div>
+            <p class="friday-notice-desc">
+                • <strong>Kelas X (10)</strong>: Melaksanakan pembelajaran hingga <strong>Jam Ke-13 (Pulang {{ $jamPulangJumatX }} WIB)</strong> untuk program Pembiasaan/P5.<br>
+                • <strong>Kelas XI (11) & Kelas XII (12)</strong>: Melaksanakan pembelajaran hingga <strong>Jam Ke-12 (Pulang {{ $jamPulangJumatXi }} WIB)</strong>. Banner jam di masing-masing dashboard kelas/guru akan otomatis menyesuaikan tingkat kelas tersebut.
+            </p>
+        </div>
+    </div>
+
+    {{-- TABEL ALOKASI SLOT JAM PELAJARAN --}}
+    <div class="jam-tabs-container">
+        <div class="jam-tabs-header">
+            <div class="jam-tab-pills">
+                <button type="button" class="jam-tab-pill active" onclick="switchJamDetailTab('senin_kamis', this)">
+                    📅 Senin — Kamis (Jam 1–10)
+                </button>
+                <button type="button" class="jam-tab-pill" onclick="switchJamDetailTab('jumat_x', this)">
+                    🕌 Jumat — Kelas X / 10 (Jam 1–13)
+                </button>
+                <button type="button" class="jam-tab-pill" onclick="switchJamDetailTab('jumat_xi', this)">
+                    🕌 Jumat — Kelas XI & XII (Jam 1–12)
+                </button>
             </div>
             <div>
                 @if($isCustomSeninKamis || $isCustomJumat)
@@ -565,131 +584,313 @@
                 @endif
             </div>
         </div>
-        <div class="card-body">
-            <div class="tab-pills-nav">
-                <button type="button" class="tab-pill-btn active" onclick="switchJamTab('senin_kamis', this)">
-                    Senin — Kamis (Jam 1 s.d 10)
-                </button>
-                <button type="button" class="tab-pill-btn" onclick="switchJamTab('jumat', this)">
-                    Jumat (Jam 1 s.d 13)
-                </button>
-            </div>
 
-            <div class="jam-tab-body">
+        <div class="jam-tab-body">
 
-                {{-- TAB 1: SENIN - KAMIS (SEMUA TINGKAT) --}}
-                <div id="tabDetail_senin_kamis" class="jam-tab-pane active">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">
-                            Alokasi Jam Pelajaran Senin — Kamis (1 JP = {{ $durasiPelajaran }} Menit • Total 10 Jam Pelajaran)
-                        </span>
-                        <span class="badge badge-navy">Berlaku untuk Kelas X, XI, XII</span>
-                    </div>
+            {{-- TAB 1: SENIN - KAMIS (SEMUA TINGKAT) --}}
+            <div id="tabDetail_senin_kamis" class="jam-tab-pane active">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 13.5px; color: var(--text-secondary); font-weight: 500;">
+                        Alokasi Jam Pelajaran Senin — Kamis (1 JP = {{ $durasiPelajaran }} Menit • Total 10 Jam Pelajaran)
+                    </span>
+                    <span class="badge badge-navy">Berlaku untuk Kelas X, XI, XII</span>
+                </div>
 
-                    <div class="slot-tbl-wrap">
-                        <table class="slot-tbl">
-                            <thead>
+                <div class="slot-tbl-wrap">
+                    <table class="slot-tbl">
+                        <thead>
+                            <tr>
+                                <th style="width: 110px;">Jam Ke</th>
+                                <th style="width: 160px;">Waktu Mulai</th>
+                                <th style="width: 160px;">Waktu Selesai</th>
+                                <th>Keterangan / Aktivitas Khusus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($seninKamisSlots as $jam => $slot)
                                 <tr>
-                                    <th style="width: 110px;">Jam Ke</th>
-                                    <th style="width: 150px;">Waktu Mulai</th>
-                                    <th style="width: 150px;">Waktu Selesai</th>
-                                    <th>Keterangan / Aktivitas Khusus</th>
+                                    <td>
+                                        <span class="badge-jp">Jam Ke-{{ $jam }}</span>
+                                    </td>
+                                    <td>
+                                        <input type="time" name="slots_senin_kamis[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                    </td>
+                                    <td>
+                                        <input type="time" name="slots_senin_kamis[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="slots_senin_kamis[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="KBM Reguler" class="form-control form-control-sm">
+                                    </td>
                                 </tr>
                                 @if(isset($seninKamisIstirahat[$jam]))
-                                    <tr class="row-istirahat">
-                                         <td>Istirahat</td>
-                                         <td colspan="3">
-                                             <strong>{{ $seninKamisIstirahat[$jam]['label'] }}</strong> ({{ $seninKamisIstirahat[$jam]['waktu'] }})
-                                         </td>
-                                     </tr>
-                                 @endif
+                                    <tr class="row-break">
+                                        <td>☕ Istirahat</td>
+                                        <td colspan="3">
+                                            <strong>{{ $seninKamisIstirahat[$jam]['label'] }}</strong> ({{ $seninKamisIstirahat[$jam]['waktu'] }})
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+            </div>
 
-                {{-- TAB 2: JUMAT - KELAS X (10) --}}
-                <div id="tabDetail_jumat_x" class="jam-tab-pane">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">
-                            Alokasi Jam Pelajaran Jumat Khusus <strong>Kelas X (10)</strong> (1 JP = {{ $durasiPelajaranJumat }} Menit • Total 13 Jam Pelajaran • Pulang {{ $jamPulangJumatX }} WIB)
-                        </span>
-                        <span class="badge badge-purple" style="background:#8b5cf6; color:#ffffff;">Khusus Kelas X (10)</span>
-                    </div>
+            {{-- TAB 2: JUMAT - KELAS X (10) --}}
+            <div id="tabDetail_jumat_x" class="jam-tab-pane">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 13.5px; color: var(--text-secondary); font-weight: 500;">
+                        Alokasi Jam Pelajaran Jumat Khusus <strong>Kelas X (10)</strong> (1 JP = {{ $durasiPelajaranJumat }} Menit • Total 13 Jam Pelajaran • Pulang {{ $jamPulangJumatX }} WIB)
+                    </span>
+                    <span class="badge badge-purple" style="background:#8b5cf6; color:#ffffff;">Khusus Kelas X (10)</span>
+                </div>
 
-                    <div class="slot-tbl-wrap">
-                        <table class="slot-tbl">
-                            <thead>
-                                <tr>
-                                    <th style="width: 110px;">Jam Ke</th>
-                                    <th style="width: 150px;">Waktu Mulai</th>
-                                    <th style="width: 150px;">Waktu Selesai</th>
-                                    <th>Keterangan / Aktivitas Khusus</th>
+                <div class="slot-tbl-wrap">
+                    <table class="slot-tbl">
+                        <thead>
+                            <tr>
+                                <th style="width: 110px;">Jam Ke</th>
+                                <th style="width: 160px;">Waktu Mulai</th>
+                                <th style="width: 160px;">Waktu Selesai</th>
+                                <th>Keterangan / Aktivitas Khusus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($jumatSlotsX as $jam => $slot)
+                                <tr class="{{ (int)$jam == 13 ? 'row-highlight-x' : '' }}">
+                                    <td>
+                                        <span class="badge-jp {{ (int)$jam == 13 ? 'badge-purple' : '' }}" @if((int)$jam == 13) style="background:#8b5cf6; color:#ffffff;" @endif>
+                                            Jam Ke-{{ $jam }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <input type="time" name="slots_jumat[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                    </td>
+                                    <td>
+                                        <input type="time" name="slots_jumat[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="slots_jumat[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="{{ (int)$jam == 13 ? 'Khusus Kelas X (Pembiasaan/P5)' : 'KBM Jumat' }}" class="form-control form-control-sm">
+                                    </td>
                                 </tr>
                                 @if(isset($jumatIstirahat[$jam]))
-                                    <tr class="row-istirahat">
-                                        <td>Istirahat</td>
+                                    <tr class="row-break">
+                                        <td>🕌 Istirahat</td>
                                         <td colspan="3">
-                                             <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
+                                            <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
                                         </td>
                                     </tr>
-                                 @endif
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+            </div>
 
-                {{-- TAB 3: JUMAT - KELAS XI & XII (11 & 12) --}}
-                <div id="tabDetail_jumat_xi" class="jam-tab-pane">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">
-                            Alokasi Jam Pelajaran Jumat Khusus <strong>Kelas XI (11) & XII (12)</strong> (1 JP = {{ $durasiPelajaranJumat }} Menit • Total 12 Jam Pelajaran • Pulang {{ $jamPulangJumatXi }} WIB)
-                        </span>
-                        <span class="badge badge-amber" style="background:#f59e0b; color:#ffffff;">Kelas XI (11) & XII (12)</span>
-                    </div>
-
-                    <div class="slot-tbl-wrap">
-                        <table class="slot-tbl">
-                            <thead>
-                                <tr>
-                                    <th style="width: 110px;">Jam Ke</th>
-                                    <th style="width: 150px;">Waktu Mulai</th>
-                                    <th style="width: 150px;">Waktu Selesai</th>
-                                    <th>Keterangan / Aktivitas Khusus</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($jumatSlotsXi as $jam => $slot)
-                                    <tr>
-                                        <td>
-                                            <span class="badge-jp">Jam Ke-{{ $jam }}</span>
-                                        </td>
-                                        <td>
-                                            <input type="time" disabled value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px; opacity:0.85;">
-                                        </td>
-                                        <td>
-                                            <input type="time" disabled value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px; opacity:0.85;">
-                                        </td>
-                                        <td>
-                                            <input type="text" disabled value="{{ $slot['keterangan'] ?? '' }}" placeholder="Mengikuti konfigurasi Jumat" class="form-control form-control-sm" style="opacity:0.85;">
-                                        </td>
-                                    </tr>
-                                    @if(isset($jumatIstirahat[$jam]))
-                                        <tr class="row-break">
-                                            <td>🕌 Istirahat</td>
-                                            <td colspan="3">
-                                                <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+            {{-- TAB 3: JUMAT - KELAS XI & XII (11 & 12) --}}
+            <div id="tabDetail_jumat_xi" class="jam-tab-pane">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 13.5px; color: var(--text-secondary); font-weight: 500;">
+                        Alokasi Jam Pelajaran Jumat Khusus <strong>Kelas XI (11) & XII (12)</strong> (1 JP = {{ $durasiPelajaranJumat }} Menit • Total 12 Jam Pelajaran • Pulang {{ $jamPulangJumatXi }} WIB)
+                    </span>
+                    <span class="badge badge-amber" style="background:#f59e0b; color:#ffffff;">Kelas XI (11) & XII (12)</span>
                 </div>
 
+                <div class="slot-tbl-wrap">
+                    <table class="slot-tbl">
+                        <thead>
+                            <tr>
+                                <th style="width: 110px;">Jam Ke</th>
+                                <th style="width: 160px;">Waktu Mulai</th>
+                                <th style="width: 160px;">Waktu Selesai</th>
+                                <th>Keterangan / Aktivitas Khusus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($jumatSlotsXi as $jam => $slot)
+                                <tr>
+                                    <td>
+                                        <span class="badge-jp">Jam Ke-{{ $jam }}</span>
+                                    </td>
+                                    <td>
+                                        <input type="time" disabled value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px; opacity:0.85;">
+                                    </td>
+                                    <td>
+                                        <input type="time" disabled value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px; opacity:0.85;">
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled value="{{ $slot['keterangan'] ?? '' }}" placeholder="Mengikuti konfigurasi Jumat (Jam 1–12)" class="form-control form-control-sm" style="opacity:0.85;">
+                                    </td>
+                                </tr>
+                                @if(isset($jumatIstirahat[$jam]))
+                                    <tr class="row-break">
+                                        <td>🕌 Istirahat</td>
+                                        <td colspan="3">
+                                            <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- SECTION: PENGATURAN JAM ISTIRAHAT (TERPISAH) --}}
+    <div class="jam-tabs-container" style="margin-bottom: 24px;">
+        <div class="jam-tabs-header">
+            <div class="jam-tab-pills">
+                <button type="button" class="jam-tab-pill active" onclick="switchIstirahatTab('ist_senin_kamis', this)">
+                    ☕ Istirahat Senin — Kamis
+                </button>
+                <button type="button" class="jam-tab-pill" onclick="switchIstirahatTab('ist_jumat', this)">
+                    🕌 Istirahat Jumat
+                </button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">Pengaturan Jam Istirahat</span>
+                @if($isCustomIstirahatSeninKamis || $isCustomIstirahatJumat)
+                    <span class="badge badge-info">Kustom</span>
+                @else
+                    <span class="badge badge-success">✓ Standar</span>
+                @endif
             </div>
         </div>
+
+        <div class="jam-tab-body">
+
+            {{-- TAB ISTIRAHAT 1: SENIN - KAMIS --}}
+            <div id="tabDetail_ist_senin_kamis" class="jam-tab-pane active">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 13.5px; color: var(--text-secondary); font-weight: 500;">
+                        Jam Istirahat Senin — Kamis — disisipkan setelah Jam KBM yang ditentukan
+                    </span>
+                    <span class="badge badge-navy">Berlaku untuk Kelas X, XI, XII</span>
+                </div>
+
+                <div class="slot-tbl-wrap">
+                    <table class="slot-tbl">
+                        <thead>
+                            <tr>
+                                <th style="width: 200px;">Nama Istirahat</th>
+                                <th style="width: 160px;">Setelah Jam KBM Ke-</th>
+                                <th style="width: 160px;">Waktu Mulai</th>
+                                <th style="width: 160px;">Waktu Selesai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($seninKamisIstirahat as $afterJam => $ist)
+                                <tr class="row-break">
+                                    <td>
+                                        <input type="text"
+                                            name="istirahat_senin_kamis[{{ $afterJam }}][label]"
+                                            value="{{ $ist['label'] }}"
+                                            class="form-control form-control-sm"
+                                            placeholder="Nama istirahat">
+                                    </td>
+                                    <td>
+                                        <input type="number"
+                                            name="istirahat_senin_kamis[{{ $afterJam }}][setelah_jam]"
+                                            value="{{ $afterJam }}"
+                                            min="1" max="10"
+                                            class="form-control form-control-sm"
+                                            style="width: 90px;">
+                                    </td>
+                                    <td>
+                                        <input type="time"
+                                            name="istirahat_senin_kamis[{{ $afterJam }}][mulai]"
+                                            value="{{ $ist['waktu_mulai'] }}"
+                                            class="form-control form-control-sm"
+                                            style="width: 130px;">
+                                    </td>
+                                    <td>
+                                        <input type="time"
+                                            name="istirahat_senin_kamis[{{ $afterJam }}][selesai]"
+                                            value="{{ $ist['waktu_selesai'] }}"
+                                            class="form-control form-control-sm"
+                                            style="width: 130px;">
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 10px;">
+                    <small class="text-muted">
+                        💡 <strong>Setelah Jam KBM Ke-</strong>: jam pelajaran sebelum istirahat disisipkan. Contoh: nilai <code>4</code> = istirahat muncul setelah Jam Ke-4 selesai.
+                    </small>
+                </div>
+            </div>
+
+            {{-- TAB ISTIRAHAT 2: JUMAT --}}
+            <div id="tabDetail_ist_jumat" class="jam-tab-pane">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 13.5px; color: var(--text-secondary); font-weight: 500;">
+                        Jam Istirahat Hari Jumat — berlaku untuk semua tingkat kelas (X, XI & XII)
+                    </span>
+                    <span class="badge" style="background:#f59e0b; color:#ffffff;">Jumat</span>
+                </div>
+
+                <div class="slot-tbl-wrap">
+                    <table class="slot-tbl">
+                        <thead>
+                            <tr>
+                                <th style="width: 200px;">Nama Istirahat</th>
+                                <th style="width: 160px;">Setelah Jam KBM Ke-</th>
+                                <th style="width: 160px;">Waktu Mulai</th>
+                                <th style="width: 160px;">Waktu Selesai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($jumatIstirahat as $afterJam => $ist)
+                                <tr class="row-break">
+                                    <td>
+                                        <input type="text"
+                                            name="istirahat_jumat[{{ $afterJam }}][label]"
+                                            value="{{ $ist['label'] }}"
+                                            class="form-control form-control-sm"
+                                            placeholder="Nama istirahat">
+                                    </td>
+                                    <td>
+                                        <input type="number"
+                                            name="istirahat_jumat[{{ $afterJam }}][setelah_jam]"
+                                            value="{{ $afterJam }}"
+                                            min="1" max="13"
+                                            class="form-control form-control-sm"
+                                            style="width: 90px;">
+                                    </td>
+                                    <td>
+                                        <input type="time"
+                                            name="istirahat_jumat[{{ $afterJam }}][mulai]"
+                                            value="{{ $ist['waktu_mulai'] }}"
+                                            class="form-control form-control-sm"
+                                            style="width: 130px;">
+                                    </td>
+                                    <td>
+                                        <input type="time"
+                                            name="istirahat_jumat[{{ $afterJam }}][selesai]"
+                                            value="{{ $ist['waktu_selesai'] }}"
+                                            class="form-control form-control-sm"
+                                            style="width: 130px;">
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 10px;">
+                    <small class="text-muted">
+                        💡 <strong>Setelah Jam KBM Ke-</strong>: jam pelajaran sebelum istirahat disisipkan. Contoh: nilai <code>8</code> = Solat Jumat muncul setelah Jam Ke-8 selesai.
+                    </small>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     {{-- TOMBOL SUBMIT --}}
     <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 40px;">
@@ -709,6 +910,17 @@
 function switchJamDetailTab(tabKey, btnEl) {
     document.querySelectorAll('.jam-tab-pill').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.jam-tab-pane').forEach(p => p.classList.remove('active'));
+
+    if (btnEl) btnEl.classList.add('active');
+    const targetPane = document.getElementById('tabDetail_' + tabKey);
+    if (targetPane) targetPane.classList.add('active');
+}
+
+function switchIstirahatTab(tabKey, btnEl) {
+    // Hanya toggle tab dalam container istirahat
+    const container = btnEl.closest('.jam-tabs-container');
+    container.querySelectorAll('.jam-tab-pill').forEach(b => b.classList.remove('active'));
+    container.querySelectorAll('.jam-tab-pane').forEach(p => p.classList.remove('active'));
 
     if (btnEl) btnEl.classList.add('active');
     const targetPane = document.getElementById('tabDetail_' + tabKey);
