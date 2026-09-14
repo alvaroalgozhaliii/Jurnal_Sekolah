@@ -130,9 +130,9 @@ class WhatsAppAdminController extends Controller
         $res = $this->waService->kirim($request->no_tujuan, $request->pesan_tes);
 
         if ($res['success']) {
-            return back()->with('success', '✅ Tes WhatsApp Berhasil: ' . $res['message']);
+            return back()->with('success', 'Tes WhatsApp Berhasil: ' . $res['message']);
         } else {
-            return back()->with('error', '❌ Tes WhatsApp Gagal: ' . $res['message']);
+            return back()->with('error', 'Tes WhatsApp Gagal: ' . $res['message']);
         }
     }
 

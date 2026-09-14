@@ -223,7 +223,7 @@
                         <td>
                             @if($k->guruWaliKelas && $k->guruWaliKelas->no_telp)
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $k->guruWaliKelas->no_telp) }}" target="_blank" style="color:#16a34a; font-weight:500; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
-                                    <span>📱</span> {{ $k->guruWaliKelas->no_telp }}
+                                    {{ $k->guruWaliKelas->no_telp }}
                                 </a>
                             @else
                                 <span class="text-muted">-</span>
@@ -242,7 +242,7 @@
                         <td style="text-align:center;">
                             <button type="button" class="btn btn-sm btn-primary" 
                                     onclick="openAssignModal({{ $k->id_kelas }}, '{{ addslashes($k->nama_kelas) }}', '{{ $k->id_guru_walikelas ?? '' }}')">
-                                ✏️ Atur Wali
+                                Atur Wali
                             </button>
                         </td>
                     </tr>

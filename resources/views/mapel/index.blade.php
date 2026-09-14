@@ -403,28 +403,28 @@
 {{-- Stat Cards --}}
 <div class="mapel-stats">
     <div class="stat-card all">
-        <div class="stat-icon">📚</div>
+        <div class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
         <div class="stat-info">
             <div class="stat-label">Total Mapel</div>
             <div class="stat-value">{{ $totalMapel }}</div>
         </div>
     </div>
     <div class="stat-card x">
-        <div class="stat-icon">🟢</div>
+        <div class="stat-icon" style="font-weight:800; font-size:18px; color:#10b981;">X</div>
         <div class="stat-info">
             <div class="stat-label">Kelas X</div>
             <div class="stat-value">{{ $groupByTingkat['X'] ?? 0 }}</div>
         </div>
     </div>
     <div class="stat-card xi">
-        <div class="stat-icon">🟡</div>
+        <div class="stat-icon" style="font-weight:800; font-size:18px; color:#f59e0b;">XI</div>
         <div class="stat-info">
             <div class="stat-label">Kelas XI</div>
             <div class="stat-value">{{ $groupByTingkat['XI'] ?? 0 }}</div>
         </div>
     </div>
     <div class="stat-card xii">
-        <div class="stat-icon">🟣</div>
+        <div class="stat-icon" style="font-weight:800; font-size:18px; color:#8b5cf6;">XII</div>
         <div class="stat-info">
             <div class="stat-label">Kelas XII</div>
             <div class="stat-value">{{ $groupByTingkat['XII'] ?? 0 }}</div>
@@ -503,10 +503,10 @@
                         default => 'tnil'
                     };
                     $tingkatIcon = match($t) {
-                        'X'   => '🟢',
-                        'XI'  => '🟡',
-                        'XII' => '🟣',
-                        default => '⚪'
+                        'X'   => '',
+                        'XI'  => '',
+                        'XII' => '',
+                        default => ''
                     };
                 @endphp
                 <tr>
@@ -524,7 +524,7 @@
                     </td>
                     <td class="col-tingkat">
                         <span class="badge-tingkat {{ $badgeClass }}">
-                            {{ $tingkatIcon }} Kelas {{ $t ?? '-' }}
+                            Kelas {{ $t ?? '-' }}
                         </span>
                     </td>
                     <td>
@@ -568,7 +568,7 @@
     </div>
     @else
     <div class="empty-mapel">
-        <div class="empty-mapel-icon">📖</div>
+        <div class="empty-mapel-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
         <h4>Belum Ada Data Mata Pelajaran</h4>
         <p>
             @if($search || $tingkat)
