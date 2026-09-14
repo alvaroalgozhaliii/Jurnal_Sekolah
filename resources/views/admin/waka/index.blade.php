@@ -234,7 +234,7 @@
 
 <!-- Statistik Ringkas -->
 <div class="stat-summary-grid">
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #2563eb;">
         <div class="stat-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         </div>
@@ -244,7 +244,7 @@
         </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #7c3aed;">
         <div class="stat-icon" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
         </div>
@@ -256,7 +256,7 @@
         </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #059669;">
         <div class="stat-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         </div>
@@ -266,7 +266,7 @@
         </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="border-left: 4px solid #d97706;">
         <div class="stat-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
         </div>
