@@ -23,7 +23,7 @@
 
         <div class="sso-welcome-box">
             <h1 class="sso-welcome-title">Selamat Datang!</h1>
-            <p class="sso-welcome-desc">Silakan masukkan username dan password Anda untuk masuk ke sistem jurnal dan presensi sekolah.</p>
+            <p class="sso-welcome-desc">Silakan masukkan Username, NIP, atau NISN beserta password Anda untuk masuk ke sistem.</p>
         </div>
 
         <div class="sso-left-footer">
@@ -181,7 +181,7 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                     </span>
-                    <input type="text" id="username" name="username" value="{{ old('username') }}" class="sso-input" placeholder="Masukkan username" required autofocus autocomplete="username">
+                    <input type="text" id="username" name="username" value="{{ old('username') }}" class="sso-input" placeholder="Username / NIP / NISN" required autofocus autocomplete="username">
                 </div>
 
                 <!-- Password Pill Input -->
