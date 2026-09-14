@@ -5,242 +5,564 @@
 
 @section('content')
 <style>
-.jam-card-hero {
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+/* ==========================================================================
+   PENGATURAN JAM SEKOLAH — MODERN & INTUITIVE DESIGN
+   ========================================================================== */
+.jam-wrapper {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+/* Hero Header */
+.jam-hero-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     color: #ffffff;
-    border-radius: var(--radius-lg, 12px);
-    padding: 24px;
+    border-radius: var(--radius-lg, 14px);
+    padding: 24px 28px;
     margin-bottom: 24px;
     box-shadow: 0 10px 25px -5px rgba(37,99,235,0.25);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 20px;
 }
-.jam-grid-settings {
+
+.jam-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #e0e7ff;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.jam-hero-title {
+    margin: 0 0 6px;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.jam-hero-desc {
+    margin: 0;
+    font-size: 13.5px;
+    color: #cbd5e1;
+    max-width: 620px;
+    line-height: 1.5;
+}
+
+/* Metric Pill Cards Row */
+.jam-metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.jam-metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.jam-metric-card:hover {
+    border-color: #93c5fd;
+    transform: translateY(-2px);
+}
+
+.jam-metric-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.jam-metric-icon.blue { background: rgba(37,99,235,0.12); color: #2563eb; }
+.jam-metric-icon.emerald { background: rgba(16,185,129,0.12); color: #10b981; }
+.jam-metric-icon.purple { background: rgba(139,92,246,0.12); color: #8b5cf6; }
+.jam-metric-icon.amber { background: rgba(245,158,11,0.12); color: #f59e0b; }
+
+[data-theme="dark"] .jam-metric-icon.blue { background: rgba(37,99,235,0.25); color: #60a5fa; }
+[data-theme="dark"] .jam-metric-icon.emerald { background: rgba(16,185,129,0.25); color: #34d399; }
+[data-theme="dark"] .jam-metric-icon.purple { background: rgba(139,92,246,0.25); color: #a78bfa; }
+[data-theme="dark"] .jam-metric-icon.amber { background: rgba(245,158,11,0.25); color: #fbbf24; }
+
+.jam-metric-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.jam-metric-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.jam-metric-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: monospace;
+    line-height: 1.2;
+}
+
+.jam-metric-sub {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* Settings Form Grid */
+.jam-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 20px;
     margin-bottom: 24px;
 }
-.jam-section-box {
+
+.jam-box {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg, 12px);
-    padding: 20px;
+    border-radius: 12px;
+    padding: 22px;
     box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
 }
-.jam-section-title {
+
+.jam-box-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.jam-box-title {
+    margin: 0;
     font-size: 15px;
     font-weight: 700;
     color: var(--text-primary);
-    margin: 0 0 16px;
+}
+
+.jam-box-badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--badge-navy-bg);
+    color: var(--navy-primary);
+}
+
+/* Friday Special Card Callout */
+.friday-notice-callout {
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
     display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.friday-notice-callout svg {
+    color: #8b5cf6;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.friday-notice-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #6d28d9;
+    margin-bottom: 2px;
+}
+
+[data-theme="dark"] .friday-notice-title {
+    color: #c4b5fd;
+}
+
+.friday-notice-desc {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+}
+
+/* Tabs for Slot Editor */
+.jam-tabs-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 24px;
+}
+
+.jam-tabs-header {
+    background: var(--bg-card-header);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.jam-tab-pills {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+}
+
+.jam-tab-pill {
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
+    position: relative;
+    top: 1px;
 }
-.slot-table-wrapper {
+
+.jam-tab-pill:hover {
+    color: var(--navy-primary);
+    background: rgba(37,99,235,0.06);
+}
+
+.jam-tab-pill.active {
+    background: var(--bg-card);
+    color: #2563eb;
+    border-color: var(--border);
+    border-top: 2.5px solid #2563eb;
+}
+
+[data-theme="dark"] .jam-tab-pill.active {
+    color: #60a5fa;
+    border-top-color: #60a5fa;
+    background: var(--bg-card);
+}
+
+.jam-tab-body {
+    padding: 20px;
+}
+
+.jam-tab-pane {
+    display: none;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.jam-tab-pane.active {
+    display: block;
+}
+
+/* Slot Table */
+.slot-tbl-wrap {
     overflow-x: auto;
     border: 1px solid var(--border);
     border-radius: 8px;
-    margin-top: 12px;
 }
-.slot-table {
+
+.slot-tbl {
     width: 100%;
     border-collapse: collapse;
     font-size: 13.5px;
 }
-.slot-table th, .slot-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    text-align: left;
-}
-.slot-table th {
+
+.slot-tbl th {
     background: var(--bg-card-header);
-    color: var(--text-secondary);
-    font-weight: 600;
+    padding: 12px 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
 }
-.slot-table tr:last-child td {
+
+.slot-tbl td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.slot-tbl tr:last-child td {
     border-bottom: none;
 }
-.slot-table tr.row-istirahat td {
+
+.slot-tbl tr.row-break td {
     background: rgba(245, 158, 11, 0.08);
     color: #b45309;
     font-weight: 600;
 }
-[data-theme="dark"] .slot-table tr.row-istirahat td {
+
+[data-theme="dark"] .slot-tbl tr.row-break td {
     background: rgba(245, 158, 11, 0.15);
     color: #fbbf24;
 }
-.tab-pills-nav {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 8px;
+
+.slot-tbl tr.row-highlight-x td {
+    background: rgba(139, 92, 246, 0.08);
 }
-.tab-pill-btn {
-    background: transparent;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 13.5px;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.2s;
+
+[data-theme="dark"] .slot-tbl tr.row-highlight-x td {
+    background: rgba(139, 92, 246, 0.18);
 }
-.tab-pill-btn:hover {
-    color: var(--navy-primary);
+
+.badge-jp {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
     background: var(--badge-navy-bg);
+    color: var(--navy-primary);
 }
-.tab-pill-btn.active {
-    background: #2563eb;
-    color: #ffffff;
-}
-.tab-pane {
-    display: none;
-}
-.tab-pane.active {
-    display: block;
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 </style>
 
-<div class="page-header">
-    <div>
-        <h1 class="page-title">Pengaturan Jam Sekolah</h1>
-        <p class="page-subtitle">Konfigurasi Terpusat Jam Masuk, Jam Pulang, dan Alokasi Jam KBM Terhubung ke Seluruh Role</p>
-    </div>
-    <div style="display: flex; gap: 10px; align-items: center;">
-        <form action="{{ route('admin.jam-sekolah.reset') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mereset seluruh jam sekolah dan alokasi KBM ke standar awal reguler?');">
-            @csrf
-            <button type="submit" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"/></svg>
-                Reset ke Standar KBM
-            </button>
-        </form>
-    </div>
-</div>
+<div class="jam-wrapper">
 
+<<<<<<< HEAD
 {{-- Banner Info Keterhubungan Antar Role --}}
 <div class="jam-card-hero">
     <div>
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700; margin-bottom: 4px;">
             INTEGRASI SISTEM REAL-TIME
+=======
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Pengaturan Jam Sekolah</h1>
+            <p class="page-subtitle">Konfigurasi Jam Masuk, Pulang, dan Alokasi Jam KBM Terhubung ke Seluruh Role (Guru, Piket, Wali Kelas, Siswa, Ortu)</p>
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
         </div>
-        <div style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">
-            Pengaturan Jam Terhubung Otomatis ke Seluruh Role
-        </div>
-        <div style="font-size: 13.5px; color: #e2e8f0; max-width: 650px; line-height: 1.5;">
-            Setiap perubahan waktu pada form di bawah akan langsung menyinkronkan <strong>Live Clock Banner</strong> di semua role, validasi keterlambatan siswa/guru, jam presensi masuk & keluar, toleransi piket kelas kosong, serta jadwal pelajaran.
-        </div>
-    </div>
-    <div style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 14px 20px; text-align: center;">
-        <div style="font-size: 11px; text-transform: uppercase; color: #bfdbfe; font-weight: 700;">Jam Masuk Aktif</div>
-        <div style="font-size: 24px; font-weight: 800; font-family: monospace; margin: 2px 0;">{{ $jamMasuk }} WIB</div>
-        <div style="font-size: 12px; color: #86efac; font-weight: 600;">Toleransi: +{{ $toleransiTerlambat }} Menit</div>
-    </div>
-</div>
-
-<form action="{{ route('admin.jam-sekolah.update') }}" method="POST">
-    @csrf
-
-    <div class="jam-grid-settings">
-        {{-- BLOK 1: JAM OPERASIONAL UTAMA --}}
-        <div class="jam-section-box">
-            <h3 class="jam-section-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                1. Jam Masuk & Pulang Sekolah
-            </h3>
-
-            <div class="form-group mb-16">
-                <label class="form-label" for="jam_masuk">Jam Masuk Sekolah <span class="req">*</span></label>
-                <input type="time" id="jam_masuk" name="jam_masuk" value="{{ old('jam_masuk', $jamMasuk) }}" class="form-control" required>
-                <small class="text-muted">Waktu mulai apel/KBM pagi hari untuk seluruh sekolah.</small>
-            </div>
-
-            <div class="form-row mb-16">
-                <div class="form-group">
-                    <label class="form-label" for="jam_pulang">Jam Pulang (Senin - Kamis) <span class="req">*</span></label>
-                    <input type="time" id="jam_pulang" name="jam_pulang" value="{{ old('jam_pulang', $jamPulang) }}" class="form-control" required>
-                    <small class="text-muted">Akhir KBM Senin - Kamis.</small>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="jam_pulang_jumat">Jam Pulang (Jumat) <span class="req">*</span></label>
-                    <input type="time" id="jam_pulang_jumat" name="jam_pulang_jumat" value="{{ old('jam_pulang_jumat', $jamPulangJumat) }}" class="form-control" required>
-                    <small class="text-muted">Akhir KBM hari Jumat.</small>
-                </div>
-            </div>
-        </div>
-
-        {{-- BLOK 2: DURASI JP & TOLERANSI --}}
-        <div class="jam-section-box">
-            <h3 class="jam-section-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                2. Durasi Jam Pelajaran (JP) & Toleransi
-            </h3>
-
-            <div class="form-row mb-16">
-                <div class="form-group">
-                    <label class="form-label" for="durasi_pelajaran_menit">Durasi 1 JP (Senin - Kamis)</label>
-                    <div class="d-flex align-center gap-8">
-                        <input type="number" id="durasi_pelajaran_menit" name="durasi_pelajaran_menit" value="{{ old('durasi_pelajaran_menit', $durasiPelajaran) }}" min="1" max="120" required class="form-control" style="width: 110px;">
-                        <span class="text-muted fw-bold">menit</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="durasi_pelajaran_jumat_menit">Durasi 1 JP (Jumat)</label>
-                    <div class="d-flex align-center gap-8">
-                        <input type="number" id="durasi_pelajaran_jumat_menit" name="durasi_pelajaran_jumat_menit" value="{{ old('durasi_pelajaran_jumat_menit', $durasiPelajaranJumat) }}" min="1" max="120" required class="form-control" style="width: 110px;">
-                        <span class="text-muted fw-bold">menit</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group mb-16">
-                <label class="form-label" for="toleransi_keterlambatan_menit">Toleransi Keterlambatan Masuk</label>
-                <div class="d-flex align-center gap-8">
-                    <input type="number" id="toleransi_keterlambatan_menit" name="toleransi_keterlambatan_menit" value="{{ old('toleransi_keterlambatan_menit', $toleransiTerlambat) }}" min="0" max="60" required class="form-control" style="width: 110px;">
-                    <span class="text-muted fw-bold">menit</span>
-                </div>
-                <small class="text-muted">Batas menit sebelum siswa/guru otomatis tercatat sebagai "Terlambat".</small>
-            </div>
-        </div>
-
-        {{-- BLOK 3: ATURAN JURNAL & PIKET --}}
-        <div class="jam-section-box">
-            <h3 class="jam-section-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                3. Batas Jurnal Guru & Piket
-            </h3>
-
-            <div class="form-group mb-16">
-                <label class="form-label" for="batas_waktu_jurnal_menit">Batas Pengisian Jurnal Mengajar Guru</label>
-                <div class="d-flex align-center gap-8">
-                    <input type="number" id="batas_waktu_jurnal_menit" name="batas_waktu_jurnal_menit" value="{{ old('batas_waktu_jurnal_menit', $batasWaktuJurnal) }}" min="0" required class="form-control" style="width: 110px;">
-                    <span class="text-muted fw-bold">menit</span>
-                </div>
-                <small class="text-muted">Toleransi pengisian jurnal harian setelah sesi KBM guru berakhir.</small>
-            </div>
-
-            <div class="form-group mb-16">
-                <label class="form-label" for="toleransi_kelas_kosong_menit">Toleransi Peringatan Kelas Kosong (Piket)</label>
-                <div class="d-flex align-center gap-8">
-                    <input type="number" id="toleransi_kelas_kosong_menit" name="toleransi_kelas_kosong_menit" value="{{ old('toleransi_kelas_kosong_menit', $toleransiKelasKosong) }}" min="0" required class="form-control" style="width: 110px;">
-                    <span class="text-muted fw-bold">menit</span>
-                </div>
-                <small class="text-muted">Waktu sebelum sistem piket membunyikan peringatan kelas belum diisi guru.</small>
-            </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <form action="{{ route('admin.jam-sekolah.reset') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mereset seluruh konfigurasi jam sekolah ke jadwal standar resmi SMKN 1 Boyolangu?');">
+                @csrf
+                <button type="submit" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"/></svg>
+                    Reset ke Standar KBM
+                </button>
+            </form>
         </div>
     </div>
 
-    {{-- BLOK 4: TABEL DETAIL SLOT JAM PELAJARAN (INTERAKTIF) --}}
-    <div class="card mb-24">
-        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+    {{-- Hero Banner Real-Time Sync --}}
+    <div class="jam-hero-banner">
+        <div>
+            <div class="jam-hero-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                Sinkronisasi Otomatis Seluruh Role
+            </div>
+            <h2 class="jam-hero-title">Pusat Kendali Jadwal & Waktu KBM</h2>
+            <p class="jam-hero-desc">
+                Pengaturan ini langsung tersinkron ke <strong>Live Clock Banner</strong> di dashboard semua role, validasi kehadiran guru, pencatatan siswa terlambat di piket, serta batas waktu pengisian jurnal mengajar.
+            </p>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.25); border-radius: 12px; padding: 14px 20px; text-align: center; min-width: 210px;">
+            <div style="font-size: 11px; text-transform: uppercase; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px;">Jam Masuk Sekolah</div>
+            <div style="font-size: 26px; font-weight: 800; font-family: monospace; margin: 3px 0; color: #ffffff;">{{ $jamMasuk }} WIB</div>
+            <div style="font-size: 12px; color: #86efac; font-weight: 600;">Toleransi: +{{ $toleransiTerlambat }} Menit</div>
+        </div>
+    </div>
+
+    {{-- Quick Metric Highlights --}}
+    <div class="jam-metrics-grid">
+        {{-- Metric 1: Jam Masuk --}}
+        <div class="jam-metric-card">
+            <div class="jam-metric-icon blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
             <div>
+                <div class="jam-metric-label">Jam Masuk Pagi</div>
+                <div class="jam-metric-value">{{ $jamMasuk }} WIB</div>
+                <div class="jam-metric-sub">Semua Tingkat (X, XI, XII)</div>
+            </div>
+        </div>
+
+        {{-- Metric 2: Pulang Senin-Kamis --}}
+        <div class="jam-metric-card">
+            <div class="jam-metric-icon emerald">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <div>
+                <div class="jam-metric-label">Pulang Senin–Kamis</div>
+                <div class="jam-metric-value">{{ $jamPulang }} WIB</div>
+                <div class="jam-metric-sub">10 JP (40 Menit/JP)</div>
+            </div>
+        </div>
+
+        {{-- Metric 3: Pulang Jumat Kelas 10 --}}
+        <div class="jam-metric-card">
+            <div class="jam-metric-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <div>
+                <div class="jam-metric-label">Pulang Jumat (Kelas 10)</div>
+                <div class="jam-metric-value">{{ $jamPulangJumatX }} WIB</div>
+                <div class="jam-metric-sub">13 JP (Sampai Jam ke-13)</div>
+            </div>
+        </div>
+
+        {{-- Metric 4: Pulang Jumat Kelas 11 & 12 --}}
+        <div class="jam-metric-card">
+            <div class="jam-metric-icon amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            </div>
+            <div>
+                <div class="jam-metric-label">Pulang Jumat (Kelas 11 & 12)</div>
+                <div class="jam-metric-value">{{ $jamPulangJumatXi }} WIB</div>
+                <div class="jam-metric-sub">12 JP (Pulang Lebih Awal)</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Main Configuration Form --}}
+    <form action="{{ route('admin.jam-sekolah.update') }}" method="POST">
+        @csrf
+
+        <div class="jam-settings-grid">
+
+            {{-- BLOK 1: JAM OPERASIONAL SEKOLAH (MASUK & PULANG) --}}
+            <div class="jam-box">
+                <div class="jam-box-head">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <h3 class="jam-box-title">1. Waktu Masuk & Pulang</h3>
+                    <span class="jam-box-badge">Utama</span>
+                </div>
+
+                <div class="form-group mb-16">
+                    <label class="form-label" for="jam_masuk">Jam Masuk Sekolah <span class="req">*</span></label>
+                    <input type="time" id="jam_masuk" name="jam_masuk" value="{{ old('jam_masuk', $jamMasuk) }}" class="form-control" required>
+                    <small class="text-muted">Waktu mulai apel/KBM pagi hari untuk seluruh tingkat.</small>
+                </div>
+
+                <div class="form-group mb-16">
+                    <label class="form-label" for="jam_pulang">Jam Pulang (Senin — Kamis) <span class="req">*</span></label>
+                    <input type="time" id="jam_pulang" name="jam_pulang" value="{{ old('jam_pulang', $jamPulang) }}" class="form-control" required>
+                    <small class="text-muted">Akhir KBM Senin s.d Kamis (Semua Tingkat).</small>
+                </div>
+
+                <div class="form-row mb-8">
+                    <div class="form-group">
+                        <label class="form-label" for="jam_pulang_jumat_x">Pulang Jumat (Kelas 10) <span class="req">*</span></label>
+                        <input type="time" id="jam_pulang_jumat_x" name="jam_pulang_jumat_x" value="{{ old('jam_pulang_jumat_x', $jamPulangJumatX) }}" class="form-control" required>
+                        <small class="text-muted">13 JP (Kelas X).</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="jam_pulang_jumat_xi">Pulang Jumat (Kelas 11 & 12) <span class="req">*</span></label>
+                        <input type="time" id="jam_pulang_jumat_xi" name="jam_pulang_jumat_xi" value="{{ old('jam_pulang_jumat_xi', $jamPulangJumatXi) }}" class="form-control" required>
+                        <small class="text-muted">12 JP (Kelas XI & XII).</small>
+                    </div>
+                </div>
+            </div>
+
+            {{-- BLOK 2: DURASI JP & TOLERANSI MASUK --}}
+            <div class="jam-box">
+                <div class="jam-box-head">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <h3 class="jam-box-title">2. Durasi JP & Keterlambatan</h3>
+                    <span class="jam-box-badge">Durasi</span>
+                </div>
+
+                <div class="form-row mb-16">
+                    <div class="form-group">
+                        <label class="form-label" for="durasi_pelajaran_menit">Durasi 1 JP (Senin–Kamis)</label>
+                        <div class="d-flex align-center gap-8">
+                            <input type="number" id="durasi_pelajaran_menit" name="durasi_pelajaran_menit" value="{{ old('durasi_pelajaran_menit', $durasiPelajaran) }}" min="1" max="120" required class="form-control" style="width: 100px;">
+                            <span class="text-muted fw-bold">menit</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="durasi_pelajaran_jumat_menit">Durasi 1 JP (Jumat)</label>
+                        <div class="d-flex align-center gap-8">
+                            <input type="number" id="durasi_pelajaran_jumat_menit" name="durasi_pelajaran_jumat_menit" value="{{ old('durasi_pelajaran_jumat_menit', $durasiPelajaranJumat) }}" min="1" max="120" required class="form-control" style="width: 100px;">
+                            <span class="text-muted fw-bold">menit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-16">
+                    <label class="form-label" for="toleransi_keterlambatan_menit">Toleransi Keterlambatan Masuk</label>
+                    <div class="d-flex align-center gap-8">
+                        <input type="number" id="toleransi_keterlambatan_menit" name="toleransi_keterlambatan_menit" value="{{ old('toleransi_keterlambatan_menit', $toleransiTerlambat) }}" min="0" max="60" required class="form-control" style="width: 100px;">
+                        <span class="text-muted fw-bold">menit</span>
+                    </div>
+                    <small class="text-muted">Batas menit sebelum presensi guru/siswa otomatis dianggap "Terlambat".</small>
+                </div>
+            </div>
+
+            {{-- BLOK 3: ATURAN JURNAL GURU & TOLERANSI PIKET --}}
+            <div class="jam-box">
+                <div class="jam-box-head">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    <h3 class="jam-box-title">3. Aturan Jurnal Guru & Piket</h3>
+                    <span class="jam-box-badge">Validasi</span>
+                </div>
+
+                <div class="form-group mb-16">
+                    <label class="form-label" for="batas_waktu_jurnal_menit">Batas Pengisian Jurnal Mengajar</label>
+                    <div class="d-flex align-center gap-8">
+                        <input type="number" id="batas_waktu_jurnal_menit" name="batas_waktu_jurnal_menit" value="{{ old('batas_waktu_jurnal_menit', $batasWaktuJurnal) }}" min="0" required class="form-control" style="width: 100px;">
+                        <span class="text-muted fw-bold">menit</span>
+                    </div>
+                    <small class="text-muted">Toleransi pengisian jurnal guru setelah jam pelajaran berakhir.</small>
+                </div>
+
+                <div class="form-group mb-16">
+                    <label class="form-label" for="toleransi_kelas_kosong_menit">Toleransi Kelas Kosong (Piket)</label>
+                    <div class="d-flex align-center gap-8">
+                        <input type="number" id="toleransi_kelas_kosong_menit" name="toleransi_kelas_kosong_menit" value="{{ old('toleransi_kelas_kosong_menit', $toleransiKelasKosong) }}" min="0" required class="form-control" style="width: 100px;">
+                        <span class="text-muted fw-bold">menit</span>
+                    </div>
+                    <small class="text-muted">Peringatan bagi petugas piket saat kelas belum dihadiri guru.</small>
+                </div>
+            </div>
+
+        </div>
+
+        {{-- Special Callout Alert for Friday Grade 10 vs 11/12 --}}
+        <div class="friday-notice-callout">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <div>
+<<<<<<< HEAD
                 <h3 class="card-title">Tabel & Editor Slot Jam KBM Real-Time</h3>
                 <p class="card-subtitle">Pratinjau detail alokasi waktu per jam pelajaran (Senin–Kamis & Jumat)</p>
             </div>
@@ -260,34 +582,59 @@
                 <button type="button" class="tab-pill-btn" onclick="switchJamTab('jumat', this)">
                     Jumat (Jam 1 s.d 13)
                 </button>
+=======
+                <div class="friday-notice-title">💡 Informasi Perbedaan Hari Jumat: Kelas 10 vs Kelas 11 & 12</div>
+                <p class="friday-notice-desc">
+                    Pada hari Jumat, <strong>Kelas X (10)</strong> memiliki total <strong>13 Jam Pelajaran (07:00 - 15:30 WIB)</strong> karena mencakup jam ke-13 khusus penguatan profil pelajar/pembiasaan. Sedangkan <strong>Kelas XI (11) & XII (12)</strong> selesai pada <strong>Jam ke-12 (07:00 - 15:00 WIB)</strong>. Jadwal dan Live Clock Banner otomatis menyesuaikan tingkat kelas masing-masing.
+                </p>
+            </div>
+        </div>
+
+        {{-- BLOK 4: INTERACTIVE TABS FOR KBM SLOTS --}}
+        <div class="jam-tabs-container">
+            <div class="jam-tabs-header">
+                <div class="jam-tab-pills">
+                    <button type="button" class="jam-tab-pill active" onclick="switchJamDetailTab('senin_kamis', this)">
+                        📅 Senin — Kamis (Semua Kelas: Jam 1–10)
+                    </button>
+                    <button type="button" class="jam-tab-pill" onclick="switchJamDetailTab('jumat_x', this)">
+                        🕌 Jumat — Kelas X (Jam 1–13 • Pulang 15:30)
+                    </button>
+                    <button type="button" class="jam-tab-pill" onclick="switchJamDetailTab('jumat_xi', this)">
+                        🕌 Jumat — Kelas XI & XII (Jam 1–12 • Pulang 15:00)
+                    </button>
+                </div>
+                <div>
+                    @if($isCustomSeninKamis || $isCustomJumat)
+                        <span class="badge badge-info">⚙️ Menggunakan Slot Kustom</span>
+                    @else
+                        <span class="badge badge-success">✓ Standar KBM Reguler</span>
+                    @endif
+                </div>
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
             </div>
 
-            {{-- TAB 1: SENIN - KAMIS --}}
-            <div id="tabPane_senin_kamis" class="tab-pane active">
-                <div class="slot-table-wrapper">
-                    <table class="slot-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 100px;">Jam Ke</th>
-                                <th style="width: 160px;">Waktu Mulai</th>
-                                <th style="width: 160px;">Waktu Selesai</th>
-                                <th>Keterangan / Aktivitas Khusus</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($seninKamisSlots as $jam => $slot)
+            <div class="jam-tab-body">
+
+                {{-- TAB 1: SENIN - KAMIS (SEMUA TINGKAT) --}}
+                <div id="tabDetail_senin_kamis" class="jam-tab-pane active">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">
+                            Alokasi Jam Pelajaran Senin — Kamis (1 JP = {{ $durasiPelajaran }} Menit • Total 10 Jam Pelajaran)
+                        </span>
+                        <span class="badge badge-navy">Berlaku untuk Kelas X, XI, XII</span>
+                    </div>
+
+                    <div class="slot-tbl-wrap">
+                        <table class="slot-tbl">
+                            <thead>
                                 <tr>
-                                    <td><strong class="text-navy">Jam Ke-{{ $jam }}</strong></td>
-                                    <td>
-                                        <input type="time" name="slots_senin_kamis[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                    </td>
-                                    <td>
-                                        <input type="time" name="slots_senin_kamis[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="slots_senin_kamis[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="Opsional (misal: Upacara/Apel)" class="form-control form-control-sm">
-                                    </td>
+                                    <th style="width: 110px;">Jam Ke</th>
+                                    <th style="width: 150px;">Waktu Mulai</th>
+                                    <th style="width: 150px;">Waktu Selesai</th>
+                                    <th>Keterangan / Aktivitas Khusus</th>
                                 </tr>
+<<<<<<< HEAD
                                 @if(isset($seninKamisIstirahat[$jam]))
                                     <tr class="row-istirahat">
                                          <td>Istirahat</td>
@@ -299,35 +646,58 @@
                             @endforeach
                         </tbody>
                     </table>
+=======
+                            </thead>
+                            <tbody>
+                                @foreach($seninKamisSlots as $jam => $slot)
+                                    <tr>
+                                        <td>
+                                            <span class="badge-jp">Jam Ke-{{ $jam }}</span>
+                                        </td>
+                                        <td>
+                                            <input type="time" name="slots_senin_kamis[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                        </td>
+                                        <td>
+                                            <input type="time" name="slots_senin_kamis[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="slots_senin_kamis[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="Opsional (misal: Upacara/Apel)" class="form-control form-control-sm">
+                                        </td>
+                                    </tr>
+                                    @if(isset($seninKamisIstirahat[$jam]))
+                                        <tr class="row-break">
+                                            <td>☕ Istirahat</td>
+                                            <td colspan="3">
+                                                <strong>{{ $seninKamisIstirahat[$jam]['label'] }}</strong> ({{ $seninKamisIstirahat[$jam]['waktu'] }})
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                 </div>
-            </div>
 
-            {{-- TAB 2: JUMAT --}}
-            <div id="tabPane_jumat" class="tab-pane">
-                <div class="slot-table-wrapper">
-                    <table class="slot-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 100px;">Jam Ke</th>
-                                <th style="width: 160px;">Waktu Mulai</th>
-                                <th style="width: 160px;">Waktu Selesai</th>
-                                <th>Keterangan / Aktivitas Khusus</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($jumatSlots as $jam => $slot)
+                {{-- TAB 2: JUMAT - KELAS X (10) --}}
+                <div id="tabDetail_jumat_x" class="jam-tab-pane">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">
+                            Alokasi Jam Pelajaran Jumat Khusus <strong>Kelas X (10)</strong> (1 JP = {{ $durasiPelajaranJumat }} Menit • Total 13 Jam Pelajaran • Pulang {{ $jamPulangJumatX }} WIB)
+                        </span>
+                        <span class="badge badge-purple" style="background:#8b5cf6; color:#ffffff;">Khusus Kelas X (10)</span>
+                    </div>
+
+                    <div class="slot-tbl-wrap">
+                        <table class="slot-tbl">
+                            <thead>
                                 <tr>
-                                    <td><strong class="text-navy">Jam Ke-{{ $jam }}</strong></td>
-                                    <td>
-                                        <input type="time" name="slots_jumat[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                    </td>
-                                    <td>
-                                        <input type="time" name="slots_jumat[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="slots_jumat[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="Opsional (misal: Pembiasaan Hari Jumat)" class="form-control form-control-sm">
-                                    </td>
+                                    <th style="width: 110px;">Jam Ke</th>
+                                    <th style="width: 150px;">Waktu Mulai</th>
+                                    <th style="width: 150px;">Waktu Selesai</th>
+                                    <th>Keterangan / Aktivitas Khusus</th>
                                 </tr>
+<<<<<<< HEAD
                                 @if(isset($jumatIstirahat[$jam]))
                                     <tr class="row-istirahat">
                                         <td>Istirahat</td>
@@ -339,11 +709,101 @@
                             @endforeach
                         </tbody>
                     </table>
+=======
+                            </thead>
+                            <tbody>
+                                @foreach($jumatSlotsX as $jam => $slot)
+                                    <tr class="{{ $jam == 13 ? 'row-highlight-x' : '' }}">
+                                        <td>
+                                            <span class="badge-jp" style="{{ $jam == 13 ? 'background:#ede9fe; color:#6d28d9;' : '' }}">
+                                                Jam Ke-{{ $jam }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <input type="time" name="slots_jumat[{{ $jam }}][mulai]" value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                        </td>
+                                        <td>
+                                            <input type="time" name="slots_jumat[{{ $jam }}][selesai]" value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px;">
+                                        </td>
+                                        <td>
+                                            @if($jam == 13)
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <input type="text" name="slots_jumat[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? 'Khusus Kelas X (Penguatan/P5)' }}" class="form-control form-control-sm">
+                                                    <span class="badge badge-warning" style="white-space:nowrap; font-size:11px;">⭐ Tambahan Kelas X</span>
+                                                </div>
+                                            @else
+                                                <input type="text" name="slots_jumat[{{ $jam }}][keterangan]" value="{{ $slot['keterangan'] ?? '' }}" placeholder="Opsional (misal: Pembiasaan Hari Jumat)" class="form-control form-control-sm">
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @if(isset($jumatIstirahat[$jam]))
+                                        <tr class="row-break">
+                                            <td>🕌 Istirahat</td>
+                                            <td colspan="3">
+                                                <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
                 </div>
+
+                {{-- TAB 3: JUMAT - KELAS XI & XII (11 & 12) --}}
+                <div id="tabDetail_jumat_xi" class="jam-tab-pane">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">
+                            Alokasi Jam Pelajaran Jumat Khusus <strong>Kelas XI (11) & XII (12)</strong> (1 JP = {{ $durasiPelajaranJumat }} Menit • Total 12 Jam Pelajaran • Pulang {{ $jamPulangJumatXi }} WIB)
+                        </span>
+                        <span class="badge badge-amber" style="background:#f59e0b; color:#ffffff;">Kelas XI (11) & XII (12)</span>
+                    </div>
+
+                    <div class="slot-tbl-wrap">
+                        <table class="slot-tbl">
+                            <thead>
+                                <tr>
+                                    <th style="width: 110px;">Jam Ke</th>
+                                    <th style="width: 150px;">Waktu Mulai</th>
+                                    <th style="width: 150px;">Waktu Selesai</th>
+                                    <th>Keterangan / Aktivitas Khusus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($jumatSlotsXi as $jam => $slot)
+                                    <tr>
+                                        <td>
+                                            <span class="badge-jp">Jam Ke-{{ $jam }}</span>
+                                        </td>
+                                        <td>
+                                            <input type="time" disabled value="{{ $slot['waktu_mulai'] }}" class="form-control form-control-sm" style="width: 130px; opacity:0.85;">
+                                        </td>
+                                        <td>
+                                            <input type="time" disabled value="{{ $slot['waktu_selesai'] }}" class="form-control form-control-sm" style="width: 130px; opacity:0.85;">
+                                        </td>
+                                        <td>
+                                            <input type="text" disabled value="{{ $slot['keterangan'] ?? '' }}" placeholder="Mengikuti konfigurasi Jumat" class="form-control form-control-sm" style="opacity:0.85;">
+                                        </td>
+                                    </tr>
+                                    @if(isset($jumatIstirahat[$jam]))
+                                        <tr class="row-break">
+                                            <td>🕌 Istirahat</td>
+                                            <td colspan="3">
+                                                <strong>{{ $jumatIstirahat[$jam]['label'] }}</strong> ({{ $jumatIstirahat[$jam]['waktu'] }})
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
 
+<<<<<<< HEAD
     {{-- TOMBOL SUBMIT --}}
     <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 40px;">
         <button type="submit" class="btn btn-primary btn-lg" style="padding: 12px 28px; font-weight: 700; font-size: 15px; box-shadow: var(--shadow-md);">
@@ -353,16 +813,29 @@
             Batal
         </a>
     </div>
+=======
+        {{-- Action Submit Bar --}}
+        <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 40px;">
+            <button type="submit" class="btn btn-primary btn-lg" style="padding: 12px 30px; font-weight: 700; font-size: 15px; box-shadow: var(--shadow-md);">
+                💾 SIMPAN PENGATURAN JAM SEKOLAH
+            </button>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary btn-lg">
+                Batal
+            </a>
+        </div>
+>>>>>>> 17c7770e8d8f725f51c4468bb61b31a80b427243
 
-</form>
+    </form>
+
+</div>
 
 <script>
-function switchJamTab(tabKey, btnEl) {
-    document.querySelectorAll('.tab-pill-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+function switchJamDetailTab(tabKey, btnEl) {
+    document.querySelectorAll('.jam-tab-pill').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.jam-tab-pane').forEach(p => p.classList.remove('active'));
 
     if (btnEl) btnEl.classList.add('active');
-    const targetPane = document.getElementById('tabPane_' + tabKey);
+    const targetPane = document.getElementById('tabDetail_' + tabKey);
     if (targetPane) targetPane.classList.add('active');
 }
 </script>
