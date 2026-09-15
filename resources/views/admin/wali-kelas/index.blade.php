@@ -263,6 +263,7 @@
     <div class="custom-modal">
         <form id="assignWaliForm" action="" method="POST">
             @csrf
+            @method('PUT')
             <div class="custom-modal-header">
                 <h3 style="margin:0; font-size:16px; font-weight:700;">Penetapan Wali Kelas</h3>
                 <button type="button" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--text-muted);" onclick="closeAssignModal()">&times;</button>

@@ -114,7 +114,7 @@
 
 {{-- Ringkasan per Role --}}
 @php
-    $roleGroups = $users->groupBy('role');
+    $roleGroups = $users->getCollection()->groupBy('role');
     $roleMeta = [
         'admin'          => ['label'=>'Admin',          'class'=>'rb-admin'],
         'guru'           => ['label'=>'Guru',           'class'=>'rb-guru'],
@@ -139,7 +139,7 @@
         @endif
     @endforeach
     <button onclick="filterRole('')" class="btn btn-secondary btn-sm" id="filterBtnAll">
-        Semua ({{ $users->count() }})
+        Semua ({{ $users->total() }})
     </button>
 </div>
 
@@ -158,7 +158,7 @@
 
 <div class="card">
     <div class="card-body" style="padding:0;">
-        @if($users->count() > 0)
+        @if($users->total() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
             <table class="table" id="tableUsers">
                 <thead>
@@ -178,7 +178,7 @@
                         $rm = $roleMeta[$item->role] ?? ['label' => strtoupper($item->role), 'class' => 'rb-ortu'];
                     @endphp
                     <tr data-role="{{ $item->role }}">
-                        <td class="no-col">{{ $loop->iteration }}</td>
+                        <td class="no-col">{{ ($users->currentPage() - 1) * 25 + $loop->iteration }}</td>
                         <td class="fw-bold" style="color:var(--text-primary);">{{ $item->nama }}</td>
                         <td>
                             <span class="badge badge-navy" style="font-family:monospace; font-size:13px;">{{ $item->username }}</span>
@@ -218,6 +218,59 @@
                 </tbody>
             </table>
         </div>
+        {{-- Info & Navigasi Pagination --}}
+        @if($users->lastPage() > 1)
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding:14px 16px; border-top:1px solid var(--border);">
+            <span style="font-size:13px; color:var(--text-secondary);">
+                Menampilkan
+                <strong>{{ $users->firstItem() }}</strong>–<strong>{{ $users->lastItem() }}</strong>
+                dari <strong>{{ $users->total() }}</strong> pengguna
+            </span>
+            <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
+                {{-- Prev --}}
+                @if($users->onFirstPage())
+                    <span style="padding:5px 10px; border-radius:6px; font-size:13px; color:var(--text-secondary); border:1px solid var(--border); cursor:not-allowed; opacity:.5;">‹</span>
+                @else
+                    <a href="{{ $users->previousPageUrl() }}" style="padding:5px 10px; border-radius:6px; font-size:13px; color:var(--text-primary); border:1px solid var(--border); text-decoration:none;">‹</a>
+                @endif
+
+                {{-- Halaman --}}
+                @php
+                    $cur  = $users->currentPage();
+                    $last = $users->lastPage();
+                    $pages = [];
+                    if ($last <= 7) {
+                        $pages = range(1, $last);
+                    } else {
+                        $pages = array_unique(array_filter(array_merge(
+                            [1, 2],
+                            ($cur > 4)              ? ['...l'] : [],
+                            range(max(3, $cur-1), min($last-2, $cur+1)),
+                            ($cur < $last - 3)      ? ['...r'] : [],
+                            [$last-1, $last]
+                        )));
+                    }
+                @endphp
+
+                @foreach($pages as $p)
+                    @if($p === '...l' || $p === '...r')
+                        <span style="padding:5px 8px; font-size:13px; color:var(--text-secondary);">…</span>
+                    @elseif($p == $cur)
+                        <span style="padding:5px 10px; border-radius:6px; font-size:13px; font-weight:700; background:var(--primary,#3b82f6); color:#fff; border:1px solid var(--primary,#3b82f6);">{{ $p }}</span>
+                    @else
+                        <a href="{{ $users->url($p) }}" style="padding:5px 10px; border-radius:6px; font-size:13px; color:var(--text-primary); border:1px solid var(--border); text-decoration:none;">{{ $p }}</a>
+                    @endif
+                @endforeach
+
+                {{-- Next --}}
+                @if($users->hasMorePages())
+                    <a href="{{ $users->nextPageUrl() }}" style="padding:5px 10px; border-radius:6px; font-size:13px; color:var(--text-primary); border:1px solid var(--border); text-decoration:none;">›</a>
+                @else
+                    <span style="padding:5px 10px; border-radius:6px; font-size:13px; color:var(--text-secondary); border:1px solid var(--border); cursor:not-allowed; opacity:.5;">›</span>
+                @endif
+            </div>
+        </div>
+        @endif
         @else
         <div class="empty-state">
             <div class="empty-state-text">Tidak ada data pengguna.</div>

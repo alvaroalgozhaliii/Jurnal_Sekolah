@@ -10,6 +10,7 @@ use App\Models\AbsensiSiswa;
 use App\Models\JurnalHarian;
 use App\Models\SiswaTerlambat;
 use App\Models\Notifikasi;
+use App\Services\AttendanceAlertService;
 use Carbon\Carbon;
 
 class WaliKelasController extends Controller
@@ -74,8 +75,19 @@ class WaliKelasController extends Controller
         // Also keep backward-compat variable name
         $statusHariIni = $statusTanggal;
 
+        $peringatanMap = [];
+        $siswaPerhatianCount = 0;
+        if ($kelas && $siswaList->isNotEmpty()) {
+            $peringatanMap = AttendanceAlertService::checkBulk($siswaList);
+            foreach ($peringatanMap as $p) {
+                if (!empty($p['has_alert'])) {
+                    $siswaPerhatianCount++;
+                }
+            }
+        }
+
         return view('walikelas.data-kelas', compact(
-            'kelas', 'siswaList', 'statusTanggal', 'statusHariIni', 'tanggal', 'today'
+            'kelas', 'siswaList', 'statusTanggal', 'statusHariIni', 'tanggal', 'today', 'peringatanMap', 'siswaPerhatianCount'
         ));
     }
 
@@ -117,8 +129,20 @@ class WaliKelasController extends Controller
             }
         }
 
+        $peringatanMap = [];
+        $selectedSiswa = null;
+        $peringatan = [];
+        if ($kelas && $siswaList->isNotEmpty()) {
+            $peringatanMap = AttendanceAlertService::checkBulk($siswaList);
+            if ($selectedSiswaId) {
+                $selectedSiswa = $siswaList->firstWhere('id_siswa', $selectedSiswaId);
+                $peringatan = $peringatanMap[$selectedSiswaId]['alerts'] ?? [];
+            }
+        }
+
         return view('walikelas.rekap-presensi', compact(
-            'kelas', 'siswaList', 'bulan', 'tahun', 'selectedSiswaId', 'rekapData', 'summary'
+            'kelas', 'siswaList', 'bulan', 'tahun', 'selectedSiswaId', 'rekapData', 'summary',
+            'peringatanMap', 'selectedSiswa', 'peringatan'
         ));
     }
 

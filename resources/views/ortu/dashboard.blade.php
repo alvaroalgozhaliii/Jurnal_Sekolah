@@ -31,6 +31,7 @@
 @endif
 
 @if($selectedSiswa)
+@include('partials.peringatan-siswa', ['peringatan' => $peringatan ?? [], 'namaSiswa' => $selectedSiswa->nama])
 <div class="grid-2 mb-24">
     <!-- INFORMASI PROFIL ANAK -->
     <div class="card">

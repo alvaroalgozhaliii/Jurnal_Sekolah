@@ -9,6 +9,7 @@ use App\Models\Jadwal;
 use App\Models\AbsensiSiswa;
 use App\Models\PengajuanIzin;
 use App\Models\Notifikasi;
+use App\Services\AttendanceAlertService;
 use Carbon\Carbon;
 
 class OrtuDashboardController extends Controller
@@ -83,13 +84,18 @@ class OrtuDashboardController extends Controller
             ->take(5)
             ->get();
 
+        $alertData = $selectedSiswa ? AttendanceAlertService::checkSiswa($selectedSiswa->id_siswa) : null;
+        $peringatan = $alertData['alerts'] ?? [];
+
         return view('ortu.dashboard', compact(
             'anakList',
             'selectedSiswa',
             'jadwalHariIni',
             'statusPresensi',
             'summaryAnak',
-            'notifikasiList'
+            'notifikasiList',
+            'peringatan',
+            'alertData'
         ));
     }
 
@@ -179,8 +185,11 @@ class OrtuDashboardController extends Controller
             }
         }
 
+        $alertData = $selectedSiswa ? AttendanceAlertService::checkSiswa($selectedSiswa->id_siswa) : null;
+        $peringatan = $alertData['alerts'] ?? [];
+
         return view('ortu.rekap-bulanan', compact(
-            'anakList', 'selectedSiswa', 'bulan', 'tahun', 'rekapData', 'summary'
+            'anakList', 'selectedSiswa', 'bulan', 'tahun', 'rekapData', 'summary', 'peringatan', 'alertData'
         ));
     }
 
