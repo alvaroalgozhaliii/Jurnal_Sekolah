@@ -50,6 +50,7 @@
 
 <div class="card">
     <div class="card-body" style="padding:0;">
+        @if($guru->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
             <table class="table">
                 <thead>
@@ -66,7 +67,7 @@
                 <tbody>
                     @foreach($guru as $item)
                     <tr>
-                        <td class="no-col">{{ $loop->iteration }}</td>
+                        <td class="no-col">{{ $guru->firstItem() + $loop->index }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
                         <td class="text-muted">{{ $item->nip ?? '-' }}</td>
                         <td>{{ $item->bidang_studi ?? '-' }}</td>
@@ -91,6 +92,21 @@
                 </tbody>
             </table>
         </div>
+        @if($guru->hasPages())
+        <div class="card-footer">
+            <div class="text-muted" style="font-size: 13px;">
+                Menampilkan <strong>{{ $guru->firstItem() ?? 0 }}</strong> &ndash; <strong>{{ $guru->lastItem() ?? 0 }}</strong> dari <strong>{{ $guru->total() }}</strong> guru
+            </div>
+            <div>
+                {{ $guru->links() }}
+            </div>
+        </div>
+        @endif
+        @else
+        <div class="empty-state" style="padding: 32px; text-align: center;">
+            <div class="empty-state-text" style="color: var(--text-muted); font-size: 14px;">Tidak ada data guru ditemukan.</div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection

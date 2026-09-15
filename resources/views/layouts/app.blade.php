@@ -33,45 +33,54 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Tom Select (Searchable Dropdown System) -->
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
     <style>
     /* ═══════════════════════════════════════════════
        PREMIUM SEARCHABLE SELECT (Tom Select Styling)
     ═══════════════════════════════════════════════ */
-    .ts-wrapper.form-control, .ts-wrapper.select-search {
-        padding: 0;
+    html .ts-wrapper,
+    html [data-theme="dark"] .ts-wrapper {
+        padding: 0 !important;
         border: none !important;
         background: transparent !important;
-        width: 100%;
-        display: block;
-        position: relative;
-    }
-    .ts-control {
-        border: 1.5px solid var(--border, #cbd5e1) !important;
-        border-radius: 10px !important;
-        padding: 8px 14px !important;
-        font-size: 13.5px !important;
-        font-family: 'Inter', -apple-system, sans-serif !important;
-        min-height: 42px !important;
+        background-color: transparent !important;
         box-shadow: none !important;
-        background: var(--bg-card, #ffffff) !important;
+        transform: none !important;
+        width: 100% !important;
+        display: block !important;
+        position: relative !important;
+    }
+    html .ts-wrapper .ts-control,
+    html [data-theme="dark"] .ts-wrapper .ts-control {
+        border: 1px solid var(--border, #cbd5e1) !important;
+        border-radius: var(--radius-sm, 6px) !important;
+        padding: 8px 11px !important;
+        font-size: 13px !important;
+        font-family: 'Inter', -apple-system, sans-serif !important;
+        min-height: 38px !important;
+        height: 38px !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
         color: var(--text-primary, #1e293b) !important;
         width: 100% !important;
-        cursor: pointer;
+        cursor: pointer !important;
         transition: all 0.2s ease !important;
         display: flex !important;
         align-items: center !important;
         outline: none !important;
+        box-sizing: border-box !important;
     }
-    .ts-control:hover {
+    html .ts-wrapper .ts-control:hover {
         border-color: #3b82f6 !important;
     }
-    .ts-wrapper.focus .ts-control {
+    html .ts-wrapper.focus .ts-control {
         border-color: #2563eb !important;
         box-shadow: 0 0 0 3px rgba(37,99,235,0.2) !important;
-        background: var(--bg-card, #ffffff) !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
         outline: none !important;
     }
     /* Menghilangkan kotak outline / border biru di dalam input Tom Select */
@@ -83,7 +92,7 @@
         box-shadow: none !important;
         background: transparent !important;
         font-family: 'Inter', -apple-system, sans-serif !important;
-        font-size: 13.5px !important;
+        font-size: 13px !important;
         color: var(--text-primary, #1e293b) !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -92,23 +101,31 @@
         color: var(--text-primary, #1e293b) !important;
         font-weight: 500;
     }
-    .ts-dropdown {
+    .ts-dropdown, body > .ts-dropdown {
         position: absolute !important;
-        top: calc(100% + 4px) !important;
-        left: 0 !important;
-        width: 100% !important;
-        border: 1.5px solid var(--border, #cbd5e1) !important;
-        border-radius: 12px !important;
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18) !important;
-        background: var(--bg-card, #ffffff) !important;
+        border: 1px solid var(--border, #cbd5e1) !important;
+        border-radius: 8px !important;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25) !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
         opacity: 1 !important;
         overflow: hidden !important;
-        z-index: 9999 !important;
+        z-index: 999999 !important;
+    }
+    .form-group, .form-row {
+        position: relative;
+    }
+    .form-group:focus-within,
+    .form-row:focus-within,
+    .ts-wrapper.focus,
+    .ts-wrapper.dropdown-active {
+        z-index: 99999 !important;
+        position: relative !important;
     }
     .ts-dropdown-content {
         max-height: 220px !important;
         overflow-y: auto !important;
-        background: var(--bg-card, #ffffff) !important;
+        background: inherit !important;
         padding: 4px !important;
     }
     .ts-dropdown .option {
@@ -141,22 +158,34 @@
         padding: 1px 4px;
     }
     /* Dark Mode Tom Select Overrides */
+    html[data-theme="dark"] .ts-wrapper .ts-control,
+    [data-theme="dark"] .ts-wrapper .ts-control,
     [data-theme="dark"] .ts-control {
+        background: #162032 !important;
+        background-color: #162032 !important;
+        color: #f8fafc !important;
+        border: 1px solid #334155 !important;
+    }
+    html[data-theme="dark"] .ts-wrapper.focus .ts-control,
+    [data-theme="dark"] .ts-wrapper.focus .ts-control {
         background: #1e293b !important;
+        background-color: #1e293b !important;
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3.5px rgba(59, 130, 246, 0.25) !important;
+    }
+    [data-theme="dark"] .ts-control .item,
+    [data-theme="dark"] .ts-control input {
         color: #f8fafc !important;
+    }
+    [data-theme="dark"] .ts-control input::placeholder {
+        color: #94a3b8 !important;
+    }
+    [data-theme="dark"] .ts-dropdown,
+    [data-theme="dark"] body > .ts-dropdown {
+        background: #0f172a !important;
+        background-color: #0f172a !important;
         border-color: #334155 !important;
-    }
-    [data-theme="dark"] .ts-control .item {
-        color: #f8fafc !important;
-    }
-    [data-theme="dark"] .ts-control input,
-    [data-theme="dark"] .ts-control input:focus {
-        color: #f8fafc !important;
-    }
-    [data-theme="dark"] .ts-dropdown {
-        background: #1e293b !important;
-        border-color: #334155 !important;
-        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6) !important;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8) !important;
     }
     [data-theme="dark"] .ts-dropdown .option {
         color: #e2e8f0 !important;
@@ -766,6 +795,10 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const dateInputs = document.querySelectorAll('input[type="date"]');
+    const monthNames = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
 
     dateInputs.forEach(input => {
         if (input.dataset.calendarInit) return;
@@ -789,9 +822,14 @@ document.addEventListener('DOMContentLoaded', function () {
         popover.className = 'jurnal-calendar-popover';
         popover.innerHTML = `
             <div class="jurnal-cal-header">
-                <button type="button" class="jurnal-cal-nav-btn btn-prev">&larr;</button>
-                <div class="jurnal-cal-month-title">Bulan Tahun</div>
-                <button type="button" class="jurnal-cal-nav-btn btn-next">&rarr;</button>
+                <button type="button" class="jurnal-cal-nav-btn btn-prev" title="Bulan Sebelumnya">&larr;</button>
+                <div class="jurnal-cal-selects">
+                    <select class="jurnal-cal-select-month" title="Pilih Bulan">
+                        ${monthNames.map((m, idx) => `<option value="${idx}">${m}</option>`).join('')}
+                    </select>
+                    <select class="jurnal-cal-select-year" title="Pilih Tahun"></select>
+                </div>
+                <button type="button" class="jurnal-cal-nav-btn btn-next" title="Bulan Selanjutnya">&rarr;</button>
             </div>
             <div class="jurnal-cal-grid">
                 <div class="jurnal-cal-day-label">Min</div>
@@ -810,15 +848,24 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
         wrapper.appendChild(popover);
 
+        const monthSelect = popover.querySelector('.jurnal-cal-select-month');
+        const yearSelect = popover.querySelector('.jurnal-cal-select-year');
+
+        // Populate Year Options (from current year + 15 down to 1940)
+        const currentYr = new Date().getFullYear();
+        const minYear = 1940;
+        const maxYear = currentYr + 15;
+        for (let y = maxYear; y >= minYear; y--) {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            yearSelect.appendChild(opt);
+        }
+
         let currDate = input.value ? new Date(input.value) : new Date();
         if (isNaN(currDate.getTime())) currDate = new Date();
         let viewMonth = currDate.getMonth();
         let viewYear = currDate.getFullYear();
-
-        const monthNames = [
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-        ];
 
         function updateVisibleText() {
             if (input.value) {
@@ -836,8 +883,8 @@ document.addEventListener('DOMContentLoaded', function () {
         updateVisibleText();
 
         function renderCalendar() {
-            const monthTitle = popover.querySelector('.jurnal-cal-month-title');
-            monthTitle.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+            monthSelect.value = viewMonth;
+            yearSelect.value = viewYear;
 
             const datesContainer = popover.querySelector('.dates-container');
             datesContainer.innerHTML = '';
@@ -888,6 +935,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        monthSelect.addEventListener('change', function (e) {
+            e.stopPropagation();
+            viewMonth = parseInt(monthSelect.value, 10);
+            renderCalendar();
+        });
+
+        yearSelect.addEventListener('change', function (e) {
+            e.stopPropagation();
+            viewYear = parseInt(yearSelect.value, 10);
+            renderCalendar();
+        });
+
         visibleInput.addEventListener('click', function (e) {
             e.stopPropagation();
             document.querySelectorAll('.jurnal-calendar-popover.active').forEach(p => {
@@ -914,9 +973,12 @@ document.addEventListener('DOMContentLoaded', function () {
         popover.querySelector('.jurnal-cal-btn-today').addEventListener('click', function (e) {
             e.stopPropagation();
             const now = new Date();
-            const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            viewMonth = now.getMonth();
+            viewYear = now.getFullYear();
+            const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             input.value = dateStr;
             updateVisibleText();
+            renderCalendar();
             popover.classList.remove('active');
             input.dispatchEvent(new Event('change', { bubbles: true }));
         });
@@ -925,6 +987,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.stopPropagation();
             input.value = '';
             updateVisibleText();
+            renderCalendar();
             popover.classList.remove('active');
             input.dispatchEvent(new Event('change', { bubbles: true }));
         });
@@ -1037,6 +1100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 placeholder: el.getAttribute('placeholder') || '-- Ketik untuk mencari / memilih --',
                 allowEmptyOption: true,
                 maxOptions: 200,
+                dropdownParent: 'body',
                 onChange: function(value) {
                     // Trigger native change event agar listener lain (onchange / Alpine / Vanilla) tetap berjalan
                     el.dispatchEvent(new Event('change', { bubbles: true }));

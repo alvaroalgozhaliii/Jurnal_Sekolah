@@ -59,17 +59,19 @@
                         <th>Tingkat</th>
                         <th>Jurusan</th>
                         <th>Wali Kelas</th>
+                        <th>Jumlah Siswa</th>
                         <th class="action-col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($kelas as $item)
                     <tr>
-                        <td class="no-col">{{ $loop->iteration }}</td>
+                        <td class="no-col">{{ $kelas->firstItem() + $loop->index }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama_kelas }}</td>
                         <td><span class="badge badge-navy">{{ $item->tingkat }}</span></td>
                         <td>{{ $item->jurusan->nama_jurusan ?? '-' }}</td>
                         <td>{{ $item->wali_kelas ?? '-' }}</td>
+                        <td><span class="badge badge-secondary">{{ $item->siswa_count }} siswa</span></td>
                         <td class="action-col">
                             <a href="{{ route('kelas.show', $item->id_kelas) }}" class="btn btn-secondary btn-sm">Detail</a>
                             <a href="{{ route('kelas.edit', $item->id_kelas) }}" class="btn btn-primary btn-sm">Edit</a>
@@ -83,6 +85,16 @@
                 </tbody>
             </table>
         </div>
+        @if($kelas->hasPages())
+        <div class="card-footer">
+            <div class="text-muted" style="font-size: 13px;">
+                Menampilkan <strong>{{ $kelas->firstItem() ?? 0 }}</strong> &ndash; <strong>{{ $kelas->lastItem() ?? 0 }}</strong> dari <strong>{{ $kelas->total() }}</strong> kelas
+            </div>
+            <div>
+                {{ $kelas->links() }}
+            </div>
+        </div>
+        @endif
         @else
         <div class="empty-state">
             <div class="empty-state-text">Tidak ada data kelas.</div>

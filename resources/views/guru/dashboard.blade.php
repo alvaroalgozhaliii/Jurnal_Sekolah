@@ -150,7 +150,7 @@
     </div>
 
     <!-- PRESENSI SAYA ACTION BUTTON -->
-    <div class="stat-card justify-between" style="background: linear-gradient(135deg, #1e3a8a, #1e293b); color: #ffffff;">
+    <div class="stat-card justify-between" style="border-left: 4px solid #3b82f6; background: linear-gradient(135deg, #1e3a8a, #1e293b); color: #ffffff;">
         <div>
             <div style="font-size: 15px; font-weight: 700;">Presensi Harian Guru</div>
             <div style="font-size: 12px; color: #cbd5e1; margin-top: 2px;">Catat Waktu Masuk & Keluar</div>
