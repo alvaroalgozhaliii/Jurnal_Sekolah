@@ -37,7 +37,7 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
-        $nisn = $request->input('nisn', $request->input('nis'));
+        $nisn = $request->input('nisn') ?? $request->input('NISN') ?? $request->input('nis');
         $request->merge(['nisn' => $nisn]);
 
         $request->validate([
@@ -94,7 +94,7 @@ class SiswaController extends Controller
     {
         $siswa = Siswa::findOrFail($id);
 
-        $nisn = $request->input('nisn', $request->input('nis'));
+        $nisn = $request->input('nisn') ?? $request->input('NISN') ?? $request->input('nis');
         $request->merge(['nisn' => $nisn]);
 
         $request->validate([
