@@ -1046,13 +1046,37 @@ input[type="number"]::-webkit-outer-spin-button {
     border-bottom: 1px solid var(--border);
 }
 
-.jurnal-cal-month-title {
-    font-weight: 800;
-    font-size: 15px;
-    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1.2;
+.jurnal-cal-selects {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.jurnal-cal-select-month,
+.jurnal-cal-select-year {
+    background: #f8fafc;
+    border: 1px solid var(--border, #cbd5e1);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e3a8a;
+    outline: none;
+    cursor: pointer;
+    font-family: 'Inter', -apple-system, sans-serif;
+    transition: all 0.18s ease;
+}
+
+.jurnal-cal-select-month:hover,
+.jurnal-cal-select-year:hover {
+    border-color: #3b82f6;
+    background: #f0f7ff;
+}
+
+.jurnal-cal-select-month:focus,
+.jurnal-cal-select-year:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 
 .jurnal-cal-nav-btn {
@@ -1649,8 +1673,8 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme="dark"] input[type="time"],
 [data-theme="dark"] select,
 [data-theme="dark"] textarea {
-    background-color: #080c16 !important;
-    border: 1px solid #26354f !important;
+    background-color: #162032 !important;
+    border: 1px solid #334155 !important;
     color: #f8fafc !important;
 }
 
@@ -1668,19 +1692,20 @@ input[type="number"]::-webkit-outer-spin-button {
 
 [data-theme="dark"] input::placeholder,
 [data-theme="dark"] textarea::placeholder {
-    color: #64748b !important;
+    color: #94a3b8 !important;
 }
 
+[data-theme="dark"] .form-control:focus,
 [data-theme="dark"] input:focus,
 [data-theme="dark"] select:focus,
 [data-theme="dark"] textarea:focus {
     border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22) !important;
-    background-color: #080c16 !important;
+    box-shadow: 0 0 0 3.5px rgba(59, 130, 246, 0.25) !important;
+    background-color: #1e293b !important;
 }
 
 [data-theme="dark"] input[readonly] {
-    background-color: #050811 !important;
+    background-color: #0b1324 !important;
     color: #93c5fd !important;
     border-color: #1e293b !important;
 }
@@ -1777,10 +1802,61 @@ input[type="number"]::-webkit-outer-spin-button {
     border-color: #2563eb;
 }
 
+html .ts-wrapper,
+html [data-theme="dark"] .ts-wrapper {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+    width: 100% !important;
+    display: block !important;
+    position: relative !important;
+}
+
+html .ts-wrapper .ts-control,
+html [data-theme="dark"] .ts-wrapper .ts-control {
+    border: 1px solid var(--border, #cbd5e1) !important;
+    border-radius: var(--radius-sm, 6px) !important;
+    padding: 8px 11px !important;
+    font-size: 13px !important;
+    font-family: 'Inter', -apple-system, sans-serif !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: var(--text-primary, #1e293b) !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+.form-group, .form-row {
+    position: relative;
+}
+
+.form-group:focus-within,
+.form-row:focus-within,
+.ts-wrapper.focus,
+.ts-wrapper.dropdown-active {
+    z-index: 99999 !important;
+    position: relative !important;
+}
+
+.ts-dropdown, body > .ts-dropdown {
+    z-index: 999999 !important;
+}
+
 /* Dark mode for Tom Select */
+html[data-theme="dark"] .ts-wrapper .ts-control,
+[data-theme="dark"] .ts-wrapper .ts-control,
 [data-theme="dark"] .ts-control {
-    background-color: #080c16 !important;
-    border: 1px solid #26354f !important;
+    background-color: #162032 !important;
+    border: 1px solid #334155 !important;
     color: #f8fafc !important;
 }
 
@@ -1788,10 +1864,11 @@ input[type="number"]::-webkit-outer-spin-button {
     color: #f8fafc !important;
 }
 
-[data-theme="dark"] .ts-dropdown {
+[data-theme="dark"] .ts-dropdown,
+[data-theme="dark"] body > .ts-dropdown {
     background-color: #0f172a !important;
     border: 1px solid #26354f !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8) !important;
 }
 
 [data-theme="dark"] .ts-dropdown-content {
@@ -1838,8 +1915,23 @@ input[type="number"]::-webkit-outer-spin-button {
     color: var(--text-primary);
 }
 
-[data-theme="dark"] .jurnal-cal-month-title {
-    color: #60a5fa;
+[data-theme="dark"] .jurnal-cal-select-month,
+[data-theme="dark"] .jurnal-cal-select-year {
+    background: #162032 !important;
+    border-color: #334155 !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] .jurnal-cal-select-month:hover,
+[data-theme="dark"] .jurnal-cal-select-year:hover {
+    border-color: #3b82f6 !important;
+    background: #1e293b !important;
+}
+
+[data-theme="dark"] .jurnal-cal-select-month option,
+[data-theme="dark"] .jurnal-cal-select-year option {
+    background: #0f172a !important;
+    color: #f8fafc !important;
 }
 
 [data-theme="dark"] .jurnal-cal-nav-btn {
