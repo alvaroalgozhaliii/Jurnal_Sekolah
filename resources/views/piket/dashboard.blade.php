@@ -159,16 +159,27 @@
 
 <!-- TABEL MONITORING JADWAL HARI INI -->
 <div class="card">
-    <div class="card-header">
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <h3 class="card-title">
             <svg class="svg-icon text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
             Jadwal Mengajar KBM Hari Ini ({{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM YYYY') }})
         </h3>
+        @if($jadwalHariIni->count() > 10)
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" id="jadwalPrevBtn" class="btn btn-secondary btn-sm" style="padding:4px 10px; display:inline-flex; align-items:center; gap:4px; font-weight:600;">
+                &larr; Prev
+            </button>
+            <span id="jadwalSlideInfo" style="font-size:12.5px; font-weight:600; color:var(--text-secondary);">Slide 1</span>
+            <button type="button" id="jadwalNextBtn" class="btn btn-secondary btn-sm" style="padding:4px 10px; display:inline-flex; align-items:center; gap:4px; font-weight:600;">
+                Next &rarr;
+            </button>
+        </div>
+        @endif
     </div>
     <div class="card-body" style="padding:0;">
         @if($jadwalHariIni->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+            <table class="table" id="tableJadwalPiket">
                 <thead>
                     <tr>
                         <th class="no-col">Jam</th>
@@ -180,7 +191,7 @@
                 </thead>
                 <tbody>
                     @foreach($jadwalHariIni as $j)
-                    <tr>
+                    <tr class="jadwal-row">
                         <td class="no-col fw-bold">{{ $j->jam_ke }}</td>
                         <td>{{ $j->waktu_mulai }} - {{ $j->waktu_selesai }}</td>
                         <td><span class="badge badge-navy">{{ $j->kelas->nama_kelas ?? '-' }}</span></td>
@@ -191,6 +202,18 @@
                 </tbody>
             </table>
         </div>
+
+        @if($jadwalHariIni->count() > 10)
+        <div class="card-footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:12px 18px; border-top:1px solid var(--border);">
+            <div style="font-size:12.5px; color:var(--text-secondary);">
+                Menampilkan <strong id="jadwalSlideDetail" style="color:var(--text-primary);">1 - 10</strong> dari <strong style="color:var(--text-primary);">{{ $jadwalHariIni->count() }}</strong> jadwal hari ini (10 data per slide)
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;" id="jadwalSlideDots">
+                {{-- Diisi dinamis oleh JavaScript --}}
+            </div>
+        </div>
+        @endif
+
         @else
         <div class="empty-state">
             <div class="empty-state-text">Tidak ada jadwal KBM untuk hari ini.</div>
@@ -198,4 +221,146 @@
         @endif
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rows = document.querySelectorAll('.jadwal-row');
+    const pageSize = 10;
+    const totalRows = rows.length;
+    if (totalRows <= pageSize) return;
+
+    let currentSlide = 1;
+    const totalSlides = Math.ceil(totalRows / pageSize);
+
+    const prevBtn = document.getElementById('jadwalPrevBtn');
+    const nextBtn = document.getElementById('jadwalNextBtn');
+    const slideInfo = document.getElementById('jadwalSlideInfo');
+    const slideDetail = document.getElementById('jadwalSlideDetail');
+    const slideDots = document.getElementById('jadwalSlideDots');
+
+    function showSlide(slide) {
+        if (slide < 1 || slide > totalSlides) return;
+        currentSlide = slide;
+        const start = (slide - 1) * pageSize;
+        const end = start + pageSize;
+
+        rows.forEach((row, idx) => {
+            if (idx >= start && idx < end) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (slideInfo) {
+            slideInfo.textContent = `Slide ${slide} dari ${totalSlides}`;
+        }
+
+        if (slideDetail) {
+            const startNum = start + 1;
+            const endNum = Math.min(end, totalRows);
+            slideDetail.textContent = `${startNum} - ${endNum}`;
+        }
+
+        if (prevBtn) {
+            prevBtn.disabled = slide === 1;
+            prevBtn.style.opacity = slide === 1 ? '0.4' : '1';
+            prevBtn.style.cursor = slide === 1 ? 'not-allowed' : 'pointer';
+        }
+        if (nextBtn) {
+            nextBtn.disabled = slide === totalSlides;
+            nextBtn.style.opacity = slide === totalSlides ? '0.4' : '1';
+            nextBtn.style.cursor = slide === totalSlides ? 'not-allowed' : 'pointer';
+        }
+
+        renderDots();
+    }
+
+    function renderDots() {
+        if (!slideDots) return;
+        slideDots.innerHTML = '';
+
+        let pages = [];
+        if (totalSlides <= 5) {
+            for (let i = 1; i <= totalSlides; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (currentSlide > 3) {
+                pages.push('...');
+            }
+            const startRange = Math.max(2, currentSlide - 1);
+            const endRange = Math.min(totalSlides - 1, currentSlide + 1);
+            for (let i = startRange; i <= endRange; i++) {
+                pages.push(i);
+            }
+            if (currentSlide < totalSlides - 2) {
+                pages.push('...');
+            }
+            pages.push(totalSlides);
+        }
+
+        // Tombol Prev ‹
+        const prevPageBtn = document.createElement('button');
+        prevPageBtn.type = 'button';
+        prevPageBtn.innerHTML = '&lsaquo;';
+        prevPageBtn.title = 'Slide Sebelumnya';
+        prevPageBtn.disabled = currentSlide === 1;
+        prevPageBtn.style.cssText = 'width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 16px; font-weight: 700; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); cursor: ' + (currentSlide === 1 ? 'not-allowed; opacity: 0.4;' : 'pointer;');
+        prevPageBtn.addEventListener('click', () => {
+            if (currentSlide > 1) showSlide(currentSlide - 1);
+        });
+        slideDots.appendChild(prevPageBtn);
+
+        // Angka & Ellipsis …
+        pages.forEach(p => {
+            if (p === '...') {
+                const span = document.createElement('span');
+                span.textContent = '…';
+                span.style.cssText = 'display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 32px; color: var(--text-secondary); font-size: 13px; font-weight: 600; user-select: none;';
+                slideDots.appendChild(span);
+            } else {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = p;
+                if (p === currentSlide) {
+                    btn.style.cssText = 'min-width: 32px; height: 32px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12.5px; font-weight: 700; background: #2563eb; color: #ffffff; border: 1px solid #2563eb; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3); cursor: default;';
+                } else {
+                    btn.style.cssText = 'min-width: 32px; height: 32px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12.5px; font-weight: 600; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); cursor: pointer; transition: all 0.15s ease;';
+                    btn.onmouseover = () => { btn.style.background = 'rgba(59, 130, 246, 0.1)'; btn.style.borderColor = '#3b82f6'; };
+                    btn.onmouseout = () => { btn.style.background = 'var(--bg-card)'; btn.style.borderColor = 'var(--border)'; };
+                }
+                btn.addEventListener('click', () => showSlide(p));
+                slideDots.appendChild(btn);
+            }
+        });
+
+        // Tombol Next ›
+        const nextPageBtn = document.createElement('button');
+        nextPageBtn.type = 'button';
+        nextPageBtn.innerHTML = '&rsaquo;';
+        nextPageBtn.title = 'Slide Selanjutnya';
+        nextPageBtn.disabled = currentSlide === totalSlides;
+        nextPageBtn.style.cssText = 'width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 16px; font-weight: 700; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); cursor: ' + (currentSlide === totalSlides ? 'not-allowed; opacity: 0.4;' : 'pointer;');
+        nextPageBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+        });
+        slideDots.appendChild(nextPageBtn);
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 1) showSlide(currentSlide - 1);
+        });
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+        });
+    }
+
+    showSlide(1);
+});
+</script>
+@endpush
 @endsection
