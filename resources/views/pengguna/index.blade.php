@@ -149,6 +149,26 @@
     background: #0f172a;
     color: #94a3b8;
 }
+
+/* Fix: cegah search input overlap (naik) saat hover/focus */
+.search-bar-form .form-control,
+.search-bar-form .form-control:hover,
+.search-bar-form .form-control:focus {
+    transform: none !important;
+}
+
+/* Fix: cegah baris tabel bergerak saat hover (supaya tidak menutupi search) */
+#tableUsers tbody tr,
+#tableUsers tbody tr:hover {
+    transform: none !important;
+}
+
+/* Fix: cegah card tabel naik saat hover sehingga menutupi search */
+#tableCard,
+#tableCard:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
 </style>
 
 {{-- Modal Reset Password --}}
@@ -244,7 +264,7 @@
 {{-- Search --}}
 <div class="card mb-16">
     <div class="card-body" style="padding:12px 16px;">
-        <form method="GET" action="{{ route('pengguna.index') }}" class="d-flex gap-8" style="align-items:center;">
+        <form method="GET" action="{{ route('pengguna.index') }}" class="d-flex gap-8 search-bar-form" style="align-items:center;">
             <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama, username, role..." class="form-control" style="max-width:420px;">
             <button type="submit" class="btn btn-primary btn-sm">Cari</button>
             @if($search ?? false)
@@ -254,7 +274,7 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card" id="tableCard">
     <div class="card-body" style="padding:0;">
         @if($users->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
