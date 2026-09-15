@@ -336,8 +336,8 @@
     </div>
     <div class="card-body" style="padding:0;">
         @if($rekapData->count() > 0)
-        <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+        <div class="table-wrapper" style="border:none; border-radius:0; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table class="table" style="min-width:650px; width:100%;">
                 <thead>
                     <tr>
                         <th>Tanggal</th>

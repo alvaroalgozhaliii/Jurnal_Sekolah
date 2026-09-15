@@ -241,8 +241,8 @@
     </div>
     <div class="card-body" style="padding:0;">
         @if($terlambatList->count() > 0)
-        <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+        <div class="table-wrapper" style="border:none; border-radius:0; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table class="table" style="min-width:680px; width:100%;">
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
@@ -259,7 +259,7 @@
                         <td class="no-col">{{ $idx + 1 }}</td>
                         <td class="fw-bold text-navy">{{ $t->siswa->nama ?? '-' }}</td>
                         <td>
-                            <span class="badge" style="background:#fef3c7;color:#d97706;font-weight:700;">
+                            <span class="badge badge-warning" style="font-weight:700;">
                                 Jam ke-{{ $t->terlambat_sampai_jam }}
                             </span>
                             @php
@@ -305,8 +305,8 @@
         <h3 class="card-title">Ringkasan Bulan Ini — Rekap per Siswa</h3>
     </div>
     <div class="card-body" style="padding:0;">
-        <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+        <div class="table-wrapper" style="border:none; border-radius:0; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table class="table" style="min-width:550px; width:100%;">
                 <thead>
                     <tr>
                         <th class="no-col">No</th>

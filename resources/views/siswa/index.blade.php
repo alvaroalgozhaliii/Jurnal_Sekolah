@@ -4,12 +4,16 @@
 @section('page-title', 'Data Siswa')
 
 @section('content')
+<div id="siswaPageContent">
 <div class="page-header">
     <div>
         <h1 class="page-title">Data Siswa</h1>
-        <p class="page-subtitle">Kelola Master Data Siswa & Akun Orang Tua</p>
+        <p class="page-subtitle">Kelola Master Data Siswa &amp; Akun Orang Tua</p>
     </div>
     <div class="page-actions">
+        <button type="button" id="btnBulkModeToggle" class="btn btn-secondary btn-bulk-mode-toggle" onclick="toggleBulkMode()" title="Aktifkan mode pilih untuk seleksi data">
+            ☑ Mode Pilih
+        </button>
         <a href="{{ route('siswa.create') }}" class="btn btn-primary">+ Tambah Siswa</a>
         <a href="{{ route('siswa.export-csv', request()->query()) }}" class="btn btn-secondary">Export CSV</a>
         <a href="{{ route('siswa.trash') }}" class="btn btn-secondary">Lihat Trash</a>
@@ -52,9 +56,12 @@
     <div class="card-body" style="padding:0;">
         @if($siswa->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+            <table class="table" style="min-width:720px;">
                 <thead>
                     <tr>
+                        <th class="bulk-check-col">
+                            <input type="checkbox" class="bulk-checkbox" id="checkboxSelectAll" title="Pilih Semua">
+                        </th>
                         <th class="no-col">No</th>
                         <th>NISN</th>
                         <th>Nama Lengkap</th>
@@ -67,6 +74,12 @@
                 <tbody>
                     @foreach($siswa as $item)
                     <tr>
+                        <td class="bulk-check-col">
+                            <input type="checkbox" class="bulk-checkbox"
+                                data-id="{{ $item->id_siswa }}"
+                                data-edit-url="{{ route('siswa.edit', $item->id_siswa) }}"
+                                data-show-url="{{ route('siswa.show', $item->id_siswa) }}">
+                        </td>
                         <td class="no-col">{{ $siswa->firstItem() + $loop->index }}</td>
                         <td class="text-muted fw-bold">{{ $item->NISN }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
@@ -109,4 +122,25 @@
         @endif
     </div>
 </div>
+
+@include('partials.bulk-action-bar', [
+    'bulkDeleteRoute'  => route('siswa.bulk-delete'),
+    'hasDetail'        => true,
+    'hasEdit'          => true,
+    'bulkEntityLabel'  => 'siswa',
+])
+
+@push('scripts')
+<script>
+function toggleBulkMode() {
+    const content = document.getElementById('siswaPageContent');
+    const btn     = document.getElementById('btnBulkModeToggle');
+    const isActive = content.classList.toggle('bulk-mode');
+    btn.classList.toggle('active', isActive);
+    btn.innerHTML  = isActive ? '✕ Matikan Pilih' : '☑ Mode Pilih';
+    if (!isActive) { clearBulkSelection(); }
+}
+</script>
+@endpush
+</div>{{-- end #siswaPageContent --}}
 @endsection

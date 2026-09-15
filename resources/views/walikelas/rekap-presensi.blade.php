@@ -242,15 +242,15 @@
 @if($selectedSiswa && !empty($peringatan))
     @include('partials.peringatan-siswa', ['peringatan' => $peringatan, 'namaSiswa' => $selectedSiswa->nama])
 @elseif(!$selectedSiswa && $siswaBermasalah->isNotEmpty())
-    <div style="background:#fff7ed; border:1.5px solid #fdba74; border-radius:12px; padding:12px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+    <div class="monitoring-class-banner">
         <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-size:20px;">⚠️</span>
-            <div>
-                <strong style="color:#9a3412; font-size:13.5px;">Monitoring Wali Kelas:</strong>
-                <span style="color:#9a3412; font-size:13px;">Terdapat <b>{{ $siswaBermasalah->count() }} siswa</b> di kelas ini yang terdeteksi butuh perhatian terkait absensi (Alpa berturut-turut atau akumulasi izin/sakit).</span>
+            <div class="banner-text">
+                <strong style="font-size:13.5px;">Monitoring Wali Kelas:</strong>
+                <span style="font-size:13px;">Terdapat <b>{{ $siswaBermasalah->count() }} siswa</b> di kelas ini yang terdeteksi butuh perhatian terkait absensi (Alpa berturut-turut atau akumulasi izin/sakit).</span>
             </div>
         </div>
-        <a href="{{ route('walikelas.data-kelas') }}" class="btn btn-sm" style="background:#ea580c; color:#fff; font-size:12px; border-radius:8px; text-decoration:none; padding:6px 12px;">
+        <a href="{{ route('walikelas.data-kelas') }}" class="btn btn-sm" style="background:#ea580c; color:#fff; font-size:12px; border-radius:8px; text-decoration:none; padding:6px 12px; flex-shrink:0;">
             Periksa di Data Kelas &rarr;
         </a>
     </div>
@@ -355,8 +355,8 @@
     </div>
     <div class="card-body" style="padding:0;">
         @if($rekapData->count() > 0)
-        <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+        <div class="table-wrapper" style="border:none; border-radius:0; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table class="table" style="min-width:760px; width:100%;">
                 <thead>
                     <tr>
                         <th>Tanggal</th>

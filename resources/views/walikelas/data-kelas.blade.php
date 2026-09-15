@@ -177,7 +177,7 @@
             </div>
         </div>
 
-        <div style="display:grid; grid-template-columns: 200px 1fr; gap:24px; align-items:center;">
+        <div class="responsive-chart-grid">
             <div class="chart-canvas-wrapper">
                 <canvas id="kelasAbsensiChart"></canvas>
             </div>
@@ -235,8 +235,8 @@
     </div>
     <div class="card-body" style="padding:0;">
         @if($siswaList->count() > 0)
-        <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+        <div class="table-wrapper" style="border:none; border-radius:0; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table class="table" style="min-width:820px; width:100%;">
                 <thead>
                     <tr>
                         <th class="no-col">No</th>
@@ -297,13 +297,13 @@
                             @if($hasAlert)
                                 @foreach($alertInfo['alerts'] as $al)
                                     @php
-                                        $bgBadge = match($al['level']) {
-                                            'danger' => 'background:#fee2e2; color:#991b1b; border:1px solid #fca5a5;',
-                                            'warning' => 'background:#ffedd5; color:#9a3412; border:1px solid #fdba74;',
-                                            default => 'background:#fef9c3; color:#854d0e; border:1px solid #fde047;'
+                                        $badgeClass = match($al['level'] ?? 'caution') {
+                                            'danger'  => 'badge-alert-danger',
+                                            'warning' => 'badge-alert-warning',
+                                            default   => 'badge-alert-caution',
                                         };
                                     @endphp
-                                    <div style="font-size:11px; padding:3px 8px; border-radius:6px; margin-bottom:3px; line-height:1.3; {{ $bgBadge }}" title="{{ strip_tags($al['saran'] ?? '') }}">
+                                    <div class="{{ $badgeClass }}" title="{{ strip_tags($al['saran'] ?? '') }}">
                                         {{ $al['icon'] }} {!! strip_tags($al['pesan']) !!}
                                     </div>
                                 @endforeach
