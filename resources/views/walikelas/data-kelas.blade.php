@@ -213,10 +213,18 @@
         <h3 class="card-title">Informasi Kelas: {{ $kelas->nama_kelas }}</h3>
     </div>
     <div class="card-body">
-        <div class="grid-3">
+        <div class="grid-3" style="display:flex; flex-wrap:wrap; gap:20px; align-items:center;">
             <div><span class="text-muted">Kelas:</span> <strong>{{ $kelas->nama_kelas }}</strong></div>
             <div><span class="text-muted">Jurusan:</span> <strong>{{ $kelas->jurusan->nama_jurusan ?? '-' }}</strong></div>
             <div><span class="text-muted">Total Siswa:</span> <strong><span class="badge badge-navy">{{ $siswaList->count() }} Siswa</span></strong></div>
+            @if(!empty($siswaPerhatianCount) && $siswaPerhatianCount > 0)
+            <div>
+                <span class="text-muted">Monitoring Absensi:</span>
+                <span class="badge" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-weight:700;">
+                    ⚠ {{ $siswaPerhatianCount }} Siswa Butuh Perhatian
+                </span>
+            </div>
+            @endif
         </div>
     </div>
 </div>
@@ -236,6 +244,7 @@
                         <th>Nama Siswa</th>
                         <th>Jenis Kelamin</th>
                         <th>Status {{ \Carbon\Carbon::parse($selDate)->format('d/m/Y') }}</th>
+                        <th>Status Perhatian</th>
                         <th>Akun User Ortu</th>
                         <th>No Telp Ortu</th>
                     </tr>
@@ -278,6 +287,28 @@
                             <span class="badge {{ $stBadge }}">{{ $stText }}</span>
                             @if($absen && $absen->keterangan)
                                 <div class="text-muted" style="font-size:11px; margin-top:2px;">{{ Str::limit($absen->keterangan, 30) }}</div>
+                            @endif
+                        </td>
+                        <td>
+                            @php
+                                $alertInfo = $peringatanMap[$s->id_siswa] ?? null;
+                                $hasAlert = !empty($alertInfo['has_alert']);
+                            @endphp
+                            @if($hasAlert)
+                                @foreach($alertInfo['alerts'] as $al)
+                                    @php
+                                        $bgBadge = match($al['level']) {
+                                            'danger' => 'background:#fee2e2; color:#991b1b; border:1px solid #fca5a5;',
+                                            'warning' => 'background:#ffedd5; color:#9a3412; border:1px solid #fdba74;',
+                                            default => 'background:#fef9c3; color:#854d0e; border:1px solid #fde047;'
+                                        };
+                                    @endphp
+                                    <div style="font-size:11px; padding:3px 8px; border-radius:6px; margin-bottom:3px; line-height:1.3; {{ $bgBadge }}" title="{{ strip_tags($al['saran'] ?? '') }}">
+                                        {{ $al['icon'] }} {!! strip_tags($al['pesan']) !!}
+                                    </div>
+                                @endforeach
+                            @else
+                                <span class="badge badge-success" style="font-size:11px; opacity:0.85;">Normal</span>
                             @endif
                         </td>
                         <td>

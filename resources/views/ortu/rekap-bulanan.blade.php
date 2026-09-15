@@ -231,6 +231,8 @@
     $totalPresensi = array_sum($summary);
 @endphp
 
+@include('partials.peringatan-siswa', ['peringatan' => $peringatan ?? [], 'namaSiswa' => $selectedSiswa->nama])
+
 <div class="cal-dashboard-grid">
     {{-- COMPACT MONTHLY CALENDAR --}}
     <form action="{{ route('ortu.rekap-bulanan') }}" method="GET" id="calForm" style="margin:0;">

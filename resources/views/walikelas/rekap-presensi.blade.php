@@ -236,7 +236,25 @@
     $tanggalAda = $rekapData->map(fn($r) => substr($r->jurnal->tanggal ?? '', 0, 10))
         ->filter()->unique()->values()->toArray();
     $totalPresensi = array_sum($summary);
+    $siswaBermasalah = collect($peringatanMap ?? [])->filter(fn($p) => !empty($p['has_alert']));
 @endphp
+
+@if($selectedSiswa && !empty($peringatan))
+    @include('partials.peringatan-siswa', ['peringatan' => $peringatan, 'namaSiswa' => $selectedSiswa->nama])
+@elseif(!$selectedSiswa && $siswaBermasalah->isNotEmpty())
+    <div style="background:#fff7ed; border:1.5px solid #fdba74; border-radius:12px; padding:12px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:20px;">⚠️</span>
+            <div>
+                <strong style="color:#9a3412; font-size:13.5px;">Monitoring Wali Kelas:</strong>
+                <span style="color:#9a3412; font-size:13px;">Terdapat <b>{{ $siswaBermasalah->count() }} siswa</b> di kelas ini yang terdeteksi butuh perhatian terkait absensi (Alpa berturut-turut atau akumulasi izin/sakit).</span>
+            </div>
+        </div>
+        <a href="{{ route('walikelas.data-kelas') }}" class="btn btn-sm" style="background:#ea580c; color:#fff; font-size:12px; border-radius:8px; text-decoration:none; padding:6px 12px;">
+            Periksa di Data Kelas &rarr;
+        </a>
+    </div>
+@endif
 
 <div class="cal-dashboard-grid">
     {{-- COMPACT MONTHLY CALENDAR --}}

@@ -21,7 +21,7 @@ class PenggunaController extends Controller
             });
         }
 
-        $users = $query->orderBy('nama', 'asc')->get();
+        $users = $query->orderBy('nama', 'asc')->paginate(25)->appends(['search' => $search]);
         return view('pengguna.index', compact('users', 'search'));
     }
 
