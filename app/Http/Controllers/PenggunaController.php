@@ -11,7 +11,8 @@ class PenggunaController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
-        $query = User::query();
+        $role   = $request->get('role');
+        $query  = User::query();
 
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -21,9 +22,13 @@ class PenggunaController extends Controller
             });
         }
 
-        $allUsers = User::query()->orderBy('nama', 'asc')->get();
-        $users = $query->orderBy('nama', 'asc')->paginate(25)->appends(['search' => $search]);
-        return view('pengguna.index', compact('users', 'search', 'allUsers'));
+        if ($role) {
+            $query->where('role', $role);
+        }
+
+        $allUsers = User::orderBy('nama', 'asc')->get();
+        $users    = $query->orderBy('nama', 'asc')->paginate(25)->appends(['search' => $search, 'role' => $role]);
+        return view('pengguna.index', compact('users', 'search', 'allUsers', 'role'));
     }
 
     public function create()

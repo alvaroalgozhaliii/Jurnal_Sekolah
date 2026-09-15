@@ -77,24 +77,10 @@
 /* Role Filter Bar Styling */
 .role-filter-container {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 8px 10px;
     margin-bottom: 20px;
     align-items: center;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(99,179,237,0.3) transparent;
-}
-.role-filter-container::-webkit-scrollbar {
-    height: 4px;
-}
-.role-filter-container::-webkit-scrollbar-track {
-    background: transparent;
-}
-.role-filter-container::-webkit-scrollbar-thumb {
-    background: rgba(99,179,237,0.35);
-    border-radius: 4px;
 }
 .role-filter-btn {
     display: inline-flex;
@@ -263,25 +249,34 @@
 <div class="role-filter-container">
     @foreach($roleMeta as $roleKey => $meta)
         @if($roleGroups->has($roleKey))
-        <button type="button" onclick="filterRole('{{ $roleKey }}', this)" class="role-filter-btn" id="filterBtn_{{ $roleKey }}">
+        <a href="{{ route('pengguna.index', array_filter(['role' => $roleKey, 'search' => $search ?? ''])) }}" 
+           class="role-filter-btn {{ ($role ?? '') === $roleKey ? 'active' : '' }}" 
+           id="filterBtn_{{ $roleKey }}"
+           style="text-decoration: none;">
             <span class="rb {{ $meta['class'] }}">{{ $meta['label'] }}</span>
             <span class="role-count-badge">{{ $roleGroups[$roleKey]->count() }}</span>
-        </button>
+        </a>
         @endif
     @endforeach
-    <button type="button" onclick="filterRole('', this)" class="role-filter-btn active" id="filterBtnAll">
+    <a href="{{ route('pengguna.index', array_filter(['search' => $search ?? ''])) }}" 
+       class="role-filter-btn {{ empty($role) ? 'active' : '' }}" 
+       id="filterBtnAll"
+       style="text-decoration: none;">
         <span>Semua</span>
         <span class="role-count-badge">{{ $allUsers->count() }}</span>
-    </button>
+    </a>
 </div>
 
 {{-- Search --}}
 <div class="card mb-16">
     <div class="card-body" style="padding:12px 16px;">
         <form method="GET" action="{{ route('pengguna.index') }}" class="d-flex gap-8 search-bar-form" style="align-items:center;">
+            @if($role ?? false)
+                <input type="hidden" name="role" value="{{ $role }}">
+            @endif
             <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama, username, role..." class="form-control" style="max-width:420px;">
             <button type="submit" class="btn btn-primary btn-sm">Cari</button>
-            @if($search ?? false)
+            @if(($search ?? false) || ($role ?? false))
                 <a href="{{ route('pengguna.index') }}" class="btn btn-secondary btn-sm">Reset</a>
             @endif
         </form>
@@ -461,25 +456,7 @@ document.getElementById('inputConfPw').addEventListener('input', function() {
     msg.style.display = (this.value && this.value !== pw) ? 'block' : 'none';
 });
 
-// Role filter
-function filterRole(role, btn) {
-    const rows = document.querySelectorAll('#tableUsers tbody tr');
-    rows.forEach(row => {
-        if (!role || row.dataset.role === role) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-    // Update active state on filter buttons
-    document.querySelectorAll('.role-filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) {
-        btn.classList.add('active');
-    } else {
-        const target = role ? document.getElementById('filterBtn_' + role) : document.getElementById('filterBtnAll');
-        if (target) target.classList.add('active');
-    }
-}
+});
 </script>
 @endpush
 @endsection
