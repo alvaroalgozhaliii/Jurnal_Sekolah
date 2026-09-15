@@ -31,7 +31,7 @@
                 <tbody>
                     @foreach($siswa as $item)
                     <tr>
-                        <td class="no-col">{{ $loop->iteration }}</td>
+                        <td class="no-col">{{ $siswa->firstItem() + $loop->index }}</td>
                         <td class="text-muted fw-bold">{{ $item->NISN }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
                         <td><span class="badge badge-navy">{{ $item->kelas->nama_kelas ?? '-' }}</span></td>
@@ -50,6 +50,16 @@
                 </tbody>
             </table>
         </div>
+        @if($siswa->hasPages())
+        <div class="card-footer">
+            <div class="text-muted" style="font-size: 13px;">
+                Menampilkan <strong>{{ $siswa->firstItem() ?? 0 }}</strong> &ndash; <strong>{{ $siswa->lastItem() ?? 0 }}</strong> dari <strong>{{ $siswa->total() }}</strong> siswa
+            </div>
+            <div>
+                {{ $siswa->links() }}
+            </div>
+        </div>
+        @endif
         @else
         <div class="empty-state">
             <div class="empty-state-text">Tidak ada data siswa di trash.</div>

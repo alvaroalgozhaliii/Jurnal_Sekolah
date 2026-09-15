@@ -22,7 +22,7 @@ class GuruController extends Controller
             });
         }
 
-        $guru = $query->orderBy('nama', 'asc')->get();
+        $guru = $query->orderBy('nama', 'asc')->paginate(25)->withQueryString();
         return view('guru.index', compact('guru', 'search'));
     }
 
@@ -116,7 +116,7 @@ class GuruController extends Controller
 
     public function trash()
     {
-        $guru = Guru::onlyTrashed()->get();
+        $guru = Guru::onlyTrashed()->paginate(25)->withQueryString();
         return view('guru.trash', compact('guru'));
     }
 
