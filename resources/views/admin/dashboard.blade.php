@@ -22,23 +22,51 @@
 
 <!-- STATS MASTER DATA GRID -->
 <div class="grid-4 mb-24">
-    <div class="stat-card" style="border-left: 4px solid #1e3a8a;">
-        <div class="stat-icon-box navy">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+    <div class="stat-card stat-card-with-progress" style="border-left: 4px solid #1e3a8a;">
+        <div class="stat-card-top">
+            <div class="stat-icon-box navy">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div>
+                <div class="stat-num">{{ $jumlahGuru }}</div>
+                <div class="stat-label">Total Guru</div>
+            </div>
         </div>
-        <div>
-            <div class="stat-num">{{ $jumlahGuru }}</div>
-            <div class="stat-label">Total Guru</div>
+        <div class="stat-progress-box" title="{{ $kehadiranGuruHariIni }} dari {{ $jumlahGuru }} guru presensi masuk hari ini">
+            <div class="stat-progress-header">
+                <span class="stat-progress-label">Masuk Hari Ini</span>
+                <span class="stat-progress-val navy">
+                    {{ $persenGuruMasuk }}%
+                    <span class="stat-progress-count">({{ $kehadiranGuruHariIni }})</span>
+                </span>
+            </div>
+            <div class="stat-progress-track navy">
+                <div class="stat-progress-fill navy" style="width: {{ $persenGuruMasuk }}%;"></div>
+            </div>
         </div>
     </div>
 
-    <div class="stat-card" style="border-left: 4px solid #0284c7;">
-        <div class="stat-icon-box blue">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+    <div class="stat-card stat-card-with-progress" style="border-left: 4px solid #0284c7;">
+        <div class="stat-card-top">
+            <div class="stat-icon-box blue">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            </div>
+            <div>
+                <div class="stat-num">{{ $jumlahSiswa }}</div>
+                <div class="stat-label">Total Siswa</div>
+            </div>
         </div>
-        <div>
-            <div class="stat-num">{{ $jumlahSiswa }}</div>
-            <div class="stat-label">Total Siswa</div>
+        <div class="stat-progress-box" title="{{ $kehadiranSiswaHariIni }} dari {{ $jumlahSiswa }} siswa hadir KBM hari ini">
+            <div class="stat-progress-header">
+                <span class="stat-progress-label">Masuk Hari Ini</span>
+                <span class="stat-progress-val blue">
+                    {{ $persenSiswaMasuk }}%
+                    <span class="stat-progress-count">({{ $kehadiranSiswaHariIni }})</span>
+                </span>
+            </div>
+            <div class="stat-progress-track blue">
+                <div class="stat-progress-fill blue" style="width: {{ $persenSiswaMasuk }}%;"></div>
+            </div>
         </div>
     </div>
 

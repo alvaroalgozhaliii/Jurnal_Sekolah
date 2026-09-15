@@ -19,12 +19,15 @@
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 32px;
-    width: 100%;
+    padding: 24px;
+    width: calc(100% - 24px);
     max-width: 420px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.3);
     transform: translateY(20px);
     transition: transform .25s;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 .modal-overlay.show .modal-box { transform: translateY(0); }
 .modal-title {
@@ -208,12 +211,16 @@
     </div>
 </div>
 
+<div id="penggunaPageContent">
 <div class="page-header">
     <div>
         <h1 class="page-title">Manajemen Akun Pengguna</h1>
-        <p class="page-subtitle">Kelola Seluruh Akun Login Pengguna System & Peran (Role)</p>
+        <p class="page-subtitle">Kelola Seluruh Akun Login Pengguna System &amp; Peran (Role)</p>
     </div>
     <div class="page-actions">
+        <button type="button" id="btnBulkModeToggle" class="btn btn-secondary btn-bulk-mode-toggle" onclick="toggleBulkMode()" title="Aktifkan mode pilih untuk seleksi data">
+            ☑ Mode Pilih
+        </button>
         <a href="{{ route('pengguna.create') }}" class="btn btn-primary">+ Tambah Pengguna Baru</a>
     </div>
 </div>
@@ -255,14 +262,9 @@
         </button>
         @endif
     @endforeach
-<<<<<<< HEAD
-    <button onclick="filterRole('')" class="btn btn-secondary btn-sm" id="filterBtnAll">
-        Semua ({{ $users->total() }})
-=======
     <button type="button" onclick="filterRole('', this)" class="role-filter-btn active" id="filterBtnAll">
         <span>Semua</span>
-        <span class="role-count-badge">{{ $users->count() }}</span>
->>>>>>> 1f8878dad9cd7c9cf756f327dafeccace4323bab
+        <span class="role-count-badge">{{ $users->total() }}</span>
     </button>
 </div>
 
@@ -282,10 +284,13 @@
 <div class="card" id="tableCard">
     <div class="card-body" style="padding:0;">
         @if($users->total() > 0)
-        <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table" id="tableUsers">
+        <div class="table-wrapper" style="border:none; border-radius:0; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table class="table" id="tableUsers" style="min-width:780px; width:100%;">
                 <thead>
                     <tr>
+                        <th class="bulk-check-col">
+                            <input type="checkbox" class="bulk-checkbox" id="checkboxSelectAll" title="Pilih Semua">
+                        </th>
                         <th class="no-col">No</th>
                         <th>Nama Lengkap</th>
                         <th>Username</th>
@@ -301,6 +306,12 @@
                         $rm = $roleMeta[$item->role] ?? ['label' => strtoupper($item->role), 'class' => 'rb-ortu'];
                     @endphp
                     <tr data-role="{{ $item->role }}">
+                        <td class="bulk-check-col">
+                            <input type="checkbox" class="bulk-checkbox"
+                                data-id="{{ $item->id_user }}"
+                                data-edit-url="{{ route('pengguna.edit', $item->id_user) }}"
+                                data-show-url="">
+                        </td>
                         <td class="no-col">{{ ($users->currentPage() - 1) * 25 + $loop->iteration }}</td>
                         <td class="fw-bold" style="color:var(--text-primary);">{{ $item->nama }}</td>
                         <td>
@@ -343,7 +354,7 @@
         </div>
         {{-- Info & Navigasi Pagination --}}
         @if($users->lastPage() > 1)
-        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding:14px 16px; border-top:1px solid var(--border);">
+        <div class="custom-pagination-bar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding:14px 16px; border-top:1px solid var(--border);">
             <span style="font-size:13px; color:var(--text-secondary);">
                 Menampilkan
                 <strong>{{ $users->firstItem() }}</strong>–<strong>{{ $users->lastItem() }}</strong>
@@ -473,4 +484,26 @@ function filterRole(role, btn) {
 }
 </script>
 @endpush
+
+@include('partials.bulk-action-bar', [
+    'bulkDeleteRoute'  => route('pengguna.bulk-delete'),
+    'hasDetail'        => false,
+    'hasEdit'          => true,
+    'bulkEntityLabel'  => 'pengguna',
+])
+
+@push('scripts')
+<script>
+function toggleBulkMode() {
+    const content = document.getElementById('penggunaPageContent');
+    const btn     = document.getElementById('btnBulkModeToggle');
+    const isActive = content.classList.toggle('bulk-mode');
+    btn.classList.toggle('active', isActive);
+    btn.innerHTML  = isActive ? '✕ Matikan Pilih' : '☑ Mode Pilih';
+    if (!isActive) { clearBulkSelection(); }
+}
+</script>
+@endpush
+</div>{{-- end #penggunaPageContent --}}
 @endsection
+

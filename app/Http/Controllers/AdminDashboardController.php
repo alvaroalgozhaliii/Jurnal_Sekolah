@@ -30,10 +30,13 @@ class AdminDashboardController extends Controller
         $jumlahMapel = Mapel::count();
         $jumlahUser = User::count();
 
-        $kehadiranGuruHariIni = PresensiMasuk::where('tanggal', $today)->count();
+        $kehadiranGuruHariIni = PresensiMasuk::where('tanggal', $today)->distinct('id_user')->count('id_user');
         $kehadiranSiswaHariIni = AbsensiSiswa::whereHas('jurnal', function($q) use ($today) {
             $q->where('tanggal', $today);
-        })->where('status', 'hadir')->count();
+        })->where('status', 'hadir')->distinct('id_siswa')->count('id_siswa');
+        
+        $persenGuruMasuk = $jumlahGuru > 0 ? min(100, round(($kehadiranGuruHariIni / $jumlahGuru) * 100, 1)) : 0;
+        $persenSiswaMasuk = $jumlahSiswa > 0 ? min(100, round(($kehadiranSiswaHariIni / $jumlahSiswa) * 100, 1)) : 0;
         
         $jurnalHariIni = JurnalHarian::where('tanggal', $today)->count();
 
@@ -60,6 +63,8 @@ class AdminDashboardController extends Controller
             'jumlahUser',
             'kehadiranGuruHariIni',
             'kehadiranSiswaHariIni',
+            'persenGuruMasuk',
+            'persenSiswaMasuk',
             'jurnalHariIni',
             'siswaHadir',
             'siswaSakit',

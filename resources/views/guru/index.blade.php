@@ -4,12 +4,16 @@
 @section('page-title', 'Data Guru')
 
 @section('content')
+<div id="guruPageContent">
 <div class="page-header">
     <div>
         <h1 class="page-title">Data Guru</h1>
         <p class="page-subtitle">Kelola Master Data Guru Sekolah</p>
     </div>
     <div class="page-actions">
+        <button type="button" id="btnBulkModeToggle" class="btn btn-secondary btn-bulk-mode-toggle" onclick="toggleBulkMode()" title="Aktifkan mode pilih untuk seleksi data">
+            ☑ Mode Pilih
+        </button>
         <a href="{{ route('guru.create') }}" class="btn btn-primary">+ Tambah Guru</a>
         <a href="{{ route('guru.export-csv', request()->query()) }}" class="btn btn-secondary">Export CSV</a>
         <a href="{{ route('guru.trash') }}" class="btn btn-secondary">Lihat Trash</a>
@@ -52,9 +56,12 @@
     <div class="card-body" style="padding:0;">
         @if($guru->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+            <table class="table" style="min-width:720px;">
                 <thead>
                     <tr>
+                        <th class="bulk-check-col">
+                            <input type="checkbox" class="bulk-checkbox" id="checkboxSelectAll" title="Pilih Semua">
+                        </th>
                         <th class="no-col">No</th>
                         <th>Nama Lengkap</th>
                         <th>NIP</th>
@@ -67,6 +74,12 @@
                 <tbody>
                     @foreach($guru as $item)
                     <tr>
+                        <td class="bulk-check-col">
+                            <input type="checkbox" class="bulk-checkbox"
+                                data-id="{{ $item->id_guru }}"
+                                data-edit-url="{{ route('guru.edit', $item->id_guru) }}"
+                                data-show-url="{{ route('guru.show', $item->id_guru) }}">
+                        </td>
                         <td class="no-col">{{ $guru->firstItem() + $loop->index }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
                         <td class="text-muted">{{ $item->nip ?? '-' }}</td>
@@ -109,4 +122,25 @@
         @endif
     </div>
 </div>
+
+@include('partials.bulk-action-bar', [
+    'bulkDeleteRoute'  => route('guru.bulk-delete'),
+    'hasDetail'        => true,
+    'hasEdit'          => true,
+    'bulkEntityLabel'  => 'guru',
+])
+
+@push('scripts')
+<script>
+function toggleBulkMode() {
+    const content = document.getElementById('guruPageContent');
+    const btn     = document.getElementById('btnBulkModeToggle');
+    const isActive = content.classList.toggle('bulk-mode');
+    btn.classList.toggle('active', isActive);
+    btn.innerHTML  = isActive ? '✕ Matikan Pilih' : '☑ Mode Pilih';
+    if (!isActive) { clearBulkSelection(); }
+}
+</script>
+@endpush
+</div>{{-- end #guruPageContent --}}
 @endsection

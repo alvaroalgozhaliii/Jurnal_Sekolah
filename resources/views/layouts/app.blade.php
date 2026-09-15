@@ -195,6 +195,43 @@
         background-color: rgba(59, 130, 246, 0.25) !important;
         color: #60a5fa !important;
     }
+
+    /* Topbar Title Ellipsis & Flex Protection */
+    .topbar-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 700;
+        font-size: 15px;
+        min-width: 0;
+    }
+    @media (max-width: 600px) {
+        .topbar-title {
+            max-width: 160px;
+            font-size: 13.5px;
+        }
+    }
+    @media (max-width: 480px) {
+        .topbar-title {
+            max-width: 120px;
+            font-size: 13px;
+        }
+        .btn-ganti-akses span {
+            display: none !important;
+        }
+        .btn-ganti-akses {
+            padding: 6px 8px !important;
+        }
+    }
+
+    /* Mencegah horizontal layout shift / overflow */
+    body, .app-shell, .main-area {
+        max-width: 100vw;
+    }
+    .content-area {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
     </style>
 
     @stack('styles')
@@ -690,7 +727,7 @@
     <div class="main-area">
         <!-- TOPBAR -->
         <header class="topbar">
-            <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
                 <!-- Hamburger (shown on mobile only) -->
                 <button class="topbar-hamburger" id="sidebarToggle" aria-label="Toggle sidebar">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -757,8 +794,87 @@
             </div>
         </header>
 
-        <!-- FLASH NOTIFICATION MESSAGES -->
+        {{-- BULK QUEUE NAVIGATOR — muncul saat sedang review detail/edit antre --}}
+        <div id="bulkQueueNav" style="display:none;">
+            <div style="
+                display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+                padding: 10px 20px;
+                background: var(--navy-primary, #1e3a8a);
+                color: #fff;
+                font-size: 13px; font-weight: 600;
+                position: sticky; top:0; z-index:800;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            ">
+                <span id="bqnIcon" style="font-size:16px;"></span>
+                <span id="bqnLabel" style="flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></span>
+                <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
+                    <button id="bqnPrev" class="btn btn-sm" onclick="bulkQueueNav(-1)"
+                        style="background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.3); padding:4px 12px; font-size:12px;">
+                        ‹ Sebelumnya
+                    </button>
+                    <button id="bqnNext" class="btn btn-sm" onclick="bulkQueueNav(1)"
+                        style="background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.3); padding:4px 12px; font-size:12px;">
+                        Selanjutnya ›
+                    </button>
+                    <button onclick="bulkQueueFinish()"
+                        style="background:rgba(255,255,255,0.25); color:#fff; border:1px solid rgba(255,255,255,0.4); border-radius:8px; padding:4px 12px; font-size:12px; cursor:pointer; font-weight:700;">
+                        ✓ Selesai
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script>
+        (function() {
+            function loadBulkQueue() {
+                try {
+                    const raw = sessionStorage.getItem('bulkQueue');
+                    if (!raw) return;
+                    const q = JSON.parse(raw);
+                    if (!q || !q.urls || q.urls.length === 0) return;
+
+                    const nav  = document.getElementById('bulkQueueNav');
+                    const icon = document.getElementById('bqnIcon');
+                    const lbl  = document.getElementById('bqnLabel');
+                    const prev = document.getElementById('bqnPrev');
+                    const next = document.getElementById('bqnNext');
+
+                    nav.style.display = 'block';
+                    icon.textContent  = q.type === 'edit' ? '✏️' : '🔍';
+                    lbl.textContent   = (q.type === 'edit' ? 'Mode Edit Antre' : 'Mode Lihat Detail') +
+                                        ' — ' + (q.index + 1) + ' dari ' + q.total;
+
+                    prev.disabled = (q.index === 0);
+                    prev.style.opacity = q.index === 0 ? '0.4' : '1';
+                    next.disabled = (q.index >= q.total - 1);
+                    next.style.opacity = (q.index >= q.total - 1) ? '0.4' : '1';
+                } catch(e) {}
+            }
+
+            window.bulkQueueNav = function(dir) {
+                try {
+                    const q = JSON.parse(sessionStorage.getItem('bulkQueue') || 'null');
+                    if (!q) return;
+                    const newIndex = q.index + dir;
+                    if (newIndex < 0 || newIndex >= q.total) return;
+                    q.index = newIndex;
+                    sessionStorage.setItem('bulkQueue', JSON.stringify(q));
+                    window.location.href = q.urls[newIndex];
+                } catch(e) {}
+            };
+
+            window.bulkQueueFinish = function() {
+                sessionStorage.removeItem('bulkQueue');
+                // Kembali ke halaman daftar jika ada referrer, atau history back
+                history.go(-1);
+            };
+
+            document.addEventListener('DOMContentLoaded', loadBulkQueue);
+        })();
+        </script>
+
+        {{-- FLASH NOTIFICATION MESSAGES --}}
         <main class="content-area">
+
             @if(session('success'))
                 <div class="alert alert-success">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>

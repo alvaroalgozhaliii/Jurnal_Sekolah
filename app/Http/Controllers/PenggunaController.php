@@ -102,6 +102,21 @@ class PenggunaController extends Controller
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids)) {
+            return back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+        // Exclude own account
+        $ids = array_filter($ids, fn($id) => (int)$id !== (int)auth()->id());
+        if (empty($ids)) {
+            return back()->with('error', 'Tidak dapat menghapus akun yang sedang aktif (akun Anda sendiri).');
+        }
+        $count = User::whereIn('id_user', $ids)->delete();
+        return back()->with('success', "$count akun pengguna berhasil dihapus.");
+    }
+
     public function resetPassword(Request $request, $id)
     {
         $request->validate([

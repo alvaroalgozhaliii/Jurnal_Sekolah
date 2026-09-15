@@ -99,8 +99,8 @@
     </div>
     <div class="card-body" style="padding:0;">
         @if($jadwalHariIni->count() > 0)
-        <div class="table-wrapper" style="border:none; border-radius:0;">
-            <table class="table">
+        <div class="table-wrapper" style="border:none; border-radius:0; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+            <table class="table" style="min-width:600px; width:100%;">
                 <thead>
                     <tr>
                         <th class="no-col">Jam</th>

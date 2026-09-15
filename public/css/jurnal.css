@@ -1373,7 +1373,8 @@ input[type="number"]::-webkit-outer-spin-button {
     .user-avatar { width: 26px; height: 26px; font-size: 10px; }
 
     /* Import bar stack vertikal */
-    div[style*="justify-content:space-between"] {
+    .import-bar,
+    .csv-import-box {
         flex-direction: column;
         align-items: flex-start !important;
     }
@@ -1802,8 +1803,7 @@ input[type="number"]::-webkit-outer-spin-button {
     border-color: #2563eb;
 }
 
-html .ts-wrapper,
-html [data-theme="dark"] .ts-wrapper {
+html:not([data-theme="dark"]) .ts-wrapper {
     padding: 0 !important;
     border: none !important;
     background: transparent !important;
@@ -1815,8 +1815,7 @@ html [data-theme="dark"] .ts-wrapper {
     position: relative !important;
 }
 
-html .ts-wrapper .ts-control,
-html [data-theme="dark"] .ts-wrapper .ts-control {
+html:not([data-theme="dark"]) .ts-wrapper .ts-control {
     border: 1px solid var(--border, #cbd5e1) !important;
     border-radius: var(--radius-sm, 6px) !important;
     padding: 8px 11px !important;
@@ -4368,6 +4367,11 @@ input[type='radio']:active,
         position: relative !important;
     }
 
+    .table-wrapper > table,
+    .table-responsive > table {
+        min-width: 620px;
+    }
+
     .card-body:has(> table) {
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
@@ -4638,5 +4642,480 @@ body.dark-mode .custom-pagination .page-link {
     }
 }
 
+/* ============================================================
+   ROLE BADGES (.rb) - LIGHT & DARK MODE CONTRAST
+   ============================================================ */
+.rb {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    line-height: 1.2;
+}
 
+.rb-admin     { background: #fee2e2; color: #991b1b; }
+.rb-guru      { background: #dbeafe; color: #1e40af; }
+.rb-piket     { background: #dcfce7; color: #166534; }
+.rb-waka      { background: #e0e7ff; color: #3730a3; }
+.rb-kepala    { background: #fef3c7; color: #92400e; }
+.rb-satpam    { background: #ffedd5; color: #9a3412; }
+.rb-ortu      { background: #f1f5f9; color: #334155; }
+.rb-siswa     { background: #f1f5f9; color: #334155; }
+.rb-walikelas { background: #fce7f3; color: #9d174d; }
 
+/* Dark Mode Overrides for Role Badges (Prevent color clashing / washed out text) */
+[data-theme="dark"] .rb-admin     { background: rgba(239, 68, 68, 0.2) !important; color: #fca5a5 !important; border: 1px solid rgba(239, 68, 68, 0.3); }
+[data-theme="dark"] .rb-guru      { background: rgba(59, 130, 246, 0.2) !important; color: #93c5fd !important; border: 1px solid rgba(59, 130, 246, 0.3); }
+[data-theme="dark"] .rb-piket     { background: rgba(34, 197, 94, 0.2) !important; color: #86efac !important; border: 1px solid rgba(34, 197, 94, 0.3); }
+[data-theme="dark"] .rb-waka      { background: rgba(99, 102, 241, 0.2) !important; color: #c7d2fe !important; border: 1px solid rgba(99, 102, 241, 0.3); }
+[data-theme="dark"] .rb-kepala    { background: rgba(245, 158, 11, 0.2) !important; color: #fde68a !important; border: 1px solid rgba(245, 158, 11, 0.3); }
+[data-theme="dark"] .rb-satpam    { background: rgba(249, 115, 22, 0.2) !important; color: #fdba74 !important; border: 1px solid rgba(249, 115, 22, 0.3); }
+[data-theme="dark"] .rb-ortu      { background: rgba(148, 163, 184, 0.2) !important; color: #cbd5e1 !important; border: 1px solid rgba(148, 163, 184, 0.3); }
+[data-theme="dark"] .rb-siswa     { background: rgba(148, 163, 184, 0.2) !important; color: #cbd5e1 !important; border: 1px solid rgba(148, 163, 184, 0.3); }
+[data-theme="dark"] .rb-walikelas { background: rgba(236, 72, 153, 0.2) !important; color: #fbcfe8 !important; border: 1px solid rgba(236, 72, 153, 0.3); }
+
+/* ============================================================
+   BANNER PERINGATAN SISWA (ADAPTIVE LIGHT & DARK)
+   ============================================================ */
+.alert-peringatan-siswa {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    animation: fadeIn .35s ease;
+    transition: all 0.2s ease;
+}
+.alert-peringatan-siswa .icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.alert-peringatan-siswa .content-box {
+    flex: 1;
+    min-width: 0;
+}
+.alert-peringatan-siswa .title-text {
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    line-height: 1.3;
+}
+.alert-peringatan-siswa .desc-text {
+    font-size: 13px;
+    line-height: 1.5;
+}
+.alert-peringatan-siswa .saran-text {
+    font-size: 12px;
+    margin-top: 5px;
+    opacity: .85;
+}
+
+/* Light Mode Levels */
+.alert-peringatan-siswa.level-danger {
+    background: #fef2f2;
+    border: 1.5px solid #fca5a5;
+    color: #991b1b;
+}
+.alert-peringatan-siswa.level-danger .icon-box {
+    background: #fee2e2;
+}
+
+.alert-peringatan-siswa.level-warning {
+    background: #fff7ed;
+    border: 1.5px solid #fdba74;
+    color: #9a3412;
+}
+.alert-peringatan-siswa.level-warning .icon-box {
+    background: #ffedd5;
+}
+
+.alert-peringatan-siswa.level-caution {
+    background: #fefce8;
+    border: 1.5px solid #fde047;
+    color: #854d0e;
+}
+.alert-peringatan-siswa.level-caution .icon-box {
+    background: #fef9c3;
+}
+
+/* Dark Mode Levels (Contrast safe, no white-on-white / black-on-black) */
+[data-theme="dark"] .alert-peringatan-siswa.level-danger {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border: 1.5px solid rgba(239, 68, 68, 0.35) !important;
+    color: #fca5a5 !important;
+}
+[data-theme="dark"] .alert-peringatan-siswa.level-danger .icon-box {
+    background: rgba(239, 68, 68, 0.22) !important;
+}
+
+[data-theme="dark"] .alert-peringatan-siswa.level-warning {
+    background: rgba(249, 115, 22, 0.12) !important;
+    border: 1.5px solid rgba(249, 115, 22, 0.35) !important;
+    color: #fdba74 !important;
+}
+[data-theme="dark"] .alert-peringatan-siswa.level-warning .icon-box {
+    background: rgba(249, 115, 22, 0.22) !important;
+}
+
+[data-theme="dark"] .alert-peringatan-siswa.level-caution {
+    background: rgba(234, 179, 8, 0.12) !important;
+    border: 1.5px solid rgba(234, 179, 8, 0.35) !important;
+    color: #fde047 !important;
+}
+[data-theme="dark"] .alert-peringatan-siswa.level-caution .icon-box {
+    background: rgba(234, 179, 8, 0.22) !important;
+}
+
+/* ============================================================
+   MONITORING CLASS SUMMARY BANNER (WALI KELAS)
+   ============================================================ */
+.monitoring-class-banner {
+    background: #fff7ed;
+    border: 1.5px solid #fdba74;
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.monitoring-class-banner .banner-text {
+    color: #9a3412;
+}
+
+[data-theme="dark"] .monitoring-class-banner {
+    background: rgba(249, 115, 22, 0.12) !important;
+    border-color: rgba(249, 115, 22, 0.35) !important;
+}
+[data-theme="dark"] .monitoring-class-banner .banner-text {
+    color: #fdba74 !important;
+}
+
+/* ============================================================
+   STATUS PERHATIAN BADGES IN TABLES
+   ============================================================ */
+.badge-alert-danger {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    line-height: 1.3;
+    display: inline-block;
+    margin-bottom: 3px;
+}
+.badge-alert-warning {
+    background: #ffedd5;
+    color: #9a3412;
+    border: 1px solid #fdba74;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    line-height: 1.3;
+    display: inline-block;
+    margin-bottom: 3px;
+}
+.badge-alert-caution {
+    background: #fef9c3;
+    color: #854d0e;
+    border: 1px solid #fde047;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    line-height: 1.3;
+    display: inline-block;
+    margin-bottom: 3px;
+}
+
+[data-theme="dark"] .badge-alert-danger {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #fca5a5 !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+}
+[data-theme="dark"] .badge-alert-warning {
+    background: rgba(249, 115, 22, 0.2) !important;
+    color: #fdba74 !important;
+    border-color: rgba(249, 115, 22, 0.35) !important;
+}
+[data-theme="dark"] .badge-alert-caution {
+    background: rgba(234, 179, 8, 0.2) !important;
+    color: #fde047 !important;
+    border-color: rgba(234, 179, 8, 0.35) !important;
+}
+
+/* ============================================================
+   RESPONSIVE CHART GRID (Diagram + Legend in Data Kelas / Rekap)
+   ============================================================ */
+.responsive-chart-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    align-items: center;
+}
+@media (max-width: 640px) {
+    .responsive-chart-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+}
+
+/* ============================================================
+   MOBILE OVERLAY & MODAL RESPONSIVE TWEAKS
+   ============================================================ */
+@media (max-width: 600px) {
+    .modal-box {
+        padding: 20px 16px !important;
+        width: calc(100vw - 28px) !important;
+        max-width: calc(100vw - 28px) !important;
+        margin: 0 auto !important;
+        border-radius: 14px !important;
+    }
+    .modal-title {
+        font-size: 16px !important;
+    }
+    .modal-sub {
+        font-size: 12px !important;
+        margin-bottom: 16px !important;
+    }
+    .custom-pagination-bar {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 12px !important;
+    }
+}
+/* ══════════════════════════════════════════════════
+   BULK ACTION BAR — Floating action bar saat pilih data
+   ══════════════════════════════════════════════════ */
+.bulk-action-bar {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1);
+    backdrop-filter: blur(12px);
+    transition: bottom 0.35s cubic-bezier(.175,.885,.32,1.275), opacity 0.25s;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: calc(100vw - 32px);
+}
+.bulk-action-bar.show {
+    bottom: 24px;
+    opacity: 1;
+    pointer-events: auto;
+}
+.bulk-selected-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    background: var(--navy-primary, #1e3a8a);
+    color: #fff;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+.bulk-action-bar .bulk-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+/* Checkbox styling */
+.bulk-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--navy-primary, #1e3a8a);
+}
+.bulk-check-col {
+    width: 40px;
+    text-align: center;
+    padding-left: 12px !important;
+}
+/* Row highlight when selected */
+.bulk-row-selected {
+    background: rgba(30, 58, 138, 0.06) !important;
+}
+[data-theme="dark"] .bulk-row-selected {
+    background: rgba(59, 130, 246, 0.12) !important;
+}
+/* Dark mode bulk bar */
+[data-theme="dark"] .bulk-action-bar {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+}
+/* Bulk confirm modal overlay */
+.bulk-modal-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity .2s, visibility .2s;
+}
+.bulk-modal-overlay.show { opacity: 1; visibility: visible; }
+.bulk-modal-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    width: calc(100% - 24px);
+    max-width: 400px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+    transform: translateY(20px);
+    transition: transform .25s;
+    text-align: center;
+}
+.bulk-modal-overlay.show .bulk-modal-box { transform: translateY(0); }
+.bulk-modal-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+.bulk-modal-title {
+    font-size: 18px; font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+.bulk-modal-desc {
+    font-size: 13px; color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+.bulk-modal-actions {
+    display: flex; gap: 10px; justify-content: center;
+}
+
+@media (max-width: 640px) {
+    .bulk-action-bar {
+        border-radius: 12px;
+        padding: 10px 14px;
+        gap: 8px;
+        bottom: -120px;
+    }
+    .bulk-action-bar.show { bottom: 14px; }
+    .bulk-action-bar .btn { font-size: 12px; padding: 5px 10px; }
+}
+/* ── Bulk Mode Toggle ─────────────────────────────── */
+/* Checkbox column hidden by default, visible in bulk mode */
+.bulk-check-col { display: none; }
+.bulk-mode .bulk-check-col { display: table-cell; }
+
+/* "Mode Pilih" toggle button active state */
+.btn-bulk-mode-toggle {
+    position: relative;
+    border: 1.5px dashed var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+.btn-bulk-mode-toggle:hover {
+    border-color: var(--navy-primary, #1e3a8a);
+    color: var(--navy-primary, #1e3a8a);
+    background: rgba(30, 58, 138, 0.05);
+}
+.btn-bulk-mode-toggle.active {
+    border-style: solid;
+    border-color: var(--navy-primary, #1e3a8a);
+    background: rgba(30, 58, 138, 0.08);
+    color: var(--navy-primary, #1e3a8a);
+    font-weight: 700;
+}
+[data-theme="dark"] .btn-bulk-mode-toggle.active {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+    color: #93c5fd;
+}
+
+/* ── Stat Card Attendance Progress Bar (Admin Dashboard) ── */
+.stat-card-with-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 12px;
+}
+.stat-card-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.stat-progress-box {
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    width: 100%;
+}
+.stat-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+.stat-progress-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.stat-progress-val {
+    font-weight: 700;
+    font-size: 11.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.stat-progress-val.navy { color: #1e3a8a; }
+.stat-progress-val.blue { color: #0284c7; }
+[data-theme="dark"] .stat-progress-val.navy { color: #93c5fd; }
+[data-theme="dark"] .stat-progress-val.blue { color: #38bdf8; }
+
+.stat-progress-count {
+    font-size: 10.5px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.stat-progress-track {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--border);
+}
+.stat-progress-track.navy { background: rgba(30, 58, 138, 0.12); }
+.stat-progress-track.blue { background: rgba(2, 132, 199, 0.12); }
+[data-theme="dark"] .stat-progress-track.navy { background: rgba(147, 197, 253, 0.15); }
+[data-theme="dark"] .stat-progress-track.blue { background: rgba(56, 189, 248, 0.15); }
+
+.stat-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.stat-progress-fill.navy { background: #1e3a8a; }
+.stat-progress-fill.blue { background: #0284c7; }
+[data-theme="dark"] .stat-progress-fill.navy { background: #60a5fa; }
+[data-theme="dark"] .stat-progress-fill.blue { background: #38bdf8; }

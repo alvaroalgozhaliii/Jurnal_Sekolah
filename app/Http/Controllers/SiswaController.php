@@ -130,6 +130,16 @@ class SiswaController extends Controller
         return redirect()->route('siswa.index')->with('success', 'Data siswa dipindahkan ke trash');
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids)) {
+            return back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+        $count = Siswa::whereIn('id_siswa', $ids)->delete();
+        return back()->with('success', "$count data siswa berhasil dipindahkan ke trash.");
+    }
+
     public function trash()
     {
         $siswa = Siswa::onlyTrashed()->with('kelas')->paginate(25)->withQueryString();

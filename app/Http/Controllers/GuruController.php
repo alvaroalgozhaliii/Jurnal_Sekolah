@@ -114,6 +114,16 @@ class GuruController extends Controller
         return redirect()->route('guru.index')->with('success', 'Data guru dipindahkan ke trash');
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids)) {
+            return back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+        $count = Guru::whereIn('id_guru', $ids)->delete();
+        return back()->with('success', "$count data guru berhasil dipindahkan ke trash.");
+    }
+
     public function trash()
     {
         $guru = Guru::onlyTrashed()->paginate(25)->withQueryString();

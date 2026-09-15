@@ -119,6 +119,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/rekap-kehadiran/export-csv', [AdminDashboardController::class, 'exportRekapCsv'])->name('admin.rekap-kehadiran.export-csv');
 
     // Pengguna (User Management)
+    Route::post('/pengguna/bulk-delete', [PenggunaController::class, 'bulkDelete'])->name('pengguna.bulk-delete');
     Route::resource('pengguna', PenggunaController::class);
     Route::patch('/pengguna/{id}/reset-password', [PenggunaController::class, 'resetPassword'])->name('pengguna.reset-password');
 
@@ -356,6 +357,10 @@ Route::middleware(['auth', 'role:admin,guru,piket,wali_kelas,waka_kesiswaan,waka
 
     Route::get('/jadwal/import-template', [JadwalController::class, 'importTemplate'])->name('jadwal.import-template');
     Route::post('/jadwal/import-csv', [JadwalController::class, 'importCsv'])->name('jadwal.import-csv');
+
+    // BULK DELETE MASTER DATA
+    Route::post('/guru/bulk-delete', [GuruController::class, 'bulkDelete'])->name('guru.bulk-delete');
+    Route::post('/siswa/bulk-delete', [SiswaController::class, 'bulkDelete'])->name('siswa.bulk-delete');
 
     // RESOURCE ROUTES
     Route::resource('guru', GuruController::class);
