@@ -12,18 +12,20 @@ class KelasController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
-        $query = Kelas::with('jurusan');
+        $query = Kelas::with('jurusan')->withCount('siswa');
 
         if ($search) {
-            $query->where('nama_kelas', 'like', "%{$search}%")
+            $query->where(function($q) use ($search) {
+                $q->where('nama_kelas', 'like', "%{$search}%")
                   ->orWhere('tingkat', 'like', "%{$search}%")
                   ->orWhere('wali_kelas', 'like', "%{$search}%")
-                  ->orWhereHas('jurusan', function($q) use ($search) {
-                      $q->where('nama_jurusan', 'like', "%{$search}%");
+                  ->orWhereHas('jurusan', function($qj) use ($search) {
+                      $qj->where('nama_jurusan', 'like', "%{$search}%");
                   });
+            });
         }
 
-        $kelas = $query->get();
+        $kelas = $query->orderBy('tingkat', 'asc')->orderBy('nama_kelas', 'asc')->paginate(20)->withQueryString();
         return view('kelas.index', compact('kelas', 'search'));
     }
 
@@ -127,7 +129,7 @@ class KelasController extends Controller
 
     public function trash()
     {
-        $kelas = Kelas::onlyTrashed()->with('jurusan')->get();
+        $kelas = Kelas::onlyTrashed()->with('jurusan')->withCount('siswa')->paginate(20)->withQueryString();
         return view('kelas.trash', compact('kelas'));
     }
 

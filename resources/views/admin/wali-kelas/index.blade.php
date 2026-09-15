@@ -236,7 +236,7 @@
                             @endif
                         </td>
                         <td style="text-align:center;">
-                            <span class="badge badge-navy" style="font-size:12px;">{{ $k->siswa->count() }} siswa</span>
+                            <span class="badge badge-navy" style="font-size:12px;">{{ $k->siswa_count }} siswa</span>
                         </td>
                         <td style="text-align:center;">
                             @if($k->id_guru_walikelas)

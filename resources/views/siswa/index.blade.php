@@ -50,6 +50,7 @@
 
 <div class="card">
     <div class="card-body" style="padding:0;">
+        @if($siswa->count() > 0)
         <div class="table-wrapper" style="border:none; border-radius:0;">
             <table class="table">
                 <thead>
@@ -66,7 +67,7 @@
                 <tbody>
                     @foreach($siswa as $item)
                     <tr>
-                        <td class="no-col">{{ $loop->iteration }}</td>
+                        <td class="no-col">{{ $siswa->firstItem() + $loop->index }}</td>
                         <td class="text-muted fw-bold">{{ $item->NISN }}</td>
                         <td class="fw-bold text-navy">{{ $item->nama }}</td>
                         <td><span class="badge badge-navy">{{ $item->kelas->nama_kelas ?? '-' }}</span></td>
@@ -91,6 +92,21 @@
                 </tbody>
             </table>
         </div>
+        @if($siswa->hasPages())
+        <div class="card-footer">
+            <div class="text-muted" style="font-size: 13px;">
+                Menampilkan <strong>{{ $siswa->firstItem() ?? 0 }}</strong> &ndash; <strong>{{ $siswa->lastItem() ?? 0 }}</strong> dari <strong>{{ $siswa->total() }}</strong> siswa
+            </div>
+            <div>
+                {{ $siswa->links() }}
+            </div>
+        </div>
+        @endif
+        @else
+        <div class="empty-state" style="padding: 32px; text-align: center;">
+            <div class="empty-state-text" style="color: var(--text-muted); font-size: 14px;">Tidak ada data siswa ditemukan.</div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection
