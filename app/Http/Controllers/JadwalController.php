@@ -148,8 +148,9 @@ class JadwalController extends Controller
                 ->first();
 
             if ($bentrokRuang) {
+                $namaKelasRuang = $bentrokRuang->kelas->nama_kelas ?? 'kelas lain';
                 return back()->withInput()->withErrors([
-                    'ruang' => "Ruangan {$request->ruang} sudah digunakan oleh kelas {$bentrokRuang->kelas->nama_kelas} pada hari {$hari} Jam ke-{$jamKe}."
+                    'ruang' => "Ruangan {$request->ruang} sudah digunakan oleh kelas {$namaKelasRuang} pada hari {$hari} Jam ke-{$jamKe}."
                 ]);
             }
         }
@@ -264,8 +265,9 @@ class JadwalController extends Controller
                 ->first();
 
             if ($bentrokRuang) {
+                $namaKelasRuang = $bentrokRuang->kelas->nama_kelas ?? 'kelas lain';
                 return back()->withInput()->withErrors([
-                    'ruang' => "Ruangan {$request->ruang} sudah digunakan oleh kelas {$bentrokRuang->kelas->nama_kelas} pada hari {$hari} Jam ke-{$jamKe}."
+                    'ruang' => "Ruangan {$request->ruang} sudah digunakan oleh kelas {$namaKelasRuang} pada hari {$hari} Jam ke-{$jamKe}."
                 ]);
             }
         }
