@@ -2764,8 +2764,11 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
 .input-icon-wrapper .btn-toggle-password {
     position: absolute;
     right: 12px;
-    background: transparent;
-    border: none;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
     color: #64748b;
     cursor: pointer;
     padding: 4px;
@@ -2773,9 +2776,16 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
     align-items: center;
     justify-content: center;
     transition: color 0.2s ease;
+    -webkit-appearance: none !important;
+    appearance: none !important;
 }
 
-.input-icon-wrapper .btn-toggle-password:hover {
+.input-icon-wrapper .btn-toggle-password:hover,
+.input-icon-wrapper .btn-toggle-password:focus,
+.input-icon-wrapper .btn-toggle-password:active {
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
     color: #94a3b8;
 }
 
@@ -3153,9 +3163,22 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
     border: none !important;
 }
 
+/* Hide Microsoft Edge / IE native password reveal button to prevent default square box */
+input::-ms-reveal,
+input::-ms-clear,
+.sso-input-pill input::-ms-reveal,
+.sso-input-pill input::-ms-clear {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 .sso-eye-btn {
     background: transparent !important;
+    background-color: transparent !important;
     border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
     color: #94a3b8 !important;
     padding: 6px 8px !important;
     cursor: pointer;
@@ -3164,9 +3187,21 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
     justify-content: center;
     transition: color 0.2s ease;
     flex-shrink: 0;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none;
 }
 
-.sso-eye-btn:hover {
+.sso-eye-btn:hover,
+.sso-eye-btn:focus,
+.sso-eye-btn:focus-visible,
+.sso-eye-btn:active {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
     color: #475569 !important;
 }
 
