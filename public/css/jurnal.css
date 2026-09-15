@@ -550,6 +550,40 @@ a:hover {
     color: #b45309 !important;
 }
 
+/* Card Header Themed Variants */
+.card-header-amber,
+.card-header.header-amber {
+    background-color: #fef3c7 !important;
+    border-bottom: 1px solid #fde68a !important;
+}
+.card-header-amber .card-title,
+.card-header.header-amber .card-title,
+.text-amber {
+    color: #b45309 !important;
+}
+
+.card-header-green,
+.card-header.header-green {
+    background-color: #dcfce7 !important;
+    border-bottom: 1px solid #bbf7d0 !important;
+}
+.card-header-green .card-title,
+.card-header.header-green .card-title,
+.text-green {
+    color: #15803d !important;
+}
+
+.card-header-red,
+.card-header.header-red {
+    background-color: #fee2e2 !important;
+    border-bottom: 1px solid #fecaca !important;
+}
+.card-header-red .card-title,
+.card-header.header-red .card-title,
+.text-red {
+    color: #b91c1c !important;
+}
+
 .distribusi-box {
     background-color: var(--bg-card-header);
     border: 1px solid var(--border);
@@ -1661,6 +1695,51 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme="dark"] .card-amber > .card-header .card-title,
 [data-theme="dark"] .card-amber > .card-header .svg-icon {
     color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .card-header-amber,
+[data-theme="dark"] .card-header.header-amber {
+    background-color: rgba(245, 158, 11, 0.14) !important;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.28) !important;
+}
+[data-theme="dark"] .card-header-amber .card-title,
+[data-theme="dark"] .card-header.header-amber .card-title,
+[data-theme="dark"] .text-amber {
+    color: #fbbf24 !important;
+}
+[data-theme="dark"] .card-header-amber .svg-icon,
+[data-theme="dark"] .card-header.header-amber .svg-icon {
+    color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .card-header-green,
+[data-theme="dark"] .card-header.header-green {
+    background-color: rgba(34, 197, 94, 0.14) !important;
+    border-bottom: 1px solid rgba(34, 197, 94, 0.28) !important;
+}
+[data-theme="dark"] .card-header-green .card-title,
+[data-theme="dark"] .card-header.header-green .card-title,
+[data-theme="dark"] .text-green {
+    color: #86efac !important;
+}
+[data-theme="dark"] .card-header-green .svg-icon,
+[data-theme="dark"] .card-header.header-green .svg-icon {
+    color: #86efac !important;
+}
+
+[data-theme="dark"] .card-header-red,
+[data-theme="dark"] .card-header.header-red {
+    background-color: rgba(239, 68, 68, 0.14) !important;
+    border-bottom: 1px solid rgba(239, 68, 68, 0.28) !important;
+}
+[data-theme="dark"] .card-header-red .card-title,
+[data-theme="dark"] .card-header.header-red .card-title,
+[data-theme="dark"] .text-red {
+    color: #fca5a5 !important;
+}
+[data-theme="dark"] .card-header-red .svg-icon,
+[data-theme="dark"] .card-header.header-red .svg-icon {
+    color: #fca5a5 !important;
 }
 
 /* Form Controls & Inputs */
