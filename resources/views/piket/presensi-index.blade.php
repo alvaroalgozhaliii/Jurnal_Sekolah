@@ -195,8 +195,19 @@
 </div>
 
 <div class="card">
-    <div class="card-header">
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <h3 class="card-title">Status Kehadiran Guru Berdasarkan Jadwal ({{ \Carbon\Carbon::parse($selDate)->format('d/m/Y') }})</h3>
+        @if($jadwalHariIni->count() > 10)
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" id="presensiPrevBtn" class="btn btn-secondary btn-sm" style="padding:4px 10px; display:inline-flex; align-items:center; gap:4px; font-weight:600;">
+                &larr; Prev
+            </button>
+            <span id="presensiSlideInfo" style="font-size:12.5px; font-weight:600; color:var(--text-secondary);">Slide 1</span>
+            <button type="button" id="presensiNextBtn" class="btn btn-secondary btn-sm" style="padding:4px 10px; display:inline-flex; align-items:center; gap:4px; font-weight:600;">
+                Next &rarr;
+            </button>
+        </div>
+        @endif
     </div>
     <div class="card-body" style="padding:0;">
         @if($jadwalHariIni->count() > 0)
@@ -220,7 +231,7 @@
                         $piketRec = $absensiPiketList[$j->id_jadwal] ?? null;
                         $selfPresensi = $j->guru?->id_user ? ($presensiGuruMasuk[$j->guru->id_user] ?? null) : null;
                     @endphp
-                    <tr>
+                    <tr class="presensi-row">
                         <td class="no-col fw-bold">{{ $j->jam_ke }}</td>
                         <td>{{ $j->waktu_mulai }} - {{ $j->waktu_selesai }}</td>
                         <td><span class="badge badge-navy">{{ $j->kelas->nama_kelas ?? '-' }}</span></td>
@@ -275,6 +286,16 @@
                 </tbody>
             </table>
         </div>
+
+        @if($jadwalHariIni->count() > 10)
+        <div class="card-footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:12px 18px; border-top:1px solid var(--border);">
+            <div style="font-size:12.5px; color:var(--text-secondary);">
+                Menampilkan <strong id="presensiSlideDetail" style="color:var(--text-primary);">1 - 10</strong> dari <strong style="color:var(--text-primary);">{{ $jadwalHariIni->count() }}</strong> jadwal (10 data per slide)
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;" id="presensiSlideDots"></div>
+        </div>
+        @endif
+
         @else
         <div class="empty-state">
             <div class="empty-state-text">Tidak ada jadwal untuk tanggal {{ \Carbon\Carbon::parse($selDate)->format('d/m/Y') }}.</div>
@@ -376,7 +397,109 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // ── SLIDE PAGINATION STATUS KEHADIRAN ──
+    const rows = document.querySelectorAll('.presensi-row');
+    const pageSize = 10;
+    const totalRows = rows.length;
+    if (totalRows <= pageSize) return;
+
+    let currentSlide = 1;
+    const totalSlides = Math.ceil(totalRows / pageSize);
+
+    const prevBtn    = document.getElementById('presensiPrevBtn');
+    const nextBtn    = document.getElementById('presensiNextBtn');
+    const slideInfo  = document.getElementById('presensiSlideInfo');
+    const slideDetail= document.getElementById('presensiSlideDetail');
+    const slideDots  = document.getElementById('presensiSlideDots');
+
+    function showSlide(slide) {
+        if (slide < 1 || slide > totalSlides) return;
+        currentSlide = slide;
+        const start = (slide - 1) * pageSize;
+        const end = start + pageSize;
+
+        rows.forEach((row, idx) => {
+            row.style.display = (idx >= start && idx < end) ? '' : 'none';
+        });
+
+        if (slideInfo)   slideInfo.textContent = `Slide ${slide} dari ${totalSlides}`;
+        if (slideDetail) slideDetail.textContent = `${start + 1} - ${Math.min(end, totalRows)}`;
+
+        if (prevBtn) {
+            prevBtn.disabled = slide === 1;
+            prevBtn.style.opacity = slide === 1 ? '0.4' : '1';
+            prevBtn.style.cursor  = slide === 1 ? 'not-allowed' : 'pointer';
+        }
+        if (nextBtn) {
+            nextBtn.disabled = slide === totalSlides;
+            nextBtn.style.opacity = slide === totalSlides ? '0.4' : '1';
+            nextBtn.style.cursor  = slide === totalSlides ? 'not-allowed' : 'pointer';
+        }
+
+        renderSlideDotsPresensi();
+    }
+
+    function renderSlideDotsPresensi() {
+        if (!slideDots) return;
+        slideDots.innerHTML = '';
+
+        let pages = [];
+        if (totalSlides <= 5) {
+            for (let i = 1; i <= totalSlides; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (currentSlide > 3) pages.push('...');
+            const s = Math.max(2, currentSlide - 1);
+            const e = Math.min(totalSlides - 1, currentSlide + 1);
+            for (let i = s; i <= e; i++) pages.push(i);
+            if (currentSlide < totalSlides - 2) pages.push('...');
+            pages.push(totalSlides);
+        }
+
+        const mkBtn = (html, onClick, disabled, title) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.innerHTML = html;
+            if (title) b.title = title;
+            b.disabled = disabled;
+            b.style.cssText = 'width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; font-size:16px; font-weight:700; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border); cursor:' + (disabled ? 'not-allowed; opacity:0.4;' : 'pointer;');
+            if (!disabled) b.addEventListener('click', onClick);
+            return b;
+        };
+
+        slideDots.appendChild(mkBtn('&lsaquo;', () => showSlide(currentSlide - 1), currentSlide === 1, 'Slide Sebelumnya'));
+
+        pages.forEach(p => {
+            if (p === '...') {
+                const span = document.createElement('span');
+                span.textContent = '…';
+                span.style.cssText = 'display:inline-flex; align-items:center; justify-content:center; width:24px; height:32px; color:var(--text-secondary); font-size:13px; font-weight:600; user-select:none;';
+                slideDots.appendChild(span);
+            } else {
+                const isActive = p === currentSlide;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = p;
+                btn.style.cssText = `min-width:32px; height:32px; padding:0 8px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; font-size:12.5px; font-weight:${isActive ? 700 : 600}; background:${isActive ? '#2563eb' : 'var(--bg-card)'}; color:${isActive ? '#ffffff' : 'var(--text-primary)'}; border:1px solid ${isActive ? '#2563eb' : 'var(--border)'}; ${isActive ? 'box-shadow:0 2px 6px rgba(37,99,235,0.3); cursor:default;' : 'cursor:pointer;'}`;
+                if (!isActive) {
+                    btn.onmouseover = () => { btn.style.background = 'rgba(59,130,246,0.1)'; btn.style.borderColor = '#3b82f6'; };
+                    btn.onmouseout  = () => { btn.style.background = 'var(--bg-card)'; btn.style.borderColor = 'var(--border)'; };
+                    btn.addEventListener('click', () => showSlide(p));
+                }
+                slideDots.appendChild(btn);
+            }
+        });
+
+        slideDots.appendChild(mkBtn('&rsaquo;', () => showSlide(currentSlide + 1), currentSlide === totalSlides, 'Slide Selanjutnya'));
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { if (currentSlide > 1) showSlide(currentSlide - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { if (currentSlide < totalSlides) showSlide(currentSlide + 1); });
+
+    showSlide(1);
 });
 </script>
 @endpush
 @endsection
+

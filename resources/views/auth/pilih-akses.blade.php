@@ -25,8 +25,8 @@
 
     <!-- Header Section -->
     <div style="text-align: center; margin-bottom: 32px;">
-        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 9999px; color: #2563eb; font-size: 13px; font-weight: 600; margin-bottom: 12px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 18px; background: rgba(15,23,42,0.72); border: 1.5px solid rgba(99,179,237,0.4); border-radius: 9999px; color: #93c5fd; font-size: 13px; font-weight: 600; margin-bottom: 12px; backdrop-filter: blur(16px); box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 16px rgba(59,130,246,0.15);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <span>Selamat Datang, {{ $user->nama }}</span>
         </div>
         <h1 style="font-size: 28px; font-weight: 800; color: var(--text-primary, #0f172a); margin: 0 0 8px 0; letter-spacing: -0.5px;">

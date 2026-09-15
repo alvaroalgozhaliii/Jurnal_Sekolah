@@ -79,7 +79,8 @@ class GuruDashboardController extends Controller
         $pengingatJurnal = [];
         foreach ($jadwalHariIni as $j) {
             if (!$jurnalHariIni->has($j->id_jadwal)) {
-                $pengingatJurnal[] = "Anda belum mengisi jurnal untuk kelas {$j->kelas->nama_kelas} (Mapel: {$j->mapel}, Jam ke-{$j->jam_ke}).";
+                $namaKelas = $j->kelas?->nama_kelas ?? 'Kelas -';
+                $pengingatJurnal[] = "Anda belum mengisi jurnal untuk kelas {$namaKelas} (Mapel: {$j->mapel}, Jam ke-{$j->jam_ke}).";
             }
         }
 

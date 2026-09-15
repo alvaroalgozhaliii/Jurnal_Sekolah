@@ -54,9 +54,10 @@ class PiketDashboardController extends Controller
                 $piketRecord = AbsensiGuruPiket::where('id_jadwal', $j->id_jadwal)->where('tanggal', $todayDate)->first();
 
                 if (!$hasPresensi && (!$piketRecord || $piketRecord->status_guru !== 'hadir')) {
+                    $namaKelas = $j->kelas?->nama_kelas ?? 'Kelas -';
                     $kelasKosong[] = [
                         'jadwal' => $j,
-                        'pesan' => "Kelas {$j->kelas->nama_kelas} (Mapel: {$j->mapel}) belum memiliki guru yang hadir."
+                        'pesan' => "Kelas {$namaKelas} (Mapel: {$j->mapel}) belum memiliki guru yang hadir."
                     ];
                 }
             }
