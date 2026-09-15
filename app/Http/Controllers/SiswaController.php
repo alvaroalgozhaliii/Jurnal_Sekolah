@@ -25,7 +25,7 @@ class SiswaController extends Controller
             });
         }
 
-        $siswa = $query->orderBy('nama', 'asc')->get();
+        $siswa = $query->orderBy('nama', 'asc')->paginate(25)->withQueryString();
         return view('siswa.index', compact('siswa', 'search'));
     }
 
@@ -132,7 +132,7 @@ class SiswaController extends Controller
 
     public function trash()
     {
-        $siswa = Siswa::onlyTrashed()->with('kelas')->get();
+        $siswa = Siswa::onlyTrashed()->with('kelas')->paginate(25)->withQueryString();
         return view('siswa.trash', compact('siswa'));
     }
 

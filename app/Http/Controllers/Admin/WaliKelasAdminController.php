@@ -18,7 +18,7 @@ class WaliKelasAdminController extends Controller
         $search = $request->get('search');
         $statusWali = $request->get('status_wali');
 
-        $query = Kelas::with(['jurusan', 'guruWaliKelas.user', 'siswa']);
+        $query = Kelas::with(['jurusan', 'guruWaliKelas.user'])->withCount('siswa');
 
         if ($tingkat) {
             $query->where('tingkat', $tingkat);
