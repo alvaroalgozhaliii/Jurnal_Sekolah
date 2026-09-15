@@ -42,16 +42,113 @@
     background: none; border: none; cursor: pointer;
     color: var(--text-secondary); padding: 0; line-height: 1;
 }
-/* Role badge colors */
-.rb { padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .4px; }
-.rb-admin { background:#fee2e2; color:#991b1b; }
-.rb-guru { background:#dbeafe; color:#1e40af; }
-.rb-piket { background:#dcfce7; color:#166534; }
-.rb-waka { background:#e0e7ff; color:#3730a3; }
-.rb-kepala { background:#fef3c7; color:#92400e; }
-.rb-satpam { background:#ffedd5; color:#9a3412; }
-.rb-ortu, .rb-siswa { background:#f3f4f6; color:#374151; }
-.rb-walikelas { background:#fce7f3; color:#9d174d; }
+/* ── Role Badge & Role Filter (Modern Rounded Rectangle, Non-Oval) ── */
+.rb {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    line-height: 1.2;
+    border: 1px solid transparent;
+}
+.rb-admin { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+.rb-guru { background:#dbeafe; color:#1e40af; border-color:#bfdbfe; }
+.rb-piket { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+.rb-waka { background:#e0e7ff; color:#3730a3; border-color:#c7d2fe; }
+.rb-kepala { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+.rb-satpam { background:#ffedd5; color:#9a3412; border-color:#fed7aa; }
+.rb-ortu, .rb-siswa { background:#f1f5f9; color:#334155; border-color:#e2e8f0; }
+.rb-walikelas { background:#fce7f3; color:#9d174d; border-color:#fbcfe8; }
+
+/* Dark mode adjustments for role badges */
+[data-theme="dark"] .rb-admin { background: rgba(239, 68, 68, 0.16); color: #fca5a5; border-color: rgba(239, 68, 68, 0.3); }
+[data-theme="dark"] .rb-guru { background: rgba(59, 130, 246, 0.16); color: #93c5fd; border-color: rgba(59, 130, 246, 0.3); }
+[data-theme="dark"] .rb-piket { background: rgba(34, 197, 94, 0.16); color: #86efac; border-color: rgba(34, 197, 94, 0.3); }
+[data-theme="dark"] .rb-waka { background: rgba(99, 102, 241, 0.16); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3); }
+[data-theme="dark"] .rb-kepala { background: rgba(245, 158, 11, 0.16); color: #fde047; border-color: rgba(245, 158, 11, 0.3); }
+[data-theme="dark"] .rb-satpam { background: rgba(249, 115, 22, 0.16); color: #fdba74; border-color: rgba(249, 115, 22, 0.3); }
+[data-theme="dark"] .rb-ortu, [data-theme="dark"] .rb-siswa { background: rgba(148, 163, 184, 0.16); color: #cbd5e1; border-color: rgba(148, 163, 184, 0.25); }
+[data-theme="dark"] .rb-walikelas { background: rgba(236, 72, 153, 0.16); color: #f472b6; border-color: rgba(236, 72, 153, 0.3); }
+
+/* Role Filter Bar Styling */
+.role-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+.role-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+.role-filter-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+.role-filter-btn.active {
+    background: var(--navy-primary);
+    border-color: var(--navy-primary);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.25);
+}
+.role-filter-btn.active .rb {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.role-filter-btn.active .role-count-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+.role-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 4px;
+    background: #e2e8f0;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Dark Mode Role Filter */
+[data-theme="dark"] .role-filter-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+[data-theme="dark"] .role-filter-btn:hover {
+    background: #28354d;
+    border-color: #475569;
+}
+[data-theme="dark"] .role-filter-btn.active {
+    background: #2563eb;
+    border-color: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.4);
+}
+[data-theme="dark"] .role-count-badge {
+    background: #0f172a;
+    color: #94a3b8;
+}
 </style>
 
 {{-- Modal Reset Password --}}
@@ -129,17 +226,18 @@
         'siswa'          => ['label'=>'Siswa',          'class'=>'rb-siswa'],
     ];
 @endphp
-<div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+<div class="role-filter-container">
     @foreach($roleMeta as $roleKey => $meta)
         @if($roleGroups->has($roleKey))
-        <button onclick="filterRole('{{ $roleKey }}')" class="btn btn-secondary btn-sm" id="filterBtn_{{ $roleKey }}" style="gap:6px; display:flex; align-items:center;">
+        <button type="button" onclick="filterRole('{{ $roleKey }}', this)" class="role-filter-btn" id="filterBtn_{{ $roleKey }}">
             <span class="rb {{ $meta['class'] }}">{{ $meta['label'] }}</span>
-            <span style="font-weight:700;">{{ $roleGroups[$roleKey]->count() }}</span>
+            <span class="role-count-badge">{{ $roleGroups[$roleKey]->count() }}</span>
         </button>
         @endif
     @endforeach
-    <button onclick="filterRole('')" class="btn btn-secondary btn-sm" id="filterBtnAll">
-        Semua ({{ $users->count() }})
+    <button type="button" onclick="filterRole('', this)" class="role-filter-btn active" id="filterBtnAll">
+        <span>Semua</span>
+        <span class="role-count-badge">{{ $users->count() }}</span>
     </button>
 </div>
 
@@ -277,7 +375,7 @@ document.getElementById('inputConfPw').addEventListener('input', function() {
 });
 
 // Role filter
-function filterRole(role) {
+function filterRole(role, btn) {
     const rows = document.querySelectorAll('#tableUsers tbody tr');
     rows.forEach(row => {
         if (!role || row.dataset.role === role) {
@@ -286,9 +384,14 @@ function filterRole(role) {
             row.style.display = 'none';
         }
     });
-    // Update counter display
-    let count = 0;
-    rows.forEach(r => { if(r.style.display !== 'none') count++; });
+    // Update active state on filter buttons
+    document.querySelectorAll('.role-filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) {
+        btn.classList.add('active');
+    } else {
+        const target = role ? document.getElementById('filterBtn_' + role) : document.getElementById('filterBtnAll');
+        if (target) target.classList.add('active');
+    }
 }
 </script>
 @endpush
