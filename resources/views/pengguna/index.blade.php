@@ -77,10 +77,24 @@
 /* Role Filter Bar Styling */
 .role-filter-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 8px;
     margin-bottom: 20px;
     align-items: center;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99,179,237,0.3) transparent;
+}
+.role-filter-container::-webkit-scrollbar {
+    height: 4px;
+}
+.role-filter-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.role-filter-container::-webkit-scrollbar-thumb {
+    background: rgba(99,179,237,0.35);
+    border-radius: 4px;
 }
 .role-filter-btn {
     display: inline-flex;
@@ -231,7 +245,7 @@
 
 {{-- Ringkasan per Role --}}
 @php
-    $roleGroups = $users->getCollection()->groupBy('role');
+    $roleGroups = $allUsers->groupBy('role');
     $roleMeta = [
         'admin'          => ['label'=>'Admin',          'class'=>'rb-admin'],
         'guru'           => ['label'=>'Guru',           'class'=>'rb-guru'],
@@ -255,14 +269,9 @@
         </button>
         @endif
     @endforeach
-<<<<<<< HEAD
-    <button onclick="filterRole('')" class="btn btn-secondary btn-sm" id="filterBtnAll">
-        Semua ({{ $users->total() }})
-=======
     <button type="button" onclick="filterRole('', this)" class="role-filter-btn active" id="filterBtnAll">
         <span>Semua</span>
-        <span class="role-count-badge">{{ $users->count() }}</span>
->>>>>>> 1f8878dad9cd7c9cf756f327dafeccace4323bab
+        <span class="role-count-badge">{{ $allUsers->count() }}</span>
     </button>
 </div>
 
