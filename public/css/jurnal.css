@@ -1022,7 +1022,7 @@ input[type="number"]::-webkit-outer-spin-button {
     position: absolute;
     top: calc(100% + 6px);
     left: 0;
-    z-index: 9999;
+    z-index: 99999 !important;
     width: 300px;
     background: var(--bg-card);
     border: 1.5px solid var(--border);
@@ -3982,7 +3982,6 @@ input[type='radio']:active,
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.25s ease !important;
-    will-change: transform, box-shadow;
 }
 
 .card:hover,
@@ -3995,6 +3994,7 @@ input[type='radio']:active,
 .jadwal-card:hover,
 .distribusi-box:hover,
 .card-folder:hover {
+    will-change: transform, box-shadow;
     transform: translateY(-4px) scale(1.008) !important;
     box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08) !important;
     border-color: rgba(59, 130, 246, 0.35) !important;

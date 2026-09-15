@@ -122,6 +122,36 @@
         z-index: 99999 !important;
         position: relative !important;
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       GLOBAL FIX: PENCEGAHAN ELEMEN KETIMPA SAAT MEMILIH
+       (Datepicker / Kalender, Dropdown Select, Filter Bar, dsb.)
+    ═══════════════════════════════════════════════════════════════════ */
+    .card:has(.jurnal-calendar-popover.active),
+    .card:has(.ts-wrapper.focus),
+    .card:has(.ts-wrapper.dropdown-active),
+    .card:has(.jurnal-datepicker-wrapper.has-active-picker),
+    .card.has-active-picker,
+    .card:focus-within,
+    .filter-bar:has(.jurnal-calendar-popover.active),
+    .filter-bar.has-active-picker,
+    .jurnal-datepicker-wrapper.has-active-picker,
+    .jurnal-datepicker-wrapper:has(.jurnal-calendar-popover.active) {
+        z-index: 1050 !important;
+        position: relative !important;
+    }
+
+    /* Hilangkan animasi jump transform pada card saat sedang memilih tanggal / dropdown */
+    .card.has-active-picker,
+    .card:has(.jurnal-calendar-popover.active),
+    .card:has(.ts-wrapper.focus),
+    .card:has(.ts-wrapper.dropdown-active) {
+        transform: none !important;
+    }
+
+    .jurnal-calendar-popover {
+        z-index: 99999 !important;
+    }
     .ts-dropdown-content {
         max-height: 220px !important;
         overflow-y: auto !important;
@@ -882,6 +912,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         updateVisibleText();
 
+        function closeCalendar() {
+            popover.classList.remove('active');
+            wrapper.classList.remove('has-active-picker');
+            const parentCard = wrapper.closest('.card, .filter-bar, .modal-box, .stat-card, form');
+            if (parentCard && !parentCard.querySelector('.jurnal-calendar-popover.active')) {
+                parentCard.classList.remove('has-active-picker');
+            }
+        }
+
+        function openCalendar() {
+            document.querySelectorAll('.jurnal-calendar-popover.active').forEach(p => {
+                if (p !== popover) {
+                    p.classList.remove('active');
+                    const w = p.closest('.jurnal-datepicker-wrapper');
+                    if (w) w.classList.remove('has-active-picker');
+                    const c = p.closest('.card, .filter-bar, .modal-box, .stat-card, form');
+                    if (c) c.classList.remove('has-active-picker');
+                }
+            });
+            renderCalendar();
+            popover.classList.add('active');
+            wrapper.classList.add('has-active-picker');
+            const parentCard = wrapper.closest('.card, .filter-bar, .modal-box, .stat-card, form');
+            if (parentCard) parentCard.classList.add('has-active-picker');
+        }
+
         function renderCalendar() {
             monthSelect.value = viewMonth;
             yearSelect.value = viewYear;
@@ -918,7 +974,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 cell.addEventListener('click', function () {
                     input.value = dateStr;
                     updateVisibleText();
-                    popover.classList.remove('active');
+                    closeCalendar();
                     input.dispatchEvent(new Event('change', { bubbles: true }));
                 });
 
@@ -949,11 +1005,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         visibleInput.addEventListener('click', function (e) {
             e.stopPropagation();
-            document.querySelectorAll('.jurnal-calendar-popover.active').forEach(p => {
-                if (p !== popover) p.classList.remove('active');
-            });
-            renderCalendar();
-            popover.classList.toggle('active');
+            if (popover.classList.contains('active')) {
+                closeCalendar();
+            } else {
+                openCalendar();
+            }
         });
 
         popover.querySelector('.btn-prev').addEventListener('click', function (e) {
@@ -979,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', function () {
             input.value = dateStr;
             updateVisibleText();
             renderCalendar();
-            popover.classList.remove('active');
+            closeCalendar();
             input.dispatchEvent(new Event('change', { bubbles: true }));
         });
 
@@ -988,7 +1044,7 @@ document.addEventListener('DOMContentLoaded', function () {
             input.value = '';
             updateVisibleText();
             renderCalendar();
-            popover.classList.remove('active');
+            closeCalendar();
             input.dispatchEvent(new Event('change', { bubbles: true }));
         });
     });
@@ -996,6 +1052,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('click', function (e) {
         if (!e.target.closest('.jurnal-datepicker-wrapper')) {
             document.querySelectorAll('.jurnal-calendar-popover.active').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.has-active-picker').forEach(el => el.classList.remove('has-active-picker'));
         }
     });
 });
