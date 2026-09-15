@@ -550,6 +550,40 @@ a:hover {
     color: #b45309 !important;
 }
 
+/* Card Header Themed Variants */
+.card-header-amber,
+.card-header.header-amber {
+    background-color: #fef3c7 !important;
+    border-bottom: 1px solid #fde68a !important;
+}
+.card-header-amber .card-title,
+.card-header.header-amber .card-title,
+.text-amber {
+    color: #b45309 !important;
+}
+
+.card-header-green,
+.card-header.header-green {
+    background-color: #dcfce7 !important;
+    border-bottom: 1px solid #bbf7d0 !important;
+}
+.card-header-green .card-title,
+.card-header.header-green .card-title,
+.text-green {
+    color: #15803d !important;
+}
+
+.card-header-red,
+.card-header.header-red {
+    background-color: #fee2e2 !important;
+    border-bottom: 1px solid #fecaca !important;
+}
+.card-header-red .card-title,
+.card-header.header-red .card-title,
+.text-red {
+    color: #b91c1c !important;
+}
+
 .distribusi-box {
     background-color: var(--bg-card-header);
     border: 1px solid var(--border);
@@ -1022,7 +1056,7 @@ input[type="number"]::-webkit-outer-spin-button {
     position: absolute;
     top: calc(100% + 6px);
     left: 0;
-    z-index: 9999;
+    z-index: 99999 !important;
     width: 300px;
     background: var(--bg-card);
     border: 1.5px solid var(--border);
@@ -1662,6 +1696,51 @@ input[type="number"]::-webkit-outer-spin-button {
 [data-theme="dark"] .card-amber > .card-header .card-title,
 [data-theme="dark"] .card-amber > .card-header .svg-icon {
     color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .card-header-amber,
+[data-theme="dark"] .card-header.header-amber {
+    background-color: rgba(245, 158, 11, 0.14) !important;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.28) !important;
+}
+[data-theme="dark"] .card-header-amber .card-title,
+[data-theme="dark"] .card-header.header-amber .card-title,
+[data-theme="dark"] .text-amber {
+    color: #fbbf24 !important;
+}
+[data-theme="dark"] .card-header-amber .svg-icon,
+[data-theme="dark"] .card-header.header-amber .svg-icon {
+    color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .card-header-green,
+[data-theme="dark"] .card-header.header-green {
+    background-color: rgba(34, 197, 94, 0.14) !important;
+    border-bottom: 1px solid rgba(34, 197, 94, 0.28) !important;
+}
+[data-theme="dark"] .card-header-green .card-title,
+[data-theme="dark"] .card-header.header-green .card-title,
+[data-theme="dark"] .text-green {
+    color: #86efac !important;
+}
+[data-theme="dark"] .card-header-green .svg-icon,
+[data-theme="dark"] .card-header.header-green .svg-icon {
+    color: #86efac !important;
+}
+
+[data-theme="dark"] .card-header-red,
+[data-theme="dark"] .card-header.header-red {
+    background-color: rgba(239, 68, 68, 0.14) !important;
+    border-bottom: 1px solid rgba(239, 68, 68, 0.28) !important;
+}
+[data-theme="dark"] .card-header-red .card-title,
+[data-theme="dark"] .card-header.header-red .card-title,
+[data-theme="dark"] .text-red {
+    color: #fca5a5 !important;
+}
+[data-theme="dark"] .card-header-red .svg-icon,
+[data-theme="dark"] .card-header.header-red .svg-icon {
+    color: #fca5a5 !important;
 }
 
 /* Form Controls & Inputs */
@@ -3240,45 +3319,46 @@ input::-ms-clear,
 
 /* Theme Toggle Button positioned in top-right corner of the central card container */
 .sso-theme-btn-corner {
-    position: absolute !important;
-    top: 18px !important;
-    right: 20px !important;
-    width: 42px !important;
-    height: 42px !important;
-    border-radius: 13px !important;
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
-    color: #f8fafc !important;
+    position: fixed !important;
+    bottom: 28px !important;
+    right: 28px !important;
+    top: unset !important;
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 14px !important;
+    background-color: rgba(15, 23, 42, 0.82) !important;
+    border: 1.5px solid rgba(99, 179, 237, 0.45) !important;
+    color: #93c5fd !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
-    z-index: 100 !important;
+    z-index: 9999 !important;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.35) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(59, 130, 246, 0.18) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
 }
 
 [data-theme="light"] .sso-theme-btn-corner {
-    background-color: rgba(255, 255, 255, 0.85) !important;
-    border: 1.5px solid rgba(203, 213, 225, 0.8) !important;
-    color: #1e293b !important;
-    box-shadow: 0 6px 18px -4px rgba(15, 23, 42, 0.15) !important;
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    border: 1.5px solid rgba(59, 130, 246, 0.3) !important;
+    color: #2563eb !important;
+    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.15), 0 0 12px rgba(37, 99, 235, 0.1) !important;
 }
 
 .sso-theme-btn-corner:hover {
-    background-color: rgba(255, 255, 255, 0.28) !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
-    transform: scale(1.1) rotate(6deg) !important;
-    box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.4) !important;
+    background-color: rgba(30, 41, 59, 0.92) !important;
+    border-color: rgba(147, 197, 253, 0.7) !important;
+    transform: scale(1.1) rotate(10deg) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.3) !important;
 }
 
 [data-theme="light"] .sso-theme-btn-corner:hover {
-    background-color: #ffffff !important;
+    background-color: #eff6ff !important;
     border-color: #3b82f6 !important;
     color: #2563eb !important;
-    box-shadow: 0 10px 24px -4px rgba(37, 99, 235, 0.25) !important;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2) !important;
 }
 
 /* RESPONSIVE LAYOUT (MOBILE & TABLET) */
@@ -3980,7 +4060,6 @@ input[type='radio']:active,
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.25s ease !important;
-    will-change: transform, box-shadow;
 }
 
 .card:hover,
@@ -3993,6 +4072,7 @@ input[type='radio']:active,
 .jadwal-card:hover,
 .distribusi-box:hover,
 .card-folder:hover {
+    will-change: transform, box-shadow;
     transform: translateY(-4px) scale(1.008) !important;
     box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -4px rgba(15, 23, 42, 0.08) !important;
     border-color: rgba(59, 130, 246, 0.35) !important;
