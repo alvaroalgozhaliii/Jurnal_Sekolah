@@ -103,7 +103,7 @@
 
         <!-- PERSETUJUAN DARI WAKA SDM -->
         <div class="card mb-24">
-            <div class="card-header" style="background:#f0fdf4; border-bottom:1px solid #dcfce7;">
+            <div class="card-header header-green">
                 <h3 class="card-title text-green">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     Persetujuan Waka SDM (Telah Diverifikasi)

@@ -16,7 +16,7 @@
 
 <!-- SECTION 1: MENUNGGU PERSETUJUAN KEPALA SEKOLAH -->
 <div class="card mb-24">
-    <div class="card-header" style="background:#fffbeb; border-bottom:1px solid #fef3c7;">
+    <div class="card-header header-amber">
         <h3 class="card-title text-amber">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             Menunggu Persetujuan Final ({{ $pendingList->count() }})
@@ -79,7 +79,7 @@
 
 <!-- SECTION 2: TELAH DISETUJUI -->
 <div class="card mb-24">
-    <div class="card-header" style="background:#f0fdf4; border-bottom:1px solid #dcfce7;">
+    <div class="card-header header-green">
         <h3 class="card-title text-green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
             Dispensasi Guru Telah Disetujui ({{ $disetujuiList->count() }})
@@ -128,7 +128,7 @@
 <!-- SECTION 3: DITOLAK -->
 @if($ditolakList->count() > 0)
 <div class="card">
-    <div class="card-header" style="background:#fef2f2; border-bottom:1px solid #fee2e2;">
+    <div class="card-header header-red">
         <h3 class="card-title text-red">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             Dispensasi Guru Ditolak ({{ $ditolakList->count() }})
