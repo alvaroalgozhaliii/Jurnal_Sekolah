@@ -265,12 +265,6 @@
         </a>
         @endif
     @endforeach
-<<<<<<< HEAD
-    <button type="button" onclick="filterRole('', this)" class="role-filter-btn active" id="filterBtnAll">
-        <span>Semua</span>
-        <span class="role-count-badge">{{ $users->total() }}</span>
-    </button>
-=======
     <a href="{{ route('pengguna.index', array_filter(['search' => $search ?? ''])) }}" 
        class="role-filter-btn {{ empty($role) ? 'active' : '' }}" 
        id="filterBtnAll"
@@ -278,7 +272,6 @@
         <span>Semua</span>
         <span class="role-count-badge">{{ $allUsers->count() }}</span>
     </a>
->>>>>>> e6c6ee1c0de0449a92e96bd3bc6b479be908040c
 </div>
 
 {{-- Search --}}
