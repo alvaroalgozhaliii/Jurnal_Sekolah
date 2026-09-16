@@ -39,18 +39,48 @@
     </div>
 </div>
 
+{{-- Filter Jurusan --}}
+<div class="card mb-16">
+    <div class="card-body" style="padding:12px 16px;">
+        <div style="font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px;">
+            Filter Jurusan
+        </div>
+        @php
+            $warna = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#ec4899','#84cc16','#6366f1'];
+        @endphp
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+            <a href="{{ route('siswa.index', array_merge(request()->except(['jurusan','page']), [])) }}"
+               class="btn btn-sm {{ !$jurusanId ? 'btn-primary' : 'btn-secondary' }}">
+                Semua
+            </a>
+            @foreach($semuaJurusan as $idx => $j)
+            @php $wn = $warna[$idx % count($warna)]; $isActive = $jurusanId == $j->id_jurusan; @endphp
+            <a href="{{ route('siswa.index', array_merge(request()->except(['jurusan','page']), ['jurusan' => $j->id_jurusan])) }}"
+               class="btn btn-sm {{ $isActive ? 'btn-primary' : 'btn-secondary' }}"
+               style="color: {{ $isActive ? '#fff' : $wn }} !important;">
+                {{ $j->nama_jurusan }}
+            </a>
+            @endforeach
+        </div>
+    </div>
+</div>
+
 {{-- Search --}}
 <div class="card mb-16">
     <div class="card-body" style="padding:12px 16px;">
         <form method="GET" action="{{ route('siswa.index') }}" class="d-flex gap-8" style="align-items:center;">
+            @if($jurusanId)
+                <input type="hidden" name="jurusan" value="{{ $jurusanId }}">
+            @endif
             <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama siswa, NISN, kelas..." class="form-control" style="max-width:420px;">
             <button type="submit" class="btn btn-primary btn-sm">Cari</button>
             @if($search ?? false)
-                <a href="{{ route('siswa.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+                <a href="{{ route('siswa.index', $jurusanId ? ['jurusan' => $jurusanId] : []) }}" class="btn btn-secondary btn-sm">Reset</a>
             @endif
         </form>
     </div>
 </div>
+
 
 <div class="card">
     <div class="card-body" style="padding:0;">
