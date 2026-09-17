@@ -190,7 +190,7 @@
                 <div class="form-group" style="margin:0;">
                     <label class="form-label" style="margin-bottom:4px; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-secondary);">Cari / Pilih Siswa</label>
                     <select class="form-control select-search" data-searchable="true" id="uiSiswa" onchange="document.getElementById('hiddenSiswa').value=this.value; document.getElementById('calForm').submit();">
-                        <option value="">-- Semua Siswa --</option>
+                        <option value="">Semua Siswa</option>
                         @foreach($siswaList as $s)
                             <option value="{{ $s->id_siswa }}" {{ $selectedSiswaId == $s->id_siswa ? 'selected' : '' }}>
                                 {{ $s->nama }} (NISN: {{ $s->NISN }})

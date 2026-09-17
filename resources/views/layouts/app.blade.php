@@ -1270,7 +1270,7 @@ document.addEventListener('DOMContentLoaded', function () {
             new TomSelect(el, {
                 create: false,
                 sortField: { field: "text", direction: "asc" },
-                placeholder: el.getAttribute('placeholder') || '-- Ketik untuk mencari / memilih --',
+                placeholder: el.getAttribute('placeholder') || 'Ketik untuk mencari / memilih',
                 allowEmptyOption: true,
                 maxOptions: 200,
                 dropdownParent: 'body',
