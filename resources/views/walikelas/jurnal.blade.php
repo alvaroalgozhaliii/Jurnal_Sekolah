@@ -37,11 +37,11 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
-    background: linear-gradient(135deg, rgba(99,102,241,.06), transparent);
+    background: linear-gradient(135deg, rgba(30,58,138,.06), transparent);
 }
 .cal-month-name {
     font-size: 20px; font-weight: 800; letter-spacing: -.4px;
-    background: linear-gradient(135deg, #1e1b4b, #6366f1);
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     line-height: 1.1;
 }
@@ -54,7 +54,7 @@
     transition: all .18s ease;
 }
 .cal-nav-arrow:hover {
-    background: #6366f1; border-color: #6366f1; color: #fff;
+    background: #3b82f6; border-color: #3b82f6; color: #fff;
     transform: scale(1.06);
 }
 .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); padding: 10px 14px 2px; }
@@ -72,14 +72,14 @@
     color: var(--text-primary); min-height: 36px; gap: 2px;
 }
 .cal-day:hover:not(.cal-other-month):not(.cal-selected) { background: var(--bg-page); transform: scale(1.06); }
-.cal-day.cal-today { box-shadow: inset 0 0 0 2px #6366f1; color: #6366f1; font-weight: 800; }
+.cal-day.cal-today { box-shadow: inset 0 0 0 2px #3b82f6; color: #3b82f6; font-weight: 800; }
 .cal-day.cal-selected {
-    background: linear-gradient(135deg, #1e1b4b, #6366f1) !important;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important;
     color: #fff !important; font-weight: 700;
-    box-shadow: 0 4px 12px rgba(99,102,241,.35); transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(59,130,246,.35); transform: scale(1.08);
 }
 .cal-day.cal-other-month { opacity: .18; pointer-events: none !important; cursor: default !important; }
-.cal-dot { width: 4px; height: 4px; border-radius: 50%; background: #6366f1; }
+.cal-dot { width: 4px; height: 4px; border-radius: 50%; background: #3b82f6; }
 .cal-selected .cal-dot { background: rgba(255,255,255,.9); }
 .cal-day.cal-weekend { color: #ef4444; }
 .cal-day.cal-weekend.cal-selected { color: #fff; }

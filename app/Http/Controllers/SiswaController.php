@@ -42,8 +42,14 @@ class SiswaController extends Controller
             ->withQueryString();
 
         $semuaJurusan = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanCounts = Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id_kelas')
+            ->whereNull('kelas.deleted_at')
+            ->selectRaw('kelas.id_jurusan, count(*) as total')
+            ->groupBy('kelas.id_jurusan')
+            ->pluck('total', 'id_jurusan');
+        $totalSiswa = Siswa::count();
 
-        return view('siswa.index', compact('siswa', 'search', 'semuaJurusan', 'jurusanId'));
+        return view('siswa.index', compact('siswa', 'search', 'semuaJurusan', 'jurusanId', 'jurusanCounts', 'totalSiswa'));
     }
 
     public function create()

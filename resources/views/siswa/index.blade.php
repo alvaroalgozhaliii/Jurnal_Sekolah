@@ -39,30 +39,146 @@
     </div>
 </div>
 
-{{-- Filter Jurusan --}}
-<div class="card mb-16">
-    <div class="card-body" style="padding:12px 16px;">
-        <div style="font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px;">
-            Filter Jurusan
-        </div>
-        @php
-            $warna = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#ec4899','#84cc16','#6366f1'];
-        @endphp
-        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-            <a href="{{ route('siswa.index', array_merge(request()->except(['jurusan','page']), [])) }}"
-               class="btn btn-sm {{ !$jurusanId ? 'btn-primary' : 'btn-secondary' }}">
-                Semua
-            </a>
-            @foreach($semuaJurusan as $idx => $j)
-            @php $wn = $warna[$idx % count($warna)]; $isActive = $jurusanId == $j->id_jurusan; @endphp
-            <a href="{{ route('siswa.index', array_merge(request()->except(['jurusan','page']), ['jurusan' => $j->id_jurusan])) }}"
-               class="btn btn-sm {{ $isActive ? 'btn-primary' : 'btn-secondary' }}"
-               style="color: {{ $isActive ? '#fff' : $wn }} !important;">
-                {{ $j->nama_jurusan }}
-            </a>
-            @endforeach
-        </div>
-    </div>
+{{-- Filter Jurusan (Desain Identik dengan Filter Role Pengguna) --}}
+<style>
+.jb {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    line-height: 1.2;
+    border: 1px solid transparent;
+}
+.jb-red     { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+.jb-blue    { background:#dbeafe; color:#1e40af; border-color:#bfdbfe; }
+.jb-green   { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+.jb-purple  { background:#e0e7ff; color:#3730a3; border-color:#c7d2fe; }
+.jb-amber   { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+.jb-orange  { background:#ffedd5; color:#9a3412; border-color:#fed7aa; }
+.jb-cyan    { background:#cffafe; color:#155e75; border-color:#a5f3fc; }
+.jb-pink    { background:#fce7f3; color:#9d174d; border-color:#fbcfe8; }
+.jb-teal    { background:#ccfbf1; color:#115e59; border-color:#99f6e4; }
+.jb-indigo  { background:#ede9fe; color:#5b21b6; border-color:#ddd6fe; }
+
+[data-theme="dark"] .jb-red    { background: rgba(239, 68, 68, 0.16); color: #fca5a5; border-color: rgba(239, 68, 68, 0.3); }
+[data-theme="dark"] .jb-blue   { background: rgba(59, 130, 246, 0.16); color: #93c5fd; border-color: rgba(59, 130, 246, 0.3); }
+[data-theme="dark"] .jb-green  { background: rgba(34, 197, 94, 0.16); color: #86efac; border-color: rgba(34, 197, 94, 0.3); }
+[data-theme="dark"] .jb-purple { background: rgba(99, 102, 241, 0.16); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3); }
+[data-theme="dark"] .jb-amber  { background: rgba(245, 158, 11, 0.16); color: #fde047; border-color: rgba(245, 158, 11, 0.3); }
+[data-theme="dark"] .jb-orange { background: rgba(249, 115, 22, 0.16); color: #fdba74; border-color: rgba(249, 115, 22, 0.3); }
+[data-theme="dark"] .jb-cyan   { background: rgba(6, 182, 212, 0.16); color: #67e8f9; border-color: rgba(6, 182, 212, 0.3); }
+[data-theme="dark"] .jb-pink   { background: rgba(236, 72, 153, 0.16); color: #f472b6; border-color: rgba(236, 72, 153, 0.3); }
+[data-theme="dark"] .jb-teal   { background: rgba(20, 184, 166, 0.16); color: #5eead4; border-color: rgba(20, 184, 166, 0.3); }
+[data-theme="dark"] .jb-indigo { background: rgba(139, 92, 246, 0.16); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.3); }
+
+.role-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+.role-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    text-decoration: none;
+}
+.role-filter-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+.role-filter-btn.active {
+    background: var(--navy-primary, #1e3a8a);
+    border-color: var(--navy-primary, #1e3a8a);
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.25);
+}
+.role-filter-btn.active .jb {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.role-filter-btn.active .role-count-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+.role-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 4px;
+    background: #e2e8f0;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .role-filter-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+[data-theme="dark"] .role-filter-btn:hover {
+    background: #28354d;
+    border-color: #475569;
+}
+[data-theme="dark"] .role-filter-btn.active {
+    background: #2563eb;
+    border-color: #3b82f6;
+    color: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.4);
+}
+[data-theme="dark"] .role-count-badge {
+    background: #0f172a;
+    color: #94a3b8;
+}
+</style>
+
+@php
+    $badgeClasses = ['jb-red', 'jb-blue', 'jb-green', 'jb-purple', 'jb-amber', 'jb-orange', 'jb-cyan', 'jb-pink', 'jb-teal', 'jb-indigo'];
+@endphp
+
+<div class="role-filter-container">
+    @foreach($semuaJurusan as $idx => $j)
+    @php
+        $isActive = $jurusanId == $j->id_jurusan;
+        $bClass = $badgeClasses[$idx % count($badgeClasses)];
+        $count = $jurusanCounts[$j->id_jurusan] ?? 0;
+    @endphp
+    <a href="{{ route('siswa.index', array_merge(request()->except(['jurusan','page']), ['jurusan' => $j->id_jurusan])) }}"
+       class="role-filter-btn {{ $isActive ? 'active' : '' }}"
+       id="filterBtn_{{ $j->id_jurusan }}"
+       style="text-decoration: none;">
+        <span class="jb {{ $bClass }}">{{ $j->nama_jurusan }}</span>
+        <span class="role-count-badge">{{ $count }}</span>
+    </a>
+    @endforeach
+
+    <a href="{{ route('siswa.index', array_merge(request()->except(['jurusan','page']), [])) }}"
+       class="role-filter-btn {{ empty($jurusanId) ? 'active' : '' }}"
+       id="filterBtnAll"
+       style="text-decoration: none;">
+        <span>Semua</span>
+        <span class="role-count-badge">{{ $totalSiswa ?? 0 }}</span>
+    </a>
 </div>
 
 {{-- Search --}}
