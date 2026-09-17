@@ -459,7 +459,7 @@
                 <div class="form-group" style="margin-bottom:16px;">
                     <label class="form-label" style="font-weight:600; margin-bottom:6px; display:block;">Pilih Guru yang Ditugaskan</label>
                     <select name="id_guru" id="modalSelectGuru" class="form-control" style="width:100%;">
-                        <option value="">-- Kosongkan Penugasan (Tidak Ada Pejabat) --</option>
+                        <option value="">Kosongkan Penugasan (Tidak Ada Pejabat)</option>
                         @foreach($guruList as $g)
                             <option value="{{ $g->id_guru }}">
                                 {{ $g->nama }} (NIP: {{ $g->nip ?: '-' }})
