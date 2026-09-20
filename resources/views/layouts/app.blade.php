@@ -27,7 +27,7 @@
     </script>
 
     <!-- Global CSS -->
-    <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}?v={{ file_exists(public_path('css/jurnal.css')) ? filemtime(public_path('css/jurnal.css')) : time() }}">
 
     <!-- Chart.js Engine CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -901,6 +901,30 @@
             document.addEventListener('DOMContentLoaded', loadBulkQueue);
         })();
         </script>
+
+        <!-- SYSTEM AESTHETIC BACKGROUND ANIMATION LAYER -->
+        <div class="sys-aesthetic-bg" aria-hidden="true">
+            <div class="sys-bg-grid"></div>
+            <div class="sys-bg-orb sys-orb-1"></div>
+            <div class="sys-bg-orb sys-orb-2"></div>
+            <div class="sys-bg-orb sys-orb-3"></div>
+            <div class="sys-bg-orb sys-orb-4"></div>
+            <div class="sys-bg-ring sys-ring-1"></div>
+            <div class="sys-bg-ring sys-ring-2"></div>
+            <div class="sys-bg-beam"></div>
+            <!-- Falling Meteors / Shooting Stars (Vertikal Miring ke Samping) -->
+            <div class="sys-meteors-container">
+                <div class="sys-meteor m1"></div>
+                <div class="sys-meteor m2"></div>
+                <div class="sys-meteor m3"></div>
+                <div class="sys-meteor m4"></div>
+                <div class="sys-meteor m5"></div>
+            </div>
+            <div class="sys-particle p1"></div>
+            <div class="sys-particle p2"></div>
+            <div class="sys-particle p3"></div>
+            <div class="sys-particle p4"></div>
+        </div>
 
         {{-- FLASH NOTIFICATION MESSAGES --}}
         <main class="content-area">
