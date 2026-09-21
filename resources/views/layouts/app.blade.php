@@ -235,31 +235,23 @@
         font-size: 15px;
         min-width: 0;
     }
-    @media (max-width: 600px) {
-        .topbar-title {
-            max-width: 160px;
-            font-size: 13.5px;
-        }
+    /* Pertahankan tampilan desktop persis sama */
+    .topbar-title {
+        max-width: none;
+        font-size: 15px;
     }
-    @media (max-width: 480px) {
-        .topbar-title {
-            max-width: 120px;
-            font-size: 13px;
-        }
-        .btn-ganti-akses span {
-            display: none !important;
-        }
-        .btn-ganti-akses {
-            padding: 6px 8px !important;
-        }
+    .btn-ganti-akses span {
+        display: inline !important;
+    }
+    .btn-ganti-akses {
+        padding: 6px 12px !important;
     }
 
-    /* Mencegah horizontal layout shift / overflow */
+    /* Layout desktop tetap terlihat dengan horizontal scroll */
     body, .app-shell, .main-area {
-        max-width: 100vw;
+        /* max-width dihapus agar bisa scroll horizontal seperti desktop */
     }
     .content-area {
-        max-width: 100%;
         box-sizing: border-box;
     }
     </style>

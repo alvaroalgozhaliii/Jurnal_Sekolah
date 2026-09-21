@@ -1578,73 +1578,77 @@ input[type="number"]::-webkit-outer-spin-button {
     html { font-size: 13px; }
     :root { --sidebar-width: 220px; }
 
-    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); }
-    .grid-3 { grid-template-columns: repeat(2, 1fr); }
-    .grid-2 { grid-template-columns: 1fr; }
+    .grid-4, .grid-5 { grid-template-columns: repeat(4, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
 
     .page-actions { flex-wrap: wrap; }
 }
 
-/* Tablet Portrait: 601–767px */
+/* Tablet Portrait: 601–767px — Samakan dengan tampilan Desktop */
 @media (max-width: 767px) {
-    /* Sidebar hidden by default, slides in via JS toggle */
+    /* Sidebar: tetap tampil seperti desktop, body bisa di-scroll horizontal */
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
+        position: relative;
+        top: auto;
+        left: auto;
         height: 100vh;
-        transform: translateX(-100%);
-        z-index: 200;
-        box-shadow: var(--shadow-lg);
+        height: 100dvh;
+        transform: none !important;
+        z-index: auto;
+        box-shadow: none;
+        flex-shrink: 0;
     }
 
     .sidebar.open {
-        transform: translateX(0);
+        transform: none !important;
     }
 
-    /* Main area takes full width */
+    /* app-shell: izinkan horizontal scroll agar layout desktop tetap terlihat */
     .app-shell {
         height: 100vh;
-        overflow: hidden;
-    }
-
-    .main-area {
-        width: 100%;
-    }
-
-    /* Show hamburger button */
-    .topbar-hamburger {
+        height: 100dvh;
+        overflow-x: auto;
+        overflow-y: hidden;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        min-width: max-content;
     }
 
-    .topbar { padding: 0 14px; }
-    .content-area { padding: 14px; }
-    .content-area::before { left: 0; top: 50px; }
-    .content-area::after { display: none; }
+    /* Main area: ikut lebar konten */
+    .main-area {
+        width: 100vw;
+        min-width: 600px;
+    }
 
-    /* Grid: 2 kolom untuk stat, 1 kolom untuk yang lain */
-    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 12px; }
-    .form-row { grid-template-columns: 1fr; gap: 10px; }
+    /* Hamburger tetap tersembunyi karena sidebar selalu tampil seperti desktop */
+    .topbar-hamburger {
+        display: none;
+    }
+
+    .topbar { padding: 0 20px; }
+    .content-area { padding: 24px 28px; }
+    .content-area::before { left: 0; top: 58px; }
+    .content-area::after { /* biarkan tampil seperti desktop */ }
+
+    /* Grid: sama seperti desktop */
+    .grid-4, .grid-5 { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .form-row { /* biarkan seperti desktop */ }
 
     .page-header {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
-        gap: 10px;
+        gap: 16px;
     }
 
     .page-actions {
-        width: 100%;
         flex-wrap: wrap;
-        gap: 6px;
+        gap: 10px;
     }
 
     .page-actions .btn {
-        flex: 1 1 auto;
         justify-content: center;
-        min-width: 120px;
     }
 
     /* Card header: wrap jika dua elemen */
@@ -1656,8 +1660,8 @@ input[type="number"]::-webkit-outer-spin-button {
     /* Tampilkan user info text agar sama dengan desktop */
     .user-info { display: flex; flex-direction: column; }
 
-    /* Topbar kanan: reduce gap */
-    .topbar-right { gap: 10px; }
+    /* Topbar kanan */
+    .topbar-right { gap: 14px; }
 
     /* Table: pastikan scroll horizontal aktif */
     .table-wrapper {
@@ -1671,94 +1675,57 @@ input[type="number"]::-webkit-outer-spin-button {
         text-align: right;
     }
 
-    /* Stat card layout tetap compact */
+    /* Stat card: ukuran desktop */
     .stat-card {
-        padding: 12px;
+        padding: 16px 20px;
+        gap: 14px;
+    }
+    .stat-num { font-size: 22px; }
+
+    /* Filter bar: sama seperti desktop */
+    .filter-bar {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
         gap: 10px;
     }
-    .stat-num { font-size: 20px; }
 
-    /* Filter bar: wrap ke bawah */
-    .filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .filter-bar .form-control,
-    .filter-bar select,
-    .filter-bar .btn {
-        width: 100%;
-    }
+    /* Chart: tinggi desktop */
+    .chart-container { height: 280px; }
 
-    /* Form search wrap */
-    .d-flex.gap-8 { flex-wrap: wrap; }
-    .d-flex.gap-8 .form-control { flex: 1 1 100%; }
-
-    /* Chart lebih pendek di mobile */
-    .chart-container { height: 200px; }
-
-    /* Card margin bottom lebih kecil */
-    .card { margin-bottom: 14px; }
+    /* Card margin bottom */
+    .card { margin-bottom: 20px; }
 }
 
-/* Mobile: ≤600px */
+/* Mobile: ≤600px — Pertahankan tampilan Desktop */
 @media (max-width: 600px) {
-    .topbar-title { font-size: 13px; }
-    .page-title { font-size: 15px; }
-    .page-subtitle { font-size: 11px; }
-    .card-body { padding: 12px; }
-    .card-header { padding: 10px 14px; }
+    /* Pertahankan grid desktop */
+    .grid-4, .grid-5 { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
-    .btn { padding: 6px 10px; font-size: 11.5px; }
-    .btn-sm { padding: 4px 8px; font-size: 11px; }
-    .btn-lg { padding: 8px 14px; font-size: 12px; }
+    /* Pertahankan stat card desktop */
+    .stat-card { padding: 16px 20px; gap: 14px; }
+    .stat-icon-box { width: 42px; height: 42px; }
+    .stat-num { font-size: 22px; }
+    .stat-label { font-size: 12px; }
 
-    .table th, .table td { padding: 8px 10px; font-size: 12px; }
-    .table th { font-size: 10px; }
+    /* Pertahankan topbar desktop */
+    .topbar { height: 58px; padding: 0 20px; }
+    .topbar-title { font-size: 15px; }
+    .topbar-right { gap: 14px; }
+    .user-pill { padding: 4px 12px 4px 4px; }
+    .user-avatar { width: 34px; height: 34px; font-size: 13px; }
 
-    /* Action buttons di tabel */
-    .action-col { text-align: left; }
-    .action-col .btn { margin-bottom: 2px; }
+    /* Pertahankan page actions desktop */
+    .page-actions { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+    .page-actions .btn { width: auto; text-align: center; }
 
-    /* Stat card 2-kolom tetap, tapi lebih compact */
-    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .stat-card { padding: 10px; gap: 8px; }
-    .stat-icon-box { width: 34px; height: 34px; }
-    .stat-num { font-size: 18px; }
-    .stat-label { font-size: 10px; }
+    /* Content area */
+    .content-area { padding: 24px 28px; }
 
-    /* Content area padding lebih kecil */
-    .content-area { padding: 12px; }
-
-    /* Badge lebih kecil */
-    .badge { font-size: 10px; padding: 2px 7px; }
-
-    /* Topbar compact */
-    .user-pill { padding: 2px 6px 2px 2px; }
-    .user-avatar { width: 26px; height: 26px; font-size: 10px; }
-
-    /* Import bar stack vertikal */
-    .import-bar,
-    .csv-import-box {
-        flex-direction: column;
-        align-items: flex-start !important;
-    }
-
-    /* Form full width di mobile */
-    form[style*="display:flex"] {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    form[style*="display:flex"] input[type="file"] {
-        width: 100%;
-    }
-
-    /* Page actions full-width stack */
-    .page-actions { flex-direction: column; }
-    .page-actions .btn { width: 100%; text-align: center; justify-content: center; }
-
-    /* Topbar */
-    .topbar { height: 50px; padding: 0 12px; }
-    .topbar-right { gap: 8px; }
+    /* Table horizontal scroll */
+    .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
 
 /* ============================================================
@@ -1838,31 +1805,19 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 }
 
-/* Extra small mobile ≤480px */
+/* Extra small mobile ≤480px — Pertahankan tampilan Desktop */
 @media (max-width: 480px) {
-    /* Stat card: ikut 2-kolom tapi konten minimal */
+    /* Pertahankan stat card horizontal seperti desktop */
     .stat-card {
-        padding: 8px;
-        gap: 8px;
-        flex-direction: column;
-        align-items: flex-start;
+        padding: 16px 20px;
+        gap: 14px;
+        flex-direction: row;
+        align-items: center;
     }
     .stat-num { font-size: 22px; }
 
-    /* Action col: tombol kecil semua */
-    .action-col .btn-sm {
-        font-size: 10px;
-        padding: 3px 6px;
-    }
-
-    /* Topbar title max-width lebih kecil */
-    .topbar-title { max-width: 140px; }
-
-    /* Hide search label / placeholder untuk hemat ruang */
-    .form-control { font-size: 12px; }
-
-    /* Pastikan page-actions wrap dengan benar */
-    .page-actions { gap: 5px; }
+    /* Topbar title */
+    .topbar-title { max-width: none; }
 }
 
 
@@ -2485,8 +2440,6 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
    LOGIN PAGE STYLES (PREMIUM DARK AMBIENT DESIGN)
    ============================================================ */
 .login-page {
-    height: 100vh;
-    height: 100dvh;
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
@@ -2497,7 +2450,8 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
         radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 90% 60%, rgba(30, 58, 138, 0.18) 0%, transparent 45%);
     position: relative;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: auto;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -3731,232 +3685,216 @@ input::-ms-clear,
     box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2) !important;
 }
 
-/* RESPONSIVE LAYOUT (MOBILE & TABLET) */
+/* RESPONSIVE LAYOUT — Samakan dengan tampilan Desktop */
 @media (max-width: 860px) {
     /* Shape badges dan dekoratif tetap ditampilkan agar sama dengan desktop */
 
+    /* Login page: izinkan scroll horizontal agar layout desktop bisa tampil penuh */
     .login-page {
-        padding: 24px 16px;
+        padding: 20px 16px;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        overflow-x: auto;
+        min-width: 100%;
     }
 
-    /* Unified, Modern Mobile Login Card */
+    /* sso-container: TETAP dua kolom seperti desktop */
     .sso-container {
-        flex-direction: column;
-        width: 100%;
-        max-width: 410px;
-        min-height: auto;
+        flex-direction: row !important;
+        width: 960px !important;
+        max-width: 960px !important;
+        min-height: 520px;
         margin: auto;
         border-radius: 24px;
-        background: linear-gradient(180deg, #0b1329 0%, #0f1e42 100%) !important;
-        border: 1.5px solid rgba(56, 189, 248, 0.25) !important;
-        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 30px rgba(37, 99, 235, 0.2) !important;
+        background-color: #0b1329 !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+        border: none !important;
         position: relative;
         overflow: hidden;
     }
 
-    /* Wave SVG tetap ditampilkan agar sama dengan desktop */
-
-    /* Top Brand Section */
+    /* Panel kiri: tampil seperti desktop */
     .sso-left {
-        padding: 32px 24px 8px 24px !important;
-        text-align: center !important;
-        align-items: center !important;
-        justify-content: center !important;
-        background: transparent !important;
-        flex: none;
+        flex: 1 !important;
+        padding: 44px 48px !important;
+        text-align: left !important;
+        align-items: flex-start !important;
+        justify-content: space-between !important;
+        background-color: #0b1329 !important;
+        flex-direction: column !important;
+        display: flex !important;
+        flex: 1 !important;
     }
 
     .sso-brand {
-        justify-content: center;
+        justify-content: flex-start;
         gap: 12px;
         margin-bottom: 0;
     }
 
     .sso-brand-icon {
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
         border-radius: 12px;
     }
 
     .sso-brand-text .brand-name {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 800;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.3px;
     }
 
     .sso-brand-text .brand-tag {
-        font-size: 10.5px;
+        font-size: 10px;
         font-weight: 700;
         letter-spacing: 1.2px;
     }
 
-    /* Tampilkan welcome box di mobile agar sama seperti desktop */
+    /* Tampilkan welcome box seperti desktop */
     .sso-welcome-box {
         display: block !important;
-        padding: 16px 0 8px 0;
+        margin: auto 0;
+        padding: 24px 0;
     }
 
     .sso-welcome-title {
-        font-size: 22px !important;
-        text-align: center;
+        font-size: 32px !important;
+        text-align: left !important;
     }
 
     .sso-welcome-desc {
-        font-size: 13px !important;
-        text-align: center;
-        max-width: 100%;
+        font-size: 15px !important;
+        text-align: left !important;
+        max-width: 320px;
     }
 
     .sso-left-footer {
         display: block !important;
-        text-align: center;
-        font-size: 11px;
-        padding-bottom: 8px;
+        text-align: left !important;
+        font-size: 11.5px;
+        color: #475569;
     }
 
-    /* Bottom Form Section */
+    /* Panel kanan: tampil seperti desktop */
     .sso-right {
-        padding: 10px 24px 30px 24px !important;
-        background: transparent !important;
+        flex: 1.25 !important;
+        padding: 44px 44px 44px 48px !important;
+        background: linear-gradient(145deg, #1d4ed8 0%, #1e3a8a 45%, #0f172a 100%) !important;
         border-radius: 0 !important;
-        width: 100% !important;
+        width: auto !important;
         box-sizing: border-box !important;
-        flex: none;
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     .sso-form-wrap {
         width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
+        max-width: 330px !important;
+        margin: auto 0 !important;
     }
 
     .sso-form-header {
-        margin-bottom: 22px;
+        margin-bottom: 26px;
     }
 
     .sso-title {
-        font-size: 22px;
-        letter-spacing: 1.5px;
+        font-size: 24px;
+        letter-spacing: 2px;
         margin-bottom: 4px;
+        color: #ffffff;
     }
 
     .sso-subtitle {
         font-size: 11px;
-        letter-spacing: 1.5px;
-        color: #94a3b8;
+        letter-spacing: 2.2px;
+        color: #cbd5e1;
     }
 
     .sso-input-pill {
         height: 48px !important;
-        padding: 4px 14px 4px 16px !important;
+        padding: 4px 12px 4px 18px !important;
         border-radius: 50px !important;
     }
 
     .sso-submit-btn {
-        height: 48px;
-        font-size: 15px;
+        height: auto;
+        font-size: 14.5px;
         border-radius: 50px;
-        margin-top: 6px;
+        margin-top: 4px;
         letter-spacing: 0.5px;
+        padding: 12px 24px;
     }
 
     .sso-right-footer {
-        margin-top: 22px;
+        margin-top: 24px;
         font-size: 11px;
         color: rgba(255, 255, 255, 0.45);
         text-align: center;
     }
 
-    /* Posisikan tombol tema rapi di pojok kanan atas kartu */
+    /* Tombol tema */
     .sso-theme-btn-corner {
-        top: 18px !important;
-        right: 18px !important;
-        width: 36px !important;
-        height: 36px !important;
-    }
-
-    /* Light Mode Overrides khusus tampilan Mobile */
-    [data-theme="light"] .sso-container {
-        background: #ffffff !important;
-        border: 1.5px solid rgba(191, 219, 254, 0.8) !important;
-        box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.15) !important;
-    }
-
-    [data-theme="light"] .sso-left,
-    [data-theme="light"] .sso-right {
-        background: transparent !important;
-    }
-
-    [data-theme="light"] .sso-title {
-        color: #0f172a !important;
-    }
-
-    [data-theme="light"] .sso-subtitle {
-        color: #64748b !important;
-    }
-
-    [data-theme="light"] .sso-right-footer {
-        color: #64748b !important;
-    }
-
-    [data-theme="light"] .sso-theme-btn-corner {
-        background-color: rgba(15, 23, 42, 0.08) !important;
-        border: 1px solid rgba(15, 23, 42, 0.15) !important;
-        color: #1e293b !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-    }
-
-    [data-theme="light"] .sso-input-pill {
-        background: #f8fafc !important;
-        border: 1.5px solid #cbd5e1 !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
-    }
-
-    [data-theme="light"] .sso-input-pill:focus-within {
-        border-color: #2563eb !important;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
-    }
-}
-
-/* Penyesuaian untuk layar sangat kecil (< 400px, e.g. iPhone SE) */
-@media (max-width: 400px) {
-    .login-page {
-        padding: 16px 12px;
-    }
-
-    .sso-container {
-        border-radius: 20px;
-    }
-
-    .sso-left {
-        padding: 26px 16px 6px 16px !important;
-    }
-
-    .sso-right {
-        padding: 8px 16px 24px 16px !important;
-    }
-
-    .sso-title {
-        font-size: 20px;
-    }
-
-    .sso-input-pill {
+        top: unset !important;
+        bottom: 28px !important;
+        right: 28px !important;
+        width: 46px !important;
         height: 46px !important;
     }
 
-    .sso-submit-btn {
-        height: 46px;
-        font-size: 14.5px;
+    /* Light Mode Overrides */
+    [data-theme="light"] .sso-container {
+        background-color: #ffffff !important;
+        box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(191, 219, 254, 0.9) !important;
+        border: none !important;
     }
 
-    .sso-theme-btn-corner {
-        top: 16px !important;
-        right: 16px !important;
-        width: 38px !important;
-        height: 38px !important;
+    [data-theme="light"] .sso-left {
+        background-color: #ffffff !important;
     }
+
+    [data-theme="light"] .sso-right {
+        background: linear-gradient(145deg, #1d4ed8 0%, #1e3a8a 45%, #0f172a 100%) !important;
+    }
+
+    [data-theme="light"] .sso-title {
+        color: #ffffff !important;
+    }
+
+    [data-theme="light"] .sso-subtitle {
+        color: #cbd5e1 !important;
+    }
+
+    [data-theme="light"] .sso-right-footer {
+        color: rgba(255, 255, 255, 0.45) !important;
+    }
+
+    [data-theme="light"] .sso-theme-btn-corner {
+        background-color: rgba(255, 255, 255, 0.92) !important;
+        border: 1.5px solid rgba(59, 130, 246, 0.3) !important;
+        color: #2563eb !important;
+    }
+
+    [data-theme="light"] .sso-input-pill {
+        background: #ffffff !important;
+        border: 2px solid transparent !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28) !important;
+    }
+
+    [data-theme="light"] .sso-input-pill:focus-within {
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35), 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+    }
+}
+
+/* Layar sangat kecil: tetap gunakan tampilan desktop dengan scroll horizontal */
+@media (max-width: 400px) {
+    .login-page {
+        padding: 12px 8px;
+    }
+    /* sso-container tetap lebar 960px, cukup di-scroll secara horizontal */
 }
 
 /* ============================================================
@@ -4586,34 +4524,39 @@ input[type='radio']:active,
 }
 
 /* ============================================================
-   8. MASTER COMPREHENSIVE RESPONSIVENESS & MOBILE SYSTEM
+   8. MASTER COMPREHENSIVE RESPONSIVENESS — Samakan dengan Desktop
    ============================================================ */
 @media (max-width: 768px) {
-    /* 1. App Shell & Mobile Sidebar Drawer */
+    /* 1. App Shell — tampil seperti desktop, scroll horizontal */
     .app-shell {
         height: 100vh;
         height: 100dvh;
-        overflow: hidden;
+        overflow-x: auto;
+        overflow-y: hidden;
         position: relative;
+        display: flex;
+        min-width: max-content;
     }
 
+    /* Sidebar: tetap tampil seperti desktop */
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
+        position: relative;
+        top: auto;
+        left: auto;
+        bottom: auto;
         height: 100vh;
         height: 100dvh;
-        width: min(85vw, 290px) !important;
-        max-width: 290px !important;
-        transform: translateX(-100%);
-        z-index: 999 !important;
-        box-shadow: 0 0 50px rgba(0, 0, 0, 0.6) !important;
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        width: var(--sidebar-width, 240px) !important;
+        max-width: var(--sidebar-width, 240px) !important;
+        transform: none !important;
+        z-index: auto !important;
+        box-shadow: none !important;
+        transition: none !important;
+        flex-shrink: 0;
     }
 
     .sidebar.open {
-        transform: translateX(0) !important;
+        transform: none !important;
     }
 
     .sidebar-overlay {
@@ -4654,167 +4597,162 @@ input[type='radio']:active,
         -webkit-overflow-scrolling: touch !important;
     }
 
-    /* 2. Topbar & Header on Mobile */
+    /* 2. Topbar — tampil seperti desktop */
     .topbar {
-        height: 54px !important;
-        padding: 0 12px !important;
+        height: 58px !important;
+        padding: 0 20px !important;
     }
 
     .topbar-hamburger {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 38px !important;
-        height: 38px !important;
-        border-radius: 8px !important;
-        background: var(--bg-app) !important;
+        display: none !important;
     }
 
     .topbar-title {
-        font-size: 14px !important;
+        font-size: 15px !important;
         font-weight: 700 !important;
-        max-width: 170px !important;
+        max-width: none !important;
         white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
     }
 
     .topbar-right {
-        gap: 8px !important;
+        gap: 14px !important;
     }
 
     .user-pill {
-        padding: 2px 4px 2px 2px !important;
+        padding: 4px 12px 4px 4px !important;
     }
 
     .user-info {
         display: flex !important;
+        flex-direction: column !important;
     }
 
     .user-avatar {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 12px !important;
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 13px !important;
     }
 
-    /* 3. Content Area & Viewport Scrolling */
+    /* 3. Content Area — tampil seperti desktop */
     .main-area {
         height: 100vh;
         height: 100dvh;
-        width: 100% !important;
-        min-width: 0 !important;
+        width: 100vw !important;
+        min-width: 600px !important;
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+        flex: 1;
     }
 
     .content-area {
-        padding: 14px 12px !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
+        padding: 24px 28px !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
     }
 
-    /* 4. Page Header & Actions */
+    /* 4. Page Header — tampil seperti desktop */
     .page-header {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 10px !important;
-        margin-bottom: 16px !important;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+        margin-bottom: 20px !important;
     }
 
     .page-title {
-        font-size: 18px !important;
+        font-size: 20px !important;
         line-height: 1.3 !important;
     }
 
     .page-subtitle {
-        font-size: 11.5px !important;
+        font-size: 13px !important;
         line-height: 1.4 !important;
     }
 
     .page-actions {
         display: flex !important;
         flex-wrap: wrap !important;
-        gap: 8px !important;
-        width: 100% !important;
+        gap: 10px !important;
+        align-items: center !important;
     }
 
     .page-actions .btn {
-        flex: 1 1 auto !important;
-        min-width: 120px !important;
-        text-align: center !important;
-        justify-content: center !important;
-        min-height: 42px !important;
-        font-size: 12.5px !important;
+        font-size: 13px !important;
         font-weight: 600 !important;
     }
 
-    /* 5. Cards & Panels */
+    /* 5. Cards & Panels — tampil seperti desktop */
     .card {
-        margin-bottom: 14px !important;
-        border-radius: 12px !important;
+        margin-bottom: 20px !important;
+        border-radius: 14px !important;
     }
 
     .card-header {
-        padding: 12px 14px !important;
-        gap: 8px !important;
+        padding: 16px 20px !important;
+        gap: 10px !important;
         flex-wrap: wrap !important;
     }
 
     .card-body {
-        padding: 14px 12px !important;
+        padding: 20px !important;
     }
 
     .card-footer {
-        padding: 10px 14px !important;
+        padding: 14px 20px !important;
         flex-wrap: wrap !important;
-        gap: 8px !important;
-    }
-
-    /* 6. Grids & Metric Boxes */
-    .grid-4, .grid-5 {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
-    }
-
-    .grid-2, .grid-3 {
-        grid-template-columns: 1fr !important;
         gap: 10px !important;
+    }
+
+    /* 6. Grids — tampil seperti desktop */
+    .grid-4, .grid-5 {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    .grid-2 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    .grid-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
     }
 
     div[style*="minmax(250px"],
     div[style*="minmax(280px"],
     div[style*="minmax(300px"],
     div[style*="minmax(320px"] {
-        grid-template-columns: 1fr !important;
+        /* biarkan grid responsif bawaan bekerja */
     }
 
     .stat-card {
-        padding: 10px 12px !important;
-        gap: 8px !important;
-        min-width: 0 !important;
-        border-radius: 10px !important;
+        padding: 16px 20px !important;
+        gap: 14px !important;
+        border-radius: 12px !important;
     }
 
     .stat-icon-box {
-        width: 36px !important;
-        height: 36px !important;
-        border-radius: 8px !important;
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: 10px !important;
         flex-shrink: 0 !important;
     }
 
     .stat-num {
-        font-size: 19px !important;
+        font-size: 22px !important;
     }
 
     .stat-label {
-        font-size: 10.5px !important;
+        font-size: 12px !important;
     }
 
-    /* 7. Tables & Data Lists (Smooth Horizontal Scroll) */
+    /* 7. Tables — tampil seperti desktop */
     .table-wrapper,
     .table-responsive,
     [class*="-table-wrapper"] {
         width: 100% !important;
-        max-width: 100% !important;
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
         border-radius: 10px !important;
@@ -4832,14 +4770,13 @@ input[type='radio']:active,
     }
 
     .table th, .table td {
-        padding: 9px 10px !important;
-        font-size: 12px !important;
+        padding: 10px 14px !important;
+        font-size: 13px !important;
     }
 
     .table th {
-        font-size: 10px !important;
+        font-size: 11px !important;
         white-space: nowrap !important;
-        letter-spacing: 0.4px !important;
     }
 
     .action-col {
@@ -4848,19 +4785,17 @@ input[type='radio']:active,
     }
 
     .action-col .btn-sm {
-        min-height: 32px !important;
-        padding: 4px 8px !important;
-        font-size: 11px !important;
+        padding: 4px 10px !important;
+        font-size: 12px !important;
     }
 
-    /* 8. Forms & Inputs Touch Optimization (Avoid iOS Zoom & Squishing) */
+    /* 8. Forms — ukuran desktop */
     .form-row {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
+        /* biarkan seperti desktop */
     }
 
     .form-group {
-        margin-bottom: 12px !important;
+        margin-bottom: 16px !important;
     }
 
     .form-control,
@@ -4874,87 +4809,58 @@ input[type='radio']:active,
     input[type='time'],
     textarea,
     .ts-control {
-        font-size: 15px !important;
-        min-height: 44px !important;
-        width: 100% !important;
+        font-size: 13px !important;
+        min-height: 38px !important;
         box-sizing: border-box !important;
-        border-radius: 8px !important;
-    }
-
-    select[style*="min-width"],
-    .form-control[style*="min-width"],
-    .ts-wrapper[style*="min-width"],
-    div[style*="min-width: 450px"],
-    div[style*="min-width:450px"],
-    div[style*="min-width: 320px"] {
-        min-width: 0 !important;
-        width: 100% !important;
     }
 
     .filter-bar {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 8px !important;
-        width: 100% !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 10px !important;
+        flex-wrap: wrap !important;
     }
 
-    .filter-bar .form-control,
-    .filter-bar select,
-    .filter-bar .btn {
-        width: 100% !important;
-    }
-
-    /* 9. Modals & Popups on Mobile */
+    /* 9. Modals — tampil seperti desktop */
     .modal-overlay {
-        padding: 14px !important;
+        padding: 20px !important;
         z-index: 9999 !important;
     }
 
     .modal-box,
     .modal-dialog,
     .modal-content {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 20px 16px !important;
+        max-width: 600px !important;
+        margin: 0 auto !important;
+        padding: 24px !important;
         border-radius: 16px !important;
-        max-height: 88vh !important;
         overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
     }
 
     /* 10. Datepicker Calendar Popover */
     .jurnal-calendar-popover {
-        max-width: calc(100vw - 28px) !important;
-        left: 0 !important;
-        right: auto !important;
-        width: 290px !important;
+        width: 300px !important;
     }
 
-    /* 11. Tabs Navigation on Mobile */
+    /* 11. Tabs Navigation */
     .profile-tabs-bar,
     .nav-tabs,
     .tab-bar,
     .tab-nav {
         overflow-x: auto !important;
-        white-space: nowrap !important;
-        flex-wrap: nowrap !important;
         -webkit-overflow-scrolling: touch !important;
         scrollbar-width: none !important;
     }
 
-    /* 12. Universal Buttons & Interactive Feedback on Touch */
+    /* 12. Buttons — ukuran desktop */
     .btn {
-        min-height: 42px;
-        padding: 9px 16px;
+        padding: 8px 16px;
         font-size: 13px;
-        touch-action: manipulation;
     }
 
     .btn-sm {
-        min-height: 34px;
         padding: 5px 10px;
-        font-size: 11.5px;
+        font-size: 12px;
     }
 
     .card:active,
@@ -4964,32 +4870,9 @@ input[type='radio']:active,
     }
 }
 
-/* Extra Compact Screens (≤ 400px: iPhone SE, Galaxy A series) */
+/* Extra Compact Screens (≤ 400px) — Pertahankan tampilan Desktop */
 @media (max-width: 400px) {
-    .content-area {
-        padding: 10px 8px !important;
-    }
-
-    .topbar-title {
-        max-width: 130px !important;
-        font-size: 13px !important;
-    }
-
-    .page-title {
-        font-size: 16px !important;
-    }
-
-    .grid-4, .grid-5 {
-        gap: 6px !important;
-    }
-
-    .stat-card {
-        padding: 8px 10px !important;
-    }
-
-    .stat-num {
-        font-size: 17px !important;
-    }
+    /* Tetap gunakan ukuran desktop, tampilan diakses via horizontal scroll */
 }
 
 /* ==========================================
