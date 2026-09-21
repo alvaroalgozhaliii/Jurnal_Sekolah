@@ -29,7 +29,7 @@ class PengajuanIzinController extends Controller
         $query = PengajuanIzin::with(['siswa.kelas', 'guru', 'pengaju', 'wakaApprover', 'satpam']);
 
         if ($user->isOrtu()) {
-            $anakIds = $user->anakList->pluck('id_siswa');
+            $anakIds = $user->getAnakList()->pluck('id_siswa');
             $query->where(function ($q) use ($anakIds, $user) {
                 $q->whereIn('id_siswa', $anakIds)
                   ->orWhere('id_user_pengaju', $user->id_user);
@@ -60,7 +60,7 @@ class PengajuanIzinController extends Controller
         $gurus = \App\Models\Guru::orderBy('nama', 'asc')->get();
 
         if ($user->isOrtu()) {
-            $siswas = $user->anakList;
+            $siswas = $user->getAnakList();
         } else {
             $siswas = Siswa::with('kelas')->where('aktif', 1)->orderBy('nama', 'asc')->get();
         }

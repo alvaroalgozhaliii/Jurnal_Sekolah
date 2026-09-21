@@ -19,7 +19,7 @@ class AbsensiSiswaController extends Controller
         $query = AbsensiSiswa::with(['jurnal.jadwal.kelas', 'siswa', 'user']);
 
         if ($user->isOrtu()) {
-            $anakIds = $user->anakList->pluck('id_siswa');
+            $anakIds = $user->getAnakList()->pluck('id_siswa');
             $query->whereIn('id_siswa', $anakIds);
         } elseif ($user->isGuru() && !$user->isAdmin() && $user->guru) {
             $guruId = $user->guru->id_guru;

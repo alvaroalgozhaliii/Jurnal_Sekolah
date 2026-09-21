@@ -16,19 +16,7 @@ class OrtuDashboardController extends Controller
 {
     private function getAnakList()
     {
-        $user = Auth::user();
-        // Check linked children via ortu_siswa
-        $anakList = $user->anakList;
-
-        // Fallback: check direct id_user link on siswa table if pivot is empty
-        if ($anakList->isEmpty()) {
-            $directSiswa = Siswa::where('id_user', $user->id_user)->get();
-            if ($directSiswa->isNotEmpty()) {
-                $anakList = $directSiswa;
-            }
-        }
-
-        return $anakList;
+        return Auth::user()->getAnakList();
     }
 
     public function index(?Request $request = null)
