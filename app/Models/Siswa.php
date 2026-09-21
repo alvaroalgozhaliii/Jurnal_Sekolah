@@ -33,6 +33,11 @@ class Siswa extends Model
         return $this->attributes['nisn'] ?? ($this->attributes['nis'] ?? null);
     }
 
+    public function getNisnAttribute()
+    {
+        return $this->attributes['nisn'] ?? ($this->attributes['nis'] ?? null);
+    }
+
     public function setNisAttribute($value)
     {
         $this->attributes['nisn'] = $value;

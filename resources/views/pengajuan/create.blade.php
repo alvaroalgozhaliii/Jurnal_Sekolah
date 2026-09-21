@@ -39,6 +39,15 @@
     </div>
     <div class="card-body">
         
+        @if(Auth::user()->isOrtu())
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; gap:10px; font-size:13px; color:#065f46;">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px; flex-shrink:0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <div>
+                <strong>Persetujuan Otomatis:</strong> Pengajuan izin yang diajukan oleh Orang Tua siswa akan <strong>langsung disetujui</strong> dan otomatis tercatat ke dalam data presensi kehadiran kelas anak.
+            </div>
+        </div>
+        @endif
+
         @if(isset($wakaHariIni) && $wakaHariIni && $wakaHariIni->waka)
         <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px;">
             <div>
@@ -105,7 +114,7 @@
                     @endif
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}" {{ old('id_siswa') == $s->id_siswa ? 'selected' : '' }}>
-                        {{ $s->nama }} (NISN: {{ $s->NISN }} | Kelas: {{ $s->kelas->nama_kelas ?? '-' }})
+                        {{ $s->nama }} (NISN: {{ $s->nisn ?? $s->NISN ?? '-' }} | Kelas: {{ $s->kelas->nama_kelas ?? '-' }})
                     </option>
                     @endforeach
                 </select>

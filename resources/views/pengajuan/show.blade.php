@@ -14,6 +14,35 @@
     </div>
 </div>
 
+@php
+    $st = strtolower($pengajuan->status);
+    $badgeCls = match($st) {
+        'verified', 'disetujui_satpam', 'completed', 'disetujui', 'selesai' => 'badge-success',
+        'disetujui_waka', 'menunggu_satpam', 'pending_satpam' => 'badge-info',
+        'pending_waka', 'menunggu_waka', 'pending_piket' => 'badge-warning',
+        default => 'badge-danger'
+    };
+    $statusLabelShow = match($st) {
+        'completed', 'disetujui' => ($pengajuan->pengaju && $pengajuan->pengaju->isOrtu() ? 'DISETUJUI (ORANG TUA)' : 'DISETUJUI'),
+        'verified' => 'TERVERIFIKASI',
+        'disetujui_satpam' => 'DISETUJUI SATPAM',
+        'disetujui_waka' => 'DISETUJUI WAKA',
+        'pending_waka' => 'MENUNGGU PERSETUJUAN WAKA',
+        'pending_piket' => 'MENUNGGU VERIFIKASI PIKET',
+        'pending_satpam' => 'MENUNGGU PEMERIKSAAN SATPAM',
+        default => strtoupper(str_replace('_', ' ', $pengajuan->status))
+    };
+@endphp
+
+@if(($pengajuan->pengaju && $pengajuan->pengaju->isOrtu()) && in_array($st, ['completed', 'disetujui', 'verified']))
+<div class="alert alert-success mb-16" style="background:#ecfdf5; border-color:#6ee7b7; color:#065f46;">
+    <div style="display:flex; align-items:center; gap:8px;">
+        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span><strong>Izin Telah Disetujui Otomatis:</strong> Pengajuan izin ini diajukan langsung oleh Orang Tua siswa sehingga otomatis disahkan dan langsung dicatat ke data presensi kelas anak.</span>
+    </div>
+</div>
+@endif
+
 <div class="grid-2 mb-24">
     <!-- INFORMASI PENGAJUAN -->
     <div class="card">
@@ -24,22 +53,13 @@
             </h3>
         </div>
         <div class="card-body" style="padding:0;">
-            @php
-                $st = strtolower($pengajuan->status);
-                $badgeCls = match($st) {
-                    'verified', 'disetujui_satpam', 'completed', 'selesai' => 'badge-success',
-                    'disetujui_waka', 'menunggu_satpam', 'pending_satpam' => 'badge-info',
-                    'pending_waka', 'menunggu_waka', 'pending_piket' => 'badge-warning',
-                    default => 'badge-danger'
-                };
-            @endphp
             <table class="info-table">
                 <tbody>
                     <tr>
                         <th>Status Saat Ini</th>
                         <td>
                             <span class="badge {{ $badgeCls }}" style="font-size:12px; padding:5px 12px;">
-                                {{ strtoupper(str_replace('_', ' ', $pengajuan->status)) }}
+                                {{ $statusLabelShow }}
                             </span>
                         </td>
                     </tr>
@@ -47,6 +67,7 @@
                         $katLabelShow = match($pengajuan->kategori) {
                             'sakit' => 'IZIN SAKIT',
                             'izin' => 'IZIN',
+                            'acara_keluarga' => 'ACARA KELUARGA',
                             default => strtoupper(str_replace('_', ' ', $pengajuan->kategori))
                         };
                     @endphp
@@ -61,7 +82,7 @@
                     </tr>
                     <tr>
                         <th>NISN & Kelas</th>
-                        <td>NISN: {{ $pengajuan->siswa->NISN }} | Kelas: {{ $pengajuan->siswa->kelas->nama_kelas ?? '-' }} ({{ $pengajuan->siswa->kelas->jurusan->nama_jurusan ?? '-' }})</td>
+                        <td>NISN: {{ $pengajuan->siswa->nisn ?? $pengajuan->siswa->NISN ?? '-' }} | Kelas: {{ $pengajuan->siswa->kelas->nama_kelas ?? '-' }} ({{ $pengajuan->siswa->kelas->jurusan->nama_jurusan ?? '-' }})</td>
                     </tr>
                     @elseif($pengajuan->guru)
                     <tr>
