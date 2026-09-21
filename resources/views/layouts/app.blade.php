@@ -27,7 +27,7 @@
     </script>
 
     <!-- Global CSS -->
-    <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}?v={{ file_exists(public_path('css/jurnal.css')) ? filemtime(public_path('css/jurnal.css')) : time() }}">
 
     <!-- Chart.js Engine CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -235,31 +235,23 @@
         font-size: 15px;
         min-width: 0;
     }
-    @media (max-width: 600px) {
-        .topbar-title {
-            max-width: 160px;
-            font-size: 13.5px;
-        }
+    /* Pertahankan tampilan desktop persis sama */
+    .topbar-title {
+        max-width: none;
+        font-size: 15px;
     }
-    @media (max-width: 480px) {
-        .topbar-title {
-            max-width: 120px;
-            font-size: 13px;
-        }
-        .btn-ganti-akses span {
-            display: none !important;
-        }
-        .btn-ganti-akses {
-            padding: 6px 8px !important;
-        }
+    .btn-ganti-akses span {
+        display: inline !important;
+    }
+    .btn-ganti-akses {
+        padding: 6px 12px !important;
     }
 
-    /* Mencegah horizontal layout shift / overflow */
+    /* Layout desktop tetap terlihat dengan horizontal scroll */
     body, .app-shell, .main-area {
-        max-width: 100vw;
+        /* max-width dihapus agar bisa scroll horizontal seperti desktop */
     }
     .content-area {
-        max-width: 100%;
         box-sizing: border-box;
     }
     </style>
@@ -902,6 +894,30 @@
         })();
         </script>
 
+        <!-- SYSTEM AESTHETIC BACKGROUND ANIMATION LAYER -->
+        <div class="sys-aesthetic-bg" aria-hidden="true">
+            <div class="sys-bg-grid"></div>
+            <div class="sys-bg-orb sys-orb-1"></div>
+            <div class="sys-bg-orb sys-orb-2"></div>
+            <div class="sys-bg-orb sys-orb-3"></div>
+            <div class="sys-bg-orb sys-orb-4"></div>
+            <div class="sys-bg-ring sys-ring-1"></div>
+            <div class="sys-bg-ring sys-ring-2"></div>
+            <div class="sys-bg-beam"></div>
+            <!-- Falling Meteors / Shooting Stars (Vertikal Miring ke Samping) -->
+            <div class="sys-meteors-container">
+                <div class="sys-meteor m1"></div>
+                <div class="sys-meteor m2"></div>
+                <div class="sys-meteor m3"></div>
+                <div class="sys-meteor m4"></div>
+                <div class="sys-meteor m5"></div>
+            </div>
+            <div class="sys-particle p1"></div>
+            <div class="sys-particle p2"></div>
+            <div class="sys-particle p3"></div>
+            <div class="sys-particle p4"></div>
+        </div>
+
         {{-- FLASH NOTIFICATION MESSAGES --}}
         <main class="content-area">
 
@@ -1270,7 +1286,7 @@ document.addEventListener('DOMContentLoaded', function () {
             new TomSelect(el, {
                 create: false,
                 sortField: { field: "text", direction: "asc" },
-                placeholder: el.getAttribute('placeholder') || '-- Ketik untuk mencari / memilih --',
+                placeholder: el.getAttribute('placeholder') || 'Ketik untuk mencari / memilih',
                 allowEmptyOption: true,
                 maxOptions: 200,
                 dropdownParent: 'body',

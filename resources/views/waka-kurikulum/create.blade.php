@@ -377,7 +377,7 @@ function renderTabel() {
                     : `
                     <input type="hidden" name="id_guru_piket[${dateStr}]" id="guru_val_${dateStr}" value="">
                     <button type="button" class="picker-trigger" id="guru_btn_${dateStr}" onclick="openPicker(event, 'guru', '${dateStr}')">
-                        <span class="trigger-text trigger-placeholder" id="guru_txt_${dateStr}">-- Pilih Guru Piket (Opsional) --</span>
+                        <span class="trigger-text trigger-placeholder" id="guru_txt_${dateStr}">Pilih Guru Piket (Opsional)</span>
                         <svg class="trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     `
@@ -445,7 +445,7 @@ function renderPickerOptions() {
     // Opsi kosongkan untuk Waka (misal libur/tidak ada piket) maupun Guru
     html += `
     <div class="picker-option-item ${currentVal === '' ? 'selected' : ''}" onclick="selectPickerItem('', '')">
-        <span class="picker-option-title" style="color:var(--text-muted); font-style:italic;">-- Kosongkan (Tidak Ada Piket / Libur) --</span>
+        <span class="picker-option-title" style="color:var(--text-muted); font-style:italic;">Kosongkan (Tidak Ada Piket / Libur)</span>
     </div>`;
 
     let matchCount = 0;
