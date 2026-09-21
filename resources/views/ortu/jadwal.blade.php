@@ -19,7 +19,7 @@
             <select name="id_siswa" onchange="this.form.submit()" class="form-control" style="max-width:350px;">
                 @foreach($anakList as $a)
                 <option value="{{ $a->id_siswa }}" {{ ($selectedSiswa && $selectedSiswa->id_siswa == $a->id_siswa) ? 'selected' : '' }}>
-                    {{ $a->nama }} (NISN: {{ $a->NISN }})
+                    {{ $a->nama }} (NISN: {{ $a->nisn ?? $a->NISN ?? '-' }})
                 </option>
                 @endforeach
             </select>
@@ -30,18 +30,20 @@
 
 @if($selectedSiswa)
 <div class="alert alert-info mb-16">
-    <div>Anak: <strong>{{ $selectedSiswa->nama }}</strong> | Kelas: <strong>{{ $selectedSiswa->kelas->nama_kelas ?? '-' }}</strong></div>
+    <div>Anak: <strong>{{ $selectedSiswa->nama }}</strong> | NISN: <strong>{{ $selectedSiswa->nisn ?? $selectedSiswa->NISN ?? '-' }}</strong> | Kelas: <strong>{{ $selectedSiswa->kelas->nama_kelas ?? '-' }}</strong></div>
 </div>
 
 @if($jadwal->count() > 0)
     @php
-    $urutan = ['Senin','Selasa','Rabu','Kamis','Jumat'];
-    $jadwalGrouped = $jadwal->sortBy('jam_ke')->groupBy('hari');
+    $urutan = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    $jadwalGrouped = ($jadwal->first() instanceof \Illuminate\Database\Eloquent\Collection || is_array($jadwal->first()))
+        ? $jadwal
+        : $jadwal->sortBy('jam_ke')->groupBy('hari');
     $istirahatSeninKamis = [4 => 'Istirahat 1 (09:40 - 10:00)', 7 => 'Istirahat 2 (11:45 - 13:15)'];
     $istirahatJumat      = [4 => 'Istirahat 1 (09:00 - 09:30)', 8 => 'Istirahat 2 (11:20 - 13:00)'];
     @endphp
     @foreach($urutan as $hari)
-        @if(isset($jadwalGrouped[$hari]))
+        @if(isset($jadwalGrouped[$hari]) && count($jadwalGrouped[$hari]) > 0)
         @php
         $jadwalHari = $jadwalGrouped[$hari]->sortBy('jam_ke');
         $mapIstirahat = ($hari === 'Jumat') ? $istirahatJumat : $istirahatSeninKamis;

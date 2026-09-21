@@ -58,10 +58,15 @@ class OrtuDashboardController extends Controller
                 ->where('aktif', 1)
                 ->get();
 
-            $statusPresensi = AbsensiSiswa::with('jurnal')
+            $statusPresensi = AbsensiSiswa::with(['jurnal', 'user'])
                 ->where('id_siswa', $selectedSiswa->id_siswa)
-                ->whereHas('jurnal', function ($q) use ($todayDate) {
-                    $q->where('tanggal', $todayDate);
+                ->where(function ($q) use ($todayDate) {
+                    $q->whereHas('jurnal', function ($sub) use ($todayDate) {
+                        $sub->where('tanggal', $todayDate);
+                    })->orWhere(function ($sub) use ($todayDate) {
+                        $sub->whereNull('id_jurnal')
+                            ->whereDate('created_at', $todayDate);
+                    });
                 })
                 ->get();
 
@@ -123,8 +128,8 @@ class OrtuDashboardController extends Controller
             $jadwal = Jadwal::with(['guru', 'kelas'])
                 ->where('id_kelas', $selectedSiswa->id_kelas)
                 ->where('aktif', 1)
-                ->get()
-                ->groupBy('hari');
+                ->orderBy('jam_ke', 'asc')
+                ->get();
         }
 
         return view('ortu.jadwal', compact('anakList', 'selectedSiswa', 'jadwal'));
@@ -138,9 +143,9 @@ class OrtuDashboardController extends Controller
 
         $riwayatPresensi = collect();
         if ($selectedSiswa) {
-            $riwayatPresensi = AbsensiSiswa::with(['jurnal.guru', 'jurnal.jadwal'])
+            $riwayatPresensi = AbsensiSiswa::with(['jurnal.guru', 'jurnal.jadwal', 'user'])
                 ->where('id_siswa', $selectedSiswa->id_siswa)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('id_absensi', 'desc')
                 ->get();
         }
 
@@ -159,14 +164,22 @@ class OrtuDashboardController extends Controller
 
         $rekapData = collect();
         $summary   = ['hadir' => 0, 'terlambat' => 0, 'izin' => 0, 'sakit' => 0, 'alpa' => 0];
+        $tanggalAda = [];
 
         if ($selectedSiswa) {
-            $allRekapBulan = AbsensiSiswa::with(['jurnal.guru'])
+            $allRekapBulan = AbsensiSiswa::with(['jurnal.guru', 'user'])
                 ->where('id_siswa', $selectedSiswa->id_siswa)
-                ->whereHas('jurnal', function ($q) use ($bulan, $tahun) {
-                    $q->whereMonth('tanggal', $bulan)
-                      ->whereYear('tanggal', $tahun);
+                ->where(function ($q) use ($bulan, $tahun) {
+                    $q->whereHas('jurnal', function ($sub) use ($bulan, $tahun) {
+                        $sub->whereMonth('tanggal', $bulan)
+                            ->whereYear('tanggal', $tahun);
+                    })->orWhere(function ($sub) use ($bulan, $tahun) {
+                        $sub->whereNull('id_jurnal')
+                            ->whereMonth('created_at', $bulan)
+                            ->whereYear('created_at', $tahun);
+                    });
                 })
+                ->orderBy('id_absensi', 'desc')
                 ->get();
 
             foreach ($allRekapBulan as $r) {
@@ -176,12 +189,18 @@ class OrtuDashboardController extends Controller
                 }
             }
 
+            // Normalisasi tanggal untuk filter dan kalender
+            $tanggalAda = $allRekapBulan->map(function ($item) {
+                return $item->jurnal?->tanggal ?? ($item->created_at ? substr($item->created_at, 0, 10) : '');
+            })->filter()->unique()->values()->toArray();
+
             if ($tanggal) {
                 $rekapData = $allRekapBulan->filter(function ($item) use ($tanggal) {
-                    return substr($item->jurnal->tanggal ?? '', 0, 10) === $tanggal;
-                })->sortBy(fn($item) => $item->jurnal->tanggal ?? '');
+                    $itemDate = $item->jurnal?->tanggal ?? ($item->created_at ? substr($item->created_at, 0, 10) : '');
+                    return $itemDate === $tanggal;
+                });
             } else {
-                $rekapData = $allRekapBulan->sortBy(fn($item) => $item->jurnal->tanggal ?? '');
+                $rekapData = $allRekapBulan;
             }
         }
 
@@ -189,7 +208,7 @@ class OrtuDashboardController extends Controller
         $peringatan = $alertData['alerts'] ?? [];
 
         return view('ortu.rekap-bulanan', compact(
-            'anakList', 'selectedSiswa', 'bulan', 'tahun', 'rekapData', 'summary', 'peringatan', 'alertData'
+            'anakList', 'selectedSiswa', 'bulan', 'tahun', 'rekapData', 'summary', 'peringatan', 'alertData', 'tanggalAda'
         ));
     }
 

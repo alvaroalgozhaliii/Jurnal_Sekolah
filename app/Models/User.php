@@ -259,4 +259,16 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Siswa::class, 'ortu_siswa', 'id_user', 'id_siswa');
     }
+
+    public function getAnakListAttribute()
+    {
+        $children = $this->getRelationValue('anakList');
+        if (!$children || $children->isEmpty()) {
+            $direct = Siswa::where('id_user', $this->id_user)->get();
+            if ($direct->isNotEmpty()) {
+                return $direct;
+            }
+        }
+        return $children ?? collect();
+    }
 }

@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     @php
                         $st = strtolower($p->status);
                         $badgeCls = match($st) {
-                            'verified', 'disetujui_satpam', 'completed', 'selesai' => 'badge-success',
+                            'verified', 'disetujui_satpam', 'completed', 'disetujui', 'selesai' => 'badge-success',
                             'disetujui_waka', 'menunggu_satpam', 'pending_satpam' => 'badge-info',
                             'pending_waka', 'menunggu_waka', 'pending_piket' => 'badge-warning',
                             default => 'badge-danger'
@@ -83,7 +83,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         $katLabel = match($p->kategori) {
                             'sakit' => 'IZIN SAKIT',
                             'izin' => 'IZIN',
+                            'acara_keluarga' => 'ACARA KELUARGA',
                             default => strtoupper(str_replace('_', ' ', $p->kategori))
+                        };
+                        $statusLabel = match($st) {
+                            'completed', 'disetujui' => ($p->pengaju && $p->pengaju->isOrtu() ? 'DISETUJUI (ORTU)' : 'DISETUJUI'),
+                            'verified' => 'TERVERIFIKASI',
+                            'disetujui_satpam' => 'DISETUJUI SATPAM',
+                            'disetujui_waka' => 'DISETUJUI WAKA',
+                            'pending_waka' => 'MENUNGGU WAKA',
+                            'pending_piket' => 'MENUNGGU PIKET',
+                            'pending_satpam' => 'MENUNGGU SATPAM',
+                            default => strtoupper(str_replace('_', ' ', $p->status))
                         };
                     @endphp
                     <tr>
@@ -101,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             @endif
                         </td>
                         <td>{{ Str::limit($p->alasan, 35) }}</td>
-                        <td><span class="badge {{ $badgeCls }}">{{ strtoupper(str_replace('_', ' ', $p->status)) }}</span></td>
+                        <td><span class="badge {{ $badgeCls }}">{{ $statusLabel }}</span></td>
                         <td>
                             @if($p->lampiran_foto)
                                 <a href="{{ asset('storage/' . $p->lampiran_foto) }}" target="_blank" class="btn btn-secondary btn-sm">Lihat Foto</a>

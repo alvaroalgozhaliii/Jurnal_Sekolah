@@ -61,6 +61,9 @@ class PengajuanIzinController extends Controller
 
         if ($user->isOrtu()) {
             $siswas = $user->anakList;
+            if ($siswas->isEmpty()) {
+                $siswas = Siswa::with('kelas')->where('id_user', $user->id_user)->get();
+            }
         } else {
             $siswas = Siswa::with('kelas')->where('aktif', 1)->orderBy('nama', 'asc')->get();
         }
@@ -124,8 +127,8 @@ class PengajuanIzinController extends Controller
         }
 
         // Tentukan alur approval
-        // Jika dibuat oleh Orang Tua atau kategori izin siswa (sakit, izin): langsung sah/masuk ke Piket & Data Kelas
-        $isOrtuFlow = $user->isOrtu() || in_array($request->kategori, ['sakit', 'izin']);
+        // Jika dibuat oleh Orang Tua atau kategori izin siswa (sakit, izin, acara_keluarga): langsung sah/DISETUJUI & masuk ke Piket serta Data Kelas
+        $isOrtuFlow = $user->isOrtu() || in_array($request->kategori, ['sakit', 'izin', 'acara_keluarga']);
 
         $statusAwal = $isOrtuFlow ? 'completed' : 'pending_waka';
         $butuhSatpam = !$isGuruDispen && !$isOrtuFlow && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk']);
@@ -147,6 +150,8 @@ class PengajuanIzinController extends Controller
             'status' => $statusAwal,
             'butuh_satpam' => $butuhSatpam,
             'id_waka_tujuan' => $idWakaTujuan,
+            'catatan_piket' => $isOrtuFlow ? 'Disetujui otomatis karena diajukan langsung oleh Orang Tua.' : null,
+            'tgl_piket' => $isOrtuFlow ? now() : null,
         ]);
 
         // Catat Log Riwayat
@@ -156,7 +161,7 @@ class PengajuanIzinController extends Controller
             $user->role,
             null,
             $statusAwal,
-            $isOrtuFlow ? 'Izin dari Orang Tua (' . $user->nama . ') langsung dicatat ke piket dan data kelas' : ('Pengajuan ' . strtoupper(str_replace('_', ' ', $request->kategori)) . ' dibuat oleh ' . $user->nama)
+            $isOrtuFlow ? 'Disetujui langsung oleh sistem karena diajukan oleh Orang Tua (' . $user->nama . ')' : ('Pengajuan ' . strtoupper(str_replace('_', ' ', $request->kategori)) . ' dibuat oleh ' . $user->nama)
         );
 
         $namaKategoriText = match($request->kategori) {
@@ -172,13 +177,59 @@ class PengajuanIzinController extends Controller
         if ($isOrtuFlow) {
             $siswa = Siswa::with('kelas')->find($idSiswa);
             $namaSiswa = $siswa?->nama ?? 'Siswa';
+            $tanggalIzin = $pengajuan->tanggal;
+            $statusAbsensi = ($pengajuan->kategori === 'sakit') ? 'sakit' : 'izin';
 
+            // Sinkronisasi langsung ke data Absensi Siswa
+            if ($siswa) {
+                // Cari Jurnal Harian hari ini untuk kelas siswa tersebut jika ada
+                $jurnal = \App\Models\JurnalHarian::where('tanggal', $tanggalIzin)
+                    ->whereHas('jadwal', function ($q) use ($siswa) {
+                        $q->where('id_kelas', $siswa->id_kelas);
+                    })
+                    ->first();
+
+                // Jika belum ada jurnal harian, cari jadwal kelas pertama jika ada
+                if (!$jurnal && $siswa->id_kelas) {
+                    $jadwalFirst = \App\Models\Jadwal::where('id_kelas', $siswa->id_kelas)->where('aktif', 1)->first();
+                    if ($jadwalFirst) {
+                        $jurnal = \App\Models\JurnalHarian::firstOrCreate(
+                            [
+                                'id_jadwal' => $jadwalFirst->id_jadwal,
+                                'tanggal' => $tanggalIzin,
+                            ],
+                            [
+                                'id_guru' => $jadwalFirst->id_guru ?? \App\Models\Guru::first()?->id_guru,
+                                'materi' => 'Presensi Kelas (Izin Orang Tua)',
+                                'jam_ke' => $jadwalFirst->jam_ke ?? 1,
+                            ]
+                        );
+                    }
+                }
+
+                $idJurnal = $jurnal ? $jurnal->id_jurnal : null;
+
+                \App\Models\AbsensiSiswa::updateOrCreate(
+                    [
+                        'id_siswa' => $siswa->id_siswa,
+                        'created_at' => $tanggalIzin . ' 07:00:00',
+                    ],
+                    [
+                        'id_jurnal' => $idJurnal,
+                        'status' => $statusAbsensi,
+                        'jam_masuk' => $pengajuan->jam_mulai,
+                        'keterangan' => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . '(Disetujui - Izin Orang Tua)',
+                        'dicatat_oleh' => $user->id_user,
+                        'created_at' => $tanggalIzin . ' 07:00:00',
+                    ]
+                );
+            }
 
             // Notifikasi ke Guru Piket
             Notifikasi::kirimKeRole(
                 'piket',
-                'Pemberitahuan ' . $namaKategoriText . ' Siswa',
-                'Siswa ' . $namaSiswa . ' (' . ($siswa?->kelas->nama_kelas ?? '-') . ') telah dicatat ' . $namaKategoriText . ' oleh Orang Tua pada tanggal ' . $pengajuan->tanggal . '.',
+                'Pemberitahuan ' . $namaKategoriText . ' Siswa (Langsung Disetujui)',
+                'Siswa ' . $namaSiswa . ' (' . ($siswa?->kelas->nama_kelas ?? '-') . ') telah dicatat ' . $namaKategoriText . ' oleh Orang Tua pada tanggal ' . $pengajuan->tanggal . ' dan telah disetujui otomatis.',
                 route('pengajuan.show', $pengajuan->id_pengajuan),
                 'izin'
             );
@@ -197,7 +248,7 @@ class PengajuanIzinController extends Controller
                 }
             }
 
-            $flashMessage = "Pengajuan {$namaKategoriText} anak berhasil dibuat dan langsung tercatat di piket serta data presensi kelas.";
+            $flashMessage = "Pengajuan {$namaKategoriText} anak berhasil dibuat dan LANGSUNG DISETUJUI, serta otomatis tercatat di data presensi kelas.";
         } else {
             // Kirim WhatsApp ke Waka Bertugas
             $waResult = $this->waService->kirimNotifDispenKeWaka($pengajuan->load(['siswa.kelas', 'guru', 'pengaju', 'wakaTujuan']));
