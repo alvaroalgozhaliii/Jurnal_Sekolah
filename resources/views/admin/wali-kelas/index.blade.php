@@ -281,7 +281,7 @@
                 <div class="form-group" style="margin-bottom:0;">
                     <label class="form-label" for="selectGuruWali">Pilih Guru Wali Kelas <span class="req">*</span></label>
                     <select id="selectGuruWali" name="id_guru" class="form-control select-search" required>
-                        <option value="">-- Pilih Guru / Kosongkan --</option>
+                        <option value="">Pilih Guru / Kosongkan</option>
                         @foreach($guruList as $guru)
                             <option value="{{ $guru->id_guru }}">
                                 {{ $guru->nama }} (NIP: {{ $guru->nip ?? '-' }})

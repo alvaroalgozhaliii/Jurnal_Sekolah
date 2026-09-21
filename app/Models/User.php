@@ -14,6 +14,14 @@ class User extends Authenticatable
     protected $primaryKey = 'id_user';
     public $timestamps = false;
 
+    /**
+     * Disable remember_token — column does not exist in this table.
+     */
+    public function getRememberTokenName(): ?string
+    {
+        return null;
+    }
+
     protected $fillable = [
         'nama',
         'nip',
@@ -28,7 +36,6 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     // URL foto profil (fallback ke inisial nama via UI)
