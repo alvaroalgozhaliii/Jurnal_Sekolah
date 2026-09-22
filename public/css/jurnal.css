@@ -2765,50 +2765,95 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: var(--bg-app);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
+    background-color: #ffffff;
+    border: 1.5px solid rgba(37, 99, 235, 0.28);
+    color: #1e3a8a;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+    flex-shrink: 0;
 }
 
 .theme-toggle-btn:hover {
-    background-color: var(--border);
-    color: var(--gold-accent);
-    transform: scale(1.15) rotate(8deg);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background-color: #ffffff;
+    border-color: #2563eb;
+    color: #2563eb;
+    transform: scale(1.1) rotate(12deg);
+    box-shadow: 0 0 14px rgba(37, 99, 235, 0.35);
+}
+
+/* Sun Icon (tampil di Dark Mode) */
+.theme-toggle-btn .sun-icon {
+    display: none !important;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 [data-theme="dark"] .theme-toggle-btn .sun-icon {
     display: block !important;
-    color: #f59e0b;
+    visibility: visible !important;
+    color: #f59e0b !important;
+    stroke: #f59e0b !important;
+    fill: none !important;
+    filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.7));
+}
+
+/* Moon Icon (tampil jelas di Light Mode — solid & berbayang) */
+.theme-toggle-btn .moon-icon {
+    display: block !important;
+    visibility: visible !important;
+    width: 20px !important;
+    height: 20px !important;
+    color: #1e3a8a !important;
+    fill: #1e3a8a !important;
+    stroke: #1e3a8a !important;
+    stroke-width: 1.5px !important;
+    filter: drop-shadow(0 0 4px rgba(30, 58, 138, 0.4));
 }
 
 [data-theme="dark"] .theme-toggle-btn .moon-icon {
     display: none !important;
+    visibility: hidden !important;
 }
 
-[data-theme="light"] .theme-toggle-btn .sun-icon,
-:root:not([data-theme="dark"]) .theme-toggle-btn .sun-icon {
-    display: none !important;
+/* Dark Mode Button Styling */
+[data-theme="dark"] .theme-toggle-btn {
+    background-color: rgba(30, 41, 59, 0.90) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    color: #f59e0b !important;
 }
 
-[data-theme="light"] .theme-toggle-btn .moon-icon,
-:root:not([data-theme="dark"]) .theme-toggle-btn .moon-icon {
-    display: block !important;
-    color: var(--navy-primary);
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background-color: rgba(30, 41, 59, 1) !important;
+    border-color: #f59e0b !important;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.55) !important;
+    transform: scale(1.1) rotate(-12deg);
 }
 
-/* Khusus di corner login SSO, icon selalu kontras terang & jelas di atas latar biru */
+/* Khusus di corner login SSO, icon selalu kontras & jelas */
 .sso-theme-btn-corner .sun-icon {
     color: #fbbf24 !important;
+    fill: none !important;
+    stroke: #fbbf24 !important;
     filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.6));
 }
 
+/* Default (dark mode): moon icon putih agar kontras di atas latar gelap */
 .sso-theme-btn-corner .moon-icon {
     color: #ffffff !important;
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+}
+
+/* Light mode: moon icon harus gelap agar kontras di atas latar putih */
+[data-theme="light"] .sso-theme-btn-corner .moon-icon {
+    color: #1e3a8a !important;
+    fill: #1e3a8a !important;
+    stroke: #1e3a8a !important;
+    filter: drop-shadow(0 0 4px rgba(30, 58, 138, 0.4)) !important;
 }
 
 /* ============================================================
@@ -4250,6 +4295,13 @@ input::-ms-clear,
         background-color: rgba(255, 255, 255, 0.92) !important;
         border: 1.5px solid rgba(59, 130, 246, 0.3) !important;
         color: #2563eb !important;
+    }
+
+    [data-theme="light"] .sso-theme-btn-corner .moon-icon {
+        color: #1e3a8a !important;
+        fill: #1e3a8a !important;
+        stroke: #1e3a8a !important;
+        filter: drop-shadow(0 0 4px rgba(30, 58, 138, 0.4)) !important;
     }
 
     [data-theme="light"] .sso-input-pill {
