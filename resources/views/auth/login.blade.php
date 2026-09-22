@@ -32,6 +32,16 @@ input[type="password"]::-ms-clear,
 .sso-eye-btn:active {
     color: #475569 !important;
 }
+
+/* ===== ANIMASI BINTANG DI ANGKASA ===== */
+#starCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: block;
+    pointer-events: none;
+    z-index: 0;
+}
 </style>
 <div class="sso-container">
 
@@ -59,6 +69,9 @@ input[type="password"]::-ms-clear,
 
     <!-- RIGHT SIDE: Curved Wave Form Portal -->
     <div class="sso-right">
+        <!-- Canvas Animasi Bintang di Angkasa -->
+        <canvas id="starCanvas" aria-hidden="true"></canvas>
+
         <!-- Theme Toggle Button (Icon Matahari / Bulan) di Pojok Kanan Atas -->
         <button type="button" id="themeToggleBtn" class="theme-toggle-btn sso-theme-btn-corner" aria-label="Toggle Mode Gelap/Terang" title="Ganti Mode Gelap / Terang">
             <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
@@ -72,7 +85,7 @@ input[type="password"]::-ms-clear,
                 <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
-            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" style="width:20px; height:20px;">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         </button>
@@ -165,7 +178,7 @@ input[type="password"]::-ms-clear,
 
         <div class="sso-form-wrap">
             <div class="sso-form-header">
-                <h2 class="sso-title">LOGIN PORTAL</h2>
+                <h2 class="sso-title">LOGIN JURNAL</h2>
                 <p class="sso-subtitle">SISTEM KBM & PRESENSI</p>
             </div>
 
@@ -247,3 +260,123 @@ input[type="password"]::-ms-clear,
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(function() {
+    const canvas = document.getElementById('starCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let W, H, stars = [], shootingStars = [];
+
+    /* ── Inisialisasi ukuran canvas ── */
+    function resize() {
+        const parent = canvas.parentElement;
+        /* Sembunyikan canvas sementara agar tidak ikut memperbesar parent */
+        canvas.style.display = 'none';
+        W = canvas.width  = parent.offsetWidth;
+        H = canvas.height = parent.offsetHeight;
+        canvas.style.display = 'block';
+        initStars();
+    }
+
+    /* ── Buat bintang-bintang tetap (twinkle) ── */
+    function initStars() {
+        stars = [];
+        const count = Math.floor((W * H) / 3500);
+        for (let i = 0; i < count; i++) {
+            stars.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                r: Math.random() * 1.4 + 0.3,
+                alpha: Math.random(),
+                dAlpha: (Math.random() * 0.008 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
+                color: randomStarColor()
+            });
+        }
+    }
+
+    function randomStarColor() {
+        const palette = [
+            'rgba(255,255,255,',
+            'rgba(200,220,255,',
+            'rgba(255,240,200,',
+            'rgba(180,210,255,'
+        ];
+        return palette[Math.floor(Math.random() * palette.length)];
+    }
+
+    /* ── Buat shooting star baru ── */
+    function spawnShootingStar() {
+        const x = Math.random() * W;
+        const y = Math.random() * (H * 0.5);
+        shootingStars.push({
+            x, y,
+            len: Math.random() * 80 + 40,
+            speed: Math.random() * 5 + 4,
+            alpha: 1,
+            angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3
+        });
+    }
+
+    /* ── Loop animasi ── */
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        /* Gambar bintang twinkle */
+        stars.forEach(s => {
+            s.alpha += s.dAlpha;
+            if (s.alpha >= 1)      { s.alpha = 1;   s.dAlpha = -Math.abs(s.dAlpha); }
+            else if (s.alpha <= 0) { s.alpha = 0;   s.dAlpha =  Math.abs(s.dAlpha); }
+
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = s.color + s.alpha + ')';
+            ctx.fill();
+        });
+
+        /* Gambar shooting stars */
+        shootingStars = shootingStars.filter(ss => ss.alpha > 0);
+        shootingStars.forEach(ss => {
+            ctx.save();
+            ctx.globalAlpha = ss.alpha;
+            ctx.beginPath();
+            const grad = ctx.createLinearGradient(
+                ss.x, ss.y,
+                ss.x - Math.cos(ss.angle) * ss.len,
+                ss.y + Math.sin(ss.angle) * ss.len
+            );
+            grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.5;
+            ctx.moveTo(ss.x, ss.y);
+            ctx.lineTo(
+                ss.x - Math.cos(ss.angle) * ss.len,
+                ss.y + Math.sin(ss.angle) * ss.len
+            );
+            ctx.stroke();
+            ctx.restore();
+
+            ss.x += Math.cos(ss.angle) * ss.speed;
+            ss.y += Math.sin(ss.angle) * ss.speed;
+            ss.alpha -= 0.015;
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    /* ── Spawn shooting star setiap 2.5–5 detik ── */
+    function scheduleShootingStar() {
+        spawnShootingStar();
+        setTimeout(scheduleShootingStar, Math.random() * 2500 + 2500);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+    setTimeout(scheduleShootingStar, 1000);
+})();
+</script>
+@endpush

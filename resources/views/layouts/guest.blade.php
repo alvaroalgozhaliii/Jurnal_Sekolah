@@ -27,9 +27,65 @@
     </script>
 
     <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}?v={{ file_exists(public_path('css/jurnal.css')) ? filemtime(public_path('css/jurnal.css')) : time() }}">
+
+    <!-- ===== ANIMASI LATAR ANGKASA ===== -->
+    <style>
+    /* Canvas bintang full-page di belakang semua elemen */
+    #spaceBgCanvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: block;
+        pointer-events: none;
+        z-index: 0;
+    }
+    /* Nebula glow blob — hanya tambahan, tidak ubah apapun */
+    .space-nebula {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        animation: nebulaPulse 8s ease-in-out infinite alternate;
+    }
+    .space-nebula-1 {
+        width: 520px; height: 520px;
+        top: -120px; left: -100px;
+        background: radial-gradient(circle, rgba(99,51,198,0.18) 0%, transparent 70%);
+        animation-delay: 0s;
+        animation-duration: 9s;
+    }
+    .space-nebula-2 {
+        width: 480px; height: 480px;
+        bottom: -80px; right: -80px;
+        background: radial-gradient(circle, rgba(14,116,180,0.16) 0%, transparent 70%);
+        animation-delay: -4s;
+        animation-duration: 11s;
+    }
+    .space-nebula-3 {
+        width: 360px; height: 360px;
+        top: 40%; left: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(30,58,138,0.12) 0%, transparent 70%);
+        animation-delay: -2s;
+        animation-duration: 13s;
+    }
+    @keyframes nebulaPulse {
+        0%   { opacity: 0.6; transform: scale(1); }
+        100% { opacity: 1;   transform: scale(1.12); }
+    }
+    .space-nebula-3 {
+        transform-origin: center center;
+    }
+    </style>
 </head>
 <body>
 <div class="login-page">
+    <!-- ===== LATAR ANGKASA: Canvas Bintang + Nebula ===== -->
+    <canvas id="spaceBgCanvas" aria-hidden="true"></canvas>
+    <div class="space-nebula space-nebula-1" aria-hidden="true"></div>
+    <div class="space-nebula space-nebula-2" aria-hidden="true"></div>
+    <div class="space-nebula space-nebula-3" aria-hidden="true"></div>
+
     <!-- Aesthetic Ambient Floating Glowing Orbs -->
     <div class="login-orb orb-1"></div>
     <div class="login-orb orb-2"></div>
@@ -172,5 +228,93 @@ function togglePasswordVisibility(inputId, btn) {
     });
 })();
 </script>
+
+<!-- ===== JS ANIMASI LATAR ANGKASA ===== -->
+<script>
+(function () {
+    var canvas = document.getElementById('spaceBgCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W, H, stars = [], shoots = [];
+
+    function resize() {
+        canvas.style.display = 'none';
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        canvas.style.display = 'block';
+        buildStars();
+    }
+
+    function buildStars() {
+        stars = [];
+        var total = Math.floor((W * H) / 2800);
+        for (var i = 0; i < total; i++) {
+            stars.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                r: Math.random() * 1.5 + 0.2,
+                a: Math.random(),
+                da: (Math.random() * 0.006 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+                c: ['255,255,255','200,220,255','255,240,180','180,210,255'][Math.floor(Math.random()*4)]
+            });
+        }
+    }
+
+    function spawnShoot() {
+        var x = Math.random() * W;
+        var y = Math.random() * H * 0.5;
+        var angle = Math.PI / 4 + (Math.random() - 0.5) * 0.4;
+        shoots.push({ x:x, y:y, len: Math.random()*90+40, spd: Math.random()*6+4, a:1, ang:angle });
+        setTimeout(spawnShoot, Math.random()*3000+2000);
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        // Bintang twinkle
+        for (var i = 0; i < stars.length; i++) {
+            var s = stars[i];
+            s.a += s.da;
+            if (s.a >= 1) { s.a = 1; s.da = -Math.abs(s.da); }
+            else if (s.a <= 0) { s.a = 0; s.da = Math.abs(s.da); }
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + s.c + ',' + s.a + ')';
+            ctx.fill();
+        }
+
+        // Shooting stars
+        shoots = shoots.filter(function(ss){ return ss.a > 0; });
+        for (var j = 0; j < shoots.length; j++) {
+            var ss = shoots[j];
+            var tx = ss.x - Math.cos(ss.ang) * ss.len;
+            var ty = ss.y + Math.sin(ss.ang) * ss.len;
+            ctx.save();
+            ctx.globalAlpha = ss.a;
+            var g = ctx.createLinearGradient(ss.x, ss.y, tx, ty);
+            g.addColorStop(0, 'rgba(255,255,255,0.95)');
+            g.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.strokeStyle = g;
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            ctx.moveTo(ss.x, ss.y);
+            ctx.lineTo(tx, ty);
+            ctx.stroke();
+            ctx.restore();
+            ss.x += Math.cos(ss.ang) * ss.spd;
+            ss.y += Math.sin(ss.ang) * ss.spd;
+            ss.a -= 0.014;
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+    setTimeout(spawnShoot, 800);
+})();
+</script>
+@stack('scripts')
 </body>
 </html>
