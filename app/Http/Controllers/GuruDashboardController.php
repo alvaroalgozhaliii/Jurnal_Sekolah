@@ -12,6 +12,7 @@ use App\Models\Siswa;
 use App\Models\AbsensiSiswa;
 use App\Models\SiswaTerlambat;
 use App\Models\PengajuanIzin;
+use App\Models\JadwalWaka;
 use Carbon\Carbon;
 
 class GuruDashboardController extends Controller
@@ -133,6 +134,13 @@ class GuruDashboardController extends Controller
             ];
         }
 
+        // Data Petugas Piket Hari Ini
+        $piketHariIni = JadwalWaka::with(['waka', 'guruPiket'])->whereDate('tanggal', $todayDate)->first();
+        $isSayaPiketHariIni = false;
+        if ($piketHariIni && $guru) {
+            $isSayaPiketHariIni = ($piketHariIni->id_guru_piket == $guru->id_guru);
+        }
+
         return view('guru.dashboard', compact(
             'guru',
             'jadwalHariIni',
@@ -143,7 +151,9 @@ class GuruDashboardController extends Controller
             'jurnalPengganti',
             'jurnalTidakTerlaksana',
             'totalJurnalGuru',
-            'waliMonitoring'
+            'waliMonitoring',
+            'piketHariIni',
+            'isSayaPiketHariIni'
         ));
     }
 }
