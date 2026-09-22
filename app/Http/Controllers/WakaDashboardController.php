@@ -63,13 +63,17 @@ class WakaDashboardController extends Controller
         $totalDisetujui = (clone $pengajuanQuery)->whereIn('status', ['disetujui_waka', 'pending_kepala', 'menunggu_satpam', 'disetujui_kepala', 'verified', 'completed', 'selesai'])->count();
         $totalDitolak = (clone $pengajuanQuery)->where('status', 'like', 'ditolak_%')->count();
 
+        $todayDate = Carbon::today()->toDateString();
+        $piketHariIni = JadwalWaka::with(['waka', 'guruPiket'])->whereDate('tanggal', $todayDate)->first();
+
         return view('waka.dashboard', compact(
             'pengajuanPending',
             'pengajuanRiwayat',
             'isSdm',
             'totalPending',
             'totalDisetujui',
-            'totalDitolak'
+            'totalDitolak',
+            'piketHariIni'
         ));
     }
 
