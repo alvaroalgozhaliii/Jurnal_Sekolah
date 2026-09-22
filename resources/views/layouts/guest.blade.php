@@ -131,13 +131,8 @@
             <path d="M0,192L60,181.3C120,171,240,149,360,160C480,171,600,213,720,213.3C840,213,960,171,1080,154.7C1200,139,1320,149,1380,154.7L1440,160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
         </svg>
 
-        <!-- Animated Background Shooting Stars / Meteors (Jatuh Lurus) -->
+        <!-- Particles Container (Shooting star meteor dihapus agar ringan) -->
         <div class="shooting-stars-container" aria-hidden="true">
-            <div class="shooting-star star-1"></div>
-            <div class="shooting-star star-2"></div>
-            <div class="shooting-star star-3"></div>
-            <div class="shooting-star star-4"></div>
-            <div class="shooting-star star-5"></div>
             <div class="glow-particle p-1"></div>
             <div class="glow-particle p-2"></div>
             <div class="glow-particle p-3"></div>
@@ -235,7 +230,7 @@ function togglePasswordVisibility(inputId, btn) {
     var canvas = document.getElementById('spaceBgCanvas');
     if (!canvas) return;
     var ctx = canvas.getContext('2d');
-    var W, H, stars = [], shoots = [];
+    var W, H, stars = [];
 
     function resize() {
         canvas.style.display = 'none';
@@ -260,18 +255,8 @@ function togglePasswordVisibility(inputId, btn) {
         }
     }
 
-    function spawnShoot() {
-        var x = Math.random() * W;
-        var y = Math.random() * H * 0.5;
-        var angle = Math.PI / 4 + (Math.random() - 0.5) * 0.4;
-        shoots.push({ x:x, y:y, len: Math.random()*90+40, spd: Math.random()*6+4, a:1, ang:angle });
-        setTimeout(spawnShoot, Math.random()*3000+2000);
-    }
-
     function draw() {
         ctx.clearRect(0, 0, W, H);
-
-        // Bintang twinkle
         for (var i = 0; i < stars.length; i++) {
             var s = stars[i];
             s.a += s.da;
@@ -282,37 +267,12 @@ function togglePasswordVisibility(inputId, btn) {
             ctx.fillStyle = 'rgba(' + s.c + ',' + s.a + ')';
             ctx.fill();
         }
-
-        // Shooting stars
-        shoots = shoots.filter(function(ss){ return ss.a > 0; });
-        for (var j = 0; j < shoots.length; j++) {
-            var ss = shoots[j];
-            var tx = ss.x - Math.cos(ss.ang) * ss.len;
-            var ty = ss.y + Math.sin(ss.ang) * ss.len;
-            ctx.save();
-            ctx.globalAlpha = ss.a;
-            var g = ctx.createLinearGradient(ss.x, ss.y, tx, ty);
-            g.addColorStop(0, 'rgba(255,255,255,0.95)');
-            g.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.strokeStyle = g;
-            ctx.lineWidth = 1.8;
-            ctx.beginPath();
-            ctx.moveTo(ss.x, ss.y);
-            ctx.lineTo(tx, ty);
-            ctx.stroke();
-            ctx.restore();
-            ss.x += Math.cos(ss.ang) * ss.spd;
-            ss.y += Math.sin(ss.ang) * ss.spd;
-            ss.a -= 0.014;
-        }
-
         requestAnimationFrame(draw);
     }
 
     window.addEventListener('resize', resize);
     resize();
     draw();
-    setTimeout(spawnShoot, 800);
 })();
 </script>
 @stack('scripts')
