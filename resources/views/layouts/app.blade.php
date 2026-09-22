@@ -775,7 +775,8 @@
                     </svg>
                 </button>
                 <div class="topbar-title">
-                    @yield('page-title', 'Dashboard')
+                    <span class="topbar-title-sparkle" aria-hidden="true">✦</span>
+                    <span>@yield('page-title', 'Dashboard')</span>
                 </div>
             </div>
 
@@ -793,7 +794,7 @@
 
                 <!-- Dark Mode Toggle Button -->
                 <button type="button" id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark Mode" title="Ganti Mode Gelap / Terang">
-                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px;">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -804,7 +805,7 @@
                         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
-                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" style="width:20px; height:20px;">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
                 </button>
@@ -919,7 +920,19 @@
             <div class="sys-bg-orb sys-orb-4"></div>
             <div class="sys-bg-ring sys-ring-1"></div>
             <div class="sys-bg-ring sys-ring-2"></div>
+            <div class="sys-bg-diamond sys-dm-1"></div>
             <div class="sys-bg-beam"></div>
+
+            <!-- Ambient Flow Wave Lines (Gelombang Estetik Halus & Simpel) -->
+            <div class="sys-waves-container">
+                <svg class="sys-wave-svg sys-wave-1" viewBox="0 0 1440 280" fill="none" preserveAspectRatio="none">
+                    <path d="M0,80 C320,150 560,20 840,95 C1120,170 1290,65 1440,85" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 8" />
+                </svg>
+                <svg class="sys-wave-svg sys-wave-2" viewBox="0 0 1440 280" fill="none" preserveAspectRatio="none">
+                    <path d="M0,190 C290,120 530,225 850,145 C1150,75 1310,185 1440,165" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 7" />
+                </svg>
+            </div>
+
             <!-- Falling Meteors / Shooting Stars (Vertikal Miring ke Samping) -->
             <div class="sys-meteors-container">
                 <div class="sys-meteor m1"></div>
@@ -928,10 +941,31 @@
                 <div class="sys-meteor m4"></div>
                 <div class="sys-meteor m5"></div>
             </div>
+
+            <!-- Floating Aesthetic Particles -->
             <div class="sys-particle p1"></div>
             <div class="sys-particle p2"></div>
             <div class="sys-particle p3"></div>
             <div class="sys-particle p4"></div>
+
+            <!-- Twinkling Star Crosses (Kilau Bintang Halus / Aesthetic Sparkles) -->
+            <div class="sys-sparkle sp1">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+            <div class="sys-sparkle sp2">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+            <div class="sys-sparkle sp3">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+            <div class="sys-sparkle sp4">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+
+            <!-- Minimalist Precision Coordinate Crosses (+) -->
+            <div class="sys-cross cr1">+</div>
+            <div class="sys-cross cr2">+</div>
+            <div class="sys-cross cr3">+</div>
         </div>
 
         {{-- FLASH NOTIFICATION MESSAGES --}}
