@@ -2870,8 +2870,8 @@ html[data-theme="dark"] .ts-wrapper .ts-control,
         radial-gradient(circle at 10% 40%, rgba(30, 58, 138, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 90% 60%, rgba(30, 58, 138, 0.18) 0%, transparent 45%);
     position: relative;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
     padding: 20px;
     box-sizing: border-box;
 }
