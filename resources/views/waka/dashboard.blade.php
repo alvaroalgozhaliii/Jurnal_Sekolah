@@ -15,16 +15,88 @@
     };
 @endphp
 
-<div class="page-header">
+<div class="page-header d-flex justify-between align-center flex-wrap gap-12">
     <div>
         <h1 class="page-title">
             Dashboard {{ $wakaRoleLabel }}
         </h1>
-        <p class="page-subtitle">Verifikasi, Persetujuan Dispensasi & Integrasi Notifikasi WhatsApp Gerbang</p>
+        <p class="page-subtitle">Verifikasi, Persetujuan Dispensasi &amp; Manajemen Penugasan KBM</p>
     </div>
+    @if(Auth::user()->isWakaSdm() || Auth::user()->isAdmin())
+        <div class="page-actions" style="display:flex; gap:8px; flex-wrap:wrap;">
+            <a href="{{ route('jadwal-piket.create') }}" class="btn btn-primary" style="font-weight:600;">
+                + Buat Jadwal Piket
+            </a>
+            <a href="{{ route('jadwal-piket.index') }}" class="btn btn-secondary" style="font-weight:600;">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Kelola Jadwal Piket
+            </a>
+        </div>
+    @endif
 </div>
 
 @include('partials.kbm-clock-banner')
+
+<!-- CARD JADWAL PIKET HARI INI (WAKA SDM) -->
+@if(Auth::user()->isWakaSdm() || Auth::user()->isAdmin())
+    <div class="card mb-24" style="border-left: 4px solid var(--navy-primary); overflow:hidden;">
+        <div class="card-header" style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(59, 130, 246, 0.03)); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:12px 20px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:36px; height:36px; border-radius:8px; background:var(--navy-primary); color:#fff; display:flex; align-items:center; justify-content:center;">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </div>
+                <div>
+                    <h3 class="card-title" style="margin:0; font-size:15px; font-weight:700;">Penugasan Piket Hari Ini</h3>
+                    <p style="margin:2px 0 0; font-size:11.5px; color:var(--text-muted);">{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</p>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <a href="{{ route('jadwal-piket.template-csv') }}" class="btn btn-secondary btn-sm" style="font-size:11.5px;">Template CSV</a>
+                <a href="{{ route('jadwal-piket.index') }}" class="btn btn-secondary btn-sm" style="font-size:11.5px;">Lihat Kalender Piket &rarr;</a>
+            </div>
+        </div>
+        <div class="card-body" style="padding:14px 20px;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px;">
+                <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+                    <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:3px;">Waka Bertugas</span>
+                    @if(isset($piketHariIni) && $piketHariIni && $piketHariIni->waka)
+                        <strong class="text-navy" style="font-size:14px;">{{ $piketHariIni->waka->nama }}</strong>
+                        <div class="text-muted" style="font-size:11.5px; margin-top:2px;">
+                            {{ strtoupper(str_replace('_', ' ', $piketHariIni->waka->role)) }}
+                            @if($piketHariIni->waka->no_hp)
+                                &bull; <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $piketHariIni->waka->no_hp) }}" target="_blank" style="color:#16a34a; text-decoration:none; font-weight:600;">WA: {{ $piketHariIni->waka->no_hp }}</a>
+                            @endif
+                        </div>
+                    @else
+                        <span class="text-muted" style="font-size:13px; font-style:italic;">Belum ditentukan</span>
+                    @endif
+                </div>
+
+                <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+                    <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:3px;">Guru Piket</span>
+                    @if(isset($piketHariIni) && $piketHariIni && $piketHariIni->guruPiket)
+                        <strong style="font-size:14px; color:var(--text-primary);">{{ $piketHariIni->guruPiket->nama }}</strong>
+                        <div class="text-muted" style="font-size:11.5px; margin-top:2px;">
+                            {{ $piketHariIni->guruPiket->bidang_studi ?? 'Guru Piket' }}
+                            @if($piketHariIni->guruPiket->no_telp)
+                                &bull; <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $piketHariIni->guruPiket->no_telp) }}" target="_blank" style="color:#16a34a; text-decoration:none; font-weight:600;">WA: {{ $piketHariIni->guruPiket->no_telp }}</a>
+                            @endif
+                        </div>
+                    @else
+                        <span class="text-muted" style="font-size:13px; font-style:italic;">Belum ditentukan</span>
+                    @endif
+                </div>
+
+                @if(isset($piketHariIni) && $piketHariIni && $piketHariIni->keterangan)
+                    <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+                        <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:3px;">Keterangan</span>
+                        <div style="font-size:12.5px; color:var(--text-primary);">{{ $piketHariIni->keterangan }}</div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+@endif
 
 <!-- STAT CARDS -->
 <div class="grid-3 mb-24">
