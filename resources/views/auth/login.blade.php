@@ -50,21 +50,36 @@ input[type="password"]::-ms-clear,
     z-index: 0;
 }
 
-/* ===== FITUR MINIMIZE FORM LOGIN ===== */
+/* ===== FITUR TRANSISI HALUS & RINGAN SSO (GPU ACCELERATED, ANTI-LAG) ===== */
 .sso-container {
-    transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-                min-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                width 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                max-width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                min-height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.38s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: width, height, max-width;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 /* Clip konten agar tetap ikut rounded corner setelah overflow:visible di container */
 .sso-left {
     border-radius: 24px 0 0 24px;
     overflow: hidden;
+    transform: translateZ(0);
+    transition: padding 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .sso-right {
     border-radius: 0 24px 24px 0;
     overflow: visible;
+    transform: translateZ(0);
+    transition: flex 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                max-width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                padding 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease 0.08s !important;
+    will-change: flex, max-width, opacity;
 }
 
 /* Tombol Minimize di Pojok Kanan Atas Kotak */
@@ -162,38 +177,32 @@ input[type="password"]::-ms-clear,
     transform: translateY(0);
 }
 
-/* Transisi Halus pada Panel Kiri & Kanan */
-.sso-left {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+/* Animasi Wave halus */
+.sso-wave-svg {
+    transition: opacity 0.3s ease;
 }
 
-.sso-brand, 
-.sso-welcome-box, 
-.sso-welcome-title, 
-.sso-welcome-desc, 
-.sso-left-footer {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+.sso-container.sso-minimized .sso-wave-svg {
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
-.sso-right {
-    transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    will-change: flex, max-width, opacity, transform;
-}
-
-/* KETIKA MINIMIZE AKTIF */
+/* KETIKA MINIMIZE AKTIF — KOTAK JADI PERSEGI (SQUARE) SEMPURNA */
 .sso-container.sso-minimized {
-    max-width: 360px !important;
-    min-height: auto !important;
-    width: 100% !important;
+    width: min(420px, 86vh, 92vw) !important;
+    height: min(420px, 86vh, 92vw) !important;
+    max-width: min(420px, 86vh, 92vw) !important;
+    max-height: min(420px, 86vh, 92vw) !important;
+    min-height: unset !important;
+    aspect-ratio: 1 / 1 !important;
     margin: auto !important;
     background-color: #0b1329 !important;
     box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
-    border-radius: 24px !important;
+    border-radius: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
 }
 
 [data-theme="light"] .sso-container.sso-minimized {
@@ -201,32 +210,43 @@ input[type="password"]::-ms-clear,
     box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Sembunyikan dan slide keluar panel kanan */
+/* Sembunyikan panel kanan saat minimized secara halus tanpa display:none agar tidak ngelag */
 .sso-container.sso-minimized .sso-right {
     flex: 0 0 0px !important;
     max-width: 0 !important;
     width: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
     min-width: 0 !important;
+    min-height: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
     opacity: 0 !important;
     pointer-events: none !important;
     overflow: hidden !important;
-    transform: translateX(50px);
-    visibility: hidden;
+    visibility: hidden !important;
+    transition: flex 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.15s ease,
+                padding 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Panel kiri saat minimized — compact, square, centered & background sama dengan sebelum minimize */
+/* Panel kiri saat minimized — isi penuh kotak persegi, terpusat rapi dan seimbang */
 .sso-container.sso-minimized .sso-left {
     flex: 1 1 100% !important;
     width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
     align-items: center !important;
     text-align: center !important;
-    padding: 26px 28px 22px !important;
+    padding: 28px 24px !important;
     justify-content: center !important;
-    gap: 14px !important;
+    gap: 12px !important;
     background-color: #0b1329 !important;
-    border-radius: 24px !important;
+    border-radius: 28px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 [data-theme="light"] .sso-container.sso-minimized .sso-left {
@@ -236,6 +256,8 @@ input[type="password"]::-ms-clear,
 .sso-container.sso-minimized .sso-brand {
     justify-content: center !important;
     text-align: center !important;
+    margin-bottom: 0 !important;
+    gap: 12px !important;
 }
 
 .sso-container.sso-minimized .sso-welcome-box {
@@ -246,20 +268,27 @@ input[type="password"]::-ms-clear,
     align-items: center !important;
     justify-content: center !important;
     gap: 8px !important;
+    padding: 0 !important;
 }
 
 .sso-container.sso-minimized .sso-welcome-title {
-    font-size: 21px !important;
-    margin-bottom: 4px !important;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    margin-bottom: 2px !important;
+    color: #3b82f6 !important;
 }
 
 .sso-container.sso-minimized .sso-welcome-desc {
     margin: 0 auto !important;
     text-align: center !important;
-    max-width: 280px !important;
-    font-size: 12.5px !important;
+    max-width: 300px !important;
+    font-size: 13px !important;
     line-height: 1.5 !important;
-    opacity: 0.75 !important;
+    opacity: 0.8 !important;
+}
+
+.sso-container.sso-minimized .sso-restore-action-box {
+    margin-top: 10px !important;
 }
 
 .sso-container.sso-minimized .sso-left-footer {
@@ -308,10 +337,9 @@ input[type="password"]::-ms-clear,
     right: 4% !important;
 }
 
-/* Hapus / matikan animasi meteor jatuh diagonal miring yang berat */
+/* Animasi meteor jatuh vertikal ke samping */
 .shooting-star {
-    display: none !important;
-    animation: none !important;
+    display: block !important;
 }
 </style>
 
@@ -333,7 +361,7 @@ input[type="password"]::-ms-clear,
     </svg>
 </button>
 
-<div class="sso-container" id="ssoContainer">
+<div class="sso-container {{ ($errors->any() || session('error') || session('success') || session('info') || old('username') || request()->has('form') || request('open')) ? '' : 'sso-minimized' }}" id="ssoContainer">
 
     <!-- LEFT SIDE: Branding & Welcome -->
     <div class="sso-left">
@@ -556,17 +584,18 @@ input[type="password"]::-ms-clear,
     const canvas = document.getElementById('starCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    const ssoContainer = document.getElementById('ssoContainer');
 
-    let W, H, stars = [];
+    let W = 0, H = 0, stars = [];
 
     function resize() {
         const parent = canvas.parentElement;
-        canvas.style.display = 'none';
+        if (!parent || parent.offsetWidth === 0) return;
         W = canvas.width  = parent.offsetWidth;
         H = canvas.height = parent.offsetHeight;
-        canvas.style.display = 'block';
         initStars();
     }
+    window.resizeStarCanvas = resize;
 
     function initStars() {
         stars = [];
@@ -584,16 +613,22 @@ input[type="password"]::-ms-clear,
     }
 
     function draw() {
-        ctx.clearRect(0, 0, W, H);
-        stars.forEach(s => {
-            s.alpha += s.dAlpha;
-            if (s.alpha >= 1)      { s.alpha = 1;   s.dAlpha = -Math.abs(s.dAlpha); }
-            else if (s.alpha <= 0) { s.alpha = 0;   s.dAlpha =  Math.abs(s.dAlpha); }
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = s.color + s.alpha + ')';
-            ctx.fill();
-        });
+        // Hanya render saat panel terbuka agar transisi mulus dan hemat beban komputasi
+        if (!ssoContainer || !ssoContainer.classList.contains('sso-minimized')) {
+            if (W > 0 && H > 0) {
+                ctx.clearRect(0, 0, W, H);
+                for (let i = 0; i < stars.length; i++) {
+                    const s = stars[i];
+                    s.alpha += s.dAlpha;
+                    if (s.alpha >= 1)      { s.alpha = 1;   s.dAlpha = -Math.abs(s.dAlpha); }
+                    else if (s.alpha <= 0) { s.alpha = 0;   s.dAlpha =  Math.abs(s.dAlpha); }
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = s.color + s.alpha + ')';
+                    ctx.fill();
+                }
+            }
+        }
         requestAnimationFrame(draw);
     }
 
@@ -618,13 +653,31 @@ input[type="password"]::-ms-clear,
             minimizeBtn.setAttribute('aria-label', label);
         }
 
-        // Trigger resize event agar canvas background bintang pas dengan ukuran baru
-        setTimeout(function() {
-            window.dispatchEvent(new Event('resize'));
-        }, 550);
+        // Jalankan penyesuaian canvas khusus setelah animasi transisi selesai tanpa membebani browser
+        if (!isMinimized) {
+            setTimeout(function() {
+                if (typeof window.resizeStarCanvas === 'function') {
+                    window.resizeStarCanvas();
+                }
+            }, 390);
+        }
+    }
+
+    // Jika kembali dari halaman lupa password / reset password, langsung tampilkan form login
+    if (document.referrer && (document.referrer.includes('lupa-password') || document.referrer.includes('reset-password'))) {
+        if (ssoContainer && ssoContainer.classList.contains('sso-minimized')) {
+            ssoContainer.classList.remove('sso-minimized');
+            if (typeof window.resizeStarCanvas === 'function') {
+                setTimeout(window.resizeStarCanvas, 50);
+            }
+        }
     }
 
     if (minimizeBtn) {
+        const isMin = ssoContainer && ssoContainer.classList.contains('sso-minimized');
+        minimizeBtn.setAttribute('title', isMin ? 'Buka Form Login' : 'Tutup Form Login');
+        minimizeBtn.setAttribute('aria-label', isMin ? 'Buka Form Login' : 'Tutup Form Login');
+
         minimizeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             toggleForm();
