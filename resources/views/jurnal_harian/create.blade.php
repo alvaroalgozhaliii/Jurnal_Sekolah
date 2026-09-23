@@ -46,26 +46,80 @@
 </div>
 
 {{-- Banner Jam Digital & Status Jam KBM --}}
+<<<<<<< HEAD
 <div class="card mb-24 clock-hover-card" style="background: {{ $bannerColor }}; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 16px 32px -4px rgba(30, 58, 138, 0.35)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px -5px rgba(0,0,0,0.15)';">
     <div class="card-body" style="padding: 22px 26px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
                 <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700;">
                     Waktu Laptop / Perangkat Saat Ini
+=======
+@php
+    $accentBorder = match($slotStatus) {
+        'kbm' => '#16a34a',
+        'istirahat' => '#d97706',
+        'jam_pulang' => '#64748b',
+        'sebelum_kbm' => '#0284c7',
+        'libur' => '#9333ea',
+        default => '#1e3a8a'
+    };
+    $statusBadgeClass = match($slotStatus) {
+        'kbm' => 'pill-kbm',
+        'istirahat' => 'pill-istirahat',
+        'jam_pulang' => 'pill-pulang',
+        'sebelum_kbm' => 'pill-menunggu',
+        'libur' => 'pill-libur',
+        default => 'pill-kbm'
+    };
+@endphp
+
+<div class="card mb-24 kbm-clock-card" style="border-left-color: {{ $accentBorder }};">
+    <div class="card-body" style="padding: 18px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px;">
+            {{-- Sisi Kiri: Jam & Tanggal --}}
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div class="kbm-clock-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                 </div>
-                <div style="font-size: 32px; font-weight: 800; letter-spacing: 0.5px; font-family: monospace; margin-top: 2px;" id="liveClockDisplay">
-                    {{ $now->format('H:i:s') }} WIB
-                </div>
-                <div style="font-size: 13.5px; color: #e2e8f0; margin-top: 2px;">
-                    Hari {{ $currentDayIndo }}, {{ $now->translatedFormat('d F Y') }}
+                <div>
+                    <div class="clock-live-tag">
+                        <span class="clock-live-dot"></span>
+                        Waktu Real-Time (Perangkat)
+                    </div>
+                    <div class="clock-time-display">
+                        <span class="clock-digits" id="liveClockDisplay">{{ $now->format('H:i:s') }}</span>
+                        <span class="clock-tz-badge">WIB</span>
+                    </div>
+                    <div class="clock-date-display">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span id="liveDateDisplay">Hari {{ $currentDayIndo }}, {{ $now->translatedFormat('d F Y') }}</span>
+                    </div>
                 </div>
             </div>
 
+<<<<<<< HEAD
             <div style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); padding: 14px 20px; border-radius: 12px; min-width: 280px;">
                 <div style="font-size: 11.5px; text-transform: uppercase; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px;">
+=======
+            {{-- Sisi Kanan: Status KBM --}}
+            <div class="kbm-status-box">
+                <div class="kbm-status-header">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                     Status Jam KBM Saat Ini
                 </div>
-                <div style="font-size: 17px; font-weight: 700; margin-top: 4px;">
+                <div class="kbm-status-title">
                     @if($slotStatus === 'kbm')
                         Jam Ke-{{ $currentSlot['jam_ke'] }} ({{ $currentSlot['waktu_label'] }})
                     @elseif($slotStatus === 'istirahat')
@@ -80,6 +134,7 @@
                         {{ $currentSlot['keterangan'] ?? 'Di Luar Jam KBM' }}
                     @endif
                 </div>
+<<<<<<< HEAD
                 <div style="font-size: 12.5px; margin-top: 5px; font-weight: 600;">
                     @if($jadwalSelected)
                         <span style="color: #86efac;">Terkoneksi: Kelas {{ $jadwalSelected->kelas->nama_kelas ?? '-' }} — {{ $jadwalSelected->mapel }}</span>
@@ -94,11 +149,35 @@
                     @elseif($slotStatus === 'libur')
                         <span style="color: #a7f3d0;">Tidak Ada Jadwal Mengajar</span>
                     @endif
+=======
+                <div class="kbm-detail-badge">
+                    <span class="kbm-status-pill {{ $statusBadgeClass }}">
+                        <span class="kbm-pill-dot"></span>
+                        <span>
+                            @if($jadwalSelected)
+                                Terkoneksi: Kelas {{ $jadwalSelected->kelas->nama_kelas ?? '-' }} — {{ $jadwalSelected->mapel }}
+                            @elseif($slotStatus === 'kbm')
+                                Tidak ada jadwal mengajar di jam ini
+                            @elseif($slotStatus === 'istirahat')
+                                Sedang Waktu Istirahat — Tidak Ada KBM
+                            @elseif($slotStatus === 'jam_pulang')
+                                Jam Pulang Sekolah, Tidak Ada KBM
+                            @elseif($slotStatus === 'sebelum_kbm')
+                                KBM Dimulai Pukul 07:00 WIB
+                            @elseif($slotStatus === 'libur')
+                                Tidak Ada Jadwal Mengajar
+                            @else
+                                Otomatis Terdeteksi Sistem
+                            @endif
+                        </span>
+                    </span>
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 {{-- JIKA SEDANG JAM MENGAJAR DAN JADWAL DITEMUKAN --}}
 @if($jadwalSelected)
@@ -244,9 +323,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         // Update Banner Display
-        const timeDisplay = document.getElementById('laptop-time-display');
-        if (timeDisplay) {
-            timeDisplay.textContent = `${dayName}, ${dateNum} ${monthName} ${year} — ${hours}:${minutes}:${seconds} WIB/WITA`;
+        const clockEl = document.getElementById('liveClockDisplay');
+        if (clockEl) {
+            clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        const dateEl = document.getElementById('liveDateDisplay');
+        if (dateEl) {
+            dateEl.textContent = `Hari ${dayName}, ${dateNum} ${monthName} ${year}`;
         }
 
         // Auto-set Date Input (YYYY-MM-DD) if empty or on load

@@ -132,35 +132,79 @@
 {{-- Banner Jam Digital & Status Jam KBM --}}
 @php
     $slotStatus = $currentSlot['status'] ?? 'jam_pulang';
-    $bannerGradient = match($slotStatus) {
-        'kbm' => 'linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)',
-        'istirahat' => 'linear-gradient(135deg, #d97706 0%, #78350f 100%)',
-        default => 'linear-gradient(135deg, #334155 0%, #0f172a 100%)',
+    $accentBorder = match($slotStatus) {
+        'kbm' => '#16a34a',
+        'istirahat' => '#d97706',
+        'sebelum_kbm' => '#0284c7',
+        'libur' => '#9333ea',
+        default => '#64748b',
+    };
+    $statusBadgeClass = match($slotStatus) {
+        'kbm' => 'pill-kbm',
+        'istirahat' => 'pill-istirahat',
+        'sebelum_kbm' => 'pill-menunggu',
+        'libur' => 'pill-libur',
+        default => 'pill-pulang',
     };
     $autoJamKe = $currentSlot['jam_ke'] ?? 1;
     $autoWaktuMulai = $currentSlot['waktu_mulai'] ?? '07:00';
 @endphp
 
+<<<<<<< HEAD
 <div class="card mb-24" id="topBannerCard" style="background: {{ $bannerGradient }}; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 16px 32px -4px rgba(30, 58, 138, 0.35)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px -5px rgba(0,0,0,0.15)';">
     <div class="card-body" style="padding: 20px 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
                 <div style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 700;">
                     Waktu Real-Time Laptop / Perangkat
+=======
+<div class="card mb-24 kbm-clock-card" id="topBannerCard" style="border-left-color: {{ $accentBorder }};">
+    <div class="card-body" style="padding: 18px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px;">
+            {{-- Sisi Kiri: Jam & Tanggal --}}
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div class="kbm-clock-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                 </div>
-                <div style="font-size: 32px; font-weight: 800; letter-spacing: 0.5px; font-family: monospace; margin-top: 2px;" id="liveClockDisplay">
-                    {{ $now->format('H:i:s') }} WIB
-                </div>
-                <div style="font-size: 13px; color: #e2e8f0; margin-top: 2px;">
-                    Hari {{ $hariIni }}, {{ $now->locale('id')->isoFormat('D MMMM YYYY') }}
+                <div>
+                    <div class="clock-live-tag">
+                        <span class="clock-live-dot"></span>
+                        Waktu Real-Time (Perangkat)
+                    </div>
+                    <div class="clock-time-display">
+                        <span class="clock-digits" id="liveClockDisplay">{{ $now->format('H:i:s') }}</span>
+                        <span class="clock-tz-badge">WIB</span>
+                    </div>
+                    <div class="clock-date-display">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span>Hari {{ $hariIni }}, {{ $now->locale('id')->isoFormat('D MMMM YYYY') }}</span>
+                    </div>
                 </div>
             </div>
 
+<<<<<<< HEAD
             <div style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); padding: 14px 20px; border-radius: 12px; min-width: 300px;">
                 <div style="font-size: 11px; text-transform: uppercase; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px;">
+=======
+            {{-- Sisi Kanan: Status KBM --}}
+            <div class="kbm-status-box">
+                <div class="kbm-status-header">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                     Jam KBM Otomatis Terkoneksi
                 </div>
-                <div style="font-size: 17px; font-weight: 800; margin-top: 4px; color: #ffffff;" id="liveStatusDisplayBanner">
+                <div class="kbm-status-title" id="liveStatusDisplayBanner">
                     @if($slotStatus === 'kbm')
                         Jam Ke-{{ $currentSlot['jam_ke'] }} ({{ $currentSlot['waktu_label'] }})
                     @elseif($slotStatus === 'istirahat')
@@ -171,8 +215,16 @@
                         Jam Ke-1 (07:00 WIB)
                     @endif
                 </div>
+<<<<<<< HEAD
                 <div style="font-size: 12px; margin-top: 4px; color: #86efac; font-weight: 600;">
                     Tanpa Perlu Memilih Jam Manual
+=======
+                <div class="kbm-detail-badge">
+                    <span id="liveStatusBadge" class="kbm-status-pill {{ $statusBadgeClass }}">
+                        <span class="kbm-pill-dot"></span>
+                        <span>Tanpa Perlu Memilih Jam Manual</span>
+                    </span>
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                 </div>
             </div>
         </div>
@@ -347,7 +399,8 @@ function getSlotInfo(now) {
             label: 'Hari Libur Sekolah',
             jam_ke: 1,
             waktu_mulai: '07:00',
-            gradient: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)'
+            accentColor: '#9333ea',
+            badgeClass: 'pill-libur'
         };
     }
 
@@ -361,7 +414,8 @@ function getSlotInfo(now) {
                     label: `Waktu ${slot.name} (${slot.start} - ${slot.end} WIB)`,
                     jam_ke: slot.jam_ke,
                     waktu_mulai: slot.start,
-                    gradient: 'linear-gradient(135deg, #d97706 0%, #78350f 100%)'
+                    accentColor: '#d97706',
+                    badgeClass: 'pill-istirahat'
                 };
             } else {
                 return {
@@ -369,7 +423,8 @@ function getSlotInfo(now) {
                     label: `Jam Ke-${slot.jam_ke} (${slot.start} - ${slot.end} WIB)`,
                     jam_ke: slot.jam_ke,
                     waktu_mulai: slot.start,
-                    gradient: 'linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)'
+                    accentColor: '#16a34a',
+                    badgeClass: 'pill-kbm'
                 };
             }
         }
@@ -381,7 +436,8 @@ function getSlotInfo(now) {
             label: 'Belum Masuk KBM (Pukul 07:00 WIB)',
             jam_ke: 1,
             waktu_mulai: '07:00',
-            gradient: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)'
+            accentColor: '#0284c7',
+            badgeClass: 'pill-menunggu'
         };
     }
 
@@ -390,7 +446,8 @@ function getSlotInfo(now) {
         label: 'Jam Pulang Sekolah',
         jam_ke: (day === 5 ? 12 : 10),
         waktu_mulai: timeStr,
-        gradient: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)'
+        accentColor: '#64748b',
+        badgeClass: 'pill-pulang'
     };
 }
 
@@ -402,13 +459,18 @@ function updateLiveClock() {
 
     // Update Clock Display
     const clockEl = document.getElementById('liveClockDisplay');
-    if (clockEl) clockEl.textContent = `${h}:${m}:${s} WIB`;
+    if (clockEl) clockEl.textContent = `${h}:${m}:${s}`;
 
     // Solve Slot Info dynamically from browser time
     const slot = getSlotInfo(now);
 
     const bannerStatusEl = document.getElementById('liveStatusDisplayBanner');
     if (bannerStatusEl) bannerStatusEl.textContent = slot.label;
+
+    const bannerBadgeEl = document.getElementById('liveStatusBadge');
+    if (bannerBadgeEl) {
+        bannerBadgeEl.className = 'kbm-status-pill ' + slot.badgeClass;
+    }
 
     const jamCardDisplay = document.getElementById('jamKedatanganDisplay');
     if (jamCardDisplay) {
@@ -421,7 +483,9 @@ function updateLiveClock() {
     }
 
     const topBannerCard = document.getElementById('topBannerCard');
-    if (topBannerCard) topBannerCard.style.background = slot.gradient;
+    if (topBannerCard && slot.accentColor) {
+        topBannerCard.style.borderLeftColor = slot.accentColor;
+    }
 
     // Update Hidden Form Inputs
     const hiddenJamKe = document.getElementById('hiddenJamKe');

@@ -2,6 +2,7 @@
 .kbm-clock-card {
     position: relative;
     overflow: hidden;
+<<<<<<< HEAD
     background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.16);
@@ -25,10 +26,35 @@
     border-radius: 50%;
     pointer-events: none;
     transition: opacity 0.4s ease;
+=======
+    background: var(--bg-card, #ffffff);
+    color: var(--text-primary, #1e293b);
+    border: 1px solid var(--border, #e2e8f0);
+    border-left: 4px solid var(--navy-primary, #1e3a8a);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -2px rgba(15, 23, 42, 0.03);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.25s ease;
+    cursor: default;
+}
+
+/* Subtle ambient mesh background in corner */
+.kbm-clock-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 260px;
+    height: 100%;
+    background: radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 /* Smooth Hover Effect */
 .kbm-clock-card:hover {
+<<<<<<< HEAD
     transform: translateY(-3px);
     box-shadow: 0 18px 38px -6px rgba(30, 58, 138, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.25);
     border-color: rgba(255, 255, 255, 0.28);
@@ -60,21 +86,41 @@
 .kbm-status-box:hover .kbm-status-header svg {
     transform: scale(1.2);
     color: #ffffff;
+=======
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+    border-color: rgba(30, 58, 138, 0.25);
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 /* Left Icon Box */
 .kbm-clock-icon-box {
     width: 48px;
     height: 48px;
+<<<<<<< HEAD
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.2);
+=======
+    background: #eff6ff;
+    color: #1e3a8a;
+    border: 1px solid #dbeafe;
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     border-radius: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+<<<<<<< HEAD
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+=======
+    transition: all 0.25s ease;
+}
+
+.kbm-clock-card:hover .kbm-clock-icon-box {
+    transform: scale(1.05);
+    background: #dbeafe;
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 /* Live pulse dot */
@@ -85,23 +131,40 @@
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+<<<<<<< HEAD
     letter-spacing: 1.1px;
     color: #93c5fd;
+=======
+    letter-spacing: 0.8px;
+    color: var(--text-secondary, #64748b);
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 .clock-live-dot {
     width: 7px;
     height: 7px;
+<<<<<<< HEAD
     background-color: #34d399;
     border-radius: 50%;
     box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+=======
+    background-color: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     animation: livePulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 @keyframes livePulse {
+<<<<<<< HEAD
     0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
     70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+=======
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 /* Clock Digits */
@@ -114,11 +177,16 @@
 
 .clock-digits {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+<<<<<<< HEAD
     font-size: 28px;
+=======
+    font-size: 30px;
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     font-weight: 800;
     letter-spacing: -0.5px;
     font-variant-numeric: tabular-nums;
     line-height: 1.1;
+<<<<<<< HEAD
     color: #ffffff;
 }
 
@@ -131,12 +199,30 @@
     background: rgba(255, 255, 255, 0.16);
     border: 1px solid rgba(255, 255, 255, 0.18);
     color: #ffffff;
+=======
+    color: var(--text-primary, #0f172a);
+}
+
+.clock-tz-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 .clock-date-display {
     font-size: 13px;
     font-weight: 500;
+<<<<<<< HEAD
     color: rgba(255, 255, 255, 0.8);
+=======
+    color: var(--text-secondary, #64748b);
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     margin-top: 4px;
     display: flex;
     align-items: center;
@@ -145,6 +231,7 @@
 
 /* Right Status Box */
 .kbm-status-box {
+<<<<<<< HEAD
     background: rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -155,34 +242,217 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
+=======
+    background: var(--bg-app, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 14px;
+    padding: 12px 18px;
+    min-width: 270px;
+    transition: all 0.25s ease;
+}
+
+.kbm-status-box:hover {
+    background: var(--bg-card, #ffffff);
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.06);
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 .kbm-status-header {
     font-size: 10.5px;
     font-weight: 700;
     text-transform: uppercase;
+<<<<<<< HEAD
     letter-spacing: 1px;
     color: #bfdbfe;
+=======
+    letter-spacing: 0.8px;
+    color: var(--text-secondary, #64748b);
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
 .kbm-status-title {
+<<<<<<< HEAD
     font-size: 16.5px;
     font-weight: 700;
     color: #ffffff;
     margin-top: 4px;
+=======
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary, #0f172a);
+    margin-top: 3px;
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     line-height: 1.3;
 }
 
 .kbm-detail-badge {
+<<<<<<< HEAD
     display: inline-flex;
     align-items: center;
     gap: 6px;
     font-size: 12px;
     font-weight: 600;
     margin-top: 5px;
+=======
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+}
+
+.kbm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.kbm-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+/* Status Pill Variants */
+.pill-kbm {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+.pill-kbm .kbm-pill-dot {
+    background: #16a34a;
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
+}
+
+.pill-istirahat {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+.pill-istirahat .kbm-pill-dot {
+    background: #d97706;
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.25);
+}
+
+.pill-pulang {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+.pill-pulang .kbm-pill-dot {
+    background: #64748b;
+}
+
+.pill-libur {
+    background: #f3e8ff;
+    color: #7e22ce;
+    border: 1px solid #e9d5ff;
+}
+.pill-libur .kbm-pill-dot {
+    background: #9333ea;
+}
+
+.pill-menunggu {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+.pill-menunggu .kbm-pill-dot {
+    background: #0284c7;
+}
+
+/* DARK MODE SUPPORT */
+[data-theme="dark"] .kbm-clock-card {
+    background: var(--bg-card, #152246);
+    color: var(--text-primary, #f8fafc);
+    border-color: var(--border, #2a3d6e);
+    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .kbm-clock-card::before {
+    background: radial-gradient(circle at 100% 0%, rgba(96, 165, 250, 0.08) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .kbm-clock-card:hover {
+    border-color: rgba(96, 165, 250, 0.3);
+    box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .kbm-clock-icon-box {
+    background: rgba(59, 130, 246, 0.15);
+    color: #93c5fd;
+    border-color: rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .kbm-clock-card:hover .kbm-clock-icon-box {
+    background: rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .clock-digits {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .clock-tz-badge {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.35);
+    color: #93c5fd;
+}
+
+[data-theme="dark"] .clock-date-display {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .kbm-status-box {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .kbm-status-box:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .kbm-status-title {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] .pill-kbm {
+    background: rgba(22, 163, 74, 0.2);
+    color: #86efac;
+    border-color: rgba(22, 163, 74, 0.35);
+}
+
+[data-theme="dark"] .pill-istirahat {
+    background: rgba(217, 119, 6, 0.2);
+    color: #fde047;
+    border-color: rgba(217, 119, 6, 0.35);
+}
+
+[data-theme="dark"] .pill-pulang {
+    background: rgba(148, 163, 184, 0.15);
+    color: #cbd5e1;
+    border-color: rgba(148, 163, 184, 0.25);
+}
+
+[data-theme="dark"] .pill-libur {
+    background: rgba(147, 51, 234, 0.2);
+    color: #d8b4fe;
+    border-color: rgba(147, 51, 234, 0.35);
+}
+
+[data-theme="dark"] .pill-menunggu {
+    background: rgba(2, 132, 199, 0.2);
+    color: #7dd3fc;
+    border-color: rgba(2, 132, 199, 0.35);
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 </style>
 
@@ -194,13 +464,22 @@
     $initialTimeStr = $nowServer->format('H:i:s');
 @endphp
 
+<<<<<<< HEAD
 <div class="card mb-24 kbm-clock-card">
     <div class="card-body" style="padding: 20px 26px;">
+=======
+<div class="card mb-24 kbm-clock-card" id="globalKbmClockCard">
+    <div class="card-body" style="padding: 18px 24px;">
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px;">
             {{-- Sisi Kiri: Jam & Tanggal --}}
             <div style="display: flex; align-items: center; gap: 16px;">
                 <div class="kbm-clock-icon-box">
+<<<<<<< HEAD
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; color: #ffffff;">
+=======
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
@@ -208,7 +487,11 @@
                 <div>
                     <div class="clock-live-tag">
                         <span class="clock-live-dot"></span>
+<<<<<<< HEAD
                         Waktu Laptop / Perangkat Saat Ini
+=======
+                        Waktu Real-Time (Perangkat)
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                     </div>
                     <div class="clock-time-display">
                         <span class="clock-digits" id="globalLiveClock">{{ $initialTimeStr }}</span>
@@ -238,7 +521,14 @@
                     Memuat status KBM...
                 </div>
                 <div class="kbm-detail-badge">
+<<<<<<< HEAD
                     <span id="globalKbmDetailText" style="color: #86efac;">Otomatis Terdeteksi System</span>
+=======
+                    <span id="globalKbmBadge" class="kbm-status-pill pill-kbm">
+                        <span class="kbm-pill-dot"></span>
+                        <span id="globalKbmDetailText">Otomatis Terdeteksi Sistem</span>
+                    </span>
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                 </div>
             </div>
         </div>
@@ -274,6 +564,23 @@
     const jamPulangJumatX = kbmConfig.jam_pulang_jumat_x || '15:30';
     const jamPulangJumatXi = kbmConfig.jam_pulang_jumat_xi || '15:00';
 
+<<<<<<< HEAD
+=======
+    const cardEl = document.getElementById('globalKbmClockCard');
+    const clockEl = document.getElementById('globalLiveClock');
+    const dateEl = document.getElementById('globalLiveDate');
+    const slotEl = document.getElementById('globalKbmSlotText');
+    const detailEl = document.getElementById('globalKbmDetailText');
+    const badgeEl = document.getElementById('globalKbmBadge');
+
+    function setStatusState(type, slotTitle, detailText, accentColor) {
+        if (slotEl) slotEl.innerHTML = slotTitle;
+        if (detailEl) detailEl.textContent = detailText;
+        if (badgeEl) badgeEl.className = 'kbm-status-pill pill-' + type;
+        if (cardEl) cardEl.style.borderLeftColor = accentColor;
+    }
+
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     function updateGlobalKbmClock() {
         const now = new Date();
         const dayIdx = now.getDay();
@@ -287,20 +594,27 @@
         const ss = String(now.getSeconds()).padStart(2, '0');
         const timeStr = `${hh}:${mm}`;
 
+<<<<<<< HEAD
         const clockEl = document.getElementById('globalLiveClock');
         const dateEl = document.getElementById('globalLiveDate');
         const slotEl = document.getElementById('globalKbmSlotText');
         const detailEl = document.getElementById('globalKbmDetailText');
 
+=======
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
         if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss}`;
         if (dateEl) dateEl.textContent = `${dayName}, ${dateNum} ${monthName} ${year}`;
 
         if (!slotEl || !detailEl) return;
 
         if (dayIdx === 0 || dayIdx === 6) {
+<<<<<<< HEAD
             slotEl.innerHTML = '🏖️ Hari Libur Sekolah';
             detailEl.textContent = 'Tidak ada kegiatan belajar mengajar (KBM)';
             detailEl.style.color = '#a7f3d0';
+=======
+            setStatusState('libur', '🏖️ Hari Libur Sekolah', 'Tidak ada kegiatan belajar mengajar (KBM)', '#9333ea');
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
             return;
         }
 
@@ -310,20 +624,30 @@
 
         if (isJumat) {
             if (userIsKelasX === false) {
+<<<<<<< HEAD
                 // Khusus Kelas 11 & 12
                 activeSlots = jumatXiSlots;
                 jamPulang = jamPulangJumatXi;
             } else {
                 // Kelas 10 atau Tampilan Umum
+=======
+                activeSlots = jumatXiSlots;
+                jamPulang = jamPulangJumatXi;
+            } else {
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                 activeSlots = jumatXSlots;
                 jamPulang = jamPulangJumatX;
             }
         }
 
         if (timeStr < jamMasukGlobal) {
+<<<<<<< HEAD
             slotEl.innerHTML = 'Belum Masuk Jam KBM';
             detailEl.textContent = `Kegiatan KBM Dimulai Pukul ${jamMasukGlobal} WIB`;
             detailEl.style.color = '#cbd5e1';
+=======
+            setStatusState('menunggu', 'Belum Masuk Jam KBM', `KBM Dimulai Pukul ${jamMasukGlobal} WIB`, '#0284c7');
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
             return;
         }
 
@@ -332,6 +656,7 @@
             if (timeStr >= s.mulai && timeStr <= s.selesai) {
                 found = true;
                 if (s.istirahat) {
+<<<<<<< HEAD
                     slotEl.innerHTML = `☕ Sedang Waktu ${s.ket}`;
                     detailEl.textContent = isJumat && s.istirahat === 8 ? 'Jeda Solat Jumat & Istirahat' : 'Jeda Kegiatan Belajar Mengajar';
                     detailEl.style.color = '#fed7aa';
@@ -344,6 +669,16 @@
                         slotEl.innerHTML = `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai})`;
                         detailEl.textContent = s.ket ? `KBM: ${s.ket}` : 'Jam Kegiatan Belajar Mengajar Aktif';
                         detailEl.style.color = '#86efac';
+=======
+                    const istKet = isJumat && s.istirahat === 8 ? 'Jeda Solat Jumat & Istirahat' : 'Jeda Kegiatan Belajar Mengajar';
+                    setStatusState('istirahat', `☕ Sedang Waktu ${s.ket}`, istKet, '#d97706');
+                } else {
+                    if (isJumat && s.jam === 13) {
+                        setStatusState('kbm', `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai}) • Khusus Kelas X`, 'Kelas XI & XII telah pulang pukul 15:00 WIB', '#16a34a');
+                    } else {
+                        const kbmKet = s.ket ? `KBM: ${s.ket}` : 'Jam Kegiatan Belajar Mengajar Aktif';
+                        setStatusState('kbm', `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai})`, kbmKet, '#16a34a');
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
                     }
                 }
                 break;
@@ -352,6 +687,7 @@
 
         if (!found) {
             if (timeStr >= jamPulang) {
+<<<<<<< HEAD
                 slotEl.innerHTML = '🏠 Jam Pulang Sekolah';
                 if (isJumat && userIsKelasX === null) {
                     detailEl.textContent = `KBM Selesai (Kelas 11/12: ${jamPulangJumatXi} WIB • Kelas 10: ${jamPulangJumatX} WIB)`;
@@ -363,6 +699,15 @@
                 slotEl.innerHTML = 'Di Luar Jam Sesi KBM';
                 detailEl.textContent = 'Tidak Ada Sesi KBM Berjalan';
                 detailEl.style.color = '#e2e8f0';
+=======
+                let pulangKet = `KBM Hari ini telah selesai (Pukul ${jamPulang} WIB)`;
+                if (isJumat && userIsKelasX === null) {
+                    pulangKet = `KBM Selesai (Kelas 11/12: ${jamPulangJumatXi} WIB • Kelas 10: ${jamPulangJumatX} WIB)`;
+                }
+                setStatusState('pulang', '🏠 Jam Pulang Sekolah', pulangKet, '#64748b');
+            } else {
+                setStatusState('pulang', 'Di Luar Jam Sesi KBM', 'Tidak Ada Sesi KBM Berjalan', '#94a3b8');
+>>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
             }
         }
     }
