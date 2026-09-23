@@ -76,7 +76,6 @@
     .space-nebula-3 {
         transform-origin: center center;
     }
-<<<<<<< HEAD
 
     /* Pastikan sudut SSO container dan panel selalu melengkung / rounded sama persis seperti halaman login */
     .sso-container {
@@ -89,8 +88,6 @@
     .sso-right {
         border-radius: 0 24px 24px 0 !important;
     }
-=======
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     </style>
 </head>
 <body>
@@ -146,7 +143,6 @@
             <path d="M0,192L60,181.3C120,171,240,149,360,160C480,171,600,213,720,213.3C840,213,960,171,1080,154.7C1200,139,1320,149,1380,154.7L1440,160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
         </svg>
 
-<<<<<<< HEAD
         <!-- Particles & Shooting Stars Container -->
         <div class="shooting-stars-container" aria-hidden="true">
             <div class="shooting-star star-1"></div>
@@ -154,10 +150,6 @@
             <div class="shooting-star star-3"></div>
             <div class="shooting-star star-4"></div>
             <div class="shooting-star star-5"></div>
-=======
-        <!-- Particles Container (Shooting star meteor dihapus agar ringan) -->
-        <div class="shooting-stars-container" aria-hidden="true">
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
             <div class="glow-particle p-1"></div>
             <div class="glow-particle p-2"></div>
             <div class="glow-particle p-3"></div>
@@ -280,7 +272,6 @@ function togglePasswordVisibility(inputId, btn) {
         }
     }
 
-<<<<<<< HEAD
     // ===== METEOR VERTIKAL KE SAMPING (DIAGONAL FALLING SHOOTING STARS) =====
     var meteors = [];
     var lastMeteorTime = 0;
@@ -362,8 +353,6 @@ function togglePasswordVisibility(inputId, btn) {
         }
     }
 
-=======
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     function draw() {
         ctx.clearRect(0, 0, W, H);
         for (var i = 0; i < stars.length; i++) {
@@ -376,10 +365,7 @@ function togglePasswordVisibility(inputId, btn) {
             ctx.fillStyle = 'rgba(' + s.c + ',' + s.a + ')';
             ctx.fill();
         }
-<<<<<<< HEAD
         updateAndDrawMeteors();
-=======
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
         requestAnimationFrame(draw);
     }
 

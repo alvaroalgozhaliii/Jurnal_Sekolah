@@ -324,6 +324,27 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const monthsIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    function updateDashboardClock() {
+        const now = new Date();
+        const dayName = daysIndo[now.getDay()];
+        const dateNum = String(now.getDate()).padStart(2, '0');
+        const monthName = monthsIndo[now.getMonth()];
+        const year = now.getFullYear();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        const clockEl = document.getElementById('dashboard-laptop-clock');
+        if (clockEl) {
+            clockEl.textContent = `${dayName}, ${dateNum} ${monthName} ${year} (${hours}:${minutes}:${seconds})`;
+        }
+    }
+    updateDashboardClock();
+    setInterval(updateDashboardClock, 1000);
+
     const ctx = document.getElementById('chartAktivitasMengajar').getContext('2d');
     new Chart(ctx, {
         type: 'bar',

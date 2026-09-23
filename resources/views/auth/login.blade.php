@@ -50,7 +50,6 @@ input[type="password"]::-ms-clear,
     z-index: 0;
 }
 
-<<<<<<< HEAD
 /* ===== FITUR TRANSISI HALUS & RINGAN SSO (GPU ACCELERATED, ANTI-LAG) ===== */
 .sso-container {
     transition: width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
@@ -61,30 +60,19 @@ input[type="password"]::-ms-clear,
     will-change: width, height, max-width;
     transform: translateZ(0);
     backface-visibility: hidden;
-=======
-/* ===== FITUR MINIMIZE FORM LOGIN ===== */
-.sso-container {
-    transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-                min-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                width 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 /* Clip konten agar tetap ikut rounded corner setelah overflow:visible di container */
 .sso-left {
     border-radius: 24px 0 0 24px;
     overflow: hidden;
-<<<<<<< HEAD
     transform: translateZ(0);
     transition: padding 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 border-radius 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-=======
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 .sso-right {
     border-radius: 0 24px 24px 0;
     overflow: visible;
-<<<<<<< HEAD
     transform: translateZ(0);
     transition: flex 0.38s cubic-bezier(0.16, 1, 0.3, 1),
                 max-width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
@@ -92,8 +80,6 @@ input[type="password"]::-ms-clear,
                 padding 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.25s ease 0.08s !important;
     will-change: flex, max-width, opacity;
-=======
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 /* Tombol Minimize di Pojok Kanan Atas Kotak */
@@ -191,7 +177,6 @@ input[type="password"]::-ms-clear,
     transform: translateY(0);
 }
 
-<<<<<<< HEAD
 /* Animasi Wave halus */
 .sso-wave-svg {
     transition: opacity 0.3s ease;
@@ -218,40 +203,6 @@ input[type="password"]::-ms-clear,
     align-items: center !important;
     justify-content: center !important;
     overflow: hidden !important;
-=======
-/* Transisi Halus pada Panel Kiri & Kanan */
-.sso-left {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sso-brand, 
-.sso-welcome-box, 
-.sso-welcome-title, 
-.sso-welcome-desc, 
-.sso-left-footer {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sso-right {
-    transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    will-change: flex, max-width, opacity, transform;
-}
-
-/* KETIKA MINIMIZE AKTIF */
-.sso-container.sso-minimized {
-    max-width: 360px !important;
-    min-height: auto !important;
-    width: 100% !important;
-    margin: auto !important;
-    background-color: #0b1329 !important;
-    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
-    border-radius: 24px !important;
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 [data-theme="light"] .sso-container.sso-minimized {
@@ -259,29 +210,20 @@ input[type="password"]::-ms-clear,
     box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
 
-<<<<<<< HEAD
 /* Sembunyikan panel kanan saat minimized secara halus tanpa display:none agar tidak ngelag */
-=======
-/* Sembunyikan dan slide keluar panel kanan */
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 .sso-container.sso-minimized .sso-right {
     flex: 0 0 0px !important;
     max-width: 0 !important;
     width: 0 !important;
-<<<<<<< HEAD
     height: 0 !important;
     max-height: 0 !important;
     min-width: 0 !important;
     min-height: 0 !important;
-=======
-    min-width: 0 !important;
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
     padding: 0 !important;
     margin: 0 !important;
     opacity: 0 !important;
     pointer-events: none !important;
     overflow: hidden !important;
-<<<<<<< HEAD
     visibility: hidden !important;
     transition: flex 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -305,23 +247,6 @@ input[type="password"]::-ms-clear,
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
-=======
-    transform: translateX(50px);
-    visibility: hidden;
-}
-
-/* Panel kiri saat minimized — compact, square, centered & background sama dengan sebelum minimize */
-.sso-container.sso-minimized .sso-left {
-    flex: 1 1 100% !important;
-    width: 100% !important;
-    align-items: center !important;
-    text-align: center !important;
-    padding: 26px 28px 22px !important;
-    justify-content: center !important;
-    gap: 14px !important;
-    background-color: #0b1329 !important;
-    border-radius: 24px !important;
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 [data-theme="light"] .sso-container.sso-minimized .sso-left {
@@ -331,11 +256,8 @@ input[type="password"]::-ms-clear,
 .sso-container.sso-minimized .sso-brand {
     justify-content: center !important;
     text-align: center !important;
-<<<<<<< HEAD
     margin-bottom: 0 !important;
     gap: 12px !important;
-=======
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 .sso-container.sso-minimized .sso-welcome-box {
@@ -346,7 +268,6 @@ input[type="password"]::-ms-clear,
     align-items: center !important;
     justify-content: center !important;
     gap: 8px !important;
-<<<<<<< HEAD
     padding: 0 !important;
 }
 
@@ -355,19 +276,11 @@ input[type="password"]::-ms-clear,
     font-weight: 800 !important;
     margin-bottom: 2px !important;
     color: #3b82f6 !important;
-=======
-}
-
-.sso-container.sso-minimized .sso-welcome-title {
-    font-size: 21px !important;
-    margin-bottom: 4px !important;
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 .sso-container.sso-minimized .sso-welcome-desc {
     margin: 0 auto !important;
     text-align: center !important;
-<<<<<<< HEAD
     max-width: 300px !important;
     font-size: 13px !important;
     line-height: 1.5 !important;
@@ -376,12 +289,6 @@ input[type="password"]::-ms-clear,
 
 .sso-container.sso-minimized .sso-restore-action-box {
     margin-top: 10px !important;
-=======
-    max-width: 280px !important;
-    font-size: 12.5px !important;
-    line-height: 1.5 !important;
-    opacity: 0.75 !important;
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 
 .sso-container.sso-minimized .sso-left-footer {
@@ -430,16 +337,9 @@ input[type="password"]::-ms-clear,
     right: 4% !important;
 }
 
-<<<<<<< HEAD
 /* Animasi meteor jatuh vertikal ke samping */
 .shooting-star {
     display: block !important;
-=======
-/* Hapus / matikan animasi meteor jatuh diagonal miring yang berat */
-.shooting-star {
-    display: none !important;
-    animation: none !important;
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 }
 </style>
 
@@ -461,11 +361,7 @@ input[type="password"]::-ms-clear,
     </svg>
 </button>
 
-<<<<<<< HEAD
 <div class="sso-container {{ ($errors->any() || session('error') || session('success') || session('info') || old('username') || request()->has('form') || request('open')) ? '' : 'sso-minimized' }}" id="ssoContainer">
-=======
-<div class="sso-container" id="ssoContainer">
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 
     <!-- LEFT SIDE: Branding & Welcome -->
     <div class="sso-left">
@@ -688,7 +584,6 @@ input[type="password"]::-ms-clear,
     const canvas = document.getElementById('starCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-<<<<<<< HEAD
     const ssoContainer = document.getElementById('ssoContainer');
 
     let W = 0, H = 0, stars = [];
@@ -701,19 +596,6 @@ input[type="password"]::-ms-clear,
         initStars();
     }
     window.resizeStarCanvas = resize;
-=======
-
-    let W, H, stars = [];
-
-    function resize() {
-        const parent = canvas.parentElement;
-        canvas.style.display = 'none';
-        W = canvas.width  = parent.offsetWidth;
-        H = canvas.height = parent.offsetHeight;
-        canvas.style.display = 'block';
-        initStars();
-    }
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
 
     function initStars() {
         stars = [];
@@ -731,7 +613,6 @@ input[type="password"]::-ms-clear,
     }
 
     function draw() {
-<<<<<<< HEAD
         // Hanya render saat panel terbuka agar transisi mulus dan hemat beban komputasi
         if (!ssoContainer || !ssoContainer.classList.contains('sso-minimized')) {
             if (W > 0 && H > 0) {
@@ -748,18 +629,6 @@ input[type="password"]::-ms-clear,
                 }
             }
         }
-=======
-        ctx.clearRect(0, 0, W, H);
-        stars.forEach(s => {
-            s.alpha += s.dAlpha;
-            if (s.alpha >= 1)      { s.alpha = 1;   s.dAlpha = -Math.abs(s.dAlpha); }
-            else if (s.alpha <= 0) { s.alpha = 0;   s.dAlpha =  Math.abs(s.dAlpha); }
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = s.color + s.alpha + ')';
-            ctx.fill();
-        });
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
         requestAnimationFrame(draw);
     }
 
@@ -784,7 +653,6 @@ input[type="password"]::-ms-clear,
             minimizeBtn.setAttribute('aria-label', label);
         }
 
-<<<<<<< HEAD
         // Jalankan penyesuaian canvas khusus setelah animasi transisi selesai tanpa membebani browser
         if (!isMinimized) {
             setTimeout(function() {
@@ -810,15 +678,6 @@ input[type="password"]::-ms-clear,
         minimizeBtn.setAttribute('title', isMin ? 'Buka Form Login' : 'Tutup Form Login');
         minimizeBtn.setAttribute('aria-label', isMin ? 'Buka Form Login' : 'Tutup Form Login');
 
-=======
-        // Trigger resize event agar canvas background bintang pas dengan ukuran baru
-        setTimeout(function() {
-            window.dispatchEvent(new Event('resize'));
-        }, 550);
-    }
-
-    if (minimizeBtn) {
->>>>>>> 4eec900a00a6bb9e9593ed542209b9085081f0de
         minimizeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             toggleForm();
