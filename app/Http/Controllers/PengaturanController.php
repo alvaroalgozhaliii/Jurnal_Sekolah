@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pengaturan;
 use App\Models\TahunPelajaran;
+use App\Models\Notifikasi;
+use Carbon\Carbon;
 
 use App\Services\KbmService;
 
@@ -21,6 +23,8 @@ class PengaturanController extends Controller
      */
     public function jamSekolahIndex()
     {
+        $todayDate = Carbon::today(config('app.timezone', 'Asia/Jakarta'))->toDateString();
+
         $jamMasuk = KbmService::getJamMasuk();
         $jamPulang = KbmService::getJamPulang('Senin');
         $jamPulangJumatX = KbmService::getJamPulangJumatX();
@@ -30,6 +34,34 @@ class PengaturanController extends Controller
         $toleransiTerlambat = KbmService::getToleransiTerlambat();
         $batasWaktuJurnal = KbmService::getBatasWaktuJurnal();
         $toleransiKelasKosong = KbmService::getToleransiKelasKosong();
+
+        // Data Aturan Kepulangan Khusus
+        $seninAdaUpacara = KbmService::isSeninAdaUpacara($todayDate);
+        $jumatAdaPembiasaan = KbmService::isJumatAdaPembiasaan($todayDate);
+        $acaraMendadak = KbmService::getAcaraMendadakInfo($todayDate);
+
+        $acaraMendadakConfig = [
+            'aktif' => Pengaturan::getVal('acara_mendadak_aktif', '0') == '1',
+            'tanggal' => Pengaturan::getVal('acara_mendadak_tanggal', $todayDate),
+            'jam_pulang' => Pengaturan::getVal('acara_mendadak_jam_pulang', '11:30'),
+            'alasan' => Pengaturan::getVal('acara_mendadak_alasan', ''),
+            'target' => Pengaturan::getVal('acara_mendadak_target', 'semua'),
+        ];
+
+        // Perbandingan Jam Pulang Normal vs Efektif
+        $jamPulangSeninNormal = KbmService::getJamPulangNormal('Senin');
+        $jamPulangSeninEfektif = KbmService::getJamPulang('Senin', null, $todayDate, false);
+
+        $jamPulangJumatXNormal = KbmService::getJamPulangNormal('Jumat', 'X');
+        $jamPulangJumatXEfektif = KbmService::getJamPulangJumatX($todayDate, false);
+
+        $jamPulangJumatXiNormal = KbmService::getJamPulangNormal('Jumat', 'XI');
+        $jamPulangJumatXiEfektif = KbmService::getJamPulangJumatXi($todayDate, false);
+
+        // Hitung jam pulang jika tanpa upacara/pembiasaan (blade tidak bisa resolve namespace class langsung)
+        $jamPulangSeninTanpaUpacara = KbmService::kurangiWaktuMenit($jamPulangSeninNormal, $durasiPelajaran);
+        $jamPulangJumatXTanpaPembiasaan = KbmService::kurangiWaktuMenit($jamPulangJumatXNormal, $durasiPelajaranJumat);
+        $jamPulangJumatXiTanpaPembiasaan = KbmService::kurangiWaktuMenit($jamPulangJumatXiNormal, $durasiPelajaranJumat);
 
         $seninKamisSlots = KbmService::getSlots('Senin');
         $seninKamisIstirahat = KbmService::getIstirahat('Senin');
@@ -56,6 +88,19 @@ class PengaturanController extends Controller
             'toleransiTerlambat',
             'batasWaktuJurnal',
             'toleransiKelasKosong',
+            'seninAdaUpacara',
+            'jumatAdaPembiasaan',
+            'acaraMendadak',
+            'acaraMendadakConfig',
+            'jamPulangSeninNormal',
+            'jamPulangSeninEfektif',
+            'jamPulangJumatXNormal',
+            'jamPulangJumatXEfektif',
+            'jamPulangJumatXiNormal',
+            'jamPulangJumatXiEfektif',
+            'jamPulangSeninTanpaUpacara',
+            'jamPulangJumatXTanpaPembiasaan',
+            'jamPulangJumatXiTanpaPembiasaan',
             'seninKamisSlots',
             'seninKamisIstirahat',
             'jumatSlotsX',
@@ -155,6 +200,14 @@ class PengaturanController extends Controller
             Pengaturan::setVal('kbm_istirahat_jumat', json_encode($formattedIstJumat), 'admin');
         }
 
+        // Simpan Aturan Kepulangan Senin & Jumat
+        if ($request->has('senin_ada_upacara')) {
+            Pengaturan::setVal('senin_ada_upacara', $request->input('senin_ada_upacara', '1'), 'admin');
+        }
+        if ($request->has('jumat_ada_pembiasaan')) {
+            Pengaturan::setVal('jumat_ada_pembiasaan', $request->input('jumat_ada_pembiasaan', '1'), 'admin');
+        }
+
         return redirect()->route('admin.jam-sekolah.index')
             ->with('success', 'Pengaturan Jam Sekolah berhasil disimpan dan langsung terhubung ke seluruh role.');
     }
@@ -175,6 +228,13 @@ class PengaturanController extends Controller
         Pengaturan::setVal('batas_waktu_jurnal_menit', 60, 'admin');
         Pengaturan::setVal('toleransi_kelas_kosong_menit', 15, 'piket');
 
+        // Reset Aturan Kepulangan Khusus & Acara Mendadak
+        Pengaturan::setVal('senin_ada_upacara', '1', 'admin');
+        Pengaturan::setVal('jumat_ada_pembiasaan', '1', 'admin');
+        Pengaturan::setVal('acara_mendadak_aktif', '0', 'admin');
+        Pengaturan::where('kunci', 'senin_override_tanpa_upacara_tanggal')->delete();
+        Pengaturan::where('kunci', 'jumat_override_tanpa_pembiasaan_tanggal')->delete();
+
         // Hapus custom slot agar fallback ke default SMKN 1 Boyolangu
         Pengaturan::where('kunci', 'kbm_slots_senin_kamis')->delete();
         Pengaturan::where('kunci', 'kbm_slots_jumat')->delete();
@@ -182,7 +242,90 @@ class PengaturanController extends Controller
         Pengaturan::where('kunci', 'kbm_istirahat_jumat')->delete();
 
         return redirect()->route('admin.jam-sekolah.index')
-            ->with('success', 'Jadwal jam sekolah berhasil direset ke standar KBM.');
+            ->with('success', 'Jadwal jam sekolah dan aturan kepulangan berhasil direset ke standar KBM.');
+    }
+
+    /**
+     * Simpan / Perbarui Pengaturan Acara Mendadak (Pulang Cepat)
+     */
+    public function updateAcaraMendadak(Request $request)
+    {
+        $request->validate([
+            'aktif' => 'required|in:0,1',
+            'tanggal' => 'required_if:aktif,1|date',
+            'jam_pulang' => 'required_if:aktif,1|string',
+            'alasan' => 'required_if:aktif,1|string|max:255',
+            'target' => 'required_if:aktif,1|in:semua,x,xi,xii',
+        ]);
+
+        $aktif = $request->input('aktif');
+        Pengaturan::setVal('acara_mendadak_aktif', $aktif, 'admin');
+
+        if ($aktif == '1') {
+            $tanggal = $request->input('tanggal');
+            $jamPulang = $request->input('jam_pulang');
+            $alasan = $request->input('alasan');
+            $target = $request->input('target', 'semua');
+
+            Pengaturan::setVal('acara_mendadak_tanggal', $tanggal, 'admin');
+            Pengaturan::setVal('acara_mendadak_jam_pulang', $jamPulang, 'admin');
+            Pengaturan::setVal('acara_mendadak_alasan', $alasan, 'admin');
+            Pengaturan::setVal('acara_mendadak_target', $target, 'admin');
+
+            // Kirim notifikasi siaran jika opsi dicentang
+            if ($request->boolean('kirim_notifikasi')) {
+                $targetLabel = match($target) {
+                    'x' => 'Khusus Kelas X (10)',
+                    'xi' => 'Khusus Kelas XI (11)',
+                    'xii' => 'Khusus Kelas XII (12)',
+                    default => 'Seluruh Siswa (Kelas X, XI, & XII)'
+                };
+
+                $roles = ['guru', 'wali_kelas', 'siswa', 'ortu', 'piket', 'satpam', 'kepala'];
+                $judul = '⚠️ Pengumuman Kepulangan Lebih Cepat';
+                $pesan = "Pemberitahuan Resmi Sekolah: Pada tanggal {$tanggal}, siswa ({$targetLabel}) dipulangkan lebih awal pukul {$jamPulang} WIB sehubungan dengan: {$alasan}.";
+
+                foreach ($roles as $r) {
+                    Notifikasi::kirimKeRole($r, $judul, $pesan, route('notifikasi.index'), 'warning');
+                }
+            }
+
+            return redirect()->route('admin.jam-sekolah.index')
+                ->with('success', "Mode Acara Mendadak berhasil diaktifkan! Siswa dipulangkan pukul {$jamPulang} WIB.");
+        } else {
+            return redirect()->route('admin.jam-sekolah.index')
+                ->with('success', 'Mode Acara Mendadak berhasil dinonaktifkan. Jadwal kepulangan kembali normal.');
+        }
+    }
+
+    /**
+     * Quick Toggle Upacara Senin
+     */
+    public function toggleUpacaraSenin(Request $request)
+    {
+        $status = $request->input('status', '1');
+        Pengaturan::setVal('senin_ada_upacara', $status, 'admin');
+
+        $pesan = ($status === '1')
+            ? 'Status Upacara Senin: ADA UPACARA (Pulang normal pukul 15:00 WIB).'
+            : 'Status Upacara Senin: TIDAK ADA UPACARA (Pulang maju 1 JP menjadi pukul 14:20 WIB).';
+
+        return redirect()->route('admin.jam-sekolah.index')->with('success', $pesan);
+    }
+
+    /**
+     * Quick Toggle Pembiasaan Jumat
+     */
+    public function togglePembiasaanJumat(Request $request)
+    {
+        $status = $request->input('status', '1');
+        Pengaturan::setVal('jumat_ada_pembiasaan', $status, 'admin');
+
+        $pesan = ($status === '1')
+            ? 'Status Pembiasaan Jumat: ADA PEMBIASAAN (Pulang normal Kelas X: 15:30 WIB, Kelas XI/XII: 15:00 WIB).'
+            : 'Status Pembiasaan Jumat: TIDAK ADA PEMBIASAAN (Pulang maju 1 JP -> Kelas X: 15:00 WIB, Kelas XI/XII: 14:30 WIB).';
+
+        return redirect()->route('admin.jam-sekolah.index')->with('success', $pesan);
     }
 
     public function updateAdminSettings(Request $request)

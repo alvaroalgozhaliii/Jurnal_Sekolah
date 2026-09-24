@@ -161,6 +161,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/jam-sekolah', [PengaturanController::class, 'jamSekolahIndex'])->name('admin.jam-sekolah.index');
     Route::post('/jam-sekolah', [PengaturanController::class, 'updateJamSekolah'])->name('admin.jam-sekolah.update');
     Route::post('/jam-sekolah/reset', [PengaturanController::class, 'resetJamSekolah'])->name('admin.jam-sekolah.reset');
+    Route::post('/jam-sekolah/acara-mendadak', [PengaturanController::class, 'updateAcaraMendadak'])->name('admin.jam-sekolah.acara-mendadak');
+    Route::post('/jam-sekolah/toggle-upacara', [PengaturanController::class, 'toggleUpacaraSenin'])->name('admin.jam-sekolah.toggle-upacara');
+    Route::post('/jam-sekolah/toggle-pembiasaan', [PengaturanController::class, 'togglePembiasaanJumat'])->name('admin.jam-sekolah.toggle-pembiasaan');
 
     // Pengaturan Admin
     Route::post('/pengaturan', [PengaturanController::class, 'updateAdminSettings'])->name('admin.pengaturan.update');

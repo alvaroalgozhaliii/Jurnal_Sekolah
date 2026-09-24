@@ -321,6 +321,24 @@
 @endphp
 
 <div class="card mb-24 kbm-clock-card" id="globalKbmClockCard">
+    {{-- Callout Strip jika ada aturan kepulangan khusus hari ini --}}
+    @php
+        $kbmConfigJs = \App\Services\KbmService::getSlotsForJs();
+    @endphp
+    @if(!empty($kbmConfigJs['info_khusus_hari_ini']))
+        @php $infoKbm = $kbmConfigJs['info_khusus_hari_ini']; @endphp
+        <div style="background: {{ $infoKbm['tipe'] === 'acara_mendadak' ? 'rgba(239, 68, 68, 0.12)' : 'rgba(245, 158, 11, 0.12)' }}; border-bottom: 1px solid {{ $infoKbm['tipe'] === 'acara_mendadak' ? 'rgba(239, 68, 68, 0.25)' : 'rgba(245, 158, 11, 0.25)' }}; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 13px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: {{ $infoKbm['tipe'] === 'acara_mendadak' ? '#b91c1c' : '#b45309' }};">
+                <span style="font-size: 16px;">{{ $infoKbm['tipe'] === 'acara_mendadak' ? '⚡' : '📢' }}</span>
+                <strong>{{ $infoKbm['judul'] }}:</strong>
+                <span>{{ $infoKbm['pesan'] }}</span>
+            </div>
+            <span class="badge" style="background: {{ $infoKbm['tipe'] === 'acara_mendadak' ? '#ef4444' : '#f59e0b' }}; color: #ffffff; font-size: 11px; font-weight: 700; padding: 3px 9px;">
+                Waktu Kepulangan Disesuaikan
+            </span>
+        </div>
+    @endif
+
     <div class="card-body" style="padding: 18px 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px;">
             {{-- Sisi Kiri: Jam & Tanggal --}}
@@ -454,6 +472,27 @@
             }
         }
 
+        // Cek apakah ada aturan kepulangan khusus (Acara Mendadak, Tanpa Upacara, Tanpa Pembiasaan)
+        const infoKhusus = kbmConfig.info_khusus_hari_ini;
+        if (infoKhusus) {
+            if (infoKhusus.tipe === 'acara_mendadak') {
+                let matchTarget = true;
+                if (infoKhusus.target === 'x' && userIsKelasX === false) matchTarget = false;
+                if ((infoKhusus.target === 'xi' || infoKhusus.target === 'xii') && userIsKelasX === true) matchTarget = false;
+                if (matchTarget && infoKhusus.jam_pulang) {
+                    jamPulang = infoKhusus.jam_pulang;
+                }
+            } else if (infoKhusus.tipe === 'tanpa_upacara' && dayIdx === 1) {
+                if (infoKhusus.jam_pulang) jamPulang = infoKhusus.jam_pulang;
+            } else if (infoKhusus.tipe === 'tanpa_pembiasaan' && isJumat) {
+                if (userIsKelasX === false && infoKhusus.jam_pulang_xi) {
+                    jamPulang = infoKhusus.jam_pulang_xi;
+                } else if (infoKhusus.jam_pulang_x) {
+                    jamPulang = infoKhusus.jam_pulang_x;
+                }
+            }
+        }
+
         if (timeStr < jamMasukGlobal) {
             setStatusState('menunggu', 'Belum Masuk Jam KBM', `KBM Dimulai Pukul ${jamMasukGlobal} WIB`, '#0284c7');
             return;
@@ -470,7 +509,12 @@
                     if (isJumat && s.jam === 13) {
                         setStatusState('kbm', `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai}) • Khusus Kelas X`, 'Kelas XI & XII telah pulang pukul 15:00 WIB', '#16a34a');
                     } else {
-                        const kbmKet = s.ket ? `KBM: ${s.ket}` : 'Jam Kegiatan Belajar Mengajar Aktif';
+                        let kbmKet = s.ket ? `KBM: ${s.ket}` : 'Jam Kegiatan Belajar Mengajar Aktif';
+                        if (s.jam === 1 && dayIdx === 1 && infoKhusus && infoKhusus.tipe === 'tanpa_upacara') {
+                            kbmKet = 'KBM Jam Ke-1 (Upacara Ditiadakan)';
+                        } else if (s.jam === 1 && isJumat && infoKhusus && infoKhusus.tipe === 'tanpa_pembiasaan') {
+                            kbmKet = 'KBM Jam Ke-1 (Pembiasaan Ditiadakan)';
+                        }
                         setStatusState('kbm', `Jam Ke-${s.jam} (${s.mulai} - ${s.selesai})`, kbmKet, '#16a34a');
                     }
                 }
@@ -481,7 +525,13 @@
         if (!found) {
             if (timeStr >= jamPulang) {
                 let pulangKet = `KBM Hari ini telah selesai (Pukul ${jamPulang} WIB)`;
-                if (isJumat && userIsKelasX === null) {
+                if (infoKhusus && infoKhusus.tipe === 'acara_mendadak') {
+                    pulangKet = `Dipulangkan Lebih Cepat Pukul ${jamPulang} WIB (${infoKhusus.pesan})`;
+                } else if (infoKhusus && infoKhusus.tipe === 'tanpa_upacara') {
+                    pulangKet = `Senin Tanpa Upacara: KBM Selesai Pukul ${jamPulang} WIB`;
+                } else if (infoKhusus && infoKhusus.tipe === 'tanpa_pembiasaan') {
+                    pulangKet = `Jumat Tanpa Pembiasaan: KBM Selesai Pukul ${jamPulang} WIB`;
+                } else if (isJumat && userIsKelasX === null) {
                     pulangKet = `KBM Selesai (Kelas 11/12: ${jamPulangJumatXi} WIB • Kelas 10: ${jamPulangJumatX} WIB)`;
                 }
                 setStatusState('pulang', '🏠 Jam Pulang Sekolah', pulangKet, '#64748b');
