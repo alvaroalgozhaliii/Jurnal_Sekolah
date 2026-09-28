@@ -39,6 +39,7 @@ use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\Admin\ResetPasswordAdminController;
 use App\Http\Controllers\AksesController;
 use App\Http\Controllers\JadwalPiketController;
+use App\Http\Controllers\DeviceRequestController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -71,6 +72,10 @@ Route::post('/lupa-password', [LupaPasswordController::class, 'submitRequest'])-
 Route::get('/lupa-password/check-status', [LupaPasswordController::class, 'checkStatusApi'])->name('lupa-password.check-status');
 Route::get('/reset-password/{token}', [LupaPasswordController::class, 'showResetForm'])->name('reset-password.form');
 Route::post('/reset-password/{token}', [LupaPasswordController::class, 'processReset'])->name('reset-password.process');
+
+// 1 Device = 1 Akun (Device Binding) Pending Routes
+Route::get('/device-pending', fn () => view('device.pending'))->name('device.pending');
+Route::post('/device-pending/keterangan', [DeviceRequestController::class, 'simpanKeterangan'])->name('device.keterangan');
 
 
 // ======================================================
@@ -179,6 +184,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/reset-password-requests', [ResetPasswordAdminController::class, 'index'])->name('admin.reset-password.index');
     Route::post('/reset-password-requests/{id}/approve', [ResetPasswordAdminController::class, 'approve'])->name('admin.reset-password.approve');
     Route::post('/reset-password-requests/{id}/reject', [ResetPasswordAdminController::class, 'reject'])->name('admin.reset-password.reject');
+
+    // Manajemen Perangkat Pengguna (1 Device = 1 Akun)
+    Route::get('/device-requests', [DeviceRequestController::class, 'index'])->name('admin.device-requests');
+    Route::post('/device-requests/{id}/approve', [DeviceRequestController::class, 'approve'])->name('admin.device-requests.approve');
+    Route::post('/device-requests/{id}/reject', [DeviceRequestController::class, 'reject'])->name('admin.device-requests.reject');
+    Route::post('/device-requests/reset/{id}', [DeviceRequestController::class, 'reset'])->name('admin.device-requests.reset');
 });
 
 

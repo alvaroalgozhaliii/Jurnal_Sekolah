@@ -89,7 +89,7 @@ class PengajuanIzinController extends Controller
         }
 
         $request->validate([
-            'kategori' => 'required|in:dispensasi,izin_masuk,izin_keluar,sakit,izin_guru,acara_keluarga,izin',
+            'kategori' => 'required|in:dispen_masuk,dispen_keluar,dispen_lomba,terlambat,dispensasi,izin_masuk,izin_keluar,sakit,izin_guru,acara_keluarga,izin',
             'id_siswa' => 'nullable|exists:siswa,id_siswa',
             'id_guru' => 'nullable|exists:guru,id_guru',
             'tanggal' => 'required|date',
@@ -127,11 +127,11 @@ class PengajuanIzinController extends Controller
         }
 
         // Tentukan alur approval
-        // Jika dibuat oleh Orang Tua atau kategori izin siswa (sakit, izin, acara_keluarga): langsung sah/DISETUJUI & masuk ke Piket serta Data Kelas
-        $isOrtuFlow = $user->isOrtu() || in_array($request->kategori, ['sakit', 'izin', 'acara_keluarga']);
+        // Jika dibuat oleh Orang Tua atau kategori izin siswa (sakit, izin, acara_keluarga, terlambat): langsung sah/DISETUJUI & masuk ke Piket serta Data Kelas
+        $isOrtuFlow = $user->isOrtu() || in_array($request->kategori, ['sakit', 'izin', 'acara_keluarga', 'terlambat']);
 
         $statusAwal = $isOrtuFlow ? 'completed' : 'pending_waka';
-        $butuhSatpam = !$isGuruDispen && !$isOrtuFlow && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk']);
+        $butuhSatpam = !$isGuruDispen && !$isOrtuFlow && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk', 'dispen_masuk', 'dispen_keluar', 'dispen_lomba']);
         $idWakaTujuan = $isOrtuFlow ? null : $wakaTujuanUser?->id_user;
 
         $pengajuan = PengajuanIzin::create([
@@ -143,14 +143,14 @@ class PengajuanIzinController extends Controller
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'perkiraan_kembali' => $request->perkiraan_kembali,
-            'jenis_izin' => $request->jenis_izin ?? ucfirst(str_replace('_', ' ', $request->kategori)),
+            'jenis_izin' => $request->jenis_izin ?? \App\Helpers\DispenHelper::kategoriLabel($request->kategori),
             'alasan' => $request->alasan,
             'keterangan' => $request->keterangan,
             'lampiran_foto' => $fotoPath,
             'status' => $statusAwal,
             'butuh_satpam' => $butuhSatpam,
             'id_waka_tujuan' => $idWakaTujuan,
-            'catatan_piket' => $isOrtuFlow ? 'Disetujui otomatis karena diajukan langsung oleh Orang Tua.' : null,
+            'catatan_piket' => $isOrtuFlow ? 'Disetujui otomatis oleh sistem (' . \App\Helpers\DispenHelper::kategoriLabel($request->kategori) . ').' : null,
             'tgl_piket' => $isOrtuFlow ? now() : null,
         ]);
 
@@ -161,27 +161,35 @@ class PengajuanIzinController extends Controller
             $user->role,
             null,
             $statusAwal,
-            $isOrtuFlow ? 'Disetujui langsung oleh sistem karena diajukan oleh Orang Tua (' . $user->nama . ')' : ('Pengajuan ' . strtoupper(str_replace('_', ' ', $request->kategori)) . ' dibuat oleh ' . $user->nama)
+            $isOrtuFlow ? ('Dicatat langsung oleh ' . $user->nama . ' (' . \App\Helpers\DispenHelper::kategoriLabel($request->kategori) . ')') : ('Pengajuan ' . \App\Helpers\DispenHelper::kategoriLabel($request->kategori) . ' dibuat oleh ' . $user->nama)
         );
 
-        $namaKategoriText = match($request->kategori) {
-            'sakit' => 'Izin Sakit',
-            'izin' => 'Izin',
-            'acara_keluarga' => 'Izin Acara Keluarga',
-            'izin_keluar' => 'Izin Keluar Sekolah',
-            'izin_masuk' => 'Izin Masuk / Terlambat',
-            'izin_guru' => 'Dispensasi Guru',
-            default => 'Dispensasi'
-        };
+        $namaKategoriText = \App\Helpers\DispenHelper::kategoriLabel($request->kategori);
 
         if ($isOrtuFlow) {
             $siswa = Siswa::with('kelas')->find($idSiswa);
             $namaSiswa = $siswa?->nama ?? 'Siswa';
             $tanggalIzin = $pengajuan->tanggal;
-            $statusAbsensi = ($pengajuan->kategori === 'sakit') ? 'sakit' : 'izin';
+            $statusAbsensi = match($pengajuan->kategori) {
+                'sakit' => 'sakit',
+                'terlambat' => 'terlambat',
+                default => 'izin'
+            };
 
             // Sinkronisasi langsung ke data Absensi Siswa
             if ($siswa) {
+                // Jika terlambat, juga catat ke tabel siswa_terlambat (log piket)
+                if ($pengajuan->kategori === 'terlambat') {
+                    \App\Models\SiswaTerlambat::create([
+                        'id_siswa' => $siswa->id_siswa,
+                        'id_kelas' => $siswa->id_kelas,
+                        'tanggal' => $tanggalIzin,
+                        'jam_kedatangan' => $pengajuan->jam_mulai ?: date('H:i:s'),
+                        'alasan' => $pengajuan->alasan,
+                        'id_petugas_piket' => $user->id_user,
+                    ]);
+                }
+
                 // Cari Jurnal Harian hari ini untuk kelas siswa tersebut jika ada
                 $jurnal = \App\Models\JurnalHarian::where('tanggal', $tanggalIzin)
                     ->whereHas('jadwal', function ($q) use ($siswa) {
@@ -200,7 +208,7 @@ class PengajuanIzinController extends Controller
                             ],
                             [
                                 'id_guru' => $jadwalFirst->id_guru ?? \App\Models\Guru::first()?->id_guru,
-                                'materi' => 'Presensi Kelas (Izin Orang Tua)',
+                                'materi' => 'Presensi Kelas (' . $namaKategoriText . ')',
                                 'jam_ke' => $jadwalFirst->jam_ke ?? 1,
                             ]
                         );
@@ -218,7 +226,7 @@ class PengajuanIzinController extends Controller
                         'id_jurnal' => $idJurnal,
                         'status' => $statusAbsensi,
                         'jam_masuk' => $pengajuan->jam_mulai,
-                        'keterangan' => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . '(Disetujui - Izin Orang Tua)',
+                        'keterangan' => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . "(Tercatat: {$namaKategoriText})",
                         'dicatat_oleh' => $user->id_user,
                         'created_at' => $tanggalIzin . ' 07:00:00',
                     ]
@@ -229,7 +237,7 @@ class PengajuanIzinController extends Controller
             Notifikasi::kirimKeRole(
                 'piket',
                 'Pemberitahuan ' . $namaKategoriText . ' Siswa (Langsung Disetujui)',
-                'Siswa ' . $namaSiswa . ' (' . ($siswa?->kelas->nama_kelas ?? '-') . ') telah dicatat ' . $namaKategoriText . ' oleh Orang Tua pada tanggal ' . $pengajuan->tanggal . ' dan telah disetujui otomatis.',
+                'Siswa ' . $namaSiswa . ' (' . ($siswa?->kelas->nama_kelas ?? '-') . ') telah dicatat ' . $namaKategoriText . ' pada tanggal ' . $pengajuan->tanggal . ' dan telah disetujui otomatis.',
                 route('pengajuan.show', $pengajuan->id_pengajuan),
                 'izin'
             );
@@ -241,28 +249,27 @@ class PengajuanIzinController extends Controller
                     Notifikasi::kirim(
                         $guruWali->id_user,
                         'Pemberitahuan ' . $namaKategoriText . ' Siswa Kelas',
-                        'Siswa ' . $namaSiswa . ' tercatat ' . $namaKategoriText . ' oleh Orang Tua pada tanggal ' . $pengajuan->tanggal . ' dan langsung masuk ke data kelas.',
+                        'Siswa ' . $namaSiswa . ' tercatat ' . $namaKategoriText . ' pada tanggal ' . $pengajuan->tanggal . ' dan langsung masuk ke data kelas.',
                         route('walikelas.data-kelas'),
                         'izin'
                     );
                 }
             }
 
-            $flashMessage = "Pengajuan {$namaKategoriText} anak berhasil dibuat dan LANGSUNG DISETUJUI, serta otomatis tercatat di data presensi kelas.";
+            $flashMessage = "Pengajuan {$namaKategoriText} berhasil dibuat dan otomatis tercatat di data kehadiran siswa.";
         } else {
             // Kirim WhatsApp ke Waka Bertugas
             $waResult = $this->waService->kirimNotifDispenKeWaka($pengajuan->load(['siswa.kelas', 'guru', 'pengaju', 'wakaTujuan']));
 
             // Kirim Notifikasi Sistem Internal ke Waka
             if ($wakaTujuanUser) {
-                Notifikasi::create([
-                    'id_user' => $wakaTujuanUser->id_user,
-                    'judul' => 'Pengajuan Dispen Baru (' . ($isGuruDispen ? 'Guru' : 'Siswa') . ')',
-                    'pesan' => 'Ada pengajuan ' . ($isGuruDispen ? 'dispen guru' : 'dispen siswa') . ' baru menunggu persetujuan Anda.',
-                    'link' => route('waka.persetujuan.show', $pengajuan->id_pengajuan),
-                    'tipe' => 'dispen',
-                    'dibaca' => false,
-                ]);
+                Notifikasi::kirim(
+                    $wakaTujuanUser->id_user,
+                    'Pengajuan Dispen Baru (' . ($isGuruDispen ? 'Guru' : 'Siswa') . ')',
+                    'Ada pengajuan ' . ($isGuruDispen ? 'dispen guru' : 'dispen siswa') . ' baru (' . $namaKategoriText . ') menunggu persetujuan Anda.',
+                    route('waka.persetujuan.show', $pengajuan->id_pengajuan),
+                    'dispen'
+                );
             }
 
             $wakaNama = $wakaTujuanUser ? $wakaTujuanUser->nama : 'Waka';

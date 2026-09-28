@@ -32,6 +32,7 @@ class User extends Authenticatable
         'no_hp',
         'aktif',
         'foto_profil',
+        'device_token',
     ];
 
     protected $hidden = [
@@ -143,14 +144,14 @@ class User extends Authenticatable
     {
         $accesses = [];
 
-        // 1. Guru (Hak Dasar)
+        // 1. Guru (Hak Dasar / Pembelajaran)
         if ($this->isGuru()) {
             $accesses['guru'] = [
                 'key'         => 'guru',
-                'title'       => 'Guru',
-                'badge'       => 'Pengajar',
-                'subtitle'    => 'Dashboard Guru & Presensi KBM',
-                'description' => 'Aktivitas KBM, jurnal mengajar, dan absensi siswa harian.',
+                'title'       => 'Guru Pengajar',
+                'badge'       => 'Pembelajaran (KBM)',
+                'subtitle'    => 'Tugas Pokok: Mengajar KBM',
+                'description' => 'Aktivitas pembelajaran, pengisian jurnal mengajar, presensi guru, dan absensi siswa di kelas.',
                 'icon'        => 'user',
                 'route'       => 'guru.dashboard',
             ];
@@ -163,9 +164,9 @@ class User extends Authenticatable
             $accesses['wali_kelas'] = [
                 'key'         => 'wali_kelas',
                 'title'       => 'Wali Kelas' . ($namaKelas ? ' ' . $namaKelas : ''),
-                'badge'       => $namaKelas ? 'Kelas ' . $namaKelas : 'Wali Kelas',
-                'subtitle'    => 'Kelola kelas binaan',
-                'description' => 'Monitoring kehadiran, rekap presensi, dan rekap jurnal siswa binaan.',
+                'badge'       => $namaKelas ? 'Penugasan: Kelas ' . $namaKelas : 'Penugasan: Wali Kelas',
+                'subtitle'    => 'Tugas Tambahan: Wali Kelas',
+                'description' => 'Monitoring kehadiran siswa binaan, rekap presensi, siswa terlambat, dan jurnal KBM kelas binaan.',
                 'icon'        => 'school',
                 'route'       => 'walikelas.dashboard',
             ];
@@ -191,9 +192,9 @@ class User extends Authenticatable
             $accesses['waka'] = [
                 'key'         => 'waka',
                 'title'       => $wakaTitle,
-                'badge'       => 'Manajemen Waka',
-                'subtitle'    => 'Persetujuan & Monitoring Waka',
-                'description' => 'Persetujuan dispensasi izin, jadwal piket, dan monitoring kesiswaan.',
+                'badge'       => 'Penugasan: ' . $wakaTitle,
+                'subtitle'    => 'Tugas Tambahan: Manajemen Waka',
+                'description' => 'Persetujuan dispensasi izin, jadwal piket waka, dan manajerial bidang waka.',
                 'icon'        => 'briefcase',
                 'route'       => $wakaRoute,
             ];

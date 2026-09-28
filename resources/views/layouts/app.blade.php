@@ -346,6 +346,7 @@
                 </a>
                 @php
                     $pendingResetCount = \App\Models\ResetPasswordRequest::where('status', 'pending')->count();
+                    $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
                 @endphp
                 <a href="{{ route('admin.reset-password.index') }}" class="nav-item {{ request()->routeIs('admin.reset-password.*') ? 'active' : '' }}" style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="display: flex; align-items: center; gap: 10px;">
@@ -354,6 +355,15 @@
                     </span>
                     @if($pendingResetCount > 0)
                         <span class="badge badge-amber" style="font-size: 11px; padding: 2px 7px;">{{ $pendingResetCount }}</span>
+                    @endif
+                </a>
+                <a href="{{ route('admin.device-requests') }}" class="nav-item {{ request()->routeIs('admin.device-requests*') ? 'active' : '' }}" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="display: flex; align-items: center; gap: 10px;">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                        Perangkat Pengguna
+                    </span>
+                    @if($pendingDeviceCount > 0)
+                        <span class="badge badge-amber" style="font-size: 11px; padding: 2px 7px;">{{ $pendingDeviceCount }}</span>
                     @endif
                 </a>
 
@@ -383,7 +393,7 @@
                     CSV Master Import
                 </a>
 
-            <!-- GURU -->
+            <!-- GURU (Murni Aktivitas Mengajar & Pembelajaran) -->
             @elseif($role === 'guru')
                 <div class="nav-section-label">Dashboard & Presensi</div>
                 <a href="{{ route('guru.dashboard') }}" class="nav-item {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
@@ -412,34 +422,6 @@
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     Jadwal Piket
                 </a>
-
-                @php
-                    $guruModelNav = Auth::user()->guru;
-                    $kelasWaliNav = $guruModelNav ? \App\Models\Kelas::where('id_guru_walikelas', $guruModelNav->id_guru)->orWhere('wali_kelas', $guruModelNav->nama)->first() : null;
-                @endphp
-                @if($kelasWaliNav)
-                    <div class="nav-section-label">Wali Kelas {{ $kelasWaliNav->nama_kelas }}</div>
-                    <a href="{{ route('walikelas.dashboard') }}" class="nav-item {{ request()->routeIs('walikelas.dashboard') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                        Dashboard Kelas Bimbingan
-                    </a>
-                    <a href="{{ route('walikelas.data-kelas') }}" class="nav-item {{ request()->routeIs('walikelas.data-kelas') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                        Monitoring Siswa Kelas
-                    </a>
-                    <a href="{{ route('walikelas.rekap-presensi') }}" class="nav-item {{ request()->routeIs('walikelas.rekap-presensi*') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                        Rekap Presensi Siswa
-                    </a>
-                    <a href="{{ route('walikelas.siswa-terlambat') }}" class="nav-item {{ request()->routeIs('walikelas.siswa-terlambat*') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        Siswa Terlambat
-                    </a>
-                    <a href="{{ route('walikelas.jurnal') }}" class="nav-item {{ request()->routeIs('walikelas.jurnal') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                        Jurnal KBM Kelas
-                    </a>
-                @endif
 
             <!-- PIKET -->
             @elseif($role === 'piket')
@@ -497,36 +479,8 @@
                     Pengajuan Izin Anak
                 </a>
 
-            <!-- WALI KELAS (diperlakukan sama seperti Guru, dengan tambahan menu Wali Kelas) -->
+            <!-- WALI KELAS (Murni Penugasan Kelas Bimbingan) -->
             @elseif($role === 'wali_kelas' || $role === 'walikelas')
-                <div class="nav-section-label">Dashboard & Presensi</div>
-                <a href="{{ route('guru.dashboard') }}" class="nav-item {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    Dashboard Guru & Wali Kelas
-                </a>
-                <a href="{{ route('guru.presensi-saya') }}" class="nav-item {{ request()->routeIs('guru.presensi-saya') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    Presensi Masuk / Keluar
-                </a>
-
-                <div class="nav-section-label">Aktivitas Mengajar & Pengajuan</div>
-                <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') && !request()->fullUrlIs('*tab=pengajuan*') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    Jurnal Mengajar Saya
-                </a>
-                <a href="{{ route('absensi-siswa.index') }}" class="nav-item {{ request()->routeIs('absensi-siswa.*') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
-                    Absensi Siswa KBM
-                </a>
-                <a href="{{ route('jurnal-harian.index', ['tab' => 'pengajuan']) }}" class="nav-item {{ request()->fullUrlIs('*tab=pengajuan*') || request()->routeIs('pengajuan.*') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    Daftar Pengajuan Izin
-                </a>
-                <a href="{{ route('guru.jadwal-piket') }}" class="nav-item {{ request()->routeIs('guru.jadwal-piket') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    Jadwal Piket
-                </a>
-
                 @php
                     $guruModelNavWK = Auth::user()->guru;
                     if (!$guruModelNavWK) {
@@ -537,11 +491,13 @@
                         $kelasWaliNavWK = \App\Models\Kelas::where('wali_kelas', Auth::user()->nama)->first();
                     }
                 @endphp
-                <div class="nav-section-label">Wali Kelas {{ $kelasWaliNavWK?->nama_kelas ?? '' }}</div>
+                <div class="nav-section-label">Dashboard Wali Kelas</div>
                 <a href="{{ route('walikelas.dashboard') }}" class="nav-item {{ request()->routeIs('walikelas.dashboard') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    Dashboard Kelas Bimbingan
+                    Dashboard Kelas {{ $kelasWaliNavWK?->nama_kelas ?? 'Bimbingan' }}
                 </a>
+
+                <div class="nav-section-label">Penugasan Wali Kelas</div>
                 <a href="{{ route('walikelas.data-kelas') }}" class="nav-item {{ request()->routeIs('walikelas.data-kelas') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
                     Monitoring Siswa Kelas
@@ -826,7 +782,13 @@
                     @endif
                     <div class="user-info">
                         <div class="user-name">{{ Auth::user()->nama }}</div>
-                        <div class="user-role">{{ strtoupper(str_replace('_', ' ', session('active_access', Auth::user()->role))) }}</div>
+                        @php
+                            $activeRoleName = session('active_access', Auth::user()->role);
+                            if ($activeRoleName === 'waka') {
+                                $activeRoleName = str_starts_with(Auth::user()->role, 'waka_') ? Auth::user()->role : 'waka';
+                            }
+                        @endphp
+                        <div class="user-role">{{ strtoupper(str_replace('_', ' ', $activeRoleName)) }}</div>
                     </div>
                 </a>
                 @endauth

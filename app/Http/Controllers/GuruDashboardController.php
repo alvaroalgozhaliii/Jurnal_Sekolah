@@ -13,6 +13,7 @@ use App\Models\AbsensiSiswa;
 use App\Models\SiswaTerlambat;
 use App\Models\PengajuanIzin;
 use App\Models\JadwalWaka;
+use App\Models\Notifikasi;
 use Carbon\Carbon;
 
 class GuruDashboardController extends Controller
@@ -20,6 +21,16 @@ class GuruDashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $activeAccess = session('active_access');
+
+        // Jika user sedang aktif dengan peran penugasan lain (misal waka atau wali_kelas), arahkan ke dashboard peran tersebut
+        if ($activeAccess && $activeAccess !== 'guru' && !$user->isAdmin()) {
+            $routeName = AuthController::getDashboardRouteName($activeAccess);
+            if (\Illuminate\Support\Facades\Route::has($routeName) && $routeName !== 'guru.dashboard') {
+                return redirect()->route($routeName);
+            }
+        }
+
         $guru = $user->guru;
 
         if (!$guru) {
@@ -85,60 +96,34 @@ class GuruDashboardController extends Controller
             }
         }
 
-        // Monitoring Siswa Kelas (Jika Guru ditugaskan sebagai Wali Kelas)
-        $kelasWali = $user->kelas_wali;
+        // Monitoring Siswa Kelas (Penugasan Wali Kelas)
+        // Penugasan Wali Kelas dipisahkan ke Portal / Dashboard Wali Kelas (walikelas.dashboard).
+        // Dashboard Guru sekarang murni hanya menampilkan aktivitas KBM & pembelajaran.
         $waliMonitoring = null;
-
-        if ($kelasWali) {
-            $siswaWali = Siswa::where('id_kelas', $kelasWali->id_kelas)->get();
-            $totalSiswaWali = $siswaWali->count();
-            $siswaIds = $siswaWali->pluck('id_siswa');
-
-            // Presensi hari ini di kelas bimbingan
-            $presensiHariIniKelas = AbsensiSiswa::with('siswa')
-                ->whereIn('id_siswa', $siswaIds)
-                ->whereHas('jurnal', function ($q) use ($todayDate) {
-                    $q->where('tanggal', $todayDate);
-                })
-                ->get();
-
-            $hadirCount = $presensiHariIniKelas->where('status', 'hadir')->count();
-            $sakitCount = $presensiHariIniKelas->where('status', 'sakit')->count();
-            $izinCount = $presensiHariIniKelas->where('status', 'izin')->count();
-            $alpaCount = $presensiHariIniKelas->where('status', 'alpa')->count();
-            $terlambatCount = $presensiHariIniKelas->where('status', 'terlambat')->count();
-
-            // Log siswa terlambat hari ini yang dicatat piket
-            $terlambatHariIni = SiswaTerlambat::with('siswa')
-                ->whereIn('id_siswa', $siswaIds)
-                ->where('tanggal', $todayDate)
-                ->orderBy('jam_kedatangan', 'desc')
-                ->get();
-
-            // Pengajuan izin / sakit siswa kelas ini hari ini
-            $izinHariIni = PengajuanIzin::with('siswa')
-                ->whereIn('id_siswa', $siswaIds)
-                ->where('tanggal', $todayDate)
-                ->get();
-
-            $waliMonitoring = [
-                'kelas' => $kelasWali,
-                'totalSiswa' => $totalSiswaWali,
-                'hadir' => $hadirCount,
-                'sakit' => $sakitCount,
-                'izin' => $izinCount,
-                'alpa' => $alpaCount,
-                'terlambat' => $terlambatCount,
-                'siswaTerlambatList' => $terlambatHariIni,
-                'siswaIzinList' => $izinHariIni,
-            ];
-        }
 
         // Data Petugas Piket Hari Ini
         $piketHariIni = JadwalWaka::with(['waka', 'guruPiket'])->whereDate('tanggal', $todayDate)->first();
         $isSayaPiketHariIni = false;
         if ($piketHariIni && $guru) {
-            $isSayaPiketHariIni = ($piketHariIni->id_guru_piket == $guru->id_guru);
+            $isSayaPiketHariIni = $piketHariIni->isGuruBertugas($guru);
+        }
+
+        // Jika guru ini bertugas piket hari ini, buat notifikasi di sistem jika belum dibuat hari ini
+        if ($isSayaPiketHariIni && $user) {
+            $notifPiketAda = Notifikasi::where('id_user', $user->id_user)
+                ->where('type', 'piket_duty')
+                ->whereDate('created_at', $todayDate)
+                ->exists();
+
+            if (!$notifPiketAda) {
+                Notifikasi::kirim(
+                    $user->id_user,
+                    '📋 Jadwal Tugas Guru Piket Hari Ini',
+                    'Bapak/Ibu ' . ($guru->nama ?? $user->nama) . ', Anda terdaftar bertugas sebagai Petugas Piket hari ini (' . Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') . '). Silakan pantau kehadiran siswa dan tertib sekolah.',
+                    route('piket.dashboard'),
+                    'piket_duty'
+                );
+            }
         }
 
         return view('guru.dashboard', compact(

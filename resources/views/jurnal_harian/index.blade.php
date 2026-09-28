@@ -9,7 +9,7 @@
         <h1 class="page-title">Jurnal Harian KBM</h1>
         <p class="page-subtitle">Daftar Pelaksanaan Mengajar & Jurnal Kelas</p>
     </div>
-    @if(Auth::user()->isGuru())
+    @if(session('active_access', Auth::user()->role) === 'guru')
     <div class="page-actions">
         <a href="{{ route('jurnal-harian.create') }}" class="btn btn-primary">+ Isi Jurnal Mengajar</a>
         <a href="{{ route('jurnal-harian.trash') }}" class="btn btn-secondary">Lihat Trash</a>

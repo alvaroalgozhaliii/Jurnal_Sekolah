@@ -13,6 +13,37 @@
 
 @include('partials.kbm-clock-banner')
 
+{{-- BANNER NOTIFIKASI PIKET HARI INI --}}
+@if(!empty($isSayaPiketHariIni))
+<div class="card mb-24" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 2px solid #f59e0b; border-left: 6px solid #d97706; border-radius: 14px; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.12); padding: 18px 22px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: #d97706; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span class="badge" style="background: #d97706; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; letter-spacing: 0.5px;">TUGAS PIKET HARI INI</span>
+                    <strong style="font-size: 15.5px; color: #78350f;">Anda Bertugas Sebagai Petugas Piket Hari Ini!</strong>
+                </div>
+                <p style="margin: 4px 0 0; font-size: 13px; color: #92400e; line-height: 1.5;">
+                    Mohon hadir di pos piket untuk mencatat siswa terlambat, memantau perizinan/dispensasi siswa, dan menjaga ketertiban KBM.
+                </p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{{ route('piket.dashboard') }}" class="btn btn-primary" style="background: #d97706; border-color: #d97706; padding: 10px 18px; font-size: 13px; font-weight: 700; border-radius: 8px; box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Buka Portal Piket &rarr;
+            </a>
+            <a href="{{ route('piket.siswa-terlambat.create') }}" class="btn btn-secondary" style="padding: 10px 16px; font-size: 13px; font-weight: 600; border-radius: 8px; background: #fff; border: 1px solid #fde68a; color: #92400e;">
+                + Catat Siswa Terlambat
+            </a>
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- PETUGAS PIKET HARI INI -->
 @if(isset($piketHariIni) && $piketHariIni)
     <div class="card mb-24" style="border-left: 4px solid var(--navy-primary); overflow:hidden;">

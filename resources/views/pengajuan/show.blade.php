@@ -64,16 +64,12 @@
                         </td>
                     </tr>
                     @php
-                        $katLabelShow = match($pengajuan->kategori) {
-                            'sakit' => 'IZIN SAKIT',
-                            'izin' => 'IZIN',
-                            'acara_keluarga' => 'ACARA KELUARGA',
-                            default => strtoupper(str_replace('_', ' ', $pengajuan->kategori))
-                        };
+                        $katLabelShow = \App\Helpers\DispenHelper::kategoriLabel($pengajuan->kategori);
+                        $katBadgeCls = \App\Helpers\DispenHelper::badgeColor($pengajuan->kategori);
                     @endphp
                     <tr>
                         <th>Kategori</th>
-                        <td><span class="badge badge-navy">{{ $katLabelShow }}</span></td>
+                        <td><span class="badge {{ $katBadgeCls }}">{{ strtoupper($katLabelShow) }}</span></td>
                     </tr>
                     @if($pengajuan->siswa)
                     <tr>

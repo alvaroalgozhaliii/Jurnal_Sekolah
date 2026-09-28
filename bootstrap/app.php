@@ -14,8 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckDeviceToken::class,
+        ]);
         $middleware->alias([
             'role' => RoleMiddleware::class,
+            'check.device' => \App\Http\Middleware\CheckDeviceToken::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

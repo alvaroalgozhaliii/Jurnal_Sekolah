@@ -80,12 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             'pending_waka', 'menunggu_waka', 'pending_piket' => 'badge-warning',
                             default => 'badge-danger'
                         };
-                        $katLabel = match($p->kategori) {
-                            'sakit' => 'IZIN SAKIT',
-                            'izin' => 'IZIN',
-                            'acara_keluarga' => 'ACARA KELUARGA',
-                            default => strtoupper(str_replace('_', ' ', $p->kategori))
-                        };
+                        $katLabel = \App\Helpers\DispenHelper::kategoriLabel($p->kategori);
+                        $katBadgeCls = \App\Helpers\DispenHelper::badgeColor($p->kategori);
                         $statusLabel = match($st) {
                             'completed', 'disetujui' => ($p->pengaju && $p->pengaju->isOrtu() ? 'DISETUJUI (ORTU)' : 'DISETUJUI'),
                             'verified' => 'TERVERIFIKASI',
@@ -99,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     @endphp
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
-                        <td><span class="badge badge-navy">{{ $katLabel }}</span></td>
+                        <td><span class="badge {{ $katBadgeCls }}">{{ strtoupper($katLabel) }}</span></td>
                         <td class="fw-bold text-navy">
                             {{ $p->siswa ? $p->siswa->nama . ' (Kelas ' . ($p->siswa->kelas->nama_kelas ?? '-') . ')' : ($p->guru ? $p->guru->nama . ' (Guru)' : ($p->pengaju->nama ?? '-')) }}
                         </td>

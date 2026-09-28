@@ -27,6 +27,18 @@ class WakaDashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $activeAccess = session('active_access');
+
+        // Jika user sedang aktif dengan peran pembelajaran Guru biasa, arahkan ke dashboard guru
+        if ($activeAccess === 'guru' && !$user->isAdmin()) {
+            return redirect()->route('guru.dashboard');
+        }
+
+        // Jika user sedang aktif dengan peran wali kelas, arahkan ke dashboard wali kelas
+        if (in_array($activeAccess, ['wali_kelas', 'walikelas']) && !$user->isAdmin()) {
+            return redirect()->route('walikelas.dashboard');
+        }
+
         $isSdm = $user->isWakaSdm();
 
         if ($user->isWakaKurikulum()) {
