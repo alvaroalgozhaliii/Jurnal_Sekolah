@@ -33,7 +33,7 @@ class SeedOfficialSmkn1Boyolangu extends Seeder
 
         // 2. Seed Official Jurusan
         $jurusanData = [
-            ['nama_jurusan' => 'Teknik Ketenagalistrikan & Industri', 'rombel' => 'TKI', 'maks_rombel' => 2],
+            ['nama_jurusan' => 'Teknik Kimia Industri', 'rombel' => 'TKI', 'maks_rombel' => 2],
             ['nama_jurusan' => 'Rekayasa Perangkat Lunak', 'rombel' => 'RPL', 'maks_rombel' => 2],
             ['nama_jurusan' => 'Teknik Komputer & Jaringan', 'rombel' => 'TKJ', 'maks_rombel' => 2],
             ['nama_jurusan' => 'Bisnis Digital', 'rombel' => 'BD', 'maks_rombel' => 3],

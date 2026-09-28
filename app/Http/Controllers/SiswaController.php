@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\Jurusan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,12 +13,14 @@ class SiswaController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
+        $search    = $request->get('search');
+        $jurusanId = $request->get('jurusan');
+
         $query = Siswa::with(['kelas', 'user']);
 
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
+                $q->where('siswa.nama', 'like', "%{$search}%")
                   ->orWhere('nisn', 'like', "%{$search}%")
                   ->orWhereHas('kelas', function($qk) use ($search) {
                       $qk->where('nama_kelas', 'like', "%{$search}%");
@@ -25,8 +28,28 @@ class SiswaController extends Controller
             });
         }
 
-        $siswa = $query->orderBy('nama', 'asc')->paginate(25)->withQueryString();
-        return view('siswa.index', compact('siswa', 'search'));
+        $siswa = $query
+            ->join('kelas', function($join) {
+                $join->on('siswa.id_kelas', '=', 'kelas.id_kelas')
+                     ->whereNull('kelas.deleted_at');
+            })
+            ->select('siswa.*')
+            ->when($jurusanId, fn($q) => $q->where('kelas.id_jurusan', (int) $jurusanId))
+            ->orderByRaw("FIELD(kelas.tingkat, 'XII', 'XI', 'X')")
+            ->orderBy('kelas.nama_kelas', 'asc')
+            ->orderBy('siswa.nama', 'asc')
+            ->paginate(25)
+            ->withQueryString();
+
+        $semuaJurusan = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanCounts = Siswa::join('kelas', 'siswa.id_kelas', '=', 'kelas.id_kelas')
+            ->whereNull('kelas.deleted_at')
+            ->selectRaw('kelas.id_jurusan, count(*) as total')
+            ->groupBy('kelas.id_jurusan')
+            ->pluck('total', 'id_jurusan');
+        $totalSiswa = Siswa::count();
+
+        return view('siswa.index', compact('siswa', 'search', 'semuaJurusan', 'jurusanId', 'jurusanCounts', 'totalSiswa'));
     }
 
     public function create()
@@ -223,9 +246,23 @@ class SiswaController extends Controller
                 }
             }
             $t = $tingkatKls ?: (str_starts_with($namaKls, 'XII') ? 'XII' : (str_starts_with($namaKls, 'XI') ? 'XI' : 'X'));
+            $jurusanMapping = [
+                'TKI' => 1, 'RPL' => 2, 'TKJ' => 3, 'BD' => 4, 'MP' => 5,
+                'AK' => 6, 'ULW' => 7, 'DKV' => 8, 'PSPT' => 9, 'AN' => 10,
+            ];
+            $matchedJurusan = null;
+            $upperNama = strtoupper($namaKls);
+            foreach ($jurusanMapping as $code => $jId) {
+                if (preg_match('/(\b|[^A-Z])' . preg_quote($code, '/') . '(\b|[^A-Z])/', $upperNama)) {
+                    $matchedJurusan = $jId;
+                    break;
+                }
+            }
+
             $newK = Kelas::create([
                 'nama_kelas' => $namaKls,
                 'tingkat' => $t,
+                'id_jurusan' => $matchedJurusan,
                 'wali_kelas' => $waliKls ?: null,
             ]);
             $cachedKelas->push($newK);
@@ -336,23 +373,34 @@ class SiswaController extends Controller
 
     public function exportCsv(Request $request)
     {
-        $search  = $request->get('search');
-        $idKelas = $request->get('id_kelas');
-        $query   = Siswa::with(['kelas', 'user']);
+        $search    = $request->get('search');
+        $idKelas   = $request->get('id_kelas');
+        $jurusanId = $request->get('jurusan');
+        $query     = Siswa::with(['kelas', 'user']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
+                $q->where('siswa.nama', 'like', "%{$search}%")
                   ->orWhere('nisn', 'like', "%{$search}%")
                   ->orWhereHas('kelas', fn($qk) => $qk->where('nama_kelas', 'like', "%{$search}%"));
             });
         }
 
         if ($idKelas) {
-            $query->where('id_kelas', $idKelas);
+            $query->where('siswa.id_kelas', $idKelas);
         }
 
-        $data     = $query->orderBy('nama', 'asc')->get();
+        $query->join('kelas', function($join) {
+            $join->on('siswa.id_kelas', '=', 'kelas.id_kelas')
+                 ->whereNull('kelas.deleted_at');
+        })
+        ->select('siswa.*')
+        ->when($jurusanId, fn($q) => $q->where('kelas.id_jurusan', (int) $jurusanId))
+        ->orderByRaw("FIELD(kelas.tingkat, 'XII', 'XI', 'X')")
+        ->orderBy('kelas.nama_kelas', 'asc')
+        ->orderBy('siswa.nama', 'asc');
+
+        $data     = $query->get();
         $filename = 'data_siswa_' . date('Ymd_His') . '.csv';
 
         $headers = [

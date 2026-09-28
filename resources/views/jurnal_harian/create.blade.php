@@ -29,7 +29,7 @@
         <form id="form-pilih-jadwal" action="{{ route('jurnal-harian.create') }}" method="GET" class="d-flex align-center gap-12 flex-wrap">
             <label for="id_jadwal" class="form-label" style="margin:0; white-space:nowrap;">Pilih Jadwal Mengajar:</label>
             <select id="id_jadwal" name="id_jadwal" onchange="this.form.submit()" class="form-control select-search" style="min-width:450px;" placeholder="Ketik / Cari Jadwal Mengajar KBM...">
-                <option value="">-- Pilih Jadwal KBM --</option>
+                <option value="">Pilih Jadwal KBM</option>
                 @foreach($jadwalList as $j)
                 <option value="{{ $j->id_jadwal }}" 
                         data-hari="{{ $j->hari }}" 
