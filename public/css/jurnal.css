@@ -6197,3 +6197,167 @@ body.dark-mode .custom-pagination .page-link {
     color: #7dd3fc;
     border-color: rgba(2, 132, 199, 0.35);
 }
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS — GPU Compositing & Paint Containment
+   Tidak mengubah desain atau animasi apapun. Hanya meningkatkan performa.
+   ========================================================================== */
+
+/*
+ * 1. ISOLATE the entire background decoration layer.
+ *    Browser hanya perlu composite layer ini secara independen,
+ *    tidak perlu repaint seluruh halaman saat animasi berjalan.
+ */
+.sys-aesthetic-bg {
+    isolation: isolate;
+    contain: layout style;
+}
+
+/*
+ * 2. CONTAIN wave container — batas paint area ke dalam elemen saja
+ */
+.sys-waves-container {
+    contain: layout style paint;
+}
+
+/*
+ * 3. CONTAIN meteor container — meteors sudah absolute, batasi repaints
+ */
+.sys-meteors-container {
+    contain: layout style paint;
+    isolation: isolate;
+}
+
+/*
+ * 4. GPU LAYER promotion untuk semua orbs.
+ *    Keyframe animasi orbs sudah memakai translate3d() (lihat sysOrbDrift*),
+ *    sehingga browser otomatis membuat GPU compositor layer.
+ *    Kita cukup hint via will-change + backface-visibility.
+ *    JANGAN tambahkan static transform di sini karena akan override keyframe.
+ */
+.sys-orb-1,
+.sys-orb-2,
+.sys-orb-3,
+.sys-orb-4 {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/*
+ * 5. GPU LAYER untuk rings & diamond — elemen rotating ringan
+ */
+.sys-ring-1,
+.sys-ring-2,
+.sys-dm-1 {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+}
+
+/*
+ * 6. GPU LAYER untuk meteors — elemen paling berat karena drop-shadow + translate
+ */
+.sys-meteor {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Stagger meteor m4 & m5: mulai animasi lebih lambat
+       agar max 3 meteor aktif bersamaan di layar (hemat GPU) */
+}
+
+.sys-meteor.m4 {
+    animation-delay: 5.8s;  /* Geser dari 3.6s ke 5.8s — gap lebih besar dari m3 */
+}
+
+.sys-meteor.m5 {
+    animation-delay: 8.2s;  /* Geser dari 4.4s ke 8.2s — tidak overlap dengan m1-m3 */
+}
+
+/*
+ * 7. GPU LAYER untuk particles & sparkles & crosses
+ */
+.sys-particle,
+.sys-sparkle,
+.sys-cross {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 8. REDUCE backdrop-filter cost pada .card:
+ *    contain:paint membatasi area yang harus di-composite browser
+ */
+.card {
+    contain: layout style;
+    /* Jangan pakai contain:paint karena card punya overflow:visible */
+}
+
+/*
+ * 9. TOPBAR: promote ke GPU layer agar scrolling tidak menyebabkan repaint topbar
+ */
+.topbar {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+}
+
+/*
+ * 10. SIDEBAR: sudah ada transition, tambahkan GPU promotion
+ */
+.sidebar {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 11. CONTENT AREA scroll optimization
+ *     Hardware-accelerated smooth scroll
+ */
+.content-area {
+    -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * 12. SPARKLE: kurangi filter complexity saat idle (antara tween)
+ *    Override filter di keyframe 0%/100% sudah ada, ini hanya hint default
+ */
+.sys-sparkle svg {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 13. NAV ITEM hover transform — sudah GPU friendly karena hanya translateX
+ *     Tambahkan backface-visibility agar tidak trigger repaint layer lain
+ */
+.nav-item {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 14. Kurangi oversaturation backdrop-filter di user-pill
+ *     (tetap blur 10px, hanya contain layer)
+ */
+.user-pill {
+    isolation: isolate;
+}
+
+/*
+ * 15. BEAM — elemen static skew, cukup GPU layer sederhana
+ */
+.sys-bg-beam {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/*
+ * 16. DOT GRID — static, tidak beranimasi. Matikan will-change agar
+ *     browser tidak mengalokasikan GPU memory untuk ini.
+ */
+.sys-bg-grid {
+    will-change: auto;
+}

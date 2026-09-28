@@ -88,6 +88,19 @@
     .sso-right {
         border-radius: 0 24px 24px 0 !important;
     }
+
+    /* ── GPU Layer hints untuk elemen animasi login ── */
+    /* Nebula & orbs: promote ke compositor layer agar tidak trigger repaint saat halaman load */
+    .space-nebula,
+    .login-orb {
+        will-change: transform, opacity;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+    /* Canvas bintang: tampilkan kosong dulu, animasi mulai saat idle (via JS defer) */
+    #spaceBgCanvas {
+        will-change: contents;
+    }
     </style>
 </head>
 <body>
@@ -248,25 +261,26 @@ function togglePasswordVisibility(inputId, btn) {
     if (!canvas) return;
     var ctx = canvas.getContext('2d');
     var W, H, stars = [];
+    var animationStarted = false;
+    var rafId = null;
 
     function resize() {
-        canvas.style.display = 'none';
         W = canvas.width  = window.innerWidth;
         H = canvas.height = window.innerHeight;
-        canvas.style.display = 'block';
         buildStars();
     }
 
     function buildStars() {
         stars = [];
-        var total = Math.floor((W * H) / 2800);
+        /* Kurangi density sedikit agar tidak berat saat load awal */
+        var total = Math.floor((W * H) / 3400);
         for (var i = 0; i < total; i++) {
             stars.push({
                 x: Math.random() * W,
                 y: Math.random() * H,
-                r: Math.random() * 1.5 + 0.2,
+                r: Math.random() * 1.4 + 0.2,
                 a: Math.random(),
-                da: (Math.random() * 0.006 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+                da: (Math.random() * 0.005 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
                 c: ['255,255,255','200,220,255','255,240,180','180,210,255'][Math.floor(Math.random()*4)]
             });
         }
@@ -277,17 +291,14 @@ function togglePasswordVisibility(inputId, btn) {
     var lastMeteorTime = 0;
 
     function createMeteor() {
-        // Sudut jatuh vertikal ke samping: ~45 derajat (jatuh ke bawah meluncur ke kanan)
-        var angle = Math.PI / 4; 
-        var speed = Math.random() * 8 + 14; // 14 - 22 px per frame
-        var length = Math.random() * 110 + 90; // 90 - 200 px
-        
-        // Spawn dari sisi atas atau kiri atas melintasi layar
+        var angle = Math.PI / 4;
+        var speed = Math.random() * 8 + 14;
+        var length = Math.random() * 110 + 90;
         var startX = Math.random() * (W * 1.3) - (W * 0.2);
         var startY = Math.random() * (H * 0.4) - 120;
 
         var isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-        var colors = isDark 
+        var colors = isDark
             ? ['56,189,248', '96,165,250', '192,132,252', '255,255,255', '52,211,153']
             : ['37,99,235', '59,130,246', '124,58,237', '2,132,199'];
 
@@ -297,7 +308,6 @@ function togglePasswordVisibility(inputId, btn) {
             dx: Math.cos(angle) * speed,
             dy: Math.sin(angle) * speed,
             length: length,
-            speed: speed,
             thickness: Math.random() * 1.5 + 1.2,
             opacity: 1,
             fadeSpeed: Math.random() * 0.012 + 0.008,
@@ -307,7 +317,7 @@ function togglePasswordVisibility(inputId, btn) {
 
     function updateAndDrawMeteors() {
         var now = Date.now();
-        if (now - lastMeteorTime > (Math.random() * 1400 + 900) && meteors.length < 5) {
+        if (now - lastMeteorTime > (Math.random() * 1400 + 900) && meteors.length < 4) {
             meteors.push(createMeteor());
             lastMeteorTime = now;
         }
@@ -332,23 +342,27 @@ function togglePasswordVisibility(inputId, btn) {
             grad.addColorStop(0.65, 'rgba(' + m.colorRgb + ', ' + (m.opacity * 0.5) + ')');
             grad.addColorStop(1, 'rgba(255, 255, 255, ' + m.opacity + ')');
 
+            /* ── Ekor meteor (tanpa shadowBlur agar tidak berat setiap frame) ── */
             ctx.beginPath();
             ctx.moveTo(tailX, tailY);
             ctx.lineTo(m.x, m.y);
             ctx.strokeStyle = grad;
             ctx.lineWidth = m.thickness;
             ctx.lineCap = 'round';
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(' + m.colorRgb + ', 0.9)';
             ctx.stroke();
 
-            // Kepala meteor (bintang jatuh bercahaya terang di ujung lintasan)
+            /* ── Kepala meteor: glow simulasi dengan dua lingkaran (hemat vs shadowBlur) ── */
+            /* Lingkaran luar transparan (efek glow ringan) */
+            ctx.beginPath();
+            ctx.arc(m.x, m.y, m.thickness * 2.8, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + m.colorRgb + ', ' + (m.opacity * 0.18) + ')';
+            ctx.fill();
+            /* Lingkaran inti terang */
             ctx.beginPath();
             ctx.arc(m.x, m.y, m.thickness * 1.2, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(255, 255, 255, ' + m.opacity + ')';
-            ctx.shadowBlur = 14;
-            ctx.shadowColor = '#ffffff';
             ctx.fill();
+
             ctx.restore();
         }
     }
@@ -366,12 +380,30 @@ function togglePasswordVisibility(inputId, btn) {
             ctx.fill();
         }
         updateAndDrawMeteors();
-        requestAnimationFrame(draw);
+        rafId = requestAnimationFrame(draw);
     }
 
-    window.addEventListener('resize', resize);
-    resize();
-    draw();
+    function startAnimation() {
+        if (animationStarted) return;
+        animationStarted = true;
+        resize();
+        draw();
+    }
+
+    window.addEventListener('resize', function() {
+        if (animationStarted) resize();
+    });
+
+    /*
+     * DEFER START: Tunda animasi canvas sampai browser selesai render halaman.
+     * Ini menghilangkan lag/freeze saat navigasi masuk ke halaman login.
+     * requestIdleCallback → tunggu browser idle. Fallback: setTimeout 150ms.
+     */
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(startAnimation, { timeout: 800 });
+    } else {
+        setTimeout(startAnimation, 150);
+    }
 })();
 </script>
 @stack('scripts')

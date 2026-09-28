@@ -346,7 +346,11 @@
                 </a>
                 @php
                     $pendingResetCount = \App\Models\ResetPasswordRequest::where('status', 'pending')->count();
-                    $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
+                    try {
+                        $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
+                    } catch (\Exception $e) {
+                        $pendingDeviceCount = 0;
+                    }
                 @endphp
                 <a href="{{ route('admin.reset-password.index') }}" class="nav-item {{ request()->routeIs('admin.reset-password.*') ? 'active' : '' }}" style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="display: flex; align-items: center; gap: 10px;">
