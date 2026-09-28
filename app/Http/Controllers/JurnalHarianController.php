@@ -22,8 +22,13 @@ class JurnalHarianController extends Controller
         $activeTab = $request->input('tab', 'jurnal');
         $query = JurnalHarian::with(['guru', 'jadwal.kelas']);
 
-        if ($user->isGuru() && !$user->isAdmin()) {
+        $activeAccess = session('active_access', $user->role);
+
+        if ($activeAccess === 'guru' && !$user->isAdmin()) {
             $guru = $user->guru;
+            if (!$guru) {
+                $guru = Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
+            }
             $query->where('id_guru', $guru ? $guru->id_guru : 0);
         } else {
             if ($request->filled('id_guru')) {
@@ -59,7 +64,7 @@ class JurnalHarianController extends Controller
 
         // Load Pengajuan List for merging inside Jurnal view
         $pengajuanQuery = PengajuanIzin::with(['siswa.kelas', 'guru', 'pengaju', 'wakaApprover', 'satpam']);
-        if ($user->isGuru() && !$user->isAdmin()) {
+        if ($activeAccess === 'guru' && !$user->isAdmin()) {
             $idGuru = $user->guru?->id_guru;
             $pengajuanQuery->where(function ($q) use ($idGuru, $user) {
                 if ($idGuru) $q->where('id_guru', $idGuru);

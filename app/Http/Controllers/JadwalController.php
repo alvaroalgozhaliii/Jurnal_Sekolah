@@ -45,7 +45,8 @@ class JadwalController extends Controller
         // Query untuk jadwal flat (untuk view mode tabel atau guru)
         $query = Jadwal::with(['kelas', 'guru']);
 
-        if (auth()->user()->isGuru() && auth()->user()->guru) {
+        $activeAccess = session('active_access', auth()->user()->role);
+        if ($activeAccess === 'guru' && auth()->user()->guru) {
             $query->where('id_guru', auth()->user()->guru->id_guru);
         }
 

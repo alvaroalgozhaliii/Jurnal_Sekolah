@@ -69,7 +69,105 @@ class KbmService
         }
     }
 
-    public static function getJamPulang(string $hari = 'Senin', ?string $tingkat = null): string
+    /**
+     * Cek apakah hari Senin ada Upacara Bendera
+     */
+    public static function isSeninAdaUpacara(?string $tanggal = null): bool
+    {
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
+        $targetDate = $tanggal ?: $now->toDateString();
+
+        try {
+            // Cek override situasional untuk tanggal tertentu
+            $overrideTgl = Pengaturan::getVal('senin_override_tanpa_upacara_tanggal');
+            if ($overrideTgl && $overrideTgl === $targetDate) {
+                return false;
+            }
+
+            // Pengaturan default mingguan
+            $val = Pengaturan::getVal('senin_ada_upacara', '1');
+            return ($val !== '0' && $val !== 0 && $val !== false);
+        } catch (\Throwable $e) {
+            return true;
+        }
+    }
+
+    /**
+     * Cek apakah hari Jumat ada Pembiasaan Pagi
+     */
+    public static function isJumatAdaPembiasaan(?string $tanggal = null): bool
+    {
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
+        $targetDate = $tanggal ?: $now->toDateString();
+
+        try {
+            // Cek override situasional untuk tanggal tertentu
+            $overrideTgl = Pengaturan::getVal('jumat_override_tanpa_pembiasaan_tanggal');
+            if ($overrideTgl && $overrideTgl === $targetDate) {
+                return false;
+            }
+
+            // Pengaturan default mingguan
+            $val = Pengaturan::getVal('jumat_ada_pembiasaan', '1');
+            return ($val !== '0' && $val !== 0 && $val !== false);
+        } catch (\Throwable $e) {
+            return true;
+        }
+    }
+
+    /**
+     * Ambil data Kepulangan Khusus / Acara Mendadak jika aktif untuk tanggal tersebut
+     */
+    public static function getAcaraMendadakInfo(?string $tanggal = null): ?array
+    {
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
+        $targetDate = $tanggal ?: $now->toDateString();
+
+        try {
+            $aktif = Pengaturan::getVal('acara_mendadak_aktif', '0');
+            $tglAcara = Pengaturan::getVal('acara_mendadak_tanggal', '');
+
+            if (($aktif === '1' || $aktif === 1 || $aktif === true) && $tglAcara === $targetDate) {
+                return [
+                    'aktif' => true,
+                    'tanggal' => $targetDate,
+                    'jam_pulang' => Pengaturan::getVal('acara_mendadak_jam_pulang', '11:30') ?: '11:30',
+                    'alasan' => Pengaturan::getVal('acara_mendadak_alasan', 'Acara Khusus Sekolah (Pulang Cepat)') ?: 'Acara Khusus Sekolah (Pulang Cepat)',
+                    'target' => Pengaturan::getVal('acara_mendadak_target', 'semua') ?: 'semua',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // fallback
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper mengurangi waktu format HH:mm sebanyak N menit
+     */
+    public static function kurangiWaktuMenit(string $waktuStr, int $menit): string
+    {
+        try {
+            $parts = explode(':', trim($waktuStr));
+            $jam = (int)($parts[0] ?? 0);
+            $menitAwal = (int)($parts[1] ?? 0);
+            $totalMenit = ($jam * 60 + $menitAwal) - $menit;
+            if ($totalMenit < 0) {
+                $totalMenit += 24 * 60;
+            }
+            $jamBaru = intdiv($totalMenit, 60) % 24;
+            $menitBaru = $totalMenit % 60;
+            return sprintf('%02d:%02d', $jamBaru, $menitBaru);
+        } catch (\Throwable $e) {
+            return $waktuStr;
+        }
+    }
+
+    /**
+     * Mengambil Jam Pulang Standar/Normal (tanpa mempertimbangkan penyesuaian situasional)
+     */
+    public static function getJamPulangNormal(string $hari = 'Senin', ?string $tingkat = null): string
     {
         $hariNorm = ucfirst(strtolower($hari));
         try {
@@ -92,22 +190,69 @@ class KbmService
         }
     }
 
-    public static function getJamPulangJumatX(): string
+    /**
+     * Mengambil Jam Pulang Efektif dengan memperhitungkan:
+     * 1. Acara Mendadak (Pulang Cepat) jika ada
+     * 2. Senin tanpa upacara (maju 1 JP = 40 menit -> 14:20)
+     * 3. Jumat tanpa pembiasaan (maju 1 JP = 30 menit -> X: 15:00, XI/XII: 14:30)
+     */
+    public static function getJamPulang(string $hari = 'Senin', ?string $tingkat = null, ?string $tanggal = null, bool $checkAcaraMendadak = true): string
     {
-        try {
-            return Pengaturan::getVal('jam_pulang_jumat_x', Pengaturan::getVal('jam_pulang_jumat', '15:30')) ?: '15:30';
-        } catch (\Throwable $e) {
-            return '15:30';
+        $hariNorm = ucfirst(strtolower($hari));
+
+        // 1. Cek Acara Mendadak jika aktif untuk tanggal ini
+        if ($checkAcaraMendadak) {
+            $acara = self::getAcaraMendadakInfo($tanggal);
+            if ($acara) {
+                $target = strtolower($acara['target'] ?? 'semua');
+                if ($target === 'semua') {
+                    return $acara['jam_pulang'];
+                }
+                if ($tingkat !== null) {
+                    if ($target === 'x' && self::isKelasX($tingkat)) {
+                        return $acara['jam_pulang'];
+                    }
+                    if (($target === 'xi' || $target === 'xii') && !self::isKelasX($tingkat)) {
+                        return $acara['jam_pulang'];
+                    }
+                } else {
+                    return $acara['jam_pulang'];
+                }
+            }
         }
+
+        // 2. Cek Aturan Hari Senin
+        if ($hariNorm === 'Senin') {
+            $normalPulang = self::getJamPulangNormal('Senin');
+            if (!self::isSeninAdaUpacara($tanggal)) {
+                $durasiJp = self::getDurasiPelajaran('Senin'); // default 40 menit
+                return self::kurangiWaktuMenit($normalPulang, $durasiJp);
+            }
+            return $normalPulang;
+        }
+
+        // 3. Cek Aturan Hari Jumat
+        if ($hariNorm === 'Jumat') {
+            $isX = ($tingkat === null || self::isKelasX($tingkat));
+            $normalPulang = self::getJamPulangNormal('Jumat', $tingkat);
+            if (!self::isJumatAdaPembiasaan($tanggal)) {
+                $durasiJp = self::getDurasiPelajaran('Jumat'); // default 30 menit
+                return self::kurangiWaktuMenit($normalPulang, $durasiJp);
+            }
+            return $normalPulang;
+        }
+
+        return self::getJamPulangNormal($hariNorm, $tingkat);
     }
 
-    public static function getJamPulangJumatXi(): string
+    public static function getJamPulangJumatX(?string $tanggal = null, bool $checkAcaraMendadak = true): string
     {
-        try {
-            return Pengaturan::getVal('jam_pulang_jumat_xi', '15:00') ?: '15:00';
-        } catch (\Throwable $e) {
-            return '15:00';
-        }
+        return self::getJamPulang('Jumat', 'X', $tanggal, $checkAcaraMendadak);
+    }
+
+    public static function getJamPulangJumatXi(?string $tanggal = null, bool $checkAcaraMendadak = true): string
+    {
+        return self::getJamPulang('Jumat', 'XI', $tanggal, $checkAcaraMendadak);
     }
 
     public static function getDurasiPelajaran(string $hari = 'Senin'): int
@@ -253,12 +398,14 @@ class KbmService
             'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
         ];
         $hariIndo = $days[$now->format('l')] ?? 'Senin';
+        $todayDate = $now->toDateString();
         $currentTime = $now->format('H:i');
 
         $jamMasuk = self::getJamMasuk();
-        $jamPulang = self::getJamPulang($hariIndo);
+        $jamPulang = self::getJamPulang($hariIndo, null, $todayDate, true);
         $slots = self::getSlots($hariIndo);
         $istirahatList = self::getIstirahat($hariIndo);
+        $acaraMendadak = self::getAcaraMendadakInfo($todayDate);
 
         if ($hariIndo === 'Sabtu' || $hariIndo === 'Minggu') {
             return [
@@ -270,9 +417,36 @@ class KbmService
             ];
         }
 
+        // Sudah lewat jam terakhir KBM / Pulang (Evaluasi awal terutama jika ada acara mendadak pulang cepat)
+        if ($currentTime >= $jamPulang) {
+            $ketPulang = "Jam Pulang Sekolah (KBM Selesai Pukul {$jamPulang} WIB)";
+            if ($acaraMendadak) {
+                $ketPulang = "Jam Pulang Sekolah (Acara Mendadak: {$acaraMendadak['alasan']} - Dipulangkan Pukul {$jamPulang} WIB)";
+            } elseif ($hariIndo === 'Senin' && !self::isSeninAdaUpacara($todayDate)) {
+                $ketPulang = "Jam Pulang Sekolah (Senin Tanpa Upacara: Pulang Maju Pukul {$jamPulang} WIB)";
+            } elseif ($hariIndo === 'Jumat' && !self::isJumatAdaPembiasaan($todayDate)) {
+                $ketPulang = "Jam Pulang Sekolah (Jumat Tanpa Pembiasaan: Pulang Maju Pukul {$jamPulang} WIB)";
+            }
+
+            return [
+                'hari' => $hariIndo,
+                'jam_ke' => null,
+                'waktu_label' => $currentTime,
+                'status' => 'jam_pulang',
+                'keterangan' => $ketPulang,
+            ];
+        }
+
         // Cek apakah dalam slot mengajar
         foreach ($slots as $jamKe => $slot) {
             if ($currentTime >= $slot['waktu_mulai'] && $currentTime <= $slot['waktu_selesai']) {
+                $ketSlot = $slot['keterangan'] ?? "Jam Ke-{$jamKe}";
+                if ($jamKe == 1 && $hariIndo === 'Senin' && !self::isSeninAdaUpacara($todayDate)) {
+                    $ketSlot = 'KBM Jam Ke-1 (Tanpa Upacara Bendera)';
+                } elseif ($jamKe == 1 && $hariIndo === 'Jumat' && !self::isJumatAdaPembiasaan($todayDate)) {
+                    $ketSlot = 'KBM Jam Ke-1 (Tanpa Pembiasaan Pagi)';
+                }
+
                 return [
                     'hari' => $hariIndo,
                     'jam_ke' => (int)$jamKe,
@@ -280,7 +454,7 @@ class KbmService
                     'waktu_selesai' => $slot['waktu_selesai'],
                     'waktu_label' => $slot['waktu_mulai'] . ' - ' . $slot['waktu_selesai'],
                     'status' => 'kbm',
-                    'keterangan' => $slot['keterangan'] ?? "Jam Ke-{$jamKe}",
+                    'keterangan' => $ketSlot,
                 ];
             }
         }
@@ -308,17 +482,6 @@ class KbmService
             ];
         }
 
-        // Sudah lewat jam terakhir KBM / Pulang
-        if ($currentTime >= $jamPulang) {
-            return [
-                'hari' => $hariIndo,
-                'jam_ke' => null,
-                'waktu_label' => $currentTime,
-                'status' => 'jam_pulang',
-                'keterangan' => "Jam Pulang Sekolah (KBM Selesai Pukul {$jamPulang} WIB)",
-            ];
-        }
-
         return [
             'hari' => $hariIndo,
             'jam_ke' => null,
@@ -333,6 +496,14 @@ class KbmService
      */
     public static function getSlotsForJs(): array
     {
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
+        $todayDate = $now->toDateString();
+        $days = [
+            'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+        ];
+        $hariIndo = $days[$now->format('l')] ?? 'Senin';
+
         $seninKamisSlots = self::getSlots('Senin');
         $seninKamisIst = self::getIstirahat('Senin');
         $jumatSlots = self::getSlots('Jumat');
@@ -365,13 +536,51 @@ class KbmService
             return (int)$k <= 12;
         }, ARRAY_FILTER_USE_KEY);
 
+        $seninAdaUpacara = self::isSeninAdaUpacara($todayDate);
+        $jumatAdaPembiasaan = self::isJumatAdaPembiasaan($todayDate);
+        $acaraMendadak = self::getAcaraMendadakInfo($todayDate);
+
+        // Keterangan khusus jika ada penyesuaian kepulangan hari ini
+        $infoKhususHariIni = null;
+        if ($acaraMendadak) {
+            $infoKhususHariIni = [
+                'tipe' => 'acara_mendadak',
+                'judul' => 'Acara Mendadak / Pulang Cepat',
+                'pesan' => "Hari ini siswa dipulangkan pukul {$acaraMendadak['jam_pulang']} WIB sehubungan dengan {$acaraMendadak['alasan']}.",
+                'jam_pulang' => $acaraMendadak['jam_pulang'],
+                'target' => $acaraMendadak['target'],
+            ];
+        } elseif ($hariIndo === 'Senin' && !$seninAdaUpacara) {
+            $jamPulangSenin = self::getJamPulang('Senin', null, $todayDate);
+            $infoKhususHariIni = [
+                'tipe' => 'tanpa_upacara',
+                'judul' => 'Senin Tanpa Upacara Bendera',
+                'pesan' => "Upacara hari ini ditiadakan. Kepulangan siswa dimajukan 1 jam pelajaran (Pulang pukul {$jamPulangSenin} WIB).",
+                'jam_pulang' => $jamPulangSenin,
+            ];
+        } elseif ($hariIndo === 'Jumat' && !$jumatAdaPembiasaan) {
+            $jamPulangX = self::getJamPulangJumatX($todayDate);
+            $jamPulangXi = self::getJamPulangJumatXi($todayDate);
+            $infoKhususHariIni = [
+                'tipe' => 'tanpa_pembiasaan',
+                'judul' => 'Jumat Tanpa Pembiasaan',
+                'pesan' => "Pembiasaan hari ini ditiadakan. Kepulangan siswa dimajukan 1 jam pelajaran (Kelas X: {$jamPulangX} WIB, Kelas XI/XII: {$jamPulangXi} WIB).",
+                'jam_pulang_x' => $jamPulangX,
+                'jam_pulang_xi' => $jamPulangXi,
+            ];
+        }
+
         return [
             'jam_masuk' => self::getJamMasuk(),
-            'jam_pulang_senin_kamis' => self::getJamPulang('Senin'),
-            'jam_pulang_jumat' => self::getJamPulang('Jumat'),
-            'jam_pulang_jumat_x' => self::getJamPulangJumatX(),
-            'jam_pulang_jumat_xi' => self::getJamPulangJumatXi(),
+            'jam_pulang_senin_kamis' => self::getJamPulang('Senin', null, $todayDate, false),
+            'jam_pulang_jumat' => self::getJamPulang('Jumat', null, $todayDate, false),
+            'jam_pulang_jumat_x' => self::getJamPulangJumatX($todayDate, false),
+            'jam_pulang_jumat_xi' => self::getJamPulangJumatXi($todayDate, false),
             'toleransi_terlambat' => self::getToleransiTerlambat(),
+            'senin_ada_upacara' => $seninAdaUpacara,
+            'jumat_ada_pembiasaan' => $jumatAdaPembiasaan,
+            'acara_mendadak' => $acaraMendadak,
+            'info_khusus_hari_ini' => $infoKhususHariIni,
             'senin_kamis_list' => $formatList($seninKamisSlots, $seninKamisIst),
             'jumat_list' => $formatList($jumatSlotsX, $jumatIst),
             'jumat_x_list' => $formatList($jumatSlotsX, $jumatIst),

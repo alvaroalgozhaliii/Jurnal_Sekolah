@@ -38,6 +38,8 @@ use App\Http\Controllers\PiketSiswaTerlambatController;
 use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\Admin\ResetPasswordAdminController;
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\JadwalPiketController;
+use App\Http\Controllers\DeviceRequestController;
 
 // ======================================================
 // PUBLIC & AUTHENTICATION ROUTES
@@ -70,6 +72,10 @@ Route::post('/lupa-password', [LupaPasswordController::class, 'submitRequest'])-
 Route::get('/lupa-password/check-status', [LupaPasswordController::class, 'checkStatusApi'])->name('lupa-password.check-status');
 Route::get('/reset-password/{token}', [LupaPasswordController::class, 'showResetForm'])->name('reset-password.form');
 Route::post('/reset-password/{token}', [LupaPasswordController::class, 'processReset'])->name('reset-password.process');
+
+// 1 Device = 1 Akun (Device Binding) Pending Routes
+Route::get('/device-pending', fn () => view('device.pending'))->name('device.pending');
+Route::post('/device-pending/keterangan', [DeviceRequestController::class, 'simpanKeterangan'])->name('device.keterangan');
 
 
 // ======================================================
@@ -160,6 +166,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/jam-sekolah', [PengaturanController::class, 'jamSekolahIndex'])->name('admin.jam-sekolah.index');
     Route::post('/jam-sekolah', [PengaturanController::class, 'updateJamSekolah'])->name('admin.jam-sekolah.update');
     Route::post('/jam-sekolah/reset', [PengaturanController::class, 'resetJamSekolah'])->name('admin.jam-sekolah.reset');
+    Route::post('/jam-sekolah/acara-mendadak', [PengaturanController::class, 'updateAcaraMendadak'])->name('admin.jam-sekolah.acara-mendadak');
+    Route::post('/jam-sekolah/toggle-upacara', [PengaturanController::class, 'toggleUpacaraSenin'])->name('admin.jam-sekolah.toggle-upacara');
+    Route::post('/jam-sekolah/toggle-pembiasaan', [PengaturanController::class, 'togglePembiasaanJumat'])->name('admin.jam-sekolah.toggle-pembiasaan');
 
     // Pengaturan Admin
     Route::post('/pengaturan', [PengaturanController::class, 'updateAdminSettings'])->name('admin.pengaturan.update');
@@ -175,6 +184,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/reset-password-requests', [ResetPasswordAdminController::class, 'index'])->name('admin.reset-password.index');
     Route::post('/reset-password-requests/{id}/approve', [ResetPasswordAdminController::class, 'approve'])->name('admin.reset-password.approve');
     Route::post('/reset-password-requests/{id}/reject', [ResetPasswordAdminController::class, 'reject'])->name('admin.reset-password.reject');
+
+    // Manajemen Perangkat Pengguna (1 Device = 1 Akun)
+    Route::get('/device-requests', [DeviceRequestController::class, 'index'])->name('admin.device-requests');
+    Route::post('/device-requests/{id}/approve', [DeviceRequestController::class, 'approve'])->name('admin.device-requests.approve');
+    Route::post('/device-requests/{id}/reject', [DeviceRequestController::class, 'reject'])->name('admin.device-requests.reject');
+    Route::post('/device-requests/reset/{id}', [DeviceRequestController::class, 'reset'])->name('admin.device-requests.reset');
 });
 
 
@@ -188,6 +203,28 @@ Route::middleware(['auth', 'role:admin,guru,wali_kelas'])->prefix('guru-area')->
     Route::post('/presensi-masuk', [PresensiGuruController::class, 'presensiMasuk'])->name('guru.presensi-masuk');
     Route::post('/presensi-keluar', [PresensiGuruController::class, 'presensiKeluar'])->name('guru.presensi-keluar');
     Route::post('/pengaturan', [PengaturanController::class, 'updateTeacherSettings'])->name('guru.pengaturan.update');
+
+    // Jadwal Piket (View Only untuk Guru & Wali Kelas)
+    Route::get('/jadwal-piket', [JadwalPiketController::class, 'viewGuru'])->name('guru.jadwal-piket');
+});
+
+
+// ======================================================
+// JADWAL PIKET MANAGEMENT ROUTES (WAKA SDM, WAKA KURIKULUM, ADMIN)
+// ======================================================
+
+Route::middleware(['auth', 'role:admin,waka_sdm,waka_kurikulum'])->prefix('jadwal-piket')->group(function () {
+    Route::get('/', [JadwalPiketController::class, 'index'])->name('jadwal-piket.index');
+    Route::get('/create', [JadwalPiketController::class, 'create'])->name('jadwal-piket.create');
+    Route::post('/', [JadwalPiketController::class, 'store'])->name('jadwal-piket.store');
+    Route::get('/{id}/edit', [JadwalPiketController::class, 'edit'])->name('jadwal-piket.edit');
+    Route::put('/{id}', [JadwalPiketController::class, 'update'])->name('jadwal-piket.update');
+    Route::delete('/{id}', [JadwalPiketController::class, 'destroy'])->name('jadwal-piket.destroy');
+
+    // CSV: Download Template, Export, Import
+    Route::get('/template-csv', [JadwalPiketController::class, 'downloadTemplate'])->name('jadwal-piket.template-csv');
+    Route::get('/export-csv', [JadwalPiketController::class, 'exportCsv'])->name('jadwal-piket.export-csv');
+    Route::post('/import-csv', [JadwalPiketController::class, 'importCsv'])->name('jadwal-piket.import-csv');
 });
 
 
@@ -214,6 +251,9 @@ Route::middleware(['auth', 'role:admin,piket'])->prefix('piket-area')->group(fun
     Route::post('/siswa-terlambat', [PiketSiswaTerlambatController::class, 'store'])->name('piket.siswa-terlambat.store');
     Route::get('/siswa-terlambat/{id}/slip', [PiketSiswaTerlambatController::class, 'cetakSlip'])->name('piket.siswa-terlambat.slip');
     Route::delete('/siswa-terlambat/{id}', [PiketSiswaTerlambatController::class, 'destroy'])->name('piket.siswa-terlambat.destroy');
+
+    // Jadwal Piket (View untuk Petugas Piket)
+    Route::get('/jadwal-piket', [JadwalPiketController::class, 'viewPiket'])->name('piket.jadwal-piket');
 });
 
 
@@ -269,18 +309,22 @@ Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm,waka_kurikulum,wa
 });
 
 // ======================================================
-// WAKA KURIKULUM ROLE ROUTES (MANAJEMEN JADWAL PIKET)
+// WAKA KURIKULUM ROLE ROUTES (DASHBOARD & ALIASES)
 // ======================================================
 
 Route::middleware(['auth', 'role:admin,waka_kurikulum'])->prefix('waka-kurikulum-area')->group(function () {
     Route::get('/dashboard', [WakaKurikulumController::class, 'dashboard'])->name('waka-kurikulum.dashboard');
-    Route::get('/jadwal-waka', [WakaKurikulumController::class, 'index'])->name('waka-kurikulum.index');
-    Route::get('/jadwal-waka/create', [WakaKurikulumController::class, 'create'])->name('waka-kurikulum.jadwal.create');
-    Route::post('/jadwal-waka', [WakaKurikulumController::class, 'store'])->name('waka-kurikulum.jadwal.store');
+});
+
+// Backward compatibility alias routes for existing waka-kurikulum jadwal links
+Route::middleware(['auth', 'role:admin,waka_sdm,waka_kurikulum'])->prefix('waka-kurikulum-area')->group(function () {
+    Route::get('/jadwal-waka', [JadwalPiketController::class, 'index'])->name('waka-kurikulum.index');
+    Route::get('/jadwal-waka/create', [JadwalPiketController::class, 'create'])->name('waka-kurikulum.jadwal.create');
+    Route::post('/jadwal-waka', [JadwalPiketController::class, 'store'])->name('waka-kurikulum.jadwal.store');
     Route::get('/jadwal-waka/{id}', [WakaKurikulumController::class, 'show'])->name('waka-kurikulum.jadwal.show');
-    Route::get('/jadwal-waka/{id}/edit', [WakaKurikulumController::class, 'edit'])->name('waka-kurikulum.jadwal.edit');
-    Route::put('/jadwal-waka/{id}', [WakaKurikulumController::class, 'update'])->name('waka-kurikulum.jadwal.update');
-    Route::delete('/jadwal-waka/{id}', [WakaKurikulumController::class, 'destroy'])->name('waka-kurikulum.jadwal.destroy');
+    Route::get('/jadwal-waka/{id}/edit', [JadwalPiketController::class, 'edit'])->name('waka-kurikulum.jadwal.edit');
+    Route::put('/jadwal-waka/{id}', [JadwalPiketController::class, 'update'])->name('waka-kurikulum.jadwal.update');
+    Route::delete('/jadwal-waka/{id}', [JadwalPiketController::class, 'destroy'])->name('waka-kurikulum.jadwal.destroy');
 });
 
 

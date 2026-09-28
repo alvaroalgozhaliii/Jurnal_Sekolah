@@ -235,31 +235,23 @@
         font-size: 15px;
         min-width: 0;
     }
-    @media (max-width: 600px) {
-        .topbar-title {
-            max-width: 160px;
-            font-size: 13.5px;
-        }
+    /* Pertahankan tampilan desktop persis sama */
+    .topbar-title {
+        max-width: none;
+        font-size: 15px;
     }
-    @media (max-width: 480px) {
-        .topbar-title {
-            max-width: 120px;
-            font-size: 13px;
-        }
-        .btn-ganti-akses span {
-            display: none !important;
-        }
-        .btn-ganti-akses {
-            padding: 6px 8px !important;
-        }
+    .btn-ganti-akses span {
+        display: inline !important;
+    }
+    .btn-ganti-akses {
+        padding: 6px 12px !important;
     }
 
-    /* Mencegah horizontal layout shift / overflow */
+    /* Layout desktop tetap terlihat dengan horizontal scroll */
     body, .app-shell, .main-area {
-        max-width: 100vw;
+        /* max-width dihapus agar bisa scroll horizontal seperti desktop */
     }
     .content-area {
-        max-width: 100%;
         box-sizing: border-box;
     }
     </style>
@@ -354,6 +346,7 @@
                 </a>
                 @php
                     $pendingResetCount = \App\Models\ResetPasswordRequest::where('status', 'pending')->count();
+                    $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
                 @endphp
                 <a href="{{ route('admin.reset-password.index') }}" class="nav-item {{ request()->routeIs('admin.reset-password.*') ? 'active' : '' }}" style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="display: flex; align-items: center; gap: 10px;">
@@ -362,6 +355,15 @@
                     </span>
                     @if($pendingResetCount > 0)
                         <span class="badge badge-amber" style="font-size: 11px; padding: 2px 7px;">{{ $pendingResetCount }}</span>
+                    @endif
+                </a>
+                <a href="{{ route('admin.device-requests') }}" class="nav-item {{ request()->routeIs('admin.device-requests*') ? 'active' : '' }}" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="display: flex; align-items: center; gap: 10px;">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                        Perangkat Pengguna
+                    </span>
+                    @if($pendingDeviceCount > 0)
+                        <span class="badge badge-amber" style="font-size: 11px; padding: 2px 7px;">{{ $pendingDeviceCount }}</span>
                     @endif
                 </a>
 
@@ -391,7 +393,7 @@
                     CSV Master Import
                 </a>
 
-            <!-- GURU -->
+            <!-- GURU (Murni Aktivitas Mengajar & Pembelajaran) -->
             @elseif($role === 'guru')
                 <div class="nav-section-label">Dashboard & Presensi</div>
                 <a href="{{ route('guru.dashboard') }}" class="nav-item {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
@@ -416,34 +418,10 @@
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
                     Daftar Pengajuan Izin
                 </a>
-
-                @php
-                    $guruModelNav = Auth::user()->guru;
-                    $kelasWaliNav = $guruModelNav ? \App\Models\Kelas::where('id_guru_walikelas', $guruModelNav->id_guru)->orWhere('wali_kelas', $guruModelNav->nama)->first() : null;
-                @endphp
-                @if($kelasWaliNav)
-                    <div class="nav-section-label">Wali Kelas {{ $kelasWaliNav->nama_kelas }}</div>
-                    <a href="{{ route('walikelas.dashboard') }}" class="nav-item {{ request()->routeIs('walikelas.dashboard') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                        Dashboard Kelas Bimbingan
-                    </a>
-                    <a href="{{ route('walikelas.data-kelas') }}" class="nav-item {{ request()->routeIs('walikelas.data-kelas') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                        Monitoring Siswa Kelas
-                    </a>
-                    <a href="{{ route('walikelas.rekap-presensi') }}" class="nav-item {{ request()->routeIs('walikelas.rekap-presensi*') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                        Rekap Presensi Siswa
-                    </a>
-                    <a href="{{ route('walikelas.siswa-terlambat') }}" class="nav-item {{ request()->routeIs('walikelas.siswa-terlambat*') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        Siswa Terlambat
-                    </a>
-                    <a href="{{ route('walikelas.jurnal') }}" class="nav-item {{ request()->routeIs('walikelas.jurnal') ? 'active' : '' }}">
-                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                        Jurnal KBM Kelas
-                    </a>
-                @endif
+                <a href="{{ route('guru.jadwal-piket') }}" class="nav-item {{ request()->routeIs('guru.jadwal-piket') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Jadwal Piket
+                </a>
 
             <!-- PIKET -->
             @elseif($role === 'piket')
@@ -467,6 +445,10 @@
                 <a href="{{ route('piket.siswa-terlambat.index') }}" class="nav-item {{ request()->routeIs('piket.siswa-terlambat.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     Siswa Terlambat
+                </a>
+                <a href="{{ route('piket.jadwal-piket') }}" class="nav-item {{ request()->routeIs('piket.jadwal-piket') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Jadwal Piket
                 </a>
 
             <!-- ORTU / SISWA -->
@@ -497,32 +479,8 @@
                     Pengajuan Izin Anak
                 </a>
 
-            <!-- WALI KELAS (diperlakukan sama seperti Guru, dengan tambahan menu Wali Kelas) -->
+            <!-- WALI KELAS (Murni Penugasan Kelas Bimbingan) -->
             @elseif($role === 'wali_kelas' || $role === 'walikelas')
-                <div class="nav-section-label">Dashboard & Presensi</div>
-                <a href="{{ route('guru.dashboard') }}" class="nav-item {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    Dashboard Guru & Wali Kelas
-                </a>
-                <a href="{{ route('guru.presensi-saya') }}" class="nav-item {{ request()->routeIs('guru.presensi-saya') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    Presensi Masuk / Keluar
-                </a>
-
-                <div class="nav-section-label">Aktivitas Mengajar & Pengajuan</div>
-                <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') && !request()->fullUrlIs('*tab=pengajuan*') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    Jurnal Mengajar Saya
-                </a>
-                <a href="{{ route('absensi-siswa.index') }}" class="nav-item {{ request()->routeIs('absensi-siswa.*') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
-                    Absensi Siswa KBM
-                </a>
-                <a href="{{ route('jurnal-harian.index', ['tab' => 'pengajuan']) }}" class="nav-item {{ request()->fullUrlIs('*tab=pengajuan*') || request()->routeIs('pengajuan.*') ? 'active' : '' }}">
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    Daftar Pengajuan Izin
-                </a>
-
                 @php
                     $guruModelNavWK = Auth::user()->guru;
                     if (!$guruModelNavWK) {
@@ -533,11 +491,13 @@
                         $kelasWaliNavWK = \App\Models\Kelas::where('wali_kelas', Auth::user()->nama)->first();
                     }
                 @endphp
-                <div class="nav-section-label">Wali Kelas {{ $kelasWaliNavWK?->nama_kelas ?? '' }}</div>
+                <div class="nav-section-label">Dashboard Wali Kelas</div>
                 <a href="{{ route('walikelas.dashboard') }}" class="nav-item {{ request()->routeIs('walikelas.dashboard') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    Dashboard Kelas Bimbingan
+                    Dashboard Kelas {{ $kelasWaliNavWK?->nama_kelas ?? 'Bimbingan' }}
                 </a>
+
+                <div class="nav-section-label">Penugasan Wali Kelas</div>
                 <a href="{{ route('walikelas.data-kelas') }}" class="nav-item {{ request()->routeIs('walikelas.data-kelas') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
                     Monitoring Siswa Kelas
@@ -572,6 +532,10 @@
                 <a href="{{ route('guru.index') }}" class="nav-item {{ request()->routeIs('guru.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     Data Guru & Pendidik
+                </a>
+                <a href="{{ route('jadwal-piket.index') }}" class="nav-item {{ request()->routeIs('jadwal-piket.*', 'waka-kurikulum.index', 'waka-kurikulum.jadwal.*') ? 'active' : '' }}">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Jadwal Piket
                 </a>
                 <a href="{{ route('jurnal-harian.index') }}" class="nav-item {{ request()->routeIs('jurnal-harian.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -611,7 +575,7 @@
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     Dashboard Kurikulum
                 </a>
-                <a href="{{ route('waka-kurikulum.index') }}" class="nav-item {{ request()->routeIs('waka-kurikulum.index', 'waka-kurikulum.jadwal.*') ? 'active' : '' }}">
+                <a href="{{ route('jadwal-piket.index') }}" class="nav-item {{ request()->routeIs('jadwal-piket.*', 'waka-kurikulum.index', 'waka-kurikulum.jadwal.*') ? 'active' : '' }}">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     Jadwal Piket & Waka
                 </a>
@@ -767,7 +731,8 @@
                     </svg>
                 </button>
                 <div class="topbar-title">
-                    @yield('page-title', 'Dashboard')
+                    <span class="topbar-title-sparkle" aria-hidden="true">✦</span>
+                    <span>@yield('page-title', 'Dashboard')</span>
                 </div>
             </div>
 
@@ -785,7 +750,7 @@
 
                 <!-- Dark Mode Toggle Button -->
                 <button type="button" id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark Mode" title="Ganti Mode Gelap / Terang">
-                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px;">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -796,7 +761,7 @@
                         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
-                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" style="width:20px; height:20px;">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
                 </button>
@@ -817,7 +782,13 @@
                     @endif
                     <div class="user-info">
                         <div class="user-name">{{ Auth::user()->nama }}</div>
-                        <div class="user-role">{{ strtoupper(str_replace('_', ' ', session('active_access', Auth::user()->role))) }}</div>
+                        @php
+                            $activeRoleName = session('active_access', Auth::user()->role);
+                            if ($activeRoleName === 'waka') {
+                                $activeRoleName = str_starts_with(Auth::user()->role, 'waka_') ? Auth::user()->role : 'waka';
+                            }
+                        @endphp
+                        <div class="user-role">{{ strtoupper(str_replace('_', ' ', $activeRoleName)) }}</div>
                     </div>
                 </a>
                 @endauth
@@ -911,7 +882,19 @@
             <div class="sys-bg-orb sys-orb-4"></div>
             <div class="sys-bg-ring sys-ring-1"></div>
             <div class="sys-bg-ring sys-ring-2"></div>
+            <div class="sys-bg-diamond sys-dm-1"></div>
             <div class="sys-bg-beam"></div>
+
+            <!-- Ambient Flow Wave Lines (Gelombang Estetik Halus & Simpel) -->
+            <div class="sys-waves-container">
+                <svg class="sys-wave-svg sys-wave-1" viewBox="0 0 1440 280" fill="none" preserveAspectRatio="none">
+                    <path d="M0,80 C320,150 560,20 840,95 C1120,170 1290,65 1440,85" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 8" />
+                </svg>
+                <svg class="sys-wave-svg sys-wave-2" viewBox="0 0 1440 280" fill="none" preserveAspectRatio="none">
+                    <path d="M0,190 C290,120 530,225 850,145 C1150,75 1310,185 1440,165" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 7" />
+                </svg>
+            </div>
+
             <!-- Falling Meteors / Shooting Stars (Vertikal Miring ke Samping) -->
             <div class="sys-meteors-container">
                 <div class="sys-meteor m1"></div>
@@ -920,10 +903,31 @@
                 <div class="sys-meteor m4"></div>
                 <div class="sys-meteor m5"></div>
             </div>
+
+            <!-- Floating Aesthetic Particles -->
             <div class="sys-particle p1"></div>
             <div class="sys-particle p2"></div>
             <div class="sys-particle p3"></div>
             <div class="sys-particle p4"></div>
+
+            <!-- Twinkling Star Crosses (Kilau Bintang Halus / Aesthetic Sparkles) -->
+            <div class="sys-sparkle sp1">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+            <div class="sys-sparkle sp2">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+            <div class="sys-sparkle sp3">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+            <div class="sys-sparkle sp4">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z"/></svg>
+            </div>
+
+            <!-- Minimalist Precision Coordinate Crosses (+) -->
+            <div class="sys-cross cr1">+</div>
+            <div class="sys-cross cr2">+</div>
+            <div class="sys-cross cr3">+</div>
         </div>
 
         {{-- FLASH NOTIFICATION MESSAGES --}}

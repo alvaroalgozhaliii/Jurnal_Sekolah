@@ -10,7 +10,7 @@
         <p class="page-subtitle">Pilih bulan dan tentukan penugasan Waka &amp; Guru Piket untuk setiap hari</p>
     </div>
     <div class="page-actions">
-        <a href="{{ route('waka-kurikulum.index') }}" class="btn btn-secondary">&larr; Kembali</a>
+        <a href="{{ route('jadwal-piket.index') }}" class="btn btn-secondary">&larr; Kembali</a>
     </div>
 </div>
 
@@ -24,7 +24,7 @@
 </div>
 @endif
 
-<form action="{{ route('waka-kurikulum.jadwal.store') }}" method="POST" id="formBulanan">
+<form action="{{ route('jadwal-piket.store') }}" method="POST" id="formBulanan">
     @csrf
 
     {{-- Filter Periode Bulan & Tahun --}}

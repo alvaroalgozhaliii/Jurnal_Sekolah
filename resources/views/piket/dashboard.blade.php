@@ -9,7 +9,11 @@
         <h1 class="page-title">Dashboard Petugas Piket</h1>
         <p class="page-subtitle">Monitoring Jam Pelajaran, Kehadiran Guru, Kelas Kosong & Pengajuan Dispensasi</p>
     </div>
-    <div class="page-actions" style="display:flex; gap:8px;">
+    <div class="page-actions" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <a href="{{ route('piket.jadwal-piket') }}" class="btn btn-secondary" style="font-weight:600;">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            Jadwal Piket
+        </a>
         <a href="{{ route('piket.pengajuan.create') }}" class="btn btn-primary" style="background:#1e3a8a; color:#ffffff; font-weight:600;">+ Input Dispen Siswa</a>
         <a href="{{ route('pengajuan.create') }}?tipe=guru" class="btn" style="background:#d97706; color:#ffffff; font-weight:600; padding:7px 14px; border-radius:6px; border:none;">+ Input Dispen Guru</a>
         <a href="{{ route('piket.anak-sakit') }}" class="btn btn-secondary" style="font-weight:600;">Catat Anak Sakit</a>
@@ -18,24 +22,53 @@
 
 @include('partials.kbm-clock-banner')
 
-<!-- BANNER WAKA BERTUGAS HARI INI -->
-<div style="background:var(--bg-card); border:1px solid #38bdf8; border-radius:8px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-    <div style="display:flex; align-items:center; gap:12px;">
-        
-        <div>
-            <div style="font-size:13.5px; font-weight:700; color:#38bdf8;">
-                Waka yang Bertugas Hari Ini: {{ $wakaHariIni ? $wakaHariIni->waka->nama . ' (' . strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) . ')' : 'Belum Terjadwal (Otomatis diarahkan ke Waka SDM / Kesiswaan)' }}
-            </div>
-            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
-                Pengajuan dispensasi siswa & guru yang dibuat hari ini akan otomatis diteruskan ke Waka di atas via WhatsApp.
+<!-- BANNER PETUGAS PIKET & WAKA HARI INI -->
+<div class="card mb-20" style="border-left: 4px solid #38bdf8; background:var(--bg-card); padding:16px 20px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span class="badge" style="background:#16a34a; color:#fff; font-size:11px; font-weight:700; padding:3px 8px;">HARI INI</span>
+            <strong style="font-size:15px; color:#38bdf8;">Penugasan Piket &amp; Waka Bertugas</strong>
+            <span class="text-muted" style="font-size:12px;">({{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') }})</span>
+        </div>
+        <a href="{{ route('piket.jadwal-piket') }}" class="btn btn-secondary btn-sm" style="font-size:12px;">
+            Lihat Kalender Piket &rarr;
+        </a>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+        <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+            <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:2px;">Waka Bertugas</span>
+            <strong class="text-navy" style="font-size:14px;">{{ $wakaHariIni ? $wakaHariIni->waka->nama : 'Belum Terjadwal' }}</strong>
+            <div class="text-muted" style="font-size:11.5px; margin-top:2px;">
+                {{ $wakaHariIni && $wakaHariIni->waka ? strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) : 'Otomatis diarahkan ke Waka SDM / Kesiswaan' }}
+                @if($wakaHariIni && $wakaHariIni->waka && $wakaHariIni->waka->no_hp)
+                    &bull; <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $wakaHariIni->waka->no_hp) }}" target="_blank" style="color:#16a34a; text-decoration:none; font-weight:600;">WA: {{ $wakaHariIni->waka->no_hp }}</a>
+                @endif
             </div>
         </div>
+
+        <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+            <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:2px;">Guru Piket</span>
+            @if($wakaHariIni && $wakaHariIni->guruPiket)
+                <strong style="font-size:14px; color:var(--text-primary);">{{ $wakaHariIni->guruPiket->nama }}</strong>
+                <div class="text-muted" style="font-size:11.5px; margin-top:2px;">
+                    {{ $wakaHariIni->guruPiket->bidang_studi ?? 'Guru Piket' }}
+                    @if($wakaHariIni->guruPiket->no_telp)
+                        &bull; <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $wakaHariIni->guruPiket->no_telp) }}" target="_blank" style="color:#16a34a; text-decoration:none; font-weight:600;">WA: {{ $wakaHariIni->guruPiket->no_telp }}</a>
+                    @endif
+                </div>
+            @else
+                <span class="text-muted" style="font-size:13px; font-style:italic;">Belum ditentukan</span>
+            @endif
+        </div>
+
+        @if($wakaHariIni && $wakaHariIni->keterangan)
+        <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+            <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:2px;">Catatan Penugasan</span>
+            <div style="font-size:12.5px; color:var(--text-primary);">{{ $wakaHariIni->keterangan }}</div>
+        </div>
+        @endif
     </div>
-    @if($wakaHariIni && $wakaHariIni->waka && $wakaHariIni->waka->no_hp)
-        <span class="badge" style="background:#10b981; color:#fff; font-size:12px; padding:6px 12px; font-weight:600;">
-             WA: {{ $wakaHariIni->waka->no_hp }}
-        </span>
-    @endif
 </div>
 
 <!-- WARNING KELAS KOSONG -->

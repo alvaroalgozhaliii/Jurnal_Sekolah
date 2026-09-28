@@ -10,6 +10,8 @@ use App\Models\AbsensiSiswa;
 use App\Models\JurnalHarian;
 use App\Models\SiswaTerlambat;
 use App\Models\Notifikasi;
+use App\Models\Guru;
+use App\Models\PengajuanIzin;
 use App\Services\AttendanceAlertService;
 use Carbon\Carbon;
 
@@ -24,16 +26,54 @@ class WaliKelasController extends Controller
                 ->first();
             if ($kelas) return $kelas;
         }
-        return Kelas::first(); // Fallback if admin viewing
+
+        $guruModel = Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
+        if ($guruModel) {
+            $kelas = Kelas::where('id_guru_walikelas', $guruModel->id_guru)
+                ->orWhere('wali_kelas', $guruModel->nama)
+                ->first();
+            if ($kelas) return $kelas;
+        }
+
+        $kelasByName = Kelas::where('wali_kelas', $user->nama)->first();
+        if ($kelasByName) return $kelasByName;
+
+        if ($user->isAdmin()) {
+            return Kelas::first();
+        }
+        return null;
     }
 
     public function index()
     {
+        $user = Auth::user();
+        $activeAccess = session('active_access');
+
+        // Jika user sedang aktif dengan peran pembelajaran Guru biasa, arahkan ke dashboard guru
+        if ($activeAccess === 'guru' && !$user->isAdmin()) {
+            return redirect()->route('guru.dashboard');
+        }
+
+        // Jika user sedang aktif dengan peran waka, arahkan ke dashboard waka
+        if ($activeAccess && !in_array($activeAccess, ['wali_kelas', 'walikelas']) && !$user->isAdmin()) {
+            $routeName = AuthController::getDashboardRouteName($activeAccess);
+            if (\Illuminate\Support\Facades\Route::has($routeName) && $routeName !== 'walikelas.dashboard') {
+                return redirect()->route($routeName);
+            }
+        }
+
         $kelas      = $this->getKelasWali();
         $totalSiswa = $kelas ? Siswa::where('id_kelas', $kelas->id_kelas)->count() : 0;
 
-        $todayDate      = Carbon::today()->toDateString();
+        $todayDate       = Carbon::today()->toDateString();
         $presensiHariIni = collect();
+        $hadirCount      = 0;
+        $sakitCount      = 0;
+        $izinCount       = 0;
+        $alpaCount       = 0;
+        $terlambatCount  = 0;
+        $terlambatHariIni = collect();
+        $izinHariIni     = collect();
 
         if ($kelas) {
             $siswaIds = Siswa::where('id_kelas', $kelas->id_kelas)->pluck('id_siswa');
@@ -43,9 +83,39 @@ class WaliKelasController extends Controller
                     $q->where('tanggal', $todayDate);
                 })
                 ->get();
+
+            $hadirCount = $presensiHariIni->where('status', 'hadir')->count();
+            $sakitCount = $presensiHariIni->where('status', 'sakit')->count();
+            $izinCount = $presensiHariIni->where('status', 'izin')->count();
+            $alpaCount = $presensiHariIni->where('status', 'alpa')->count();
+            $terlambatCount = $presensiHariIni->where('status', 'terlambat')->count();
+
+            // Log siswa terlambat hari ini yang dicatat piket
+            $terlambatHariIni = SiswaTerlambat::with(['siswa', 'petugasPiket'])
+                ->whereIn('id_siswa', $siswaIds)
+                ->where('tanggal', $todayDate)
+                ->orderBy('jam_kedatangan', 'desc')
+                ->get();
+
+            // Pengajuan izin / sakit siswa kelas ini hari ini
+            $izinHariIni = PengajuanIzin::with('siswa')
+                ->whereIn('id_siswa', $siswaIds)
+                ->where('tanggal', $todayDate)
+                ->get();
         }
 
-        return view('walikelas.dashboard', compact('kelas', 'totalSiswa', 'presensiHariIni'));
+        return view('walikelas.dashboard', compact(
+            'kelas',
+            'totalSiswa',
+            'presensiHariIni',
+            'hadirCount',
+            'sakitCount',
+            'izinCount',
+            'alpaCount',
+            'terlambatCount',
+            'terlambatHariIni',
+            'izinHariIni'
+        ));
     }
 
     /**

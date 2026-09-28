@@ -226,7 +226,7 @@
     $MONTHS_ID_PHP = ['','Januari','Februari','Maret','April','Mei','Juni',
                       'Juli','Agustus','September','Oktober','November','Desember'];
 
-    $tanggalAda = $rekapData->map(fn($r) => substr($r->jurnal->tanggal ?? '', 0, 10))
+    $tanggalAda = (!empty($tanggalAda)) ? $tanggalAda : $rekapData->map(fn($r) => $r->jurnal?->tanggal ?? ($r->created_at ? substr($r->created_at, 0, 10) : ''))
         ->filter()->unique()->values()->toArray();
     $totalPresensi = array_sum($summary);
 @endphp
@@ -271,7 +271,7 @@
                     <select class="form-control select-search" data-searchable="true" id="uiSiswa" onchange="document.getElementById('hiddenSiswa').value=this.value; document.getElementById('hiddenTanggal').value=''; document.getElementById('calForm').submit();">
                         @foreach($anakList as $a)
                         <option value="{{ $a->id_siswa }}" {{ ($selectedSiswa->id_siswa == $a->id_siswa) ? 'selected' : '' }}>
-                            {{ $a->nama }} (NISN: {{ $a->NISN }})
+                            {{ $a->nama }} (NISN: {{ $a->nisn ?? $a->NISN ?? '-' }})
                         </option>
                         @endforeach
                     </select>
@@ -351,7 +351,7 @@
                 <tbody>
                 @foreach($rekapData as $r)
                     @php
-                        $tgl = $r->jurnal->tanggal ?? '';
+                        $tgl = $r->jurnal?->tanggal ?? ($r->created_at ? substr($r->created_at, 0, 10) : '');
                         $hariIndo = $tgl ? \Carbon\Carbon::parse($tgl)->locale('id')->isoFormat('dddd') : '-';
                         $st = strtolower($r->status);
                         $badgeCls = match($st) {

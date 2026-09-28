@@ -75,20 +75,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     @php
                         $st = strtolower($p->status);
                         $badgeCls = match($st) {
-                            'verified', 'disetujui_satpam', 'completed', 'selesai' => 'badge-success',
+                            'verified', 'disetujui_satpam', 'completed', 'disetujui', 'selesai' => 'badge-success',
                             'disetujui_waka', 'menunggu_satpam', 'pending_satpam' => 'badge-info',
                             'pending_waka', 'menunggu_waka', 'pending_piket' => 'badge-warning',
                             default => 'badge-danger'
                         };
-                        $katLabel = match($p->kategori) {
-                            'sakit' => 'IZIN SAKIT',
-                            'izin' => 'IZIN',
-                            default => strtoupper(str_replace('_', ' ', $p->kategori))
+                        $katLabel = \App\Helpers\DispenHelper::kategoriLabel($p->kategori);
+                        $katBadgeCls = \App\Helpers\DispenHelper::badgeColor($p->kategori);
+                        $statusLabel = match($st) {
+                            'completed', 'disetujui' => ($p->pengaju && $p->pengaju->isOrtu() ? 'DISETUJUI (ORTU)' : 'DISETUJUI'),
+                            'verified' => 'TERVERIFIKASI',
+                            'disetujui_satpam' => 'DISETUJUI SATPAM',
+                            'disetujui_waka' => 'DISETUJUI WAKA',
+                            'pending_waka' => 'MENUNGGU WAKA',
+                            'pending_piket' => 'MENUNGGU PIKET',
+                            'pending_satpam' => 'MENUNGGU SATPAM',
+                            default => strtoupper(str_replace('_', ' ', $p->status))
                         };
                     @endphp
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
-                        <td><span class="badge badge-navy">{{ $katLabel }}</span></td>
+                        <td><span class="badge {{ $katBadgeCls }}">{{ strtoupper($katLabel) }}</span></td>
                         <td class="fw-bold text-navy">
                             {{ $p->siswa ? $p->siswa->nama . ' (Kelas ' . ($p->siswa->kelas->nama_kelas ?? '-') . ')' : ($p->guru ? $p->guru->nama . ' (Guru)' : ($p->pengaju->nama ?? '-')) }}
                         </td>
@@ -101,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             @endif
                         </td>
                         <td>{{ Str::limit($p->alasan, 35) }}</td>
-                        <td><span class="badge {{ $badgeCls }}">{{ strtoupper(str_replace('_', ' ', $p->status)) }}</span></td>
+                        <td><span class="badge {{ $badgeCls }}">{{ $statusLabel }}</span></td>
                         <td>
                             @if($p->lampiran_foto)
                                 <a href="{{ asset('storage/' . $p->lampiran_foto) }}" target="_blank" class="btn btn-secondary btn-sm">Lihat Foto</a>

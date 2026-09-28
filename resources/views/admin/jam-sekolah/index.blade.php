@@ -358,12 +358,49 @@
     font-weight: 700;
     font-size: 12px;
     background: var(--badge-navy-bg);
-    color: var(--navy-primary);
+/* Kepulangan Kondisional & Acara Khusus Styles */
+.jam-kondisional-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(3px); }
-    to { opacity: 1; transform: translateY(0); }
+.jam-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.alert-acara-mendadak {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(249, 115, 22, 0.12) 100%);
+    border: 1.5px solid #f87171;
+    border-left: 5px solid #ef4444;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+    animation: fadeIn 0.3s ease;
+}
+
+[data-theme="dark"] .alert-acara-mendadak {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(249, 115, 22, 0.2) 100%);
+    border-color: #f87171;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.pulse-red-dot {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    animation: pulseGlow 1.5s infinite;
 }
 </style>
 
@@ -405,6 +442,42 @@
         </div>
     </div>
 
+    {{-- ALERT BANNER JIKA ACARA MENDADAK SEDANG AKTIF --}}
+    @if($acaraMendadakConfig['aktif'])
+        <div class="alert-acara-mendadak">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:14px;">
+                <div style="display:flex; align-items:flex-start; gap:14px;">
+                    <div style="width:42px; height:42px; border-radius:10px; background:rgba(239,68,68,0.2); color:#ef4444; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <div class="pulse-red-dot"></div>
+                    </div>
+                    <div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+                            <span class="badge" style="background:#ef4444; color:#fff; font-weight:800; font-size:11.5px; padding:3px 10px; letter-spacing:0.5px;">⚡ ACARA MENDADAK AKTIF</span>
+                            <span style="font-size:12.5px; color:var(--text-secondary); font-weight:600;">Tanggal: {{ \Carbon\Carbon::parse($acaraMendadakConfig['tanggal'])->translatedFormat('l, d F Y') }}</span>
+                            <span class="badge badge-info" style="font-size:11px;">Sasaran: {{ strtoupper($acaraMendadakConfig['target']) }}</span>
+                        </div>
+                        <div style="font-size:17px; font-weight:800; color:var(--text-primary); margin-bottom:4px;">
+                            Siswa Dipulangkan Lebih Cepat Pukul <span style="font-family:monospace; background:rgba(239,68,68,0.15); padding:2px 8px; border-radius:6px; color:#ef4444;">{{ $acaraMendadakConfig['jam_pulang'] }} WIB</span>
+                        </div>
+                        <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.4;">
+                            <strong>Keterangan / Alasan:</strong> {{ $acaraMendadakConfig['alasan'] }}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <form action="{{ route('admin.jam-sekolah.acara-mendadak') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan mode acara mendadak dan mengembalikan jadwal kepulangan ke waktu reguler?');">
+                        @csrf
+                        <input type="hidden" name="aktif" value="0">
+                        <button type="submit" class="btn btn-secondary btn-sm" style="background:#fff; border-color:#fca5a5; color:#b91c1c; font-weight:700; display:inline-flex; align-items:center; gap:6px; box-shadow:var(--shadow-sm);">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            Nonaktifkan Pulang Cepat
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Quick Metric Highlights --}}
     <div class="jam-metrics-grid">
         {{-- Metric 1: Jam Masuk --}}
@@ -420,40 +493,212 @@
         </div>
 
         {{-- Metric 2: Pulang Senin-Kamis --}}
-        <div class="jam-metric-card" style="border-left: 4px solid #16a34a;">
-            <div class="jam-metric-icon emerald">
+        <div class="jam-metric-card" style="border-left: 4px solid {{ !$seninAdaUpacara ? '#ea580c' : '#16a34a' }};">
+            <div class="jam-metric-icon {{ !$seninAdaUpacara ? 'amber' : 'emerald' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             </div>
             <div>
                 <div class="jam-metric-label">Pulang Senin–Kamis</div>
-                <div class="jam-metric-value">{{ $jamPulang }} WIB</div>
-                <div class="jam-metric-sub">10 JP (40 Menit/JP)</div>
+                @if(!$seninAdaUpacara)
+                    <div class="jam-metric-value" style="color: #ea580c;">{{ $jamPulangSeninEfektif }} WIB</div>
+                    <div class="jam-metric-sub">
+                        <span class="badge" style="background:#ffedd5; color:#c2410c; font-size:10.5px; font-weight:700;">Senin: Tanpa Upacara (-40m)</span>
+                    </div>
+                @else
+                    <div class="jam-metric-value">{{ $jamPulang }} WIB</div>
+                    <div class="jam-metric-sub">10 JP (40 Menit/JP • Upacara Normal)</div>
+                @endif
             </div>
         </div>
 
         {{-- Metric 3: Pulang Jumat Kelas 10 --}}
-        <div class="jam-metric-card" style="border-left: 4px solid #9333ea;">
-            <div class="jam-metric-icon purple">
+        <div class="jam-metric-card" style="border-left: 4px solid {{ !$jumatAdaPembiasaan ? '#ea580c' : '#9333ea' }};">
+            <div class="jam-metric-icon {{ !$jumatAdaPembiasaan ? 'amber' : 'purple' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </div>
             <div>
                 <div class="jam-metric-label">Pulang Jumat (Kelas 10)</div>
-                <div class="jam-metric-value">{{ $jamPulangJumatX }} WIB</div>
-                <div class="jam-metric-sub">13 JP (Sampai Jam ke-13)</div>
+                @if(!$jumatAdaPembiasaan)
+                    <div class="jam-metric-value" style="color: #ea580c;">{{ $jamPulangJumatXEfektif }} WIB</div>
+                    <div class="jam-metric-sub">
+                        <span class="badge" style="background:#ffedd5; color:#c2410c; font-size:10.5px; font-weight:700;">Tanpa Pembiasaan (-30m)</span>
+                    </div>
+                @else
+                    <div class="jam-metric-value">{{ $jamPulangJumatX }} WIB</div>
+                    <div class="jam-metric-sub">13 JP (Sampai Jam ke-13)</div>
+                @endif
             </div>
         </div>
 
         {{-- Metric 4: Pulang Jumat Kelas 11 & 12 --}}
-        <div class="jam-metric-card" style="border-left: 4px solid #d97706;">
+        <div class="jam-metric-card" style="border-left: 4px solid {{ !$jumatAdaPembiasaan ? '#ea580c' : '#d97706' }};">
             <div class="jam-metric-icon amber">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
             </div>
             <div>
                 <div class="jam-metric-label">Pulang Jumat (Kelas 11 & 12)</div>
-                <div class="jam-metric-value">{{ $jamPulangJumatXi }} WIB</div>
-                <div class="jam-metric-sub">12 JP (Pulang Lebih Awal)</div>
+                @if(!$jumatAdaPembiasaan)
+                    <div class="jam-metric-value" style="color: #ea580c;">{{ $jamPulangJumatXiEfektif }} WIB</div>
+                    <div class="jam-metric-sub">
+                        <span class="badge" style="background:#ffedd5; color:#c2410c; font-size:10.5px; font-weight:700;">Tanpa Pembiasaan (-30m)</span>
+                    </div>
+                @else
+                    <div class="jam-metric-value">{{ $jamPulangJumatXi }} WIB</div>
+                    <div class="jam-metric-sub">12 JP (Pulang Lebih Awal)</div>
+                @endif
             </div>
         </div>
+    </div>
+
+    {{-- =========================================================================
+         SECTION KHUSUS: PENGATURAN KEPULANGAN KONDISIONAL & ACARA MENDADAK
+         ========================================================================= --}}
+    <div class="jam-kondisional-grid">
+
+        {{-- BOX 1: PENYESUAIAN RUTIN (UPACARA & PEMBIASAAN) --}}
+        <div class="jam-box" style="margin-bottom:0;">
+            <div class="jam-box-head">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <h3 class="jam-box-title">Kepulangan Kondisional</h3>
+                <span class="jam-box-badge">Hari Ini</span>
+            </div>
+
+            {{-- Row: Upacara Senin --}}
+            <div class="jam-item-row" style="padding-bottom:14px;">
+                <div style="flex:1; min-width:0;">
+                    <div class="d-flex align-center gap-8 mb-4">
+                        <strong style="font-size:13px; color:var(--text-primary);">Upacara Bendera (Senin)</strong>
+                        <span class="badge {{ $seninAdaUpacara ? 'badge-success' : 'badge-amber' }}">
+                            {{ $seninAdaUpacara ? 'Ada Upacara' : 'Maju 1 JP' }}
+                        </span>
+                    </div>
+                    <div style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
+                        @if($seninAdaUpacara)
+                            KBM normal, pulang pukul <strong style="color:var(--text-primary);">{{ $jamPulangSeninNormal }} WIB</strong>
+                        @else
+                            Tanpa upacara, pulang maju ke <strong style="color:var(--gold-accent, #f59e0b);">{{ $jamPulangSeninTanpaUpacara }} WIB</strong> (-40m)
+                        @endif
+                    </div>
+                </div>
+                <form action="{{ route('admin.jam-sekolah.toggle-upacara') }}" method="POST" style="margin:0; flex-shrink:0;">
+                    @csrf
+                    @if($seninAdaUpacara)
+                        <input type="hidden" name="status" value="0">
+                        <button type="submit" class="btn btn-secondary btn-sm" title="Nonaktifkan upacara dan majukan kepulangan 1 JP">
+                            Maju 1 JP
+                        </button>
+                    @else
+                        <input type="hidden" name="status" value="1">
+                        <button type="submit" class="btn btn-primary btn-sm" title="Kembalikan ke jadwal upacara normal">
+                            Normal
+                        </button>
+                    @endif
+                </form>
+            </div>
+
+            {{-- Row: Pembiasaan Jumat --}}
+            <div class="jam-item-row" style="border-top:1px solid var(--border); padding-top:14px;">
+                <div style="flex:1; min-width:0;">
+                    <div class="d-flex align-center gap-8 mb-4">
+                        <strong style="font-size:13px; color:var(--text-primary);">Pembiasaan Pagi (Jumat)</strong>
+                        <span class="badge {{ $jumatAdaPembiasaan ? 'badge-success' : 'badge-amber' }}">
+                            {{ $jumatAdaPembiasaan ? 'Ada Pembiasaan' : 'Maju 1 JP' }}
+                        </span>
+                    </div>
+                    <div style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
+                        @if($jumatAdaPembiasaan)
+                            KBM normal (X: <strong style="color:var(--text-primary);">{{ $jamPulangJumatXNormal }}</strong>, XI/XII: <strong style="color:var(--text-primary);">{{ $jamPulangJumatXiNormal }} WIB</strong>)
+                        @else
+                            Tanpa pembiasaan, maju 30 menit (X: <strong style="color:var(--gold-accent, #f59e0b);">{{ $jamPulangJumatXTanpaPembiasaan }}</strong>, XI/XII: <strong style="color:var(--gold-accent, #f59e0b);">{{ $jamPulangJumatXiTanpaPembiasaan }} WIB</strong>)
+                        @endif
+                    </div>
+                </div>
+                <form action="{{ route('admin.jam-sekolah.toggle-pembiasaan') }}" method="POST" style="margin:0; flex-shrink:0;">
+                    @csrf
+                    @if($jumatAdaPembiasaan)
+                        <input type="hidden" name="status" value="0">
+                        <button type="submit" class="btn btn-secondary btn-sm" title="Nonaktifkan pembiasaan dan majukan kepulangan 1 JP">
+                            Maju 1 JP
+                        </button>
+                    @else
+                        <input type="hidden" name="status" value="1">
+                        <button type="submit" class="btn btn-primary btn-sm" title="Kembalikan ke jadwal pembiasaan normal">
+                            Normal
+                        </button>
+                    @endif
+                </form>
+            </div>
+        </div>
+
+        {{-- BOX 2: ACARA MENDADAK / PULANG CEPAT --}}
+        <div class="jam-box" style="margin-bottom:0;">
+            <div class="jam-box-head">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <h3 class="jam-box-title">Pulang Cepat (Acara Khusus)</h3>
+                @if($acaraMendadakConfig['aktif'])
+                    <span class="badge badge-danger">Aktif · {{ $acaraMendadakConfig['jam_pulang'] }} WIB</span>
+                @else
+                    <span class="badge badge-gray">Tidak Aktif</span>
+                @endif
+            </div>
+
+            <form action="{{ route('admin.jam-sekolah.acara-mendadak') }}" method="POST" style="display:flex; flex-direction:column; flex:1;">
+                @csrf
+                <input type="hidden" name="aktif" value="1">
+
+                <div class="form-row mb-12">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="acara_tanggal">Tanggal Berlaku <span class="req">*</span></label>
+                        <input type="date" id="acara_tanggal" name="tanggal" value="{{ old('tanggal', $acaraMendadakConfig['tanggal']) }}" class="form-control" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="acara_jam_pulang">Jam Pulang Cepat <span class="req">*</span></label>
+                        <input type="time" id="acara_jam_pulang" name="jam_pulang" value="{{ old('jam_pulang', $acaraMendadakConfig['jam_pulang']) }}" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row mb-12">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="acara_target">Sasaran Kelas</label>
+                        <select id="acara_target" name="target" class="form-control">
+                            <option value="semua" {{ $acaraMendadakConfig['target'] === 'semua' ? 'selected' : '' }}>Semua Kelas</option>
+                            <option value="x" {{ $acaraMendadakConfig['target'] === 'x' ? 'selected' : '' }}>Kelas X (10)</option>
+                            <option value="xi" {{ $acaraMendadakConfig['target'] === 'xi' ? 'selected' : '' }}>Kelas XI (11)</option>
+                            <option value="xii" {{ $acaraMendadakConfig['target'] === 'xii' ? 'selected' : '' }}>Kelas XII (12)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="acara_alasan">Keterangan / Alasan <span class="req">*</span></label>
+                        <input type="text" id="acara_alasan" name="alasan" value="{{ old('alasan', $acaraMendadakConfig['alasan']) }}" placeholder="Contoh: Rapat Dewan Guru" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="d-flex align-center justify-between mt-auto" style="padding-top:12px; border-top:1px solid var(--border); gap:10px; flex-wrap:wrap;">
+                    <label class="d-inline-flex align-center gap-6" style="font-size:12px; color:var(--text-secondary); cursor:pointer; margin:0;">
+                        <input type="checkbox" name="kirim_notifikasi" value="1" checked style="accent-color:var(--navy-primary);">
+                        <span>Kirim notifikasi siaran</span>
+                    </label>
+                    <div class="d-flex align-center gap-8">
+                        @if($acaraMendadakConfig['aktif'])
+                            <button type="button" onclick="document.getElementById('formBatalAcara').submit();" class="btn btn-secondary btn-sm" style="color:var(--danger, #ef4444);">
+                                Batalkan
+                            </button>
+                        @endif
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            {{ $acaraMendadakConfig['aktif'] ? 'Perbarui' : 'Terapkan' }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            @if($acaraMendadakConfig['aktif'])
+                <form id="formBatalAcara" action="{{ route('admin.jam-sekolah.acara-mendadak') }}" method="POST" style="display:none;">
+                    @csrf
+                    <input type="hidden" name="aktif" value="0">
+                </form>
+            @endif
+        </div>
+
     </div>
 
     {{-- Main Configuration Form --}}

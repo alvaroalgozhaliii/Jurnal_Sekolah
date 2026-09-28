@@ -13,6 +13,100 @@
 
 @include('partials.kbm-clock-banner')
 
+{{-- BANNER NOTIFIKASI PIKET HARI INI --}}
+@if(!empty($isSayaPiketHariIni))
+<div class="card mb-24" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 2px solid #f59e0b; border-left: 6px solid #d97706; border-radius: 14px; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.12); padding: 18px 22px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: #d97706; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span class="badge" style="background: #d97706; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; letter-spacing: 0.5px;">TUGAS PIKET HARI INI</span>
+                    <strong style="font-size: 15.5px; color: #78350f;">Anda Bertugas Sebagai Petugas Piket Hari Ini!</strong>
+                </div>
+                <p style="margin: 4px 0 0; font-size: 13px; color: #92400e; line-height: 1.5;">
+                    Mohon hadir di pos piket untuk mencatat siswa terlambat, memantau perizinan/dispensasi siswa, dan menjaga ketertiban KBM.
+                </p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{{ route('piket.dashboard') }}" class="btn btn-primary" style="background: #d97706; border-color: #d97706; padding: 10px 18px; font-size: 13px; font-weight: 700; border-radius: 8px; box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Buka Portal Piket &rarr;
+            </a>
+            <a href="{{ route('piket.siswa-terlambat.create') }}" class="btn btn-secondary" style="padding: 10px 16px; font-size: 13px; font-weight: 600; border-radius: 8px; background: #fff; border: 1px solid #fde68a; color: #92400e;">
+                + Catat Siswa Terlambat
+            </a>
+        </div>
+    </div>
+</div>
+@endif
+
+<!-- PETUGAS PIKET HARI INI -->
+@if(isset($piketHariIni) && $piketHariIni)
+    <div class="card mb-24" style="border-left: 4px solid var(--navy-primary); overflow:hidden;">
+        <div class="card-header" style="background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(59, 130, 246, 0.03)); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:12px 20px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:36px; height:36px; border-radius:8px; background:var(--navy-primary); color:#fff; display:flex; align-items:center; justify-content:center;">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </div>
+                <div>
+                    <h3 class="card-title" style="margin:0; font-size:15px; font-weight:700;">Petugas Piket &amp; Waka Bertugas Hari Ini</h3>
+                    <p style="margin:2px 0 0; font-size:11.5px; color:var(--text-muted);">{{ \Carbon\Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</p>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                @if(!empty($isSayaPiketHariIni))
+                    <span class="badge" style="background:#2563eb; color:#fff; font-size:11px; padding:5px 12px; border-radius:20px;">
+                        ⭐ Anda Bertugas Hari Ini
+                    </span>
+                @endif
+                <a href="{{ route('guru.jadwal-piket') }}" class="btn btn-secondary btn-sm" style="font-size:12px;">
+                    Lihat Seluruh Jadwal Piket &rarr;
+                </a>
+            </div>
+        </div>
+        <div class="card-body" style="padding:14px 20px;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px;">
+                <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+                    <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:3px;">Waka Bertugas</span>
+                    <strong class="text-navy" style="font-size:14px;">{{ $piketHariIni->waka->nama ?? '-' }}</strong>
+                    <div class="text-muted" style="font-size:11.5px; margin-top:2px;">
+                        {{ strtoupper(str_replace('_', ' ', $piketHariIni->waka->role ?? '-')) }}
+                        @if($piketHariIni->waka && $piketHariIni->waka->no_hp)
+                            &bull; <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $piketHariIni->waka->no_hp) }}" target="_blank" style="color:#16a34a; text-decoration:none; font-weight:600;">WA: {{ $piketHariIni->waka->no_hp }}</a>
+                        @endif
+                    </div>
+                </div>
+
+                <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+                    <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:3px;">Guru Piket</span>
+                    @if($piketHariIni->guruPiket)
+                        <strong style="font-size:14px; color:#1e293b;">{{ $piketHariIni->guruPiket->nama }}</strong>
+                        <div class="text-muted" style="font-size:11.5px; margin-top:2px;">
+                            {{ $piketHariIni->guruPiket->bidang_studi ?? 'Guru Pengajar' }}
+                            @if($piketHariIni->guruPiket->no_telp)
+                                &bull; <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $piketHariIni->guruPiket->no_telp) }}" target="_blank" style="color:#16a34a; text-decoration:none; font-weight:600;">WA: {{ $piketHariIni->guruPiket->no_telp }}</a>
+                            @endif
+                        </div>
+                    @else
+                        <span class="text-muted" style="font-size:13px; font-style:italic;">Belum ditentukan</span>
+                    @endif
+                </div>
+
+                @if($piketHariIni->keterangan)
+                    <div style="background:var(--bg-page); border:1px solid var(--border); border-radius:8px; padding:10px 14px;">
+                        <span class="text-muted" style="font-size:11px; font-weight:700; text-transform:uppercase; display:block; margin-bottom:3px;">Keterangan</span>
+                        <div style="font-size:12.5px; color:var(--text-primary);">{{ $piketHariIni->keterangan }}</div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+@endif
+
 @if(isset($error))
     <div class="alert alert-danger">
         <div>{{ $error }}</div>
@@ -261,27 +355,6 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    const monthsIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
-    function updateDashboardClock() {
-        const now = new Date();
-        const dayName = daysIndo[now.getDay()];
-        const dateNum = String(now.getDate()).padStart(2, '0');
-        const monthName = monthsIndo[now.getMonth()];
-        const year = now.getFullYear();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-
-        const clockEl = document.getElementById('dashboard-laptop-clock');
-        if (clockEl) {
-            clockEl.textContent = `${dayName}, ${dateNum} ${monthName} ${year} (${hours}:${minutes}:${seconds})`;
-        }
-    }
-    updateDashboardClock();
-    setInterval(updateDashboardClock, 1000);
-
     const ctx = document.getElementById('chartAktivitasMengajar').getContext('2d');
     new Chart(ctx, {
         type: 'bar',

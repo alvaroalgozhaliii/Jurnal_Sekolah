@@ -10,7 +10,7 @@
         <p class="page-subtitle">Ubah penugasan Waka Piket dan Guru Piket</p>
     </div>
     <div class="page-actions">
-        <a href="{{ route('waka-kurikulum.index') }}" class="btn btn-secondary">&larr; Kembali</a>
+        <a href="{{ route('jadwal-piket.index') }}" class="btn btn-secondary">&larr; Kembali</a>
     </div>
 </div>
 
@@ -32,7 +32,7 @@
             </div>
         @endif
 
-        <form action="{{ route('waka-kurikulum.jadwal.update', $jadwalWaka->id_jadwal_waka) }}" method="POST">
+        <form action="{{ route('jadwal-piket.update', $jadwalWaka->id_jadwal_waka) }}" method="POST">
             @csrf
             @method('PUT')
 

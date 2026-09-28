@@ -4,6 +4,13 @@
 
 @section('content')
 <style>
+/* Cegah scroll di halaman login */
+html, body {
+    overflow: hidden !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+}
+
 /* Hilangkan efek kotak/outline saat hover, klik, dan aktif pada tombol icon mata */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear,
@@ -32,8 +39,329 @@ input[type="password"]::-ms-clear,
 .sso-eye-btn:active {
     color: #475569 !important;
 }
+
+/* ===== ANIMASI BINTANG DI ANGKASA ===== */
+#starCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: block;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ===== FITUR TRANSISI HALUS & RINGAN SSO (GPU ACCELERATED, ANTI-LAG) ===== */
+.sso-container {
+    transition: width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                max-width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                min-height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.38s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: width, height, max-width;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Clip konten agar tetap ikut rounded corner setelah overflow:visible di container */
+.sso-left {
+    border-radius: 24px 0 0 24px;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: padding 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sso-right {
+    border-radius: 0 24px 24px 0;
+    overflow: visible;
+    transform: translateZ(0);
+    transition: flex 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                max-width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                padding 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease 0.08s !important;
+    will-change: flex, max-width, opacity;
+}
+
+/* Tombol Minimize di Pojok Kanan Atas Kotak */
+.sso-close-btn {
+    position: absolute !important;
+    top: 12px !important;
+    right: 14px !important;
+    z-index: 50;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    border: none !important;
+    color: rgba(147, 197, 253, 0.85);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    transition: color 0.2s ease, opacity 0.2s ease;
+    opacity: 0.8;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.sso-close-btn:hover {
+    background: transparent;
+    color: #ffffff;
+    opacity: 1;
+    box-shadow: none;
+    transform: none;
+}
+
+.sso-close-btn:active {
+    opacity: 0.6;
+    transform: none;
+}
+
+/* Sembunyikan tombol minimize saat minimized — "Buka Form Login" sudah menangani restore */
+.sso-container.sso-minimized .sso-close-btn {
+    display: none !important;
+}
+
+/* Light mode */
+[data-theme="light"] .sso-close-btn {
+    color: rgba(30, 58, 138, 0.6);
+    background: transparent;
+    box-shadow: none;
+}
+
+[data-theme="light"] .sso-close-btn:hover {
+    color: #1e3a8a;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Tombol Munculkan Form Login saat Minimized */
+.sso-restore-action-box {
+    display: none;
+    margin-top: 22px;
+}
+
+.sso-container.sso-minimized .sso-restore-action-box {
+    display: flex;
+    justify-content: center;
+}
+
+.sso-restore-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: 1.5px solid rgba(147, 197, 253, 0.5);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(29, 78, 216, 0.45);
+    transition: all 0.25s ease;
+    outline: none !important;
+}
+
+.sso-restore-btn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.6);
+}
+
+.sso-restore-btn:active {
+    transform: translateY(0);
+}
+
+/* Animasi Wave halus */
+.sso-wave-svg {
+    transition: opacity 0.3s ease;
+}
+
+.sso-container.sso-minimized .sso-wave-svg {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* KETIKA MINIMIZE AKTIF — KOTAK JADI PERSEGI (SQUARE) SEMPURNA */
+.sso-container.sso-minimized {
+    width: min(420px, 86vh, 92vw) !important;
+    height: min(420px, 86vh, 92vw) !important;
+    max-width: min(420px, 86vh, 92vw) !important;
+    max-height: min(420px, 86vh, 92vw) !important;
+    min-height: unset !important;
+    aspect-ratio: 1 / 1 !important;
+    margin: auto !important;
+    background-color: #0b1329 !important;
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    border-radius: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+}
+
+[data-theme="light"] .sso-container.sso-minimized {
+    background-color: #ffffff !important;
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Sembunyikan panel kanan saat minimized secara halus tanpa display:none agar tidak ngelag */
+.sso-container.sso-minimized .sso-right {
+    flex: 0 0 0px !important;
+    max-width: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    transition: flex 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.15s ease,
+                padding 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Panel kiri saat minimized — isi penuh kotak persegi, terpusat rapi dan seimbang */
+.sso-container.sso-minimized .sso-left {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 28px 24px !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    background-color: #0b1329 !important;
+    border-radius: 28px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+[data-theme="light"] .sso-container.sso-minimized .sso-left {
+    background-color: #ffffff !important;
+}
+
+.sso-container.sso-minimized .sso-brand {
+    justify-content: center !important;
+    text-align: center !important;
+    margin-bottom: 0 !important;
+    gap: 12px !important;
+}
+
+.sso-container.sso-minimized .sso-welcome-box {
+    margin: 0 auto !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 0 !important;
+}
+
+.sso-container.sso-minimized .sso-welcome-title {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    margin-bottom: 2px !important;
+    color: #3b82f6 !important;
+}
+
+.sso-container.sso-minimized .sso-welcome-desc {
+    margin: 0 auto !important;
+    text-align: center !important;
+    max-width: 300px !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    opacity: 0.8 !important;
+}
+
+.sso-container.sso-minimized .sso-restore-action-box {
+    margin-top: 10px !important;
+}
+
+.sso-container.sso-minimized .sso-left-footer {
+    display: none !important;
+}
+
+/* ===== PASTIKAN TULISAN / BADGE BACKGROUND TETAP TAMPIL SEMPURNA ===== */
+.login-page {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.login-aesthetic-shapes {
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}
+
+/* Posisi badge background agar tidak tertutup kotak dan tidak terpotong di tepi layar */
+.shape-badge.badge-accurate {
+    top: 6% !important;
+    left: 20% !important;
+}
+.shape-badge.badge-direct-alert {
+    top: 6% !important;
+    right: 20% !important;
+}
+.shape-badge.badge-discipline {
+    bottom: 6% !important;
+    left: 20% !important;
+}
+.shape-badge.badge-transparent {
+    bottom: 6% !important;
+    right: 20% !important;
+}
+.shape-badge.badge-recap {
+    bottom: 6% !important;
+    left: 4% !important;
+}
+.shape-badge.badge-terverifikasi {
+    bottom: 6% !important;
+    right: 4% !important;
+}
+
+/* Animasi meteor jatuh vertikal ke samping */
+.shooting-star {
+    display: block !important;
+}
 </style>
-<div class="sso-container">
+
+<!-- Theme Toggle Button (Icon Matahari / Bulan) di Luar Container agar tidak ikut hilang saat minimize -->
+<button type="button" id="themeToggleBtn" class="theme-toggle-btn sso-theme-btn-corner" aria-label="Toggle Mode Gelap/Terang" title="Ganti Mode Gelap / Terang">
+    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg class="moon-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" style="width:20px; height:20px;">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+</button>
+
+<div class="sso-container {{ ($errors->any() || session('error') || session('success') || session('info') || old('username') || request()->has('form') || request('open')) ? '' : 'sso-minimized' }}" id="ssoContainer">
 
     <!-- LEFT SIDE: Branding & Welcome -->
     <div class="sso-left">
@@ -50,6 +378,15 @@ input[type="password"]::-ms-clear,
         <div class="sso-welcome-box">
             <h1 class="sso-welcome-title">Selamat Datang!</h1>
             <p class="sso-welcome-desc">Silakan masukkan Username, NIP, atau NISN beserta password Anda untuk masuk ke sistem.</p>
+            <div class="sso-restore-action-box">
+                <button type="button" id="toggleRestoreBtn" class="sso-restore-btn" aria-label="Buka Form Login" title="Buka Form Login">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="11 17 6 12 11 7"></polyline>
+                        <polyline points="18 17 13 12 18 7"></polyline>
+                    </svg>
+                    <span>Buka Form Login</span>
+                </button>
+            </div>
         </div>
 
         <div class="sso-left-footer">
@@ -59,23 +396,16 @@ input[type="password"]::-ms-clear,
 
     <!-- RIGHT SIDE: Curved Wave Form Portal -->
     <div class="sso-right">
-        <!-- Theme Toggle Button (Icon Matahari / Bulan) di Pojok Kanan Atas -->
-        <button type="button" id="themeToggleBtn" class="theme-toggle-btn sso-theme-btn-corner" aria-label="Toggle Mode Gelap/Terang" title="Ganti Mode Gelap / Terang">
-            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px; height:18px;">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+
+        <!-- Tombol Minimize di Pojok Kanan Atas Kotak -->
+        <button type="button" id="toggleMinimizeBtn" class="sso-close-btn" aria-label="Minimize Form Login" title="Minimize Form Login">
+            <svg width="16" height="3" viewBox="0 0 16 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="1" y1="1.5" x2="15" y2="1.5"></line>
             </svg>
         </button>
+
+        <!-- Canvas Animasi Bintang di Angkasa -->
+        <canvas id="starCanvas" aria-hidden="true"></canvas>
 
         <!-- Animated 3-Layered Wave Divider (Seamlessly Blended with Right Panel) -->
         <svg class="sso-wave-svg" viewBox="0 0 80 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -165,7 +495,7 @@ input[type="password"]::-ms-clear,
 
         <div class="sso-form-wrap">
             <div class="sso-form-header">
-                <h2 class="sso-title">LOGIN PORTAL</h2>
+                <h2 class="sso-title">LOGIN JURNAL</h2>
                 <p class="sso-subtitle">SISTEM KBM & PRESENSI</p>
             </div>
 
@@ -247,3 +577,121 @@ input[type="password"]::-ms-clear,
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(function() {
+    const canvas = document.getElementById('starCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const ssoContainer = document.getElementById('ssoContainer');
+
+    let W = 0, H = 0, stars = [];
+
+    function resize() {
+        const parent = canvas.parentElement;
+        if (!parent || parent.offsetWidth === 0) return;
+        W = canvas.width  = parent.offsetWidth;
+        H = canvas.height = parent.offsetHeight;
+        initStars();
+    }
+    window.resizeStarCanvas = resize;
+
+    function initStars() {
+        stars = [];
+        const count = Math.floor((W * H) / 3500);
+        for (let i = 0; i < count; i++) {
+            stars.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                r: Math.random() * 1.4 + 0.3,
+                alpha: Math.random(),
+                dAlpha: (Math.random() * 0.008 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
+                color: ['rgba(255,255,255,','rgba(200,220,255,','rgba(255,240,200,','rgba(180,210,255,'][Math.floor(Math.random()*4)]
+            });
+        }
+    }
+
+    function draw() {
+        // Hanya render saat panel terbuka agar transisi mulus dan hemat beban komputasi
+        if (!ssoContainer || !ssoContainer.classList.contains('sso-minimized')) {
+            if (W > 0 && H > 0) {
+                ctx.clearRect(0, 0, W, H);
+                for (let i = 0; i < stars.length; i++) {
+                    const s = stars[i];
+                    s.alpha += s.dAlpha;
+                    if (s.alpha >= 1)      { s.alpha = 1;   s.dAlpha = -Math.abs(s.dAlpha); }
+                    else if (s.alpha <= 0) { s.alpha = 0;   s.dAlpha =  Math.abs(s.dAlpha); }
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = s.color + s.alpha + ')';
+                    ctx.fill();
+                }
+            }
+        }
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+})();
+
+/* ── Handler Toggle Minimize & Restore Form Login ── */
+(function() {
+    const ssoContainer = document.getElementById('ssoContainer');
+    const minimizeBtn = document.getElementById('toggleMinimizeBtn');
+    const restoreBtn = document.getElementById('toggleRestoreBtn');
+
+    function toggleForm() {
+        if (!ssoContainer) return;
+        const isMinimized = ssoContainer.classList.toggle('sso-minimized');
+
+        if (minimizeBtn) {
+            const label = isMinimized ? 'Buka Form Login' : 'Tutup Form Login';
+            minimizeBtn.setAttribute('title', label);
+            minimizeBtn.setAttribute('aria-label', label);
+        }
+
+        // Jalankan penyesuaian canvas khusus setelah animasi transisi selesai tanpa membebani browser
+        if (!isMinimized) {
+            setTimeout(function() {
+                if (typeof window.resizeStarCanvas === 'function') {
+                    window.resizeStarCanvas();
+                }
+            }, 390);
+        }
+    }
+
+    // Jika kembali dari halaman lupa password / reset password, langsung tampilkan form login
+    if (document.referrer && (document.referrer.includes('lupa-password') || document.referrer.includes('reset-password'))) {
+        if (ssoContainer && ssoContainer.classList.contains('sso-minimized')) {
+            ssoContainer.classList.remove('sso-minimized');
+            if (typeof window.resizeStarCanvas === 'function') {
+                setTimeout(window.resizeStarCanvas, 50);
+            }
+        }
+    }
+
+    if (minimizeBtn) {
+        const isMin = ssoContainer && ssoContainer.classList.contains('sso-minimized');
+        minimizeBtn.setAttribute('title', isMin ? 'Buka Form Login' : 'Tutup Form Login');
+        minimizeBtn.setAttribute('aria-label', isMin ? 'Buka Form Login' : 'Tutup Form Login');
+
+        minimizeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleForm();
+        });
+    }
+
+    if (restoreBtn) {
+        restoreBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleForm();
+        });
+    }
+
+    window.toggleSSOLogin = toggleForm;
+})();
+</script>
+@endpush

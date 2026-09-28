@@ -18,11 +18,14 @@ class AbsensiSiswaController extends Controller
         $search = $request->get('search');
         $query = AbsensiSiswa::with(['jurnal.jadwal.kelas', 'siswa', 'user']);
 
+        $activeAccess = session('active_access', $user->role);
+
         if ($user->isOrtu()) {
             $anakIds = $user->getAnakList()->pluck('id_siswa');
             $query->whereIn('id_siswa', $anakIds);
-        } elseif ($user->isGuru() && !$user->isAdmin() && $user->guru) {
-            $guruId = $user->guru->id_guru;
+        } elseif ($activeAccess === 'guru' && !$user->isAdmin()) {
+            $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
+            $guruId = $guru ? $guru->id_guru : 0;
             $query->whereHas('jurnal', function ($q) use ($guruId) {
                 $q->where('id_guru', $guruId);
             });
@@ -49,6 +52,7 @@ class AbsensiSiswaController extends Controller
     public function create(Request $request)
     {
         $user = Auth::user();
+        $activeAccess = session('active_access', $user->role);
         $idJurnal = $request->get('id_jurnal');
         $jurnalSelected = null;
         $siswaList = collect();
@@ -59,8 +63,8 @@ class AbsensiSiswaController extends Controller
                 $siswaList = Siswa::where('id_kelas', $jurnalSelected->jadwal->id_kelas)->get();
             }
         } else {
-            // Auto pick latest active journal for teacher
-            if ($user->isGuru() && $user->guru) {
+            // Auto pick latest active journal for teacher (only when in guru mode)
+            if ($activeAccess === 'guru' && $user->guru) {
                 $jurnalSelected = JurnalHarian::with(['jadwal.kelas.siswa'])
                     ->where('id_guru', $user->guru->id_guru)
                     ->orderBy('tanggal', 'desc')
@@ -71,7 +75,7 @@ class AbsensiSiswaController extends Controller
             }
         }
 
-        if ($user->isGuru() && $user->guru) {
+        if ($activeAccess === 'guru' && $user->guru) {
             $jurnalList = JurnalHarian::with('jadwal.kelas')
                 ->where('id_guru', $user->guru->id_guru)
                 ->orderBy('tanggal', 'desc')

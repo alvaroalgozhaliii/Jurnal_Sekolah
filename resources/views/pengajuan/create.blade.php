@@ -39,6 +39,15 @@
     </div>
     <div class="card-body">
         
+        @if(Auth::user()->isOrtu())
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; gap:10px; font-size:13px; color:#065f46;">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px; flex-shrink:0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <div>
+                <strong>Persetujuan Otomatis:</strong> Pengajuan izin yang diajukan oleh Orang Tua siswa akan <strong>langsung disetujui</strong> dan otomatis tercatat ke dalam data presensi kehadiran kelas anak.
+            </div>
+        </div>
+        @endif
+
         @if(isset($wakaHariIni) && $wakaHariIni && $wakaHariIni->waka)
         <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px;">
             <div>
@@ -57,7 +66,7 @@
         @endphp
         <div style="display:flex; gap:12px; margin-bottom:20px; background:var(--clr-bg-subtle); padding:6px; border-radius:8px;">
             <button type="button" id="btn-tab-siswa" onclick="setSubjekType('siswa')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'siswa' ? 'background:#1e3a8a; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
-                 Dispensasi Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)
+                 Pengajuan Dispensasi Siswa
             </button>
             <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
                  Dispensasi Guru (Alur: Piket &rarr; Waka SDM/Piket &rarr; Kepsek)
@@ -69,21 +78,26 @@
             @csrf
 
             <!-- FIELD KATEGORI YANG PASTI TERKIRIM -->
-            <input type="hidden" name="kategori" id="final_kategori" value="{{ old('kategori', Auth::user()->isOrtu() ? 'sakit' : ((isset($initialType) && $initialType === 'guru') ? 'izin_guru' : 'dispensasi')) }}">
+            <input type="hidden" name="kategori" id="final_kategori" value="{{ old('kategori', Auth::user()->isOrtu() ? 'sakit' : ((isset($initialType) && $initialType === 'guru') ? 'izin_guru' : 'dispen_masuk')) }}">
 
             <!-- Kategori Pengajuan (Siswa / Guru) -->
             <div class="form-group mb-16" id="group-kategori-siswa">
-                <label class="form-label" for="kategori_siswa">{{ Auth::user()->isOrtu() ? 'Kategori Izin Siswa' : 'Kategori Dispensasi / Izin Siswa' }} <span class="req">*</span></label>
+                <label class="form-label" for="kategori_siswa">{{ Auth::user()->isOrtu() ? 'Kategori Izin Siswa' : 'Kategori Dispensasi Siswa' }} <span class="req">*</span></label>
                 <select id="kategori_siswa" class="form-control" onchange="syncKategori()">
                     @if(Auth::user()->isOrtu())
                         <option value="sakit" {{ old('kategori', 'sakit') == 'sakit' ? 'selected' : '' }}>Izin Sakit</option>
-                        <option value="izin" {{ old('kategori') == 'izin' ? 'selected' : '' }}>Izin</option>
+                        <option value="izin" {{ old('kategori') == 'izin' ? 'selected' : '' }}>Izin Umum</option>
                     @else
-                        <option value="dispensasi" {{ old('kategori', 'dispensasi') == 'dispensasi' ? 'selected' : '' }}>Dispensasi Siswa (Pelajaran / Lomba / OSIS)</option>
-                        <option value="sakit" {{ old('kategori') == 'sakit' ? 'selected' : '' }}>Izin Sakit</option>
-                        <option value="izin" {{ old('kategori') == 'izin' ? 'selected' : '' }}>Izin</option>
-                        <option value="izin_keluar" {{ old('kategori') == 'izin_keluar' ? 'selected' : '' }}>Izin Keluar Lingkungan Sekolah</option>
-                        <option value="izin_masuk" {{ old('kategori') == 'izin_masuk' ? 'selected' : '' }}>Izin Masuk / Terlambat</option>
+                        <optgroup label="Dispensasi Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)">
+                            <option value="dispen_masuk" {{ old('kategori', 'dispen_masuk') == 'dispen_masuk' ? 'selected' : '' }}>Dispensasi Masuk (Izin Masuk Sekolah)</option>
+                            <option value="dispen_keluar" {{ old('kategori') == 'dispen_keluar' ? 'selected' : '' }}>Dispensasi Keluar (Meninggalkan Sekolah Sementara/Pulang)</option>
+                            <option value="dispen_lomba" {{ old('kategori') == 'dispen_lomba' ? 'selected' : '' }}>Dispensasi Lomba / Kegiatan / OSIS</option>
+                        </optgroup>
+                        <optgroup label="Pencatatan Kehadiran Siswa (Langsung Tercatat)">
+                            <option value="terlambat" {{ old('kategori') == 'terlambat' ? 'selected' : '' }}>Siswa Terlambat</option>
+                            <option value="sakit" {{ old('kategori') == 'sakit' ? 'selected' : '' }}>Izin Sakit</option>
+                            <option value="izin" {{ old('kategori') == 'izin' ? 'selected' : '' }}>Izin Umum</option>
+                        </optgroup>
                     @endif
                 </select>
             </div>
@@ -103,7 +117,7 @@
                     <option value="">Cari Nama / NISN / Kelas Siswa</option>
                     @foreach($siswas as $s)
                     <option value="{{ $s->id_siswa }}" {{ old('id_siswa') == $s->id_siswa ? 'selected' : '' }}>
-                        {{ $s->nama }} (NISN: {{ $s->NISN }} | Kelas: {{ $s->kelas->nama_kelas ?? '-' }})
+                        {{ $s->nama }} (NISN: {{ $s->nisn ?? $s->NISN ?? '-' }} | Kelas: {{ $s->kelas->nama_kelas ?? '-' }})
                     </option>
                     @endforeach
                 </select>
@@ -190,20 +204,67 @@ function syncKategori() {
     const kategoriSiswaSelect = document.getElementById('kategori_siswa');
     const labelAlasan = document.getElementById('label-alasan');
     const inputAlasan = document.getElementById('alasan');
+    const btnSubmit = document.getElementById('btn-submit');
 
     if (currentSubjek === 'guru') {
         finalKat.value = 'izin_guru';
-    } else {
-        finalKat.value = kategoriSiswaSelect.value;
+        return;
     }
 
+    finalKat.value = kategoriSiswaSelect.value;
+    const val = finalKat.value;
+
     if (isOrtuUser) {
-        if (finalKat.value === 'sakit') {
+        if (val === 'sakit') {
             if (labelAlasan) labelAlasan.innerHTML = 'Keterangan Sakit <span class="req">*</span>';
             if (inputAlasan) inputAlasan.placeholder = 'Jelaskan keterangan sakit yang dialami anak (misal: demam, flu, berobat ke dokter)...';
         } else {
             if (labelAlasan) labelAlasan.innerHTML = 'Keterangan Izin <span class="req">*</span>';
             if (inputAlasan) inputAlasan.placeholder = 'Jelaskan keterangan/keperluan izin anak (misal: acara keluarga, urusan mendadak, dll)...';
+        }
+    } else {
+        if (val === 'dispen_masuk') {
+            if (labelAlasan) labelAlasan.innerHTML = 'Alasan Dispensasi Masuk <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Alasan permohonan izin masuk / terlambat...';
+            if (btnSubmit) {
+                btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> TERUSKAN DISPEN MASUK KE WAKA`;
+                btnSubmit.style.background = '#1e3a8a';
+            }
+        } else if (val === 'dispen_keluar') {
+            if (labelAlasan) labelAlasan.innerHTML = 'Alasan Dispensasi Keluar <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Alasan meninggalkan sekolah sementara atau pulang awal...';
+            if (btnSubmit) {
+                btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> TERUSKAN DISPEN KELUAR KE WAKA`;
+                btnSubmit.style.background = '#b45309';
+            }
+        } else if (val === 'dispen_lomba') {
+            if (labelAlasan) labelAlasan.innerHTML = 'Nama Lomba / Alasan Kegiatan <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Nama lomba / kegiatan, delegasi sekolah, tempat, dan penyelenggara...';
+            if (btnSubmit) {
+                btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> TERUSKAN DISPEN LOMBA KE WAKA`;
+                btnSubmit.style.background = '#7c3aed';
+            }
+        } else if (val === 'terlambat') {
+            if (labelAlasan) labelAlasan.innerHTML = 'Alasan Keterlambatan <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Alasan siswa terlambat tiba di sekolah...';
+            if (btnSubmit) {
+                btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><polyline points="20 6 9 17 4 12"></polyline></svg> CATAT SISWA TERLAMBAT`;
+                btnSubmit.style.background = '#d97706';
+            }
+        } else if (val === 'sakit') {
+            if (labelAlasan) labelAlasan.innerHTML = 'Keterangan Sakit <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Keterangan sakit yang dialami siswa...';
+            if (btnSubmit) {
+                btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><polyline points="20 6 9 17 4 12"></polyline></svg> CATAT IZIN SAKIT SISWA`;
+                btnSubmit.style.background = '#059669';
+            }
+        } else {
+            if (labelAlasan) labelAlasan.innerHTML = 'Alasan / Keterangan Izin <span class="req">*</span>';
+            if (inputAlasan) inputAlasan.placeholder = 'Alasan izin siswa...';
+            if (btnSubmit) {
+                btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><polyline points="20 6 9 17 4 12"></polyline></svg> CATAT IZIN SISWA`;
+                btnSubmit.style.background = '#2563eb';
+            }
         }
     }
 }

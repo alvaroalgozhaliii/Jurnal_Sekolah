@@ -19,7 +19,7 @@
             <select name="id_siswa" onchange="this.form.submit()" class="form-control" style="max-width:350px;">
                 @foreach($anakList as $a)
                 <option value="{{ $a->id_siswa }}" {{ ($selectedSiswa && $selectedSiswa->id_siswa == $a->id_siswa) ? 'selected' : '' }}>
-                    {{ $a->nama }} (NISN: {{ $a->NISN }})
+                    {{ $a->nama }} (NISN: {{ $a->nisn ?? $a->NISN ?? '-' }})
                 </option>
                 @endforeach
             </select>
@@ -31,7 +31,7 @@
 @if($selectedSiswa)
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Riwayat Presensi: {{ $selectedSiswa->nama }} (NISN: {{ $selectedSiswa->NISN }})</h3>
+        <h3 class="card-title">Riwayat Presensi: {{ $selectedSiswa->nama }} (NISN: {{ $selectedSiswa->nisn ?? $selectedSiswa->NISN ?? '-' }})</h3>
     </div>
     <div class="card-body" style="padding:0;">
         @if($riwayatPresensi->count() > 0)
@@ -52,6 +52,9 @@
                 <tbody>
                 @foreach($riwayatPresensi as $index => $r)
                     @php
+                        $tgl = $r->jurnal?->tanggal ?? ($r->created_at ? \Carbon\Carbon::parse($r->created_at)->toDateString() : null);
+                        $mapel = $r->jurnal?->mapel ?? ($r->keterangan ? 'Presensi (' . $r->keterangan . ')' : 'Presensi Kehadiran Harian');
+                        $guru = $r->jurnal?->guru?->nama ?? ($r->user?->nama ?? 'Petugas Piket / Sekolah');
                         $st = strtolower($r->status);
                         $badgeCls = match($st) {
                             'hadir' => 'badge-success',
@@ -64,9 +67,9 @@
                     @endphp
                     <tr>
                         <td class="no-col">{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $r->jurnal->tanggal ?? '-' }}</td>
-                        <td class="fw-bold text-navy">{{ $r->jurnal->mapel ?? '-' }}</td>
-                        <td>{{ $r->jurnal->guru->nama ?? '-' }}</td>
+                        <td class="fw-bold">{{ $tgl ? \Carbon\Carbon::parse($tgl)->format('d/m/Y') : '-' }}</td>
+                        <td class="fw-bold text-navy">{{ $mapel }}</td>
+                        <td>{{ $guru }}</td>
                         <td><span class="badge {{ $badgeCls }}">{{ strtoupper($r->status) }}</span></td>
                         <td>{{ $r->jam_masuk ?? '-' }}</td>
                         <td>{{ $r->menit_terlambat ? $r->menit_terlambat . ' menit' : '-' }}</td>
