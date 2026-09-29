@@ -97,7 +97,6 @@ class JurnalHarianController extends Controller
         ];
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
         $currentSlot = \App\Services\KbmService::getCurrentSlotInfo($now);
-
         $slotStatus = $currentSlot['status'] ?? 'unknown';
 
         $bannerColor = match ($slotStatus) {
@@ -108,45 +107,26 @@ class JurnalHarianController extends Controller
             default => 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
         };
 
+        $guru = null;
         if ($user->isGuru() && !$user->isAdmin()) {
-            $guru = $user->guru;
+            $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
             if (!$guru) {
-                $guru = \App\Models\Guru::where('nama', $user->nama)
-                    ->orWhere('nip', $user->nip)
-                    ->first();
-            }
-            if (!$guru) {
-                return back()->with('error', 'Profil guru Anda tidak ditemukan.');
+                return redirect()->route('jurnal-harian.index')->with('error', 'Profil guru Anda tidak ditemukan.');
             }
             $jadwalList = Jadwal::with('kelas')
                 ->where('id_guru', $guru->id_guru)
                 ->where('aktif', 1)
                 ->get();
-
-            if ($jadwalList->isEmpty()) {
-                return redirect()->route('jurnal-harian.index')
-                    ->with('error', 'Pengisian Jurnal KBM hanya untuk guru yang memiliki jadwal mengajar. Anda tidak memiliki jadwal mengajar aktif.');
-            }
         } else {
             $jadwalList = Jadwal::with(['kelas', 'guru'])->where('aktif', 1)->get();
         }
 
-        // Attach active status for schedule filling eligibility
-        foreach ($jadwalList as $j) {
-            $j->is_active_now = $this->isScheduleActiveNow($j, $currentDayIndo, $now);
-            $j->active_message = $this->getScheduleTimeMessage($j, $currentDayIndo, $now);
-        }
-
+        // Automatic schedule detection strictly based on current KBM slot
         $jadwalSelected = null;
-        if ($request->filled('id_jadwal')) {
-            $jadwalSelected = $jadwalList->firstWhere('id_jadwal', (int) $request->id_jadwal);
-        } elseif ($currentSlot['status'] === 'kbm' && !empty($currentSlot['jam_ke'])) {
+        if ($slotStatus === 'kbm' && !empty($currentSlot['jam_ke'])) {
             $jadwalSelected = $jadwalList->first(function ($j) use ($currentDayIndo, $currentSlot) {
                 return $j->hari === $currentDayIndo && (int)$j->jam_ke === (int)$currentSlot['jam_ke'];
             });
-        } else {
-            // Auto-select first schedule matching current day if available
-            $jadwalSelected = $jadwalList->firstWhere('hari', $currentDayIndo);
         }
 
         return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected', 'currentSlot', 'slotStatus', 'bannerColor', 'currentDayIndo', 'now'));
@@ -157,8 +137,8 @@ class JurnalHarianController extends Controller
         $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
         $currentSlot = \App\Services\KbmService::getCurrentSlotInfo($now);
 
-        if ($currentSlot['status'] !== 'kbm') {
-            return back()->with('error', 'Tidak dapat mengisi jurnal: ' . ($currentSlot['keterangan'] ?? 'Di luar jam KBM') . '.');
+        if ($currentSlot['status'] !== 'kbm' || empty($currentSlot['jam_ke'])) {
+            return back()->with('error', 'Tidak dapat mengisi jurnal: ' . ($currentSlot['keterangan'] ?? 'Saat ini di luar jam KBM') . '.');
         }
 
         $request->validate([
@@ -167,21 +147,8 @@ class JurnalHarianController extends Controller
             'materi' => 'required|string',
         ]);
 
-        $jadwal = Jadwal::findOrFail($request->id_jadwal);
+        $jadwal = Jadwal::with('kelas')->findOrFail($request->id_jadwal);
         $user = Auth::user();
-
-        // Check ownership if guru
-        if ($user->isGuru() && !$user->isAdmin()) {
-            $guru = $user->guru;
-            if (!$guru) {
-                $guru = \App\Models\Guru::where('nama', $user->nama)
-                    ->orWhere('nip', $user->nip)
-                    ->first();
-            }
-            if ($guru && $jadwal->id_guru != $guru->id_guru) {
-                return back()->with('error', 'Anda hanya dapat mengisi jurnal untuk jadwal mengajar Anda sendiri.');
-            }
-        }
 
         $days = [
             'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
@@ -189,13 +156,18 @@ class JurnalHarianController extends Controller
         ];
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
 
-        $guruForStore = $user->guru;
-        if (!$guruForStore && $user->isGuru()) {
-            $guruForStore = \App\Models\Guru::where('nama', $user->nama)
-                ->orWhere('nip', $user->nip)
-                ->first();
+        // Check ownership & current schedule time if guru
+        if ($user->isGuru() && !$user->isAdmin()) {
+            $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
+            if ($guru && $jadwal->id_guru != $guru->id_guru) {
+                return back()->with('error', 'Anda hanya dapat mengisi jurnal untuk jadwal mengajar Anda sendiri.');
+            }
+
+            if ($jadwal->hari !== $currentDayIndo || (int)$jadwal->jam_ke !== (int)$currentSlot['jam_ke']) {
+                return back()->with('error', 'Tidak dapat mengisi jurnal: saat ini bukan jam mengajar untuk jadwal kelas ' . ($jadwal->kelas->nama_kelas ?? '') . ' — ' . $jadwal->mapel . '.');
+            }
         }
-        $idGuru = $guruForStore ? $guruForStore->id_guru : $jadwal->id_guru;
+        $idGuru = $guru ? $guru->id_guru : $jadwal->id_guru;
 
         $jurnal = JurnalHarian::create([
             'id_jadwal' => $jadwal->id_jadwal,

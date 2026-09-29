@@ -53,49 +53,101 @@ class AbsensiSiswaController extends Controller
     {
         $user = Auth::user();
         $activeAccess = session('active_access', $user->role);
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
+        $todayDate = $now->toDateString();
+
+        $days = [
+            'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+        ];
+        $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+        $currentSlot = \App\Services\KbmService::getCurrentSlotInfo($now);
+        $slotStatus = $currentSlot['status'] ?? 'unknown';
+
         $idJurnal = $request->get('id_jurnal');
         $jurnalSelected = null;
         $siswaList = collect();
+        $jadwalAktif = null;
 
-        if ($idJurnal) {
-            $jurnalSelected = JurnalHarian::with(['jadwal.kelas.siswa'])->find($idJurnal);
-            if ($jurnalSelected && $jurnalSelected->jadwal && $jurnalSelected->jadwal->kelas) {
-                $siswaList = Siswa::where('id_kelas', $jurnalSelected->jadwal->id_kelas)->get();
-            }
-        } else {
-            // Auto pick latest active journal for teacher (only when in guru mode)
-            if ($activeAccess === 'guru' && $user->guru) {
-                $jurnalSelected = JurnalHarian::with(['jadwal.kelas.siswa'])
-                    ->where('id_guru', $user->guru->id_guru)
-                    ->orderBy('tanggal', 'desc')
+        if ($activeAccess === 'guru' && !$user->isAdmin()) {
+            $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
+            $jurnalList = collect();
+
+            if ($slotStatus === 'kbm' && !empty($currentSlot['jam_ke']) && $guru) {
+                $jadwalAktif = \App\Models\Jadwal::with(['kelas.siswa'])
+                    ->where('id_guru', $guru->id_guru)
+                    ->where('hari', $currentDayIndo)
+                    ->where('jam_ke', $currentSlot['jam_ke'])
+                    ->where('aktif', 1)
                     ->first();
-                if ($jurnalSelected && $jurnalSelected->jadwal) {
-                    $siswaList = Siswa::where('id_kelas', $jurnalSelected->jadwal->id_kelas)->get();
+
+                if ($jadwalAktif) {
+                    $jurnalSelected = JurnalHarian::firstOrCreate(
+                        [
+                            'id_jadwal' => $jadwalAktif->id_jadwal,
+                            'tanggal' => $todayDate,
+                        ],
+                        [
+                            'id_guru' => $guru->id_guru,
+                            'mapel' => $jadwalAktif->mapel,
+                            'materi' => 'KBM Jam Ke-' . $jadwalAktif->jam_ke,
+                            'status_keterlaksanaan' => 'terlaksana',
+                            'created_by' => $user->id_user,
+                        ]
+                    );
+                    $siswaList = Siswa::where('id_kelas', $jadwalAktif->id_kelas)->orderBy('nama', 'asc')->get();
                 }
             }
-        }
-
-        if ($activeAccess === 'guru' && $user->guru) {
-            $jurnalList = JurnalHarian::with('jadwal.kelas')
-                ->where('id_guru', $user->guru->id_guru)
-                ->orderBy('tanggal', 'desc')
-                ->get();
         } else {
+            // Admin, Piket, Waka can select journals
+            if ($idJurnal) {
+                $jurnalSelected = JurnalHarian::with(['jadwal.kelas.siswa'])->find($idJurnal);
+                if ($jurnalSelected && $jurnalSelected->jadwal && $jurnalSelected->jadwal->kelas) {
+                    $siswaList = Siswa::where('id_kelas', $jurnalSelected->jadwal->id_kelas)->orderBy('nama', 'asc')->get();
+                }
+            }
             $jurnalList = JurnalHarian::with('jadwal.kelas')->orderBy('tanggal', 'desc')->get();
         }
 
-        return view('absensi-siswa.create', compact('jurnalList', 'jurnalSelected', 'siswaList'));
+        return view('absensi-siswa.create', compact('jurnalList', 'jurnalSelected', 'siswaList', 'jadwalAktif', 'currentSlot', 'slotStatus', 'currentDayIndo', 'now', 'activeAccess'));
     }
 
     public function storeBatch(Request $request)
     {
+        $user = Auth::user();
+        $now = Carbon::now(config('app.timezone', 'Asia/Jakarta'));
+        $currentSlot = \App\Services\KbmService::getCurrentSlotInfo($now);
+
+        if ($user->isGuru() && !$user->isAdmin()) {
+            if ($currentSlot['status'] !== 'kbm' || empty($currentSlot['jam_ke'])) {
+                return back()->with('error', 'Tidak dapat menginput absensi siswa: ' . ($currentSlot['keterangan'] ?? 'Saat ini di luar jam KBM') . '.');
+            }
+        }
+
         $request->validate([
             'id_jurnal' => 'required|exists:jurnal_harian,id_jurnal',
             'absensi' => 'required|array', // [id_siswa => status]
         ]);
 
         $idJurnal = $request->id_jurnal;
-        $jurnal = JurnalHarian::findOrFail($idJurnal);
+        $jurnal = JurnalHarian::with('jadwal')->findOrFail($idJurnal);
+
+        if ($user->isGuru() && !$user->isAdmin()) {
+            $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
+            $days = [
+                'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+                'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+            ];
+            $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+
+            if ($guru && $jurnal->id_guru != $guru->id_guru) {
+                return back()->with('error', 'Anda hanya dapat menginput absensi untuk kelas mengajar Anda sendiri.');
+            }
+
+            if ($jurnal->jadwal && ($jurnal->jadwal->hari !== $currentDayIndo || (int)$jurnal->jadwal->jam_ke !== (int)$currentSlot['jam_ke'])) {
+                return back()->with('error', 'Tidak dapat menginput absensi siswa: saat ini bukan jam mengajar untuk kelas ini.');
+            }
+        }
 
         foreach ($request->absensi as $idSiswa => $status) {
             $keterangan = $request->keterangan[$idSiswa] ?? null;
