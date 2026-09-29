@@ -1871,148 +1871,7 @@ input[type="number"]::-webkit-outer-spin-button {
     .page-actions { flex-wrap: wrap; }
 }
 
-/* Tablet Portrait: 601–767px — Samakan dengan tampilan Desktop */
-@media (max-width: 767px) {
-    /* Sidebar: tetap tampil seperti desktop, body bisa di-scroll horizontal */
-    .sidebar {
-        position: relative;
-        top: auto;
-        left: auto;
-        height: 100vh;
-        height: 100dvh;
-        transform: none !important;
-        z-index: auto;
-        box-shadow: none;
-        flex-shrink: 0;
-    }
 
-    .sidebar.open {
-        transform: none !important;
-    }
-
-    /* app-shell: izinkan horizontal scroll agar layout desktop tetap terlihat */
-    .app-shell {
-        height: 100vh;
-        height: 100dvh;
-        overflow-x: auto;
-        overflow-y: hidden;
-        display: flex;
-        min-width: max-content;
-    }
-
-    /* Main area: ikut lebar konten */
-    .main-area {
-        width: 100vw;
-        min-width: 600px;
-    }
-
-    /* Hamburger tetap tersembunyi karena sidebar selalu tampil seperti desktop */
-    .topbar-hamburger {
-        display: none;
-    }
-
-    .topbar { padding: 0 20px; }
-    .content-area { padding: 24px 28px; }
-    .content-area::before { left: 0; top: 58px; }
-    .content-area::after { /* biarkan tampil seperti desktop */ }
-
-    /* Grid: sama seperti desktop */
-    .grid-4, .grid-5 { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-    .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .form-row { /* biarkan seperti desktop */ }
-
-    .page-header {
-        flex-direction: row;
-        align-items: flex-start;
-        gap: 16px;
-    }
-
-    .page-actions {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .page-actions .btn {
-        justify-content: center;
-    }
-
-    /* Card header: wrap jika dua elemen */
-    .card-header {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    /* Tampilkan user info text agar sama dengan desktop */
-    .user-info { display: flex; flex-direction: column; }
-
-    /* Topbar kanan */
-    .topbar-right { gap: 14px; }
-
-    /* Table: pastikan scroll horizontal aktif */
-    .table-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    /* Action column di tabel */
-    .action-col {
-        white-space: nowrap;
-        text-align: right;
-    }
-
-    /* Stat card: ukuran desktop */
-    .stat-card {
-        padding: 16px 20px;
-        gap: 14px;
-    }
-    .stat-num { font-size: 22px; }
-
-    /* Filter bar: sama seperti desktop */
-    .filter-bar {
-        flex-direction: row;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    /* Chart: tinggi desktop */
-    .chart-container { height: 280px; }
-
-    /* Card margin bottom */
-    .card { margin-bottom: 20px; }
-}
-
-/* Mobile: ≤600px — Pertahankan tampilan Desktop */
-@media (max-width: 600px) {
-    /* Pertahankan grid desktop */
-    .grid-4, .grid-5 { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-    .grid-2 { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-
-    /* Pertahankan stat card desktop */
-    .stat-card { padding: 16px 20px; gap: 14px; }
-    .stat-icon-box { width: 42px; height: 42px; }
-    .stat-num { font-size: 22px; }
-    .stat-label { font-size: 12px; }
-
-    /* Pertahankan topbar desktop */
-    .topbar { height: 58px; padding: 0 20px; }
-    .topbar-title { font-size: 15px; }
-    .topbar-right { gap: 14px; }
-    .user-pill { padding: 4px 12px 4px 4px; }
-    .user-avatar { width: 34px; height: 34px; font-size: 13px; }
-
-    /* Pertahankan page actions desktop */
-    .page-actions { flex-direction: row; flex-wrap: wrap; gap: 10px; }
-    .page-actions .btn { width: auto; text-align: center; }
-
-    /* Content area */
-    .content-area { padding: 24px 28px; }
-
-    /* Table horizontal scroll */
-    .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-}
 
 /* ============================================================
    RESPONSIVE TAMBAHAN — Override inline styles di mobile
@@ -2091,20 +1950,7 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 }
 
-/* Extra small mobile ≤480px — Pertahankan tampilan Desktop */
-@media (max-width: 480px) {
-    /* Pertahankan stat card horizontal seperti desktop */
-    .stat-card {
-        padding: 16px 20px;
-        gap: 14px;
-        flex-direction: row;
-        align-items: center;
-    }
-    .stat-num { font-size: 22px; }
 
-    /* Topbar title */
-    .topbar-title { max-width: none; }
-}
 
 
 
@@ -4238,180 +4084,303 @@ input::-ms-clear,
     box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2) !important;
 }
 
-/* RESPONSIVE LAYOUT — Samakan dengan tampilan Desktop */
+/* ============================================================
+   RESPONSIVE LAYOUT MOBILE — Layout baru single-column
+   Desktop (>860px) TIDAK BERUBAH sama sekali
+   ============================================================ */
 @media (max-width: 860px) {
-    /* Shape badges dan dekoratif tetap ditampilkan agar sama dengan desktop */
 
-    /* Login page: izinkan scroll horizontal agar layout desktop bisa tampil penuh */
-    .login-page {
-        padding: 20px 16px;
-        align-items: center;
-        justify-content: flex-start;
-        overflow-x: auto;
-        min-width: 100%;
+    /* ── Matikan scroll horizontal, aktifkan scroll vertikal normal ── */
+    html, body {
+        overflow: hidden !important; /* halaman login: no scroll */
     }
 
-    /* sso-container: TETAP dua kolom seperti desktop */
+    .login-page {
+        padding: 0 !important;
+        overflow: hidden !important;
+        overflow-y: auto !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: unset !important;
+        min-height: 100dvh !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        box-sizing: border-box;
+    }
+
+    /* ── Sembunyikan badge dekoratif (berat di mobile) ── */
+    .login-aesthetic-shapes,
+    .shape-badge,
+    .shape-cube,
+    .shape-ring,
+    .shape-sparkle,
+    .shape-plus,
+    .login-bg-grid-left,
+    .login-bg-grid-right,
+    .ambient-wave,
+    .login-orb {
+        display: none !important;
+    }
+
+    /* ── Ringankan nebula: matikan animasi, biarkan sebagai glow statis ── */
+    .space-nebula {
+        animation: none !important;
+        opacity: 0.45 !important;
+        will-change: auto !important;
+    }
+
+    /* ── sso-container: SINGLE COLUMN, full-screen card ── */
     .sso-container {
-        flex-direction: row !important;
-        width: 960px !important;
-        max-width: 960px !important;
-        min-height: 520px;
-        margin: auto;
-        border-radius: 24px;
+        flex-direction: column !important;
+        width: calc(100vw - 32px) !important;
+        max-width: 420px !important;
+        min-height: unset !important;
+        height: auto !important;
+        margin: auto !important;
+        border-radius: 24px !important;
         background-color: #0b1329 !important;
-        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
         border: none !important;
         position: relative;
-        overflow: hidden;
+        overflow: hidden !important;
+        /* Matikan transition berat saat mobile */
+        transition: none !important;
+        will-change: auto !important;
     }
 
-    /* Panel kiri: tampil seperti desktop */
+    /* ── State minimized: kartu persegi tetap bekerja di mobile ── */
+    .sso-container.sso-minimized {
+        width: min(340px, 90vw) !important;
+        height: min(340px, 90vw) !important;
+        max-width: min(340px, 90vw) !important;
+        max-height: min(340px, 90vw) !important;
+        border-radius: 24px !important;
+    }
+
+    /* ── Panel kiri: tampil di atas (branding + welcome + tombol restore) ── */
     .sso-left {
-        flex: 1 !important;
-        padding: 44px 48px !important;
-        text-align: left !important;
-        align-items: flex-start !important;
-        justify-content: space-between !important;
+        flex: unset !important;
+        width: 100% !important;
+        padding: 28px 24px 20px !important;
+        text-align: center !important;
+        align-items: center !important;
+        justify-content: center !important;
         background-color: #0b1329 !important;
-        border-radius: 24px 0 0 24px !important;
+        border-radius: 24px 24px 0 0 !important;
         overflow: hidden !important;
         flex-direction: column !important;
         display: flex !important;
-        flex: 1 !important;
+        gap: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Saat minimized: panel kiri isi penuh */
+    .sso-container.sso-minimized .sso-left {
+        border-radius: 24px !important;
+        padding: 24px 20px !important;
     }
 
     .sso-brand {
-        justify-content: flex-start;
-        gap: 12px;
+        justify-content: center !important;
+        gap: 10px;
         margin-bottom: 0;
     }
 
     .sso-brand-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 10px !important;
     }
 
     .sso-brand-text .brand-name {
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 800;
         letter-spacing: 0.3px;
     }
 
     .sso-brand-text .brand-tag {
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 700;
         letter-spacing: 1.2px;
     }
 
-    /* Tampilkan welcome box seperti desktop */
     .sso-welcome-box {
-        display: block !important;
-        margin: auto 0;
-        padding: 24px 0;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 6px !important;
     }
 
     .sso-welcome-title {
-        font-size: 32px !important;
-        text-align: left !important;
+        font-size: 24px !important;
+        text-align: center !important;
+        margin: 0 !important;
     }
 
     .sso-welcome-desc {
-        font-size: 15px !important;
-        text-align: left !important;
-        max-width: 320px;
+        font-size: 13px !important;
+        text-align: center !important;
+        max-width: 280px !important;
+        line-height: 1.55 !important;
     }
 
+    /* Tombol "Buka Form Login" di minimized */
+    .sso-restore-action-box {
+        margin-top: 8px !important;
+    }
+
+    .sso-restore-btn {
+        font-size: 13px !important;
+        padding: 10px 22px !important;
+    }
+
+    /* Footer kiri: sembunyikan saat normal (ada di kanan) */
     .sso-left-footer {
-        display: block !important;
-        text-align: left !important;
-        font-size: 11.5px;
-        color: #475569;
+        display: none !important;
     }
 
-    /* Panel kanan: tampil seperti desktop */
+    /* ── Panel kanan (form): tampil di bawah, full width ── */
     .sso-right {
-        flex: 1.25 !important;
-        padding: 44px 44px 44px 48px !important;
-        background: linear-gradient(145deg, #1d4ed8 0%, #1e3a8a 45%, #0f172a 100%) !important;
-        border-radius: 0 24px 24px 0 !important;
-        width: auto !important;
+        flex: unset !important;
+        width: 100% !important;
+        padding: 24px 22px 28px !important;
+        background: linear-gradient(160deg, #1d4ed8 0%, #1e3a8a 50%, #0f172a 100%) !important;
+        border-radius: 0 0 24px 24px !important;
         box-sizing: border-box !important;
         position: relative !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
+        /* Matikan transition berat */
+        transition: none !important;
+        will-change: auto !important;
+    }
+
+    /* Sembunyikan wave SVG animasi berat di mobile */
+    .sso-wave-svg {
+        display: none !important;
+    }
+
+    /* Sembunyikan watermark icons berat */
+    .sso-pattern-bg {
+        display: none !important;
+    }
+
+    /* Sembunyikan canvas bintang di panel kanan (sudah ada di background) */
+    #starCanvas {
+        display: none !important;
     }
 
     .sso-form-wrap {
         width: 100% !important;
-        max-width: 330px !important;
-        margin: auto 0 !important;
+        max-width: 360px !important;
+        margin: 0 !important;
     }
 
     .sso-form-header {
-        margin-bottom: 26px;
+        margin-bottom: 18px !important;
     }
 
     .sso-title {
-        font-size: 24px;
-        letter-spacing: 2px;
-        margin-bottom: 4px;
+        font-size: 20px !important;
+        letter-spacing: 1.5px !important;
+        margin-bottom: 3px !important;
         color: #ffffff;
     }
 
     .sso-subtitle {
-        font-size: 11px;
-        letter-spacing: 2.2px;
+        font-size: 10px !important;
+        letter-spacing: 2px !important;
         color: #cbd5e1;
+    }
+
+    .sso-form {
+        gap: 12px !important;
     }
 
     .sso-input-pill {
         height: 48px !important;
-        padding: 4px 12px 4px 18px !important;
+        padding: 4px 12px 4px 16px !important;
         border-radius: 50px !important;
+        /* Matikan transform hover yang berat di mobile */
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .sso-input-pill:focus-within {
+        transform: none !important;
     }
 
     .sso-submit-btn {
-        height: auto;
-        font-size: 14.5px;
-        border-radius: 50px;
-        margin-top: 4px;
-        letter-spacing: 0.5px;
-        padding: 12px 24px;
+        height: auto !important;
+        font-size: 14px !important;
+        border-radius: 50px !important;
+        margin-top: 2px !important;
+        padding: 13px 24px !important;
+        /* Hapus hover transform yang bisa lag di mobile */
+        transition: background 0.2s ease, box-shadow 0.2s ease !important;
+    }
+
+    .sso-submit-btn:hover {
+        transform: none !important;
     }
 
     .sso-right-footer {
-        margin-top: 24px;
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.45);
-        text-align: center;
+        margin-top: 18px !important;
+        font-size: 10.5px !important;
+        color: rgba(255, 255, 255, 0.4) !important;
+        text-align: center !important;
     }
 
-    /* Tombol tema */
+    /* ── Tombol minimize: tampilkan tapi lebih besar touch target ── */
+    .sso-close-btn {
+        top: 10px !important;
+        right: 12px !important;
+        padding: 8px !important;
+    }
+
+    /* ── Tombol tema: pojok kanan bawah, ukuran mobile-friendly ── */
     .sso-theme-btn-corner {
-        top: unset !important;
-        bottom: 28px !important;
-        right: 28px !important;
-        width: 46px !important;
-        height: 46px !important;
+        bottom: 16px !important;
+        right: 16px !important;
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: 12px !important;
     }
 
-    /* Light Mode Overrides */
+    /* ── Alert: text lebih kecil ── */
+    .sso-alert {
+        font-size: 12px !important;
+        padding: 9px 12px !important;
+        border-radius: 20px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* ── Tombol lupa password: touch-friendly ── */
+    .lupa-link-btn {
+        font-size: 12px !important;
+        padding: 8px 14px !important;
+    }
+
+    /* ── Light Mode Overrides ── */
     [data-theme="light"] .sso-container {
         background-color: #ffffff !important;
-        box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(191, 219, 254, 0.9) !important;
-        border: none !important;
+        box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(191, 219, 254, 0.9) !important;
     }
 
     [data-theme="light"] .sso-left {
         background-color: #ffffff !important;
     }
 
+    [data-theme="light"] .sso-container.sso-minimized .sso-left {
+        background-color: #ffffff !important;
+    }
+
     [data-theme="light"] .sso-right {
-        background: linear-gradient(145deg, #1d4ed8 0%, #1e3a8a 45%, #0f172a 100%) !important;
+        background: linear-gradient(160deg, #1d4ed8 0%, #2563eb 50%, #1e40af 100%) !important;
     }
 
     [data-theme="light"] .sso-title {
@@ -4432,13 +4401,6 @@ input::-ms-clear,
         color: #2563eb !important;
     }
 
-    [data-theme="light"] .sso-theme-btn-corner .moon-icon {
-        color: #1e3a8a !important;
-        fill: #1e3a8a !important;
-        stroke: #1e3a8a !important;
-        filter: drop-shadow(0 0 4px rgba(30, 58, 138, 0.4)) !important;
-    }
-
     [data-theme="light"] .sso-input-pill {
         background: #ffffff !important;
         border: 2px solid transparent !important;
@@ -4451,12 +4413,38 @@ input::-ms-clear,
     }
 }
 
-/* Layar sangat kecil: tetap gunakan tampilan desktop dengan scroll horizontal */
+/* ── Layar sangat kecil (< 400px): kompres padding lagi ── */
 @media (max-width: 400px) {
     .login-page {
-        padding: 12px 8px;
+        padding: 0 !important;
     }
-    /* sso-container tetap lebar 960px, cukup di-scroll secara horizontal */
+
+    .sso-container {
+        width: calc(100vw - 20px) !important;
+        border-radius: 20px !important;
+    }
+
+    .sso-left {
+        padding: 22px 18px 16px !important;
+        border-radius: 20px 20px 0 0 !important;
+    }
+
+    .sso-right {
+        padding: 20px 18px 24px !important;
+        border-radius: 0 0 20px 20px !important;
+    }
+
+    .sso-welcome-title {
+        font-size: 21px !important;
+    }
+
+    .sso-welcome-desc {
+        font-size: 12px !important;
+    }
+
+    .sso-title {
+        font-size: 18px !important;
+    }
 }
 
 /* ============================================================
@@ -5086,45 +5074,84 @@ input[type='radio']:active,
 }
 
 /* ============================================================
-   8. MASTER COMPREHENSIVE RESPONSIVENESS — Samakan dengan Desktop
+   8. MOBILE RESPONSIVE LAYOUT — Proper Mobile First
+   Desktop (>768px) TIDAK BERUBAH sama sekali.
    ============================================================ */
 @media (max-width: 768px) {
-    /* 1. App Shell — tampil seperti desktop, scroll horizontal */
+
+    /* ── 1. App Shell: full-width, vertikal scroll normal ── */
     .app-shell {
-        height: 100vh;
-        height: 100dvh;
-        overflow-x: auto;
-        overflow-y: hidden;
-        position: relative;
-        display: flex;
-        min-width: max-content;
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        overflow: hidden !important;
+        min-width: unset !important;
+        position: relative !important;
     }
 
-    /* Sidebar: tetap tampil seperti desktop */
+    /* ── 2. Sidebar: Drawer overlay dari kiri ── */
     .sidebar {
-        position: relative;
-        top: auto;
-        left: auto;
-        bottom: auto;
-        height: 100vh;
-        height: 100dvh;
-        width: var(--sidebar-width, 240px) !important;
-        max-width: var(--sidebar-width, 240px) !important;
-        transform: none !important;
-        z-index: auto !important;
-        box-shadow: none !important;
-        transition: none !important;
-        flex-shrink: 0;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        width: 260px !important;
+        max-width: 85vw !important;
+        transform: translateX(-100%) !important;
+        z-index: 1000 !important;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35) !important;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        flex-shrink: 0 !important;
     }
 
     .sidebar.open {
-        transform: none !important;
+        transform: translateX(0) !important;
     }
 
+    /* Overlay gelap saat sidebar terbuka */
     .sidebar-overlay {
-        z-index: 990 !important;
-        backdrop-filter: blur(4px) !important;
-        -webkit-backdrop-filter: blur(4px) !important;
+        display: block !important;
+        position: fixed !important;
+        inset: 0 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        z-index: 999 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.28s ease !important;
+        backdrop-filter: blur(2px) !important;
+        -webkit-backdrop-filter: blur(2px) !important;
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    /* Tombol tutup sidebar: tampil di mobile */
+    .sidebar-close-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        margin-left: auto !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 8px !important;
+        color: #ffffff !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+        -webkit-tap-highlight-color: transparent !important;
+    }
+
+    .sidebar-close-btn:active {
+        background: rgba(255, 255, 255, 0.25) !important;
+        transform: scale(0.9) !important;
     }
 
     .sidebar-brand {
@@ -5134,109 +5161,136 @@ input[type='radio']:active,
         justify-content: space-between !important;
     }
 
-    .sidebar-close-btn {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 34px !important;
-        height: 34px !important;
-        margin-left: auto !important;
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        border-radius: 8px !important;
-        color: #ffffff !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-    }
-
-    .sidebar-close-btn:active {
-        background: rgba(255, 255, 255, 0.25) !important;
-        transform: scale(0.92) !important;
-    }
-
     .sidebar-nav {
-        padding-bottom: 40px !important;
+        padding: 8px 0 80px !important;
+        overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
     }
 
-    /* 2. Topbar — tampil seperti desktop */
-    .topbar {
-        height: 58px !important;
-        padding: 0 20px !important;
+    /* Nav item: lebih besar untuk touch */
+    .sidebar-nav .nav-item,
+    .nav-item {
+        padding: 11px 16px !important;
+        font-size: 14px !important;
+        min-height: 44px !important;
     }
 
+    /* ── 3. Main Area: full width, vertikal scroll ── */
+    .main-area {
+        flex: 1 !important;
+        width: 100% !important;
+        min-width: unset !important;
+        height: calc(100vh - 0px) !important;
+        height: calc(100dvh - 0px) !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* ── 4. Topbar: full width, hamburger tampil ── */
+    .topbar {
+        height: 54px !important;
+        min-height: 54px !important;
+        padding: 0 14px !important;
+        flex-shrink: 0 !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 100 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Hamburger: tampil di mobile */
     .topbar-hamburger {
-        display: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 10px !important;
+        flex-shrink: 0 !important;
+        -webkit-tap-highlight-color: transparent !important;
+        cursor: pointer !important;
     }
 
     .topbar-title {
-        font-size: 15px !important;
+        font-size: 14px !important;
         font-weight: 700 !important;
-        max-width: none !important;
         white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: unset !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 160px !important;
     }
 
     .topbar-right {
-        gap: 14px !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
     }
 
+    /* User pill: sembunyikan nama/role, tampilkan avatar saja */
     .user-pill {
-        padding: 4px 12px 4px 4px !important;
+        padding: 3px !important;
     }
 
     .user-info {
-        display: flex !important;
-        flex-direction: column !important;
+        display: none !important;
     }
 
     .user-avatar {
         width: 34px !important;
         height: 34px !important;
         font-size: 13px !important;
+        flex-shrink: 0 !important;
     }
 
-    /* 3. Content Area — tampil seperti desktop */
-    .main-area {
-        height: 100vh;
-        height: 100dvh;
-        width: 100vw !important;
-        min-width: 600px !important;
-        overflow-x: auto !important;
-        overflow-y: auto !important;
-        flex: 1;
+    /* Tombol ganti akses: sembunyikan teks, tampilkan icon saja */
+    .btn-ganti-akses span {
+        display: none !important;
     }
 
+    .btn-ganti-akses {
+        padding: 6px !important;
+        border-radius: 8px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+        justify-content: center !important;
+    }
+
+    /* ── 5. Content Area: padding dikecilkan ── */
     .content-area {
-        padding: 24px 28px !important;
-        overflow-x: visible !important;
-        overflow-y: visible !important;
+        padding: 16px 14px 24px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        flex: 1 !important;
+        overflow-x: hidden !important;
     }
 
-    /* 4. Page Header — tampil seperti desktop */
+    /* ── 6. Page Header ── */
     .page-header {
-        flex-direction: row !important;
+        flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 16px !important;
-        margin-bottom: 20px !important;
+        gap: 12px !important;
+        margin-bottom: 16px !important;
     }
 
     .page-title {
-        font-size: 20px !important;
+        font-size: 18px !important;
         line-height: 1.3 !important;
     }
 
     .page-subtitle {
-        font-size: 13px !important;
+        font-size: 12.5px !important;
         line-height: 1.4 !important;
     }
 
     .page-actions {
         display: flex !important;
         flex-wrap: wrap !important;
-        gap: 10px !important;
+        gap: 8px !important;
         align-items: center !important;
+        width: 100% !important;
     }
 
     .page-actions .btn {
@@ -5244,73 +5298,96 @@ input[type='radio']:active,
         font-weight: 600 !important;
     }
 
-    /* 5. Cards & Panels — tampil seperti desktop */
-    .card {
-        margin-bottom: 20px !important;
-        border-radius: 14px !important;
-    }
-
-    .card-header {
-        padding: 16px 20px !important;
-        gap: 10px !important;
-        flex-wrap: wrap !important;
-    }
-
-    .card-body {
-        padding: 20px !important;
-    }
-
-    .card-footer {
-        padding: 14px 20px !important;
-        flex-wrap: wrap !important;
-        gap: 10px !important;
-    }
-
-    /* 6. Grids — tampil seperti desktop */
-    .grid-4, .grid-5 {
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 20px !important;
-    }
-
-    .grid-2 {
+    /* ── 7. Grids di mobile: stat cards 2 kolom, card besar/chart 1 kolom ── */
+    .grid-4,
+    .grid-5 {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 20px !important;
+        gap: 10px !important;
     }
 
     .grid-3 {
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 20px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
     }
 
-    div[style*="minmax(250px"],
-    div[style*="minmax(280px"],
-    div[style*="minmax(300px"],
-    div[style*="minmax(320px"] {
-        /* biarkan grid responsif bawaan bekerja */
-    }
-
-    .stat-card {
-        padding: 16px 20px !important;
+    .grid-2 {
+        grid-template-columns: 1fr !important;
         gap: 14px !important;
+    }
+
+    /* Jika grid-2 isinya adalah stat-card, tetap 2 kolom */
+    .grid-2:has(> .stat-card),
+    .grid-2:has(> div > .stat-card) {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    /* Jika grid-3 isinya adalah card biasa (bukan stat-card), jadikan 1 kolom */
+    .grid-3:has(> .card:not(.stat-card)) {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    /* Stat Card lebih kompak */
+    .stat-card {
+        padding: 14px !important;
+        gap: 10px !important;
         border-radius: 12px !important;
+        /* Matikan hover transform di mobile */
+        transform: none !important;
+        will-change: auto !important;
+    }
+
+    .stat-card:hover {
+        transform: none !important;
     }
 
     .stat-icon-box {
-        width: 42px !important;
-        height: 42px !important;
-        border-radius: 10px !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 9px !important;
         flex-shrink: 0 !important;
     }
 
     .stat-num {
-        font-size: 22px !important;
+        font-size: 20px !important;
     }
 
     .stat-label {
-        font-size: 12px !important;
+        font-size: 11px !important;
     }
 
-    /* 7. Tables — tampil seperti desktop */
+    /* ── 8. Cards ── */
+    .card {
+        margin-bottom: 14px !important;
+        border-radius: 14px !important;
+        /* Matikan hover yang berat di mobile */
+        transform: none !important;
+        will-change: auto !important;
+    }
+
+    .card:hover {
+        transform: none !important;
+        box-shadow: inherit !important;
+    }
+
+    .card-header {
+        padding: 14px 16px !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .card-body {
+        padding: 14px 16px !important;
+    }
+
+    .card-footer {
+        padding: 12px 16px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* ── 9. Tabel: horizontal scroll di dalam card, konten tidak dipaksakan shrink ── */
     .table-wrapper,
     .table-responsive,
     [class*="-table-wrapper"] {
@@ -5322,18 +5399,22 @@ input[type='radio']:active,
     }
 
     .table-wrapper > table,
-    .table-responsive > table {
-        min-width: 620px;
+    .table-responsive > table,
+    .table-wrapper table {
+        min-width: 540px !important;
     }
 
-    .card-body:has(> table) {
+    /* Card body yang berisi tabel langsung */
+    .card-body:has(> table),
+    .card-body > .overflow-x-auto {
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
     }
 
-    .table th, .table td {
-        padding: 10px 14px !important;
-        font-size: 13px !important;
+    .table th,
+    .table td {
+        padding: 9px 12px !important;
+        font-size: 12.5px !important;
     }
 
     .table th {
@@ -5347,17 +5428,23 @@ input[type='radio']:active,
     }
 
     .action-col .btn-sm {
-        padding: 4px 10px !important;
-        font-size: 12px !important;
+        padding: 4px 8px !important;
+        font-size: 11.5px !important;
     }
 
-    /* 8. Forms — ukuran desktop */
-    .form-row {
-        /* biarkan seperti desktop */
-    }
-
+    /* ── 10. Forms ── */
     .form-group {
-        margin-bottom: 16px !important;
+        margin-bottom: 14px !important;
+    }
+
+    /* Kolom form: stack vertikal di mobile */
+    .form-row {
+        flex-direction: column !important;
+        gap: 0 !important;
+    }
+
+    .form-row .form-group {
+        width: 100% !important;
     }
 
     .form-control,
@@ -5371,40 +5458,54 @@ input[type='radio']:active,
     input[type='time'],
     textarea,
     .ts-control {
-        font-size: 13px !important;
-        min-height: 38px !important;
+        font-size: 16px !important; /* Cegah auto-zoom iOS */
+        min-height: 42px !important;
         box-sizing: border-box !important;
     }
 
+    /* Filter bar: wrap jadi vertikal */
     .filter-bar {
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 10px !important;
-        flex-wrap: wrap !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
     }
 
-    /* 9. Modals — tampil seperti desktop */
+    .filter-bar .form-control,
+    .filter-bar .form-select,
+    .filter-bar select {
+        width: 100% !important;
+    }
+
+    /* ── 11. Modals: full-screen di mobile ── */
     .modal-overlay {
-        padding: 20px !important;
+        padding: 0 !important;
         z-index: 9999 !important;
+        align-items: flex-end !important;
     }
 
     .modal-box,
     .modal-dialog,
     .modal-content {
-        max-width: 600px !important;
-        margin: 0 auto !important;
-        padding: 24px !important;
-        border-radius: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 92vh !important;
+        margin: 0 !important;
+        padding: 20px 18px !important;
+        border-radius: 20px 20px 0 0 !important;
         overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
-    /* 10. Datepicker Calendar Popover */
+    /* ── 12. Datepicker ── */
     .jurnal-calendar-popover {
-        width: 300px !important;
+        width: calc(100vw - 28px) !important;
+        max-width: 340px !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 auto !important;
     }
 
-    /* 11. Tabs Navigation */
+    /* ── 13. Tabs Navigation: horizontal scroll ── */
     .profile-tabs-bar,
     .nav-tabs,
     .tab-bar,
@@ -5412,29 +5513,125 @@ input[type='radio']:active,
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
         scrollbar-width: none !important;
+        white-space: nowrap !important;
+        flex-wrap: nowrap !important;
     }
 
-    /* 12. Buttons — ukuran desktop */
+    .profile-tabs-bar::-webkit-scrollbar,
+    .nav-tabs::-webkit-scrollbar,
+    .tab-bar::-webkit-scrollbar,
+    .tab-nav::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /* ── 14. Buttons: touch-friendly ── */
     .btn {
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: 9px 16px !important;
+        font-size: 13px !important;
+        min-height: 38px !important;
+        /* Hapus hover transform berat di mobile */
+        transition: background 0.2s ease, box-shadow 0.2s ease, opacity 0.15s ease !important;
+    }
+
+    .btn:hover {
+        transform: none !important;
+    }
+
+    .btn:active {
+        transform: scale(0.97) !important;
+        opacity: 0.85 !important;
     }
 
     .btn-sm {
-        padding: 5px 10px;
-        font-size: 12px;
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+        min-height: 32px !important;
     }
 
-    .card:active,
-    .stat-card:active,
-    .table tbody tr:active {
+    /* ── 15. Aesthetic background: matikan total di mobile agar ringan & anti-lag ── */
+    .sys-aesthetic-bg,
+    .sys-bg-orb,
+    .sys-bg-ring,
+    .sys-bg-beam,
+    .sys-bg-diamond,
+    .sys-waves-container,
+    .sys-wave-svg,
+    .sys-meteors-container,
+    .sys-meteor,
+    .sys-particle,
+    .sys-sparkle,
+    .sys-cross,
+    .sys-bg-grid {
+        display: none !important;
+        animation: none !important;
+        will-change: auto !important;
+    }
+
+    /* ── 16. Misc: pagination, badges ── */
+    .card-footer .pagination {
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+    }
+
+    /* ── 17. Touch feedback ── */
+    .card:active {
         transform: scale(0.99) !important;
+    }
+
+    .stat-card:active {
+        transform: scale(0.98) !important;
+    }
+
+    .table tbody tr:active {
+        opacity: 0.85 !important;
+    }
+
+    /* ── 18. Matikan animasi kompleks di mobile ── */
+    .card,
+    .stat-card,
+    .nav-item,
+    .btn {
+        animation: none !important;
     }
 }
 
-/* Extra Compact Screens (≤ 400px) — Pertahankan tampilan Desktop */
+/* ── Layar sangat kecil (≤ 400px): kompres lebih lanjut ── */
 @media (max-width: 400px) {
-    /* Tetap gunakan ukuran desktop, tampilan diakses via horizontal scroll */
+    .content-area {
+        padding: 12px 10px 20px !important;
+    }
+
+    .grid-4,
+    .grid-5,
+    .grid-3 {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .page-title {
+        font-size: 16px !important;
+    }
+
+    .stat-num {
+        font-size: 18px !important;
+    }
+
+    .topbar {
+        padding: 0 10px !important;
+    }
+
+    .topbar-title {
+        max-width: 120px !important;
+        font-size: 13px !important;
+    }
+
+    .card-body {
+        padding: 12px !important;
+    }
+
+    .card-header {
+        padding: 12px !important;
+    }
 }
 
 /* ==========================================
@@ -6325,4 +6522,168 @@ body.dark-mode .custom-pagination .page-link {
     background: rgba(2, 132, 199, 0.2);
     color: #7dd3fc;
     border-color: rgba(2, 132, 199, 0.35);
+}
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS — GPU Compositing & Paint Containment
+   Tidak mengubah desain atau animasi apapun. Hanya meningkatkan performa.
+   ========================================================================== */
+
+/*
+ * 1. ISOLATE the entire background decoration layer.
+ *    Browser hanya perlu composite layer ini secara independen,
+ *    tidak perlu repaint seluruh halaman saat animasi berjalan.
+ */
+.sys-aesthetic-bg {
+    isolation: isolate;
+    contain: layout style;
+}
+
+/*
+ * 2. CONTAIN wave container — batas paint area ke dalam elemen saja
+ */
+.sys-waves-container {
+    contain: layout style paint;
+}
+
+/*
+ * 3. CONTAIN meteor container — meteors sudah absolute, batasi repaints
+ */
+.sys-meteors-container {
+    contain: layout style paint;
+    isolation: isolate;
+}
+
+/*
+ * 4. GPU LAYER promotion untuk semua orbs.
+ *    Keyframe animasi orbs sudah memakai translate3d() (lihat sysOrbDrift*),
+ *    sehingga browser otomatis membuat GPU compositor layer.
+ *    Kita cukup hint via will-change + backface-visibility.
+ *    JANGAN tambahkan static transform di sini karena akan override keyframe.
+ */
+.sys-orb-1,
+.sys-orb-2,
+.sys-orb-3,
+.sys-orb-4 {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/*
+ * 5. GPU LAYER untuk rings & diamond — elemen rotating ringan
+ */
+.sys-ring-1,
+.sys-ring-2,
+.sys-dm-1 {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+}
+
+/*
+ * 6. GPU LAYER untuk meteors — elemen paling berat karena drop-shadow + translate
+ */
+.sys-meteor {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Stagger meteor m4 & m5: mulai animasi lebih lambat
+       agar max 3 meteor aktif bersamaan di layar (hemat GPU) */
+}
+
+.sys-meteor.m4 {
+    animation-delay: 5.8s;  /* Geser dari 3.6s ke 5.8s — gap lebih besar dari m3 */
+}
+
+.sys-meteor.m5 {
+    animation-delay: 8.2s;  /* Geser dari 4.4s ke 8.2s — tidak overlap dengan m1-m3 */
+}
+
+/*
+ * 7. GPU LAYER untuk particles & sparkles & crosses
+ */
+.sys-particle,
+.sys-sparkle,
+.sys-cross {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 8. REDUCE backdrop-filter cost pada .card:
+ *    contain:paint membatasi area yang harus di-composite browser
+ */
+.card {
+    contain: layout style;
+    /* Jangan pakai contain:paint karena card punya overflow:visible */
+}
+
+/*
+ * 9. TOPBAR: promote ke GPU layer agar scrolling tidak menyebabkan repaint topbar
+ */
+.topbar {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+}
+
+/*
+ * 10. SIDEBAR: sudah ada transition, tambahkan GPU promotion
+ */
+.sidebar {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 11. CONTENT AREA scroll optimization
+ *     Hardware-accelerated smooth scroll
+ */
+.content-area {
+    -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * 12. SPARKLE: kurangi filter complexity saat idle (antara tween)
+ *    Override filter di keyframe 0%/100% sudah ada, ini hanya hint default
+ */
+.sys-sparkle svg {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 13. NAV ITEM hover transform — sudah GPU friendly karena hanya translateX
+ *     Tambahkan backface-visibility agar tidak trigger repaint layer lain
+ */
+.nav-item {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/*
+ * 14. Kurangi oversaturation backdrop-filter di user-pill
+ *     (tetap blur 10px, hanya contain layer)
+ */
+.user-pill {
+    isolation: isolate;
+}
+
+/*
+ * 15. BEAM — elemen static skew, cukup GPU layer sederhana
+ */
+.sys-bg-beam {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/*
+ * 16. DOT GRID — static, tidak beranimasi. Matikan will-change agar
+ *     browser tidak mengalokasikan GPU memory untuk ini.
+ */
+.sys-bg-grid {
+    will-change: auto;
 }

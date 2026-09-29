@@ -10,6 +10,12 @@
         <p class="page-subtitle">Monitoring Jam Pelajaran, Kehadiran Guru, Kelas Kosong & Pengajuan Dispensasi</p>
     </div>
     <div class="page-actions" style="display:flex; gap:8px; flex-wrap:wrap;">
+        @if(Auth::user()->isGuru())
+            <a href="{{ route('pilih-akses.switch', 'guru') }}" class="btn btn-secondary" style="font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Dashboard Guru
+            </a>
+        @endif
         <a href="{{ route('piket.jadwal-piket') }}" class="btn btn-secondary" style="font-weight:600;">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             Jadwal Piket

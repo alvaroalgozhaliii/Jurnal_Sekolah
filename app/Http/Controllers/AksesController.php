@@ -55,4 +55,27 @@ class AksesController extends Controller
 
         return redirect()->route($targetRoute)->with('success', "Selamat datang! Anda masuk dengan akses {$title}.");
     }
+
+    public function switchAkses(string $role)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $accesses = $user->getAvailableAccesses();
+
+        if (!array_key_exists($role, $accesses)) {
+            return redirect()->back()->with('error', 'Akses tidak sah untuk akun Anda.');
+        }
+
+        session(['active_access' => $role]);
+
+        $targetRoute = $accesses[$role]['route'] ?? AuthController::getDashboardRouteName($role);
+        $title = $accesses[$role]['title'] ?? ucfirst($role);
+
+        return redirect()->route($targetRoute)->with('success', "Beralih ke akses {$title}.");
+    }
 }

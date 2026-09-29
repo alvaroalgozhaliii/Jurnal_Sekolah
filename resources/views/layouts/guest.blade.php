@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Jurnal Sekolah')</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
-
     <!-- Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +23,8 @@
     </script>
 
     <link rel="stylesheet" href="{{ asset('css/jurnal.css') }}?v={{ file_exists(public_path('css/jurnal.css')) ? filemtime(public_path('css/jurnal.css')) : time() }}">
+<<<<<<< HEAD
+=======
 
     <!-- ===== ANIMASI LATAR ANGKASA ===== -->
     <style>
@@ -88,16 +86,24 @@
     .sso-right {
         border-radius: 0 24px 24px 0 !important;
     }
+
+    /* ── GPU Layer hints untuk elemen animasi login ── */
+    /* Nebula & orbs: promote ke compositor layer agar tidak trigger repaint saat halaman load */
+    .space-nebula,
+    .login-orb {
+        will-change: transform, opacity;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+    /* Canvas bintang: tampilkan kosong dulu, animasi mulai saat idle (via JS defer) */
+    #spaceBgCanvas {
+        will-change: contents;
+    }
     </style>
+>>>>>>> 44dcf53bbef00d1340b0591b134393def5aa95db
 </head>
 <body>
 <div class="login-page">
-    <!-- ===== LATAR ANGKASA: Canvas Bintang + Nebula ===== -->
-    <canvas id="spaceBgCanvas" aria-hidden="true"></canvas>
-    <div class="space-nebula space-nebula-1" aria-hidden="true"></div>
-    <div class="space-nebula space-nebula-2" aria-hidden="true"></div>
-    <div class="space-nebula space-nebula-3" aria-hidden="true"></div>
-
     <!-- Aesthetic Ambient Floating Glowing Orbs -->
     <div class="login-orb orb-1"></div>
     <div class="login-orb orb-2"></div>
@@ -143,7 +149,7 @@
             <path d="M0,192L60,181.3C120,171,240,149,360,160C480,171,600,213,720,213.3C840,213,960,171,1080,154.7C1200,139,1320,149,1380,154.7L1440,160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
         </svg>
 
-        <!-- Particles & Shooting Stars Container -->
+        <!-- Animated Background Shooting Stars / Meteors (Jatuh Lurus) -->
         <div class="shooting-stars-container" aria-hidden="true">
             <div class="shooting-star star-1"></div>
             <div class="shooting-star star-2"></div>
@@ -240,6 +246,8 @@ function togglePasswordVisibility(inputId, btn) {
     });
 })();
 </script>
+<<<<<<< HEAD
+=======
 
 <!-- ===== JS ANIMASI LATAR ANGKASA ===== -->
 <script>
@@ -248,46 +256,48 @@ function togglePasswordVisibility(inputId, btn) {
     if (!canvas) return;
     var ctx = canvas.getContext('2d');
     var W, H, stars = [];
+    var animationStarted = false;
+    var rafId = null;
 
     function resize() {
-        canvas.style.display = 'none';
         W = canvas.width  = window.innerWidth;
         H = canvas.height = window.innerHeight;
-        canvas.style.display = 'block';
         buildStars();
     }
 
+    var isMobile = window.innerWidth <= 860;
+
     function buildStars() {
         stars = [];
-        var total = Math.floor((W * H) / 2800);
+        /* Mobile: kurangi density 60% agar lebih ringan */
+        var densityDiv = isMobile ? 6000 : 3400;
+        var total = Math.floor((W * H) / densityDiv);
         for (var i = 0; i < total; i++) {
             stars.push({
                 x: Math.random() * W,
                 y: Math.random() * H,
-                r: Math.random() * 1.5 + 0.2,
+                r: Math.random() * (isMobile ? 1.0 : 1.4) + 0.2,
                 a: Math.random(),
-                da: (Math.random() * 0.006 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+                /* Mobile: twinkle lebih lambat agar hemat CPU */
+                da: (Math.random() * (isMobile ? 0.003 : 0.005) + 0.001) * (Math.random() < 0.5 ? 1 : -1),
                 c: ['255,255,255','200,220,255','255,240,180','180,210,255'][Math.floor(Math.random()*4)]
             });
         }
     }
 
-    // ===== METEOR VERTIKAL KE SAMPING (DIAGONAL FALLING SHOOTING STARS) =====
+    // ===== METEOR VERTIKAL KE SAMPING (DESKTOP ONLY) =====
     var meteors = [];
     var lastMeteorTime = 0;
 
     function createMeteor() {
-        // Sudut jatuh vertikal ke samping: ~45 derajat (jatuh ke bawah meluncur ke kanan)
-        var angle = Math.PI / 4; 
-        var speed = Math.random() * 8 + 14; // 14 - 22 px per frame
-        var length = Math.random() * 110 + 90; // 90 - 200 px
-        
-        // Spawn dari sisi atas atau kiri atas melintasi layar
+        var angle = Math.PI / 4;
+        var speed = Math.random() * 8 + 14;
+        var length = Math.random() * 110 + 90;
         var startX = Math.random() * (W * 1.3) - (W * 0.2);
         var startY = Math.random() * (H * 0.4) - 120;
 
         var isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-        var colors = isDark 
+        var colors = isDark
             ? ['56,189,248', '96,165,250', '192,132,252', '255,255,255', '52,211,153']
             : ['37,99,235', '59,130,246', '124,58,237', '2,132,199'];
 
@@ -297,7 +307,6 @@ function togglePasswordVisibility(inputId, btn) {
             dx: Math.cos(angle) * speed,
             dy: Math.sin(angle) * speed,
             length: length,
-            speed: speed,
             thickness: Math.random() * 1.5 + 1.2,
             opacity: 1,
             fadeSpeed: Math.random() * 0.012 + 0.008,
@@ -306,8 +315,11 @@ function togglePasswordVisibility(inputId, btn) {
     }
 
     function updateAndDrawMeteors() {
+        /* Matikan meteor di mobile — terlalu berat */
+        if (isMobile) return;
+
         var now = Date.now();
-        if (now - lastMeteorTime > (Math.random() * 1400 + 900) && meteors.length < 5) {
+        if (now - lastMeteorTime > (Math.random() * 1400 + 900) && meteors.length < 4) {
             meteors.push(createMeteor());
             lastMeteorTime = now;
         }
@@ -338,22 +350,33 @@ function togglePasswordVisibility(inputId, btn) {
             ctx.strokeStyle = grad;
             ctx.lineWidth = m.thickness;
             ctx.lineCap = 'round';
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(' + m.colorRgb + ', 0.9)';
             ctx.stroke();
 
-            // Kepala meteor (bintang jatuh bercahaya terang di ujung lintasan)
+            ctx.beginPath();
+            ctx.arc(m.x, m.y, m.thickness * 2.8, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + m.colorRgb + ', ' + (m.opacity * 0.18) + ')';
+            ctx.fill();
+
             ctx.beginPath();
             ctx.arc(m.x, m.y, m.thickness * 1.2, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(255, 255, 255, ' + m.opacity + ')';
-            ctx.shadowBlur = 14;
-            ctx.shadowColor = '#ffffff';
             ctx.fill();
+
             ctx.restore();
         }
     }
 
-    function draw() {
+    /* Mobile: throttle frame rate ke ~30fps agar baterai & CPU hemat */
+    var lastFrameTime = 0;
+    var frameBudget = isMobile ? 33 : 0; /* 33ms = ~30fps di mobile */
+
+    function draw(timestamp) {
+        if (isMobile && timestamp - lastFrameTime < frameBudget) {
+            rafId = requestAnimationFrame(draw);
+            return;
+        }
+        lastFrameTime = timestamp || 0;
+
         ctx.clearRect(0, 0, W, H);
         for (var i = 0; i < stars.length; i++) {
             var s = stars[i];
@@ -366,14 +389,34 @@ function togglePasswordVisibility(inputId, btn) {
             ctx.fill();
         }
         updateAndDrawMeteors();
-        requestAnimationFrame(draw);
+        rafId = requestAnimationFrame(draw);
     }
 
-    window.addEventListener('resize', resize);
-    resize();
-    draw();
+    function startAnimation() {
+        if (animationStarted) return;
+        animationStarted = true;
+        isMobile = window.innerWidth <= 860;
+        resize();
+        draw(0);
+    }
+
+    window.addEventListener('resize', function() {
+        isMobile = window.innerWidth <= 860;
+        if (animationStarted) resize();
+    });
+
+    /*
+     * DEFER START: Tunda animasi canvas sampai browser selesai render halaman.
+     * Mobile: tunda lebih lama (300ms) agar tidak lag saat load awal.
+     */
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(startAnimation, { timeout: isMobile ? 1200 : 800 });
+    } else {
+        setTimeout(startAnimation, isMobile ? 300 : 150);
+    }
 })();
 </script>
 @stack('scripts')
+>>>>>>> 44dcf53bbef00d1340b0591b134393def5aa95db
 </body>
 </html>

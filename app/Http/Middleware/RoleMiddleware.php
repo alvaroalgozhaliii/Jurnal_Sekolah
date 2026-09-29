@@ -51,6 +51,15 @@ class RoleMiddleware
             return redirect()->route($homeRoute)->with('error', 'Anda tidak memiliki hak akses untuk membuka halaman tersebut.');
         }
 
+        // Otomatis sinkronkan active_access sesuai area yang diakses jika pengguna memiliki hak akses sah
+        if ($request->is('piket-area*') && session('active_access') !== 'piket') {
+            session(['active_access' => 'piket']);
+        } elseif ($request->is('walikelas-area*') && session('active_access') !== 'wali_kelas') {
+            session(['active_access' => 'wali_kelas']);
+        } elseif ($request->is('guru-area*') && session('active_access') !== 'guru') {
+            session(['active_access' => 'guru']);
+        }
+
         return $this->addNoCacheHeaders($next($request));
     }
 

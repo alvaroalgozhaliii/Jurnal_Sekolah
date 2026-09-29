@@ -235,11 +235,6 @@
         font-size: 15px;
         min-width: 0;
     }
-    /* Pertahankan tampilan desktop persis sama */
-    .topbar-title {
-        max-width: none;
-        font-size: 15px;
-    }
     .btn-ganti-akses span {
         display: inline !important;
     }
@@ -247,10 +242,7 @@
         padding: 6px 12px !important;
     }
 
-    /* Layout desktop tetap terlihat dengan horizontal scroll */
-    body, .app-shell, .main-area {
-        /* max-width dihapus agar bisa scroll horizontal seperti desktop */
-    }
+    /* Content area box-sizing */
     .content-area {
         box-sizing: border-box;
     }
@@ -346,7 +338,11 @@
                 </a>
                 @php
                     $pendingResetCount = \App\Models\ResetPasswordRequest::where('status', 'pending')->count();
-                    $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
+                    try {
+                        $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
+                    } catch (\Exception $e) {
+                        $pendingDeviceCount = 0;
+                    }
                 @endphp
                 <a href="{{ route('admin.reset-password.index') }}" class="nav-item {{ request()->routeIs('admin.reset-password.*') ? 'active' : '' }}" style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="display: flex; align-items: center; gap: 10px;">
@@ -450,6 +446,14 @@
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     Jadwal Piket
                 </a>
+
+                @if(Auth::user()->isGuru())
+                    <div class="nav-section-label">Peran Mengajar</div>
+                    <a href="{{ route('pilih-akses.switch', 'guru') }}" class="nav-item" style="color: var(--accent, #3b82f6);">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Dashboard Guru Pengajar
+                    </a>
+                @endif
 
             <!-- ORTU / SISWA -->
             @elseif($role === 'ortu' || $role === 'siswa')
