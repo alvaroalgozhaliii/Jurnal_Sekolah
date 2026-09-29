@@ -7,41 +7,10 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">Formulir Jurnal Harian KBM</h1>
-        <p class="page-subtitle">Otomatis terkoneksi dengan jam laptop/perangkat &amp; jadwal mengajar saat ini</p>
+        <p class="page-subtitle">Terkoneksi langsung dengan jam sekolah &amp; jadwal mengajar aktif saat ini</p>
     </div>
     <div class="page-actions">
         <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary">&larr; Kembali ke Jurnal</a>
-    </div>
-</div>
-
-<!-- BANNER SINKRONISASI JAM LAPTOP AUTOMATIS -->
-<div class="alert alert-info mb-16 d-flex align-center gap-12" id="laptop-time-banner">
-    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px; height:22px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-    <div>
-        <strong>Waktu & Hari Laptop Anda:</strong> 
-        <span id="laptop-time-display" class="fw-bold text-navy">Memuat jam laptop...</span>
-        <span class="badge badge-success" style="margin-left:8px;">Otomatis Terbaca</span>
-    </div>
-</div>
-
-<div class="card mb-24">
-    <div class="card-body">
-        <form id="form-pilih-jadwal" action="{{ route('jurnal-harian.create') }}" method="GET" class="d-flex align-center gap-12 flex-wrap">
-            <label for="id_jadwal" class="form-label" style="margin:0; white-space:nowrap;">Pilih Jadwal Mengajar:</label>
-            <select id="id_jadwal" name="id_jadwal" onchange="this.form.submit()" class="form-control select-search" style="min-width:450px;" placeholder="Ketik / Cari Jadwal Mengajar KBM...">
-                <option value="">Pilih Jadwal KBM</option>
-                @foreach($jadwalList as $j)
-                <option value="{{ $j->id_jadwal }}" 
-                        data-hari="{{ $j->hari }}" 
-                        data-jam-ke="{{ $j->jam_ke }}"
-                        data-waktu-mulai="{{ $j->waktu_mulai }}"
-                        data-waktu-selesai="{{ $j->waktu_selesai }}"
-                        {{ ($jadwalSelected && $jadwalSelected->id_jadwal == $j->id_jadwal) ? 'selected' : '' }}>
-                    {{ $j->hari }} | Jam {{ $j->jam_ke }} ({{ \App\Services\KbmService::getLabelWaktu($j->hari, $j->jam_ke) ?: ($j->waktu_mulai . ' - ' . $j->waktu_selesai) }}) | Kelas {{ $j->kelas->nama_kelas ?? '-' }} | {{ $j->mapel }}
-                </option>
-                @endforeach
-            </select>
-        </form>
     </div>
 </div>
 
@@ -79,7 +48,7 @@
                 <div>
                     <div class="clock-live-tag">
                         <span class="clock-live-dot"></span>
-                        Waktu Real-Time (Perangkat)
+                        Waktu Real-Time Sekolah
                     </div>
                     <div class="clock-time-display">
                         <span class="clock-digits" id="liveClockDisplay">{{ $now->format('H:i:s') }}</span>
@@ -113,7 +82,7 @@
                     @elseif($slotStatus === 'jam_pulang')
                         Jam Pulang Sekolah
                     @elseif($slotStatus === 'sebelum_kbm')
-                        Belum Masuk Jam KBM (07:00)
+                        Belum Masuk Jam KBM ({{ \App\Services\KbmService::getJamMasuk() }} WIB)
                     @elseif($slotStatus === 'libur')
                         Hari Libur Sekolah
                     @else
@@ -127,13 +96,13 @@
                             @if($jadwalSelected)
                                 Terkoneksi: Kelas {{ $jadwalSelected->kelas->nama_kelas ?? '-' }} — {{ $jadwalSelected->mapel }}
                             @elseif($slotStatus === 'kbm')
-                                Tidak ada jadwal mengajar di jam ini
+                                Tidak ada jadwal mengajar Anda di jam ini
                             @elseif($slotStatus === 'istirahat')
                                 Sedang Waktu Istirahat — Tidak Ada KBM
                             @elseif($slotStatus === 'jam_pulang')
-                                Jam Pulang Sekolah, Tidak Ada KBM
+                                Jam Pulang Sekolah — KBM Telah Selesai
                             @elseif($slotStatus === 'sebelum_kbm')
-                                KBM Dimulai Pukul 07:00 WIB
+                                KBM Dimulai Pukul {{ \App\Services\KbmService::getJamMasuk() }} WIB
                             @elseif($slotStatus === 'libur')
                                 Tidak Ada Jadwal Mengajar
                             @else
@@ -147,13 +116,12 @@
     </div>
 </div>
 
-
 {{-- JIKA SEDANG JAM MENGAJAR DAN JADWAL DITEMUKAN --}}
 @if($jadwalSelected)
 <div class="card mb-24" style="max-width: 800px; border-left: 4px solid var(--navy-primary);">
     <div class="card-header" style="background:#f8fafc;">
         <h3 class="card-title" style="color:var(--navy-primary); font-size:15px;">
-            Informasi Jadwal Mengajar Saat Ini
+            Informasi Jadwal Mengajar Aktif Saat Ini
         </h3>
     </div>
     <div class="card-body">
@@ -191,14 +159,14 @@
             <input type="hidden" name="id_jadwal" value="{{ $jadwalSelected->id_jadwal }}">
 
             <div class="form-group">
-                <label class="form-label" for="tanggal">Tanggal Jurnal (Otomatis Laptop) <span class="req">*</span></label>
-                <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}" class="form-control" style="max-width:220px;" required>
-                <small class="text-muted" style="display:block; margin-top:4px;">Diisi otomatis dari sistem tanggal & jam laptop Anda.</small>
+                <label class="form-label" for="tanggal">Tanggal Jurnal <span class="req">*</span></label>
+                <input type="date" id="tanggal" name="tanggal" value="{{ date('Y-m-d') }}" class="form-control" style="max-width:220px;" required readonly>
+                <small class="text-muted" style="display:block; margin-top:4px;">Terkoneksi otomatis dengan tanggal hari ini.</small>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="materi">Materi Pelajaran Utama <span class="req">*</span></label>
-                <input type="text" id="materi" name="materi" value="{{ old('materi') }}" class="form-control" placeholder="Contoh: Bab 3 Persamaan Kuadrat" required>
+                <input type="text" id="materi" name="materi" value="{{ old('materi') }}" class="form-control" placeholder="Contoh: Bab 3 Persamaan Kuadrat" required autofocus>
             </div>
 
             <div class="form-group mb-16">
@@ -221,49 +189,49 @@
     </div>
 </div>
 
-{{-- JIKA BUKAN JAM MENGAJAR / ISTIRAHAT / PULANG / LIBUR --}}
+{{-- JIKA BUKAN JAM MENGAJAR / ISTIRAHAT / PULANG / LIBUR / TIDAK ADA JADWAL --}}
 @else
 <div class="card" style="max-width: 800px;">
-    <div class="card-body" style="padding: 32px 24px; text-align: center;">
+    <div class="card-body" style="padding: 36px 24px; text-align: center;">
         @if($slotStatus === 'istirahat')
-            <div style="margin-bottom: 12px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg></div>
+            <div style="margin-bottom: 14px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg></div>
             <h3 style="font-size: 20px; font-weight: 700; color: #b45309; margin-bottom: 8px;">
                 Saat Ini Sedang Waktu Istirahat
             </h3>
-            <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto 20px auto;">
-                Waktu {{ $currentSlot['keterangan'] }}. Kegiatan belajar mengajar sedang dijeda. Pengisian formulir jurnal akan aktif otomatis saat jam pelajaran berikutnya dimulai.
+            <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Waktu {{ $currentSlot['keterangan'] }}. Kegiatan belajar mengajar sedang dijeda. Pengisian formulir jurnal akan aktif otomatis saat jam pelajaran Anda dimulai.
             </p>
         @elseif($slotStatus === 'jam_pulang')
-            <div style="margin-bottom: 12px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+            <div style="margin-bottom: 14px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
             <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">
-                Jam Pulang Sekolah, Tidak Ada KBM
+                Jam Pulang Sekolah — KBM Telah Selesai
             </h3>
-            <p style="color: #64748b; font-size: 14px; max-width: 500px; margin: 0 auto 20px auto;">
-                Kegiatan Belajar Mengajar (KBM) hari ini telah selesai (Jam pulang sekolah, tidak ada kbm). Anda tidak dapat mengisi formulir jurnal di luar jam KBM.
+            <p style="color: #64748b; font-size: 14px; max-width: 500px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Kegiatan Belajar Mengajar (KBM) hari ini telah selesai ({{ $currentSlot['keterangan'] ?? 'Jam Pulang' }}). Pengisian formulir jurnal ditutup karena sudah melewati jam kepulangan sekolah.
             </p>
         @elseif($slotStatus === 'sebelum_kbm')
-            <div style="margin-bottom: 12px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg></div>
-            <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">
+            <div style="margin-bottom: 14px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg></div>
+            <h3 style="font-size: 20px; font-weight: 700; color: #0284c7; margin-bottom: 8px;">
                 Belum Masuk Jam KBM Sekolah
             </h3>
-            <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto 20px auto;">
-                Jam kegiatan belajar mengajar sekolah dimulai pukul <strong>07:00 WIB</strong>. Sistem akan otomatis mendeteksi jadwal mengajar Anda saat jam masuk tiba.
+            <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Jam kegiatan belajar mengajar sekolah dimulai pukul <strong>{{ \App\Services\KbmService::getJamMasuk() }} WIB</strong>. Sistem akan otomatis mendeteksi jadwal mengajar Anda saat jam masuk tiba.
             </p>
         @elseif($slotStatus === 'libur')
-            <div style="margin-bottom: 12px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
-            <h3 style="font-size: 20px; font-weight: 700; color: #065f46; margin-bottom: 8px;">
+            <div style="margin-bottom: 14px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#7e22ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+            <h3 style="font-size: 20px; font-weight: 700; color: #7e22ce; margin-bottom: 8px;">
                 Hari Libur Sekolah
             </h3>
-            <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto 20px auto;">
-                Hari {{ $currentDayIndo }} adalah hari libur sekolah. Tidak ada jadwal kegiatan belajar mengajar.
+            <p style="color: #64748b; font-size: 14px; max-width: 480px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Hari {{ $currentDayIndo }} adalah hari libur sekolah. Tidak ada kegiatan belajar mengajar (KBM).
             </p>
         @else
-            <div style="margin-bottom: 12px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
-            <h3 style="font-size: 20px; font-weight: 700; color: #1e40af; margin-bottom: 8px;">
-                Tidak Ada Jadwal Mengajar di Jam Ke-{{ $currentSlot['jam_ke'] ?? '-' }}
+            <div style="margin-bottom: 14px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
+            <h3 style="font-size: 20px; font-weight: 700; color: #1e3a8a; margin-bottom: 8px;">
+                Tidak Ada Jam Mengajar di Jam Ke-{{ $currentSlot['jam_ke'] ?? '-' }} Saat Ini
             </h3>
-            <p style="color: #64748b; font-size: 14px; max-width: 500px; margin: 0 auto 20px auto;">
-                Anda tidak memiliki jadwal mengajar pada jam ini ({{ $currentSlot['waktu_label'] ?? '' }}). Formulir jurnal mengajar akan muncul secara otomatis saat jam mengajar Anda tiba.
+            <p style="color: #64748b; font-size: 14px; max-width: 520px; margin: 0 auto 20px auto; line-height: 1.6;">
+                Anda tidak memiliki jadwal mengajar pada jam ini ({{ $currentSlot['waktu_label'] ?? '' }}). Pengisian formulir jurnal hanya dapat dilakukan saat jam mengajar Anda aktif.
             </p>
         @endif
 
@@ -278,83 +246,18 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    const monthsIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
-    function updateLaptopClock() {
+    function updateClock() {
         const now = new Date();
-        const dayName = daysIndo[now.getDay()];
-        const dateNum = String(now.getDate()).padStart(2, '0');
-        const monthName = monthsIndo[now.getMonth()];
-        const year = now.getFullYear();
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
-        // Update Banner Display
         const clockEl = document.getElementById('liveClockDisplay');
         if (clockEl) {
             clockEl.textContent = `${hours}:${minutes}:${seconds}`;
         }
-        const dateEl = document.getElementById('liveDateDisplay');
-        if (dateEl) {
-            dateEl.textContent = `Hari ${dayName}, ${dateNum} ${monthName} ${year}`;
-        }
-
-        // Auto-set Date Input (YYYY-MM-DD) if empty or on load
-        const dateInput = document.getElementById('tanggal');
-        if (dateInput && !dateInput.dataset.userEdited) {
-            const formattedDate = `${year}-${String(now.getMonth() + 1).padStart(2, '0')}-${dateNum}`;
-            dateInput.value = formattedDate;
-        }
-
-        return { dayName, hours, minutes, formattedDate: `${year}-${String(now.getMonth() + 1).padStart(2, '0')}-${dateNum}` };
     }
-
-    const currentLaptopState = updateLaptopClock();
-    setInterval(updateLaptopClock, 1000);
-
-    const dateInput = document.getElementById('tanggal');
-    if (dateInput) {
-        dateInput.addEventListener('change', function() {
-            this.dataset.userEdited = "true";
-        });
-    }
-
-    // Auto Schedule Selection based on Laptop Day & Time if id_jadwal not explicitly passed in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const selectJadwal = document.getElementById('id_jadwal');
-
-    if (selectJadwal && !urlParams.has('id_jadwal') && selectJadwal.options.length > 1) {
-        const currentDay = currentLaptopState.dayName;
-        const currentTimeStr = `${currentLaptopState.hours}:${currentLaptopState.minutes}`;
-
-        let matchedIndex = -1;
-        let matchedByDay = -1;
-
-        for (let i = 1; i < selectJadwal.options.length; i++) {
-            const opt = selectJadwal.options[i];
-            const optHari = opt.getAttribute('data-hari');
-            const wMulai = opt.getAttribute('data-waktu-mulai');
-            const wSelesai = opt.getAttribute('data-waktu-selesai');
-
-            if (optHari === currentDay) {
-                if (matchedByDay === -1) matchedByDay = i;
-                if (wMulai && wSelesai && currentTimeStr >= wMulai && currentTimeStr <= wSelesai) {
-                    matchedIndex = i;
-                    break;
-                }
-            }
-        }
-
-        const targetIndex = matchedIndex !== -1 ? matchedIndex : matchedByDay;
-
-        if (targetIndex !== -1 && selectJadwal.selectedIndex !== targetIndex) {
-            selectJadwal.selectedIndex = targetIndex;
-            // Submit form to load selected schedule details
-            selectJadwal.form.submit();
-        }
-    }
+    setInterval(updateClock, 1000);
 });
 </script>
 @endpush
