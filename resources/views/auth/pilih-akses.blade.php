@@ -50,16 +50,18 @@
         @foreach($accesses as $key => $item)
             @php
                 $cardColor = match($key) {
-                    'wali_kelas' => '#059669',
-                    'waka'       => '#d97706',
+                    'wali_kelas'     => '#059669',
+                    'waka'           => '#d97706',
+                    'piket'          => '#d97706',
                     'kepala_sekolah' => '#7c3aed',
-                    default      => '#2563eb',
+                    default          => '#2563eb',
                 };
                 $cardBg = match($key) {
-                    'wali_kelas' => 'rgba(16, 185, 129, 0.12)',
-                    'waka'       => 'rgba(245, 158, 11, 0.12)',
+                    'wali_kelas'     => 'rgba(16, 185, 129, 0.12)',
+                    'waka'           => 'rgba(245, 158, 11, 0.12)',
+                    'piket'          => 'rgba(217, 119, 6, 0.12)',
                     'kepala_sekolah' => 'rgba(124, 58, 237, 0.12)',
-                    default      => 'rgba(59, 130, 246, 0.12)',
+                    default          => 'rgba(59, 130, 246, 0.12)',
                 };
             @endphp
             <div class="akses-card" style="background: var(--bg-card, #ffffff); border: 1.5px solid var(--border, #e2e8f0); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 8px 24px rgba(0,0,0,0.04); transition: all 0.25s ease; position: relative; overflow: hidden;">
@@ -79,6 +81,12 @@
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            @elseif($key === 'piket')
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                    <path d="M9 14l2 2 4-4"></path>
                                 </svg>
                             @elseif($key === 'kepala_sekolah')
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

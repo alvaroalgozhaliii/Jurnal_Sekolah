@@ -49,6 +49,12 @@ class AuthController extends Controller
             Auth::login($user, true);
             $request->session()->regenerate();
 
+            // 0. Alur Admin (Selalu langsung ke Dashboard Admin)
+            if ($user->isAdmin()) {
+                session(['active_access' => 'admin']);
+                return redirect()->intended(route('admin.dashboard'));
+            }
+
             // 1. Alur Guru (Cek tugas tambahan)
             if ($user->isGuru()) {
                 $availableAccesses = $user->getAvailableAccesses();
@@ -140,6 +146,10 @@ class AuthController extends Controller
 
     protected function redirectBasedOnRole(User $user)
     {
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
         $activeAccess = session('active_access');
         if ($activeAccess) {
             $routeName = $this->getDashboardRouteName($activeAccess);

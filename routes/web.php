@@ -64,6 +64,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/pilih-akses', [AksesController::class, 'showPilihAkses'])->name('pilih-akses');
     Route::post('/pilih-akses', [AksesController::class, 'prosesPilihAkses'])->name('pilih-akses.simpan');
+    Route::get('/pilih-akses/switch/{role}', [AksesController::class, 'switchAkses'])->name('pilih-akses.switch');
 });
 
 // Lupa Password & Username Public Routes

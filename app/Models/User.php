@@ -56,9 +56,88 @@ class User extends Authenticatable
         return in_array($this->role, ['guru', 'wali_kelas', 'walikelas']) || $this->guru !== null;
     }
 
+    public function isPiketHariIni(): bool
+    {
+        if ($this->isAdmin()) {
+            return false;
+        }
+
+        if ($this->role === 'piket') {
+            return true;
+        }
+
+        $guru = $this->guru;
+        if (!$guru) {
+            $guru = Guru::where('nama', $this->nama)
+                ->orWhere('nip', $this->nip)
+                ->first();
+        }
+
+        if (!$guru || !class_exists(JadwalWaka::class)) {
+            return false;
+        }
+
+        try {
+            $todayDate = \Carbon\Carbon::today()->toDateString();
+            $piketHariIni = JadwalWaka::with(['waka', 'guruPiket'])->whereDate('tanggal', $todayDate)->first();
+            return $piketHariIni ? $piketHariIni->isGuruBertugas($guru) : false;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    public function hasPiketDuty(): bool
+    {
+        if ($this->isAdmin()) {
+            return false;
+        }
+
+        if ($this->role === 'piket') {
+            return true;
+        }
+
+        $guru = $this->guru;
+        if (!$guru) {
+            $guru = Guru::where('nama', $this->nama)
+                ->orWhere('nip', $this->nip)
+                ->first();
+        }
+
+        if (!$guru || !class_exists(JadwalWaka::class)) {
+            return false;
+        }
+
+        try {
+            if ($this->isPiketHariIni()) {
+                return true;
+            }
+
+            return JadwalWaka::where('id_guru_piket', $guru->id_guru)
+                ->orWhere('koordinator_pagi', 'like', "%{$guru->nama}%")
+                ->orWhere('petugas_pagi', 'like', "%{$guru->nama}%")
+                ->orWhere('koordinator_siang', 'like', "%{$guru->nama}%")
+                ->orWhere('petugas_siang', 'like', "%{$guru->nama}%")
+                ->exists();
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
     public function isPiket(): bool
     {
-        return $this->role === 'piket';
+        if ($this->isAdmin()) {
+            return false;
+        }
+
+        if ($this->role === 'piket') {
+            return true;
+        }
+
+        if (session('active_access') === 'piket') {
+            return true;
+        }
+
+        return $this->hasPiketDuty();
     }
 
     public function isOrtu(): bool
@@ -200,7 +279,20 @@ class User extends Authenticatable
             ];
         }
 
-        // 4. Kepala Sekolah (Pimpinan Satuan Pendidikan)
+        // 4. Petugas Piket (Tugas Tambahan)
+        if ($this->role === 'piket' || $this->isPiketHariIni() || session('active_access') === 'piket') {
+            $accesses['piket'] = [
+                'key'         => 'piket',
+                'title'       => 'Petugas Piket',
+                'badge'       => 'Tugas Piket',
+                'subtitle'    => 'Tugas Tambahan: Guru Piket',
+                'description' => 'Pencatatan siswa terlambat, pemantauan ketertiban KBM, verifikasi izin, dan presensi guru piket.',
+                'icon'        => 'clipboard',
+                'route'       => 'piket.dashboard',
+            ];
+        }
+
+        // 5. Kepala Sekolah (Pimpinan Satuan Pendidikan)
         if ($this->isKepalaSekolah()) {
             $accesses['kepala_sekolah'] = [
                 'key'         => 'kepala_sekolah',

@@ -262,6 +262,7 @@ class WhatsAppService
     {
         $pesan = self::getPesanWaka($pengajuan);
 
+        // 1. Cek Waka Tujuan yang tertera di pengajuan
         if ($pengajuan->id_waka_tujuan) {
             $waka = User::where('id_user', $pengajuan->id_waka_tujuan)
                 ->where('aktif', 1)
@@ -269,26 +270,47 @@ class WhatsAppService
                 ->where('no_hp', '!=', '')
                 ->first();
 
-            return $waka
-                ? $this->hasilKirim([$this->kirim($waka->no_hp, $pesan)], 'Waka')
-                : ['success' => false, 'message' => 'Nomor WhatsApp Waka tujuan belum tersedia.'];
+            if ($waka && !empty($waka->no_hp)) {
+                return $this->hasilKirim([$this->kirim($waka->no_hp, $pesan)], 'Waka');
+            }
         }
 
-        $targetRole = ($pengajuan->kategori === 'izin_guru') ? 'waka_sdm' : 'waka_kesiswaan';
-        $wakas = User::where('role', $targetRole)
+        // 2. Cek Waka Bertugas pada tanggal pengajuan (dari JadwalWaka)
+        $jadwalHari = \App\Models\JadwalWaka::wakaBertugasPada($pengajuan->tanggal);
+        if ($jadwalHari && $jadwalHari->waka && !empty($jadwalHari->waka->no_hp)) {
+            return $this->hasilKirim([$this->kirim($jadwalHari->waka->no_hp, $pesan)], 'Waka');
+        }
+
+        // 3. Cek Waka bidang terkait yang memiliki nomor HP aktif
+        $targetRoles = ($pengajuan->kategori === 'izin_guru')
+            ? ['waka_sdm', 'waka_kurikulum']
+            : ['waka_kesiswaan', 'waka_humas', 'waka_sarpras', 'waka_sdm', 'waka_kurikulum'];
+
+        $wakas = User::whereIn('role', $targetRoles)
             ->where('aktif', 1)
             ->whereNotNull('no_hp')
             ->where('no_hp', '!=', '')
             ->get();
 
-        if ($wakas->isEmpty()) return ['success' => false, 'message' => 'Nomor WhatsApp Waka belum tersedia.'];
-
-        $results = [];
-        foreach ($wakas as $waka) {
-            $results[] = $this->kirim($waka->no_hp, $pesan);
+        if ($wakas->isNotEmpty()) {
+            $results = [];
+            foreach ($wakas as $waka) {
+                $results[] = $this->kirim($waka->no_hp, $pesan);
+            }
+            return $this->hasilKirim($results, 'Waka');
         }
 
-        return $this->hasilKirim($results, 'Waka');
+        // 4. Fallback ke nomor WA Waka di tabel pengaturan
+        $fallbackKey = ($pengajuan->kategori === 'izin_guru') ? 'wa_waka_sdm' : 'wa_waka_kesiswaan';
+        $fallbackNomor = \App\Models\Pengaturan::getVal($fallbackKey)
+                      ?: \App\Models\Pengaturan::getVal('wa_waka_kesiswaan')
+                      ?: \App\Models\Pengaturan::getVal('wa_waka_sdm');
+
+        if (!empty($fallbackNomor)) {
+            return $this->hasilKirim([$this->kirim($fallbackNomor, $pesan)], 'Waka');
+        }
+
+        return ['success' => false, 'message' => 'Nomor WhatsApp Waka belum tersedia di profil maupun pengaturan sistem.'];
     }
 
     public function kirimNotifPenolakanWaka(PengajuanIzin $pengajuan): array

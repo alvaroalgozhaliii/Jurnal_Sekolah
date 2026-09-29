@@ -451,6 +451,14 @@
                     Jadwal Piket
                 </a>
 
+                @if(Auth::user()->isGuru())
+                    <div class="nav-section-label">Peran Mengajar</div>
+                    <a href="{{ route('pilih-akses.switch', 'guru') }}" class="nav-item" style="color: var(--accent, #3b82f6);">
+                        <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Dashboard Guru Pengajar
+                    </a>
+                @endif
+
             <!-- ORTU / SISWA -->
             @elseif($role === 'ortu' || $role === 'siswa')
                 <div class="nav-section-label">Portal Orang Tua</div>

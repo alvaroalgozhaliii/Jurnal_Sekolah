@@ -159,17 +159,50 @@
             </div>
         </div>
 
-        @if($pengajuan->kategori === 'dispensasi' || $pengajuan->kategori === 'izin_guru')
+        @if(in_array($pengajuan->kategori, ['dispensasi','dispen_keluar','dispen_masuk','dispen_lomba','izin_guru','izin_keluar','izin_masuk']))
         <!-- WHATSAPP NOTIFICATION TRIGGER BOX -->
         @php
             $isGuruDispen = ($pengajuan->kategori === 'izin_guru');
-            $wakaUser = \App\Models\User::whereIn('role', ['waka_kesiswaan', 'waka_sdm'])->whereNotNull('no_hp')->first();
-            $satpamUser = \App\Models\User::where('role', 'satpam')->whereNotNull('no_hp')->first();
-            $kepalaUser = \App\Models\User::where('role', 'kepala_sekolah')->whereNotNull('no_hp')->first();
 
-            $wakaNoHp = $wakaUser->no_hp ?? '085707300240';
-            $satpamNoHp = $satpamUser->no_hp ?? '081359472399';
-            $kepalaNoHp = $kepalaUser->no_hp ?? '085707300240';
+            // --- Resolve Waka HP (4-tier fallback, handles empty string no_hp) ---
+            $wakaNoHp = null;
+            // Tier 1: Waka yang dituju di pengajuan ini
+            if (!empty($pengajuan->wakaTujuan?->no_hp)) {
+                $wakaNoHp = $pengajuan->wakaTujuan->no_hp;
+            }
+            // Tier 2: Waka bertugas pada tanggal pengajuan (JadwalWaka)
+            if (!$wakaNoHp) {
+                $jadwalWaka = \App\Models\JadwalWaka::wakaBertugasPada($pengajuan->tanggal ?? $pengajuan->created_at?->toDateString());
+                if ($jadwalWaka && $jadwalWaka->waka && !empty($jadwalWaka->waka->no_hp)) {
+                    $wakaNoHp = $jadwalWaka->waka->no_hp;
+                }
+            }
+            // Tier 3: Cari waka mana saja yang punya no_hp tidak kosong
+            if (!$wakaNoHp) {
+                $wakaUser = \App\Models\User::whereIn('role', ['waka_kesiswaan', 'waka_sdm'])
+                    ->where('no_hp', '!=', '')->whereNotNull('no_hp')->first();
+                if ($wakaUser) $wakaNoHp = $wakaUser->no_hp;
+            }
+            // Tier 4: Fallback ke Pengaturan table
+            if (!$wakaNoHp) {
+                $wakaNoHp = \App\Models\Pengaturan::getVal('wa_waka_kesiswaan')
+                    ?? \App\Models\Pengaturan::getVal('wa_waka_sdm')
+                    ?? '085707300240';
+            }
+
+            // --- Resolve Satpam HP ---
+            $satpamUser = \App\Models\User::where('role', 'satpam')
+                ->where('no_hp', '!=', '')->whereNotNull('no_hp')->first();
+            $satpamNoHp = $satpamUser->no_hp
+                ?? \App\Models\Pengaturan::getVal('wa_satpam')
+                ?? '081359472399';
+
+            // --- Resolve Kepala Sekolah HP ---
+            $kepalaUser = \App\Models\User::where('role', 'kepala_sekolah')
+                ->where('no_hp', '!=', '')->whereNotNull('no_hp')->first();
+            $kepalaNoHp = $kepalaUser->no_hp
+                ?? \App\Models\Pengaturan::getVal('wa_kepala_sekolah')
+                ?? '085707300240';
 
             $waLinkWaka = \App\Services\WhatsAppService::getDirectWaLinkWaka($pengajuan, $wakaNoHp);
             $waLinkSatpam = \App\Services\WhatsAppService::getDirectWaLinkSatpam($pengajuan, $satpamNoHp);
@@ -188,17 +221,17 @@
                     <strong class="d-block mb-4" style="font-size:12.5px;">1. Buka Chat WhatsApp Langsung (1-Klik):</strong>
                     <p class="text-muted mb-8" style="font-size:11.5px;">Buka WhatsApp dengan format pesan dan link approval resmi yang sudah terisi otomatis:</p>
                     <div class="d-flex gap-8 flex-wrap">
-                        <a href="{{ $waLinkWaka }}" target="_blank" class="btn btn-success btn-sm">
+                        <a href="{{ $waLinkWaka }}" target="_blank" class="btn btn-primary btn-sm">
                             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             Kirim WA ke Waka ({{ $wakaNoHp }})
                         </a>
                         @if($isGuruDispen && in_array($pengajuan->status, ['pending_kepala', 'disetujui_kepala', 'completed']))
-                        <a href="{{ $waLinkKepala }}" target="_blank" class="btn btn-success btn-sm">
+                        <a href="{{ $waLinkKepala }}" target="_blank" class="btn btn-primary btn-sm">
                             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             Kirim WA ke Kepala Sekolah ({{ $kepalaNoHp }})
                         </a>
                         @elseif(!$isGuruDispen && $pengajuan->isDisetujuiWaka())
-                        <a href="{{ $waLinkSatpam }}" target="_blank" class="btn btn-success btn-sm">
+                        <a href="{{ $waLinkSatpam }}" target="_blank" class="btn btn-primary btn-sm">
                             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             Kirim WA ke Satpam ({{ $satpamNoHp }})
                         </a>
