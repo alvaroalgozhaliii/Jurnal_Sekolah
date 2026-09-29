@@ -48,6 +48,12 @@
 .role-badge.satpam { background: #fee2e2; color: #991b1b; }
 .role-badge.piket { background: #dcfce7; color: #166534; }
 
+[data-theme="dark"] .role-badge.kesiswaan { background: rgba(59, 130, 246, 0.18); color: #93c5fd; }
+[data-theme="dark"] .role-badge.sdm { background: rgba(99, 102, 241, 0.18); color: #a5b4fc; }
+[data-theme="dark"] .role-badge.kepala { background: rgba(245, 158, 11, 0.18); color: #fde047; }
+[data-theme="dark"] .role-badge.satpam { background: rgba(239, 68, 68, 0.18); color: #fca5a5; }
+[data-theme="dark"] .role-badge.piket { background: rgba(34, 197, 94, 0.18); color: #86efac; }
+
 .officer-item {
     display: grid;
     grid-template-columns: 220px 1fr 200px;

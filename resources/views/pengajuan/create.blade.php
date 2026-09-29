@@ -49,7 +49,7 @@
         @endif
 
         @if(isset($wakaHariIni) && $wakaHariIni && $wakaHariIni->waka)
-        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px;">
+        <div style="background:var(--badge-info-bg, #eff6ff); border:1px solid rgba(14,165,233,0.3); border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:var(--text-primary);">
             <div>
                  <strong>Waka Bertugas Hari Ini:</strong> {{ $wakaHariIni->waka->nama }} ({{ strtoupper(str_replace('_', ' ', $wakaHariIni->waka->role)) }})
             </div>
@@ -104,7 +104,7 @@
 
             <div class="form-group mb-16" id="group-kategori-guru" style="display:none;">
                 <label class="form-label" for="kategori_guru">Kategori Izin Guru</label>
-                <input type="text" class="form-control" value="Dispensasi / Izin Meninggalkan Tugas Guru" readonly style="background:#f8fafc; font-weight:600;">
+                <input type="text" class="form-control" value="Dispensasi / Izin Meninggalkan Tugas Guru" readonly style="font-weight:600;">
                 <small class="text-muted" style="display:block; margin-top:4px;">
                      Pengajuan ini akan diteruskan ke <strong>Waka SDM</strong>, lalu ke <strong>Kepala Sekolah</strong> (tanpa satpam).
                 </small>

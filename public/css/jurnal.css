@@ -2582,6 +2582,135 @@ input[type="number"]::-webkit-outer-spin-button {
     border-color: #2563eb;
 }
 
+/* ============================================================
+   DARK MODE COMPREHENSIVE OVERRIDES
+   ============================================================ */
+.row-istirahat {
+    background-color: #fff7ed;
+}
+.row-istirahat td {
+    color: #92400e;
+}
+
+[data-theme="dark"] .row-istirahat,
+[data-theme="dark"] tr.row-istirahat,
+[data-theme="dark"] tr[style*="background:#fff7ed"],
+[data-theme="dark"] tr[style*="background: #fff7ed"],
+[data-theme="dark"] tr[style*="background:#f8fafc"],
+[data-theme="dark"] tr[style*="background: #f8fafc"],
+[data-theme="dark"] tr[style*="background:#ffffff"],
+[data-theme="dark"] tr[style*="background: #ffffff"] {
+    background-color: rgba(245, 158, 11, 0.14) !important;
+    border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+[data-theme="dark"] .row-istirahat td,
+[data-theme="dark"] tr.row-istirahat td,
+[data-theme="dark"] tr[style*="background:#fff7ed"] td,
+[data-theme="dark"] tr[style*="background: #fff7ed"] td,
+[data-theme="dark"] tr[style*="background:#f8fafc"] td,
+[data-theme="dark"] tr[style*="background: #f8fafc"] td,
+[data-theme="dark"] tr[style*="background:#ffffff"] td,
+[data-theme="dark"] tr[style*="background: #ffffff"] td {
+    color: #fbbf24 !important;
+}
+
+[data-theme="dark"] [style*="color:#1e3a8a"],
+[data-theme="dark"] [style*="color: #1e3a8a"],
+[data-theme="dark"] [style*="color:#0066cc"],
+[data-theme="dark"] [style*="color: #0066cc"] {
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] [style*="background:#1e3a8a"],
+[data-theme="dark"] [style*="background: #1e3a8a"],
+[data-theme="dark"] [style*="background:#1e40af"],
+[data-theme="dark"] [style*="background: #1e40af"] {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    border: 1px solid #334155 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .role-chip.guru,
+[data-theme="dark"] .role-badge.kesiswaan,
+[data-theme="dark"] .rb-guru {
+    background: rgba(37, 99, 235, 0.22) !important;
+    color: #60a5fa !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+}
+
+[data-theme="dark"] .role-chip.siswa,
+[data-theme="dark"] .role-badge.kepala,
+[data-theme="dark"] .rb-kepala {
+    background: rgba(245, 158, 11, 0.22) !important;
+    color: #fbbf24 !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="dark"] .rb-ortu,
+[data-theme="dark"] .rb-siswa {
+    background: rgba(148, 163, 184, 0.18) !important;
+    color: #cbd5e1 !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+[data-theme="dark"] .calendar-wrapper {
+    background: var(--bg-card, #0f172a) !important;
+    border: 1px solid var(--border, #1e293b) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .calendar-title {
+    color: var(--text-primary, #f8fafc) !important;
+}
+
+[data-theme="dark"] .calendar-nav-btn {
+    background: #162032 !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .calendar-nav-btn:hover {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+[data-theme="dark"] .calendar-day-header {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .calendar-day {
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .calendar-day:hover:not(.empty) {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .calendar-day.today {
+    border-color: #3b82f6 !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] code {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #60a5fa !important;
+}
+
+[data-theme="dark"] div[style*="background:#fff"],
+[data-theme="dark"] div[style*="background: #fff"],
+[data-theme="dark"] div[style*="background:#ffffff"],
+[data-theme="dark"] div[style*="background: #ffffff"],
+[data-theme="dark"] div[style*="background: white"],
+[data-theme="dark"] div[style*="background:#f8fafc"],
+[data-theme="dark"] div[style*="background: #f8fafc"] {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #1e293b !important;
+}
+
 html:not([data-theme="dark"]) .ts-wrapper {
     padding: 0 !important;
     border: none !important;

@@ -216,7 +216,7 @@
                     <strong>{{ $pengajuan->kepalaApprover?->nama ?? 'Kepala Sekolah' }}</strong>
                     <div class="text-muted" style="font-size:11px; margin-top:4px;">{{ $pengajuan->tgl_kepala ? date('d M Y H:i', strtotime($pengajuan->tgl_kepala)) . ' WIB' : '-' }}</div>
                 </div>
-                <div style="padding:12px; background:#f8fafc; border-radius:6px;">
+                <div style="padding:12px; background:var(--bg-card-header, #f8fafc); border-radius:6px; border:1px solid var(--border);">
                     <div class="text-muted" style="font-size:12px;">Catatan Kepala Sekolah:</div>
                     <div style="font-weight:600; margin-top:4px;">{{ $pengajuan->catatan_kepala ?? '-' }}</div>
                 </div>

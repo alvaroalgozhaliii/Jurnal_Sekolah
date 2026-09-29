@@ -107,6 +107,10 @@
 .role-chip.walikelas { background: #d1fae5; color: #065f46; }
 .role-chip.siswa     { background: #fef3c7; color: #92400e; }
 
+[data-theme="dark"] .role-chip.guru      { background: rgba(59, 130, 246, 0.18); color: #93c5fd; }
+[data-theme="dark"] .role-chip.walikelas { background: rgba(34, 197, 94, 0.18); color: #86efac; }
+[data-theme="dark"] .role-chip.siswa     { background: rgba(245, 158, 11, 0.18); color: #fde047; }
+
 /* ── Format table responsive ─────────────────────────── */
 .format-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .format-table { width: 100%; font-size: 12px; border-collapse: collapse; min-width: 560px; }

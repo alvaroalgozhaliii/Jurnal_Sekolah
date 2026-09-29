@@ -196,7 +196,7 @@
                     Unggah file format <strong>.csv</strong> untuk menambahkan atau memperbarui jadwal piket harian. Kolom wajib: <code>tanggal</code>, <code>waka</code>. Kolom opsional: <code>guru_piket</code>, <code>keterangan</code>.
                 </p>
 
-                <div style="background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; padding:20px; text-align:center; margin-bottom:16px;">
+                <div style="background:var(--bg-card-header, #f8fafc); border:1px dashed var(--border, #cbd5e1); border-radius:8px; padding:20px; text-align:center; margin-bottom:16px;">
                     <svg class="svg-icon text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:36px;height:36px; margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                     <div style="margin-bottom:8px;">
                         <input type="file" name="csv_file" id="csv_file_input" accept=".csv,text/csv" required style="font-size:13px;">
@@ -204,14 +204,14 @@
                     <span class="text-muted" style="font-size:11.5px;">Maksimal ukuran file: 10 MB</span>
                 </div>
 
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:#eff6ff; border-radius:6px;">
-                    <span style="font-size:12px; color:#1e40af;">Belum punya formatnya?</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--badge-info-bg, #eff6ff); border:1px solid rgba(14,165,233,0.2); border-radius:6px;">
+                    <span style="font-size:12px; color:var(--text-primary);">Belum punya formatnya?</span>
                     <a href="{{ route('jadwal-piket.template-csv') }}" class="btn btn-secondary btn-sm" style="font-size:11px; padding:4px 10px;">
                         Download Template CSV
                     </a>
                 </div>
             </div>
-            <div class="card-footer" style="display:flex; justify-content:flex-end; gap:10px; padding:12px 20px; background:#f8fafc;">
+            <div class="card-footer" style="display:flex; justify-content:flex-end; gap:10px; padding:12px 20px;">
                 <button type="button" class="btn btn-secondary" onclick="document.getElementById('modalImportCsv').style.display='none';">Batal</button>
                 <button type="submit" class="btn btn-primary" style="font-weight:600;">Unggah &amp; Simpan</button>
             </div>

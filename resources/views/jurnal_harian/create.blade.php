@@ -151,7 +151,7 @@
 {{-- JIKA SEDANG JAM MENGAJAR DAN JADWAL DITEMUKAN --}}
 @if($jadwalSelected)
 <div class="card mb-24" style="max-width: 800px; border-left: 4px solid var(--navy-primary);">
-    <div class="card-header" style="background:#f8fafc;">
+    <div class="card-header">
         <h3 class="card-title" style="color:var(--navy-primary); font-size:15px;">
             Informasi Jadwal Mengajar Saat Ini
         </h3>

@@ -50,7 +50,7 @@
             </div>
 
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:8px;">
-                <div style="background:#fff; border:1px solid var(--border, #e2e8f0); border-radius:8px; padding:12px 16px;">
+                <div style="background:var(--bg-card, #fff); border:1px solid var(--border, #e2e8f0); border-radius:8px; padding:12px 16px;">
                     <div class="text-muted" style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; margin-bottom:4px;">
                         Waka Bertugas
                     </div>
@@ -65,12 +65,12 @@
                     </div>
                 </div>
 
-                <div style="background:#fff; border:1px solid var(--border, #e2e8f0); border-radius:8px; padding:12px 16px;">
+                <div style="background:var(--bg-card, #fff); border:1px solid var(--border, #e2e8f0); border-radius:8px; padding:12px 16px;">
                     <div class="text-muted" style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; margin-bottom:4px;">
                         Guru Piket
                     </div>
                     @if($piketHariIni->guruPiket)
-                        <div class="fw-bold" style="font-size:15px; color:#1e293b;">
+                        <div class="fw-bold" style="font-size:15px; color:var(--text-primary, #1e293b);">
                             {{ $piketHariIni->guruPiket->nama }}
                         </div>
                         <div class="text-muted" style="font-size:12px; margin-top:2px;">
@@ -85,11 +85,11 @@
                 </div>
 
                 @if($piketHariIni->keterangan)
-                <div style="background:#fff; border:1px solid var(--border, #e2e8f0); border-radius:8px; padding:12px 16px;">
+                <div style="background:var(--bg-card, #fff); border:1px solid var(--border, #e2e8f0); border-radius:8px; padding:12px 16px;">
                     <div class="text-muted" style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.5px; font-weight:700; margin-bottom:4px;">
                         Keterangan / Catatan
                     </div>
-                    <div style="font-size:13px; color:#334155;">
+                    <div style="font-size:13px; color:var(--text-primary, #334155);">
                         {{ $piketHariIni->keterangan }}
                     </div>
                 </div>

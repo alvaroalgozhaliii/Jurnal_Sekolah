@@ -49,7 +49,7 @@
         $mapIstirahat = ($hari === 'Jumat') ? $istirahatJumat : $istirahatSeninKamis;
         @endphp
         <div class="card mb-16">
-            <div class="card-header" style="background:#1e3a8a;">
+            <div class="card-header card-header-navy">
                 <h3 class="card-title" style="color:#fff; margin:0;"> {{ strtoupper($hari) }}</h3>
             </div>
             <div class="card-body" style="padding:0;">
@@ -68,7 +68,7 @@
                         @foreach($jadwalHari as $j)
                         <tr>
                             <td class="fw-bold text-center">Jam {{ $j->jam_ke }}</td>
-                            <td class="fw-bold" style="color:#1e3a8a;">
+                            <td class="fw-bold text-navy">
                                 {{ \App\Services\KbmService::getLabelWaktu($j->hari, $j->jam_ke) ?: ($j->waktu_mulai . ' - ' . $j->waktu_selesai) }}
                             </td>
                             <td class="fw-bold text-navy">{{ $j->mapel }}</td>
@@ -76,8 +76,8 @@
                             <td>{{ $j->ruang ?? '-' }}</td>
                         </tr>
                         @if(isset($mapIstirahat[$j->jam_ke]))
-                        <tr style="background:#fff7ed;">
-                            <td colspan="5" style="text-align:center; font-style:italic; color:#92400e; padding:6px; font-size:12px;">
+                        <tr class="row-istirahat">
+                            <td colspan="5" style="text-align:center; font-style:italic; padding:6px; font-size:12px;">
                                  {{ $mapIstirahat[$j->jam_ke] }}
                             </td>
                         </tr>

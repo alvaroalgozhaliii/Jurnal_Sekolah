@@ -158,13 +158,13 @@
                 $mapIstirahat = $isJumat ? $istirahatJumat : $istirahatSeninKamis;
                 @endphp
                 <div style="margin: 12px 16px;">
-                    <div style="background:#1e3a8a; color:#fff; padding:8px 14px; border-radius:6px 6px 0 0; font-weight:700; font-size:13px; letter-spacing:0.5px;">
+                    <div class="card-header-navy" style="padding:8px 14px; border-radius:6px 6px 0 0; font-weight:700; font-size:13px; letter-spacing:0.5px;">
                         {{ strtoupper($hari) }}
                     </div>
-                    <div class="table-wrapper" style="border-radius:0 0 6px 6px; border:1px solid #e2e8f0; margin:0;">
+                    <div class="table-wrapper" style="border-radius:0 0 6px 6px; border:1px solid var(--border, #e2e8f0); margin:0;">
                         <table class="table" style="margin:0;">
                             <thead>
-                                <tr style="background:#f8fafc;">
+                                <tr>
                                     <th style="width:90px;">Jam Ke</th>
                                     <th style="width:160px;">Jam Pembelajaran</th>
                                     <th>Mata Pelajaran</th>
@@ -177,7 +177,7 @@
                                 @foreach($jadwalHari as $j)
                                 <tr>
                                     <td class="fw-bold text-center">Jam {{ $j->jam_ke }}</td>
-                                    <td class="fw-bold" style="color:#1e3a8a;">
+                                    <td class="fw-bold text-navy">
                                         {{ \App\Services\KbmService::getLabelWaktu($j->hari, $j->jam_ke) ?: ($j->waktu_mulai . ' - ' . $j->waktu_selesai) }}
                                     </td>
                                     <td class="fw-bold text-navy">{{ $j->mapel }}</td>
@@ -193,8 +193,8 @@
                                 </tr>
                                 {{-- Tampilkan istirahat setelah jam tertentu --}}
                                 @if(isset($mapIstirahat[$j->jam_ke]))
-                                <tr style="background:#fff7ed;">
-                                    <td colspan="6" style="text-align:center; font-style:italic; color:#92400e; padding:6px; font-size:12px;">
+                                <tr class="row-istirahat">
+                                    <td colspan="6" style="text-align:center; font-style:italic; padding:6px; font-size:12px;">
                                          {{ $mapIstirahat[$j->jam_ke] }}
                                     </td>
                                 </tr>
