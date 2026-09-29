@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Dispensasi Guru — Jurnal Sekolah')
-@section('page-title', 'Dispensasi Guru')
+@section('title', 'Izin Guru — Jurnal Sekolah')
+@section('page-title', 'Izin Guru')
 
 @section('content')
 <div class="page-header">
     <div>
-        <h1 class="page-title">Pencatatan Dispensasi / Izin Guru Piket</h1>
-        <p class="page-subtitle">Formulir pencatatan dispensasi, izin keluar, dan tugas pengganti guru KBM hari ini</p>
+        <h1 class="page-title">Pencatatan Izin Guru Piket</h1>
+        <p class="page-subtitle">Formulir pencatatan izin, izin keluar, dan tugas pengganti guru KBM hari ini</p>
     </div>
     <div class="page-actions">
         <a href="{{ route('piket.dashboard') }}" class="btn btn-secondary">&larr; Kembali ke Dashboard</a>
@@ -34,7 +34,7 @@
     <div class="card-header">
         <h3 class="card-title">
             <svg class="svg-icon text-navy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            Formulir Pengajuan Dispen Guru
+            Formulir Pencatatan Izin Guru
         </h3>
     </div>
     <div class="card-body">
@@ -43,7 +43,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Tanggal Dispen (Otomatis Sistem)</label>
+                    <label class="form-label">Tanggal Izin (Otomatis Sistem)</label>
                     <input type="text" value="{{ $todayDate }}" readonly class="form-control" style="background:#f1f5f9; font-weight:700; color:#1e3a8a;">
                 </div>
                 <div class="form-group">
@@ -88,7 +88,7 @@
             </div>
 
             <div class="d-flex gap-8 mt-24">
-                <button type="submit" class="btn btn-primary">SUBMIT DISPEN GURU</button>
+                <button type="submit" class="btn btn-primary">SUBMIT IZIN GURU</button>
                 <a href="{{ route('piket.dashboard') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>
@@ -97,8 +97,8 @@
 
 <div class="page-header" style="margin-top:32px;">
     <div>
-        <h2 class="page-title" style="font-size:18px;">Riwayat Dispen Guru Hari Ini</h2>
-        <p class="page-subtitle">Daftar dispensasi guru KBM tercatat tanggal: <strong>{{ $todayDate }}</strong></p>
+        <h2 class="page-title" style="font-size:18px;">Riwayat Izin Guru Hari Ini</h2>
+        <p class="page-subtitle">Daftar izin guru KBM tercatat tanggal: <strong>{{ $todayDate }}</strong></p>
     </div>
 </div>
 
@@ -167,9 +167,9 @@
         <div class="empty-state">
             <div class="empty-state-text">
                 @if($search)
-                    Tidak ada data dispen guru yang sesuai pencarian.
+                    Tidak ada data izin guru yang sesuai pencarian.
                 @else
-                    Belum ada data dispen guru yang dicatat hari ini.
+                    Belum ada data izin guru yang dicatat hari ini.
                 @endif
             </div>
         </div>

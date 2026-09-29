@@ -69,7 +69,7 @@
                  Pengajuan Dispensasi Siswa
             </button>
             <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
-                 Dispensasi Guru (Alur: Piket &rarr; Waka SDM/Piket &rarr; Kepsek)
+                 Izin Guru (Langsung Disetujui Otomatis)
             </button>
         </div>
         @endif
@@ -104,9 +104,9 @@
 
             <div class="form-group mb-16" id="group-kategori-guru" style="display:none;">
                 <label class="form-label" for="kategori_guru">Kategori Izin Guru</label>
-                <input type="text" class="form-control" value="Dispensasi / Izin Meninggalkan Tugas Guru" readonly style="font-weight:600;">
+                <input type="text" class="form-control" value="Izin Guru" readonly style="font-weight:600;">
                 <small class="text-muted" style="display:block; margin-top:4px;">
-                     Pengajuan ini akan diteruskan ke <strong>Waka SDM</strong>, lalu ke <strong>Kepala Sekolah</strong> (tanpa satpam).
+                     Pengajuan Izin Guru ini langsung disetujui otomatis tanpa proses persetujuan.
                 </small>
             </div>
 
@@ -311,7 +311,7 @@ function setSubjekType(type) {
         if (idGuruSelect) idGuruSelect.required = true;
 
         if (btnSubmit) {
-            btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> TERUSKAN DISPEN GURU KE WAKA SDM`;
+            btnSubmit.innerHTML = `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px; margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> SIMPAN IZIN GURU`;
             btnSubmit.style.background = '#d97706';
             btnSubmit.style.color = '#ffffff';
         }

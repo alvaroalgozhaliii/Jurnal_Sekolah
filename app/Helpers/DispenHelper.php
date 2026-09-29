@@ -14,7 +14,7 @@ class DispenHelper
             'sakit'          => 'Izin Sakit',
             'izin'           => 'Izin',
             'acara_keluarga' => 'Izin Acara Keluarga',
-            'izin_guru'      => 'Dispensasi Guru',
+            'izin_guru'      => 'Izin Guru',
             'dispensasi'     => 'Dispensasi Siswa',
             'izin_masuk'     => 'Dispensasi Masuk',
             'izin_keluar'    => 'Dispensasi Keluar',

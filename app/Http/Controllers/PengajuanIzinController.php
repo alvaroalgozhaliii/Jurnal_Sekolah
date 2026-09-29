@@ -124,8 +124,8 @@ class PengajuanIzinController extends Controller
         }
 
         // Tentukan alur approval
-        // Jika dibuat oleh Orang Tua atau kategori izin siswa (sakit, izin, acara_keluarga, terlambat): langsung sah/DISETUJUI & masuk ke Piket serta Data Kelas
-        $isOrtuFlow = $user->isOrtu() || in_array($request->kategori, ['sakit', 'izin', 'acara_keluarga', 'terlambat']);
+        // Jika dibuat oleh Orang Tua atau kategori izin (sakit, izin, acara_keluarga, terlambat, izin_guru): langsung sah/DISETUJUI tanpa proses approval
+        $isOrtuFlow = $user->isOrtu() || in_array($request->kategori, ['sakit', 'izin', 'acara_keluarga', 'terlambat', 'izin_guru']);
 
         $statusAwal = $isOrtuFlow ? 'completed' : 'pending_waka';
         $butuhSatpam = !$isGuruDispen && !$isOrtuFlow && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk', 'dispen_masuk', 'dispen_keluar', 'dispen_lomba']);
@@ -164,96 +164,109 @@ class PengajuanIzinController extends Controller
         $namaKategoriText = \App\Helpers\DispenHelper::kategoriLabel($request->kategori);
 
         if ($isOrtuFlow) {
-            $siswa = Siswa::with('kelas')->find($idSiswa);
-            $namaSiswa = $siswa?->nama ?? 'Siswa';
-            $tanggalIzin = $pengajuan->tanggal;
-            $statusAbsensi = match($pengajuan->kategori) {
-                'sakit' => 'sakit',
-                'terlambat' => 'terlambat',
-                default => 'izin'
-            };
+            if ($isGuruDispen) {
+                $guruObj = Guru::find($idGuru);
+                $namaGuru = $guruObj?->nama ?? $user->nama;
+                Notifikasi::kirimKeRole(
+                    'piket',
+                    'Pemberitahuan Izin Guru',
+                    'Guru ' . $namaGuru . ' telah dicatat Izin Guru pada tanggal ' . $pengajuan->tanggal . ' dan disetujui otomatis.',
+                    route('pengajuan.show', $pengajuan->id_pengajuan),
+                    'izin'
+                );
+                $flashMessage = "Pengajuan Izin Guru berhasil dibuat dan langsung disetujui otomatis.";
+            } else {
+                $siswa = Siswa::with('kelas')->find($idSiswa);
+                $namaSiswa = $siswa?->nama ?? 'Siswa';
+                $tanggalIzin = $pengajuan->tanggal;
+                $statusAbsensi = match($pengajuan->kategori) {
+                    'sakit' => 'sakit',
+                    'terlambat' => 'terlambat',
+                    default => 'izin'
+                };
 
-            // Sinkronisasi langsung ke data Absensi Siswa
-            if ($siswa) {
-                // Jika terlambat, juga catat ke tabel siswa_terlambat (log piket)
-                if ($pengajuan->kategori === 'terlambat') {
-                    \App\Models\SiswaTerlambat::create([
-                        'id_siswa' => $siswa->id_siswa,
-                        'id_kelas' => $siswa->id_kelas,
-                        'tanggal' => $tanggalIzin,
-                        'jam_kedatangan' => $pengajuan->jam_mulai ?: date('H:i:s'),
-                        'alasan' => $pengajuan->alasan,
-                        'id_petugas_piket' => $user->id_user,
-                    ]);
+                // Sinkronisasi langsung ke data Absensi Siswa
+                if ($siswa) {
+                    // Jika terlambat, juga catat ke tabel siswa_terlambat (log piket)
+                    if ($pengajuan->kategori === 'terlambat') {
+                        \App\Models\SiswaTerlambat::create([
+                            'id_siswa' => $siswa->id_siswa,
+                            'id_kelas' => $siswa->id_kelas,
+                            'tanggal' => $tanggalIzin,
+                            'jam_kedatangan' => $pengajuan->jam_mulai ?: date('H:i:s'),
+                            'alasan' => $pengajuan->alasan,
+                            'id_petugas_piket' => $user->id_user,
+                        ]);
+                    }
+
+                    // Cari Jurnal Harian hari ini untuk kelas siswa tersebut jika ada
+                    $jurnal = \App\Models\JurnalHarian::where('tanggal', $tanggalIzin)
+                        ->whereHas('jadwal', function ($q) use ($siswa) {
+                            $q->where('id_kelas', $siswa->id_kelas);
+                        })
+                        ->first();
+
+                    // Jika belum ada jurnal harian, cari jadwal kelas pertama jika ada
+                    if (!$jurnal && $siswa->id_kelas) {
+                        $jadwalFirst = \App\Models\Jadwal::where('id_kelas', $siswa->id_kelas)->where('aktif', 1)->first();
+                        if ($jadwalFirst) {
+                            $jurnal = \App\Models\JurnalHarian::firstOrCreate(
+                                [
+                                    'id_jadwal' => $jadwalFirst->id_jadwal,
+                                    'tanggal' => $tanggalIzin,
+                                ],
+                                [
+                                    'id_guru' => $jadwalFirst->id_guru ?? \App\Models\Guru::first()?->id_guru,
+                                    'materi' => 'Presensi Kelas (' . $namaKategoriText . ')',
+                                    'jam_ke' => $jadwalFirst->jam_ke ?? 1,
+                                ]
+                            );
+                        }
+                    }
+
+                    $idJurnal = $jurnal ? $jurnal->id_jurnal : null;
+
+                    \App\Models\AbsensiSiswa::updateOrCreate(
+                        [
+                            'id_siswa' => $siswa->id_siswa,
+                            'created_at' => $tanggalIzin . ' 07:00:00',
+                        ],
+                        [
+                            'id_jurnal' => $idJurnal,
+                            'status' => $statusAbsensi,
+                            'jam_masuk' => $pengajuan->jam_mulai,
+                            'keterangan' => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . "(Tercatat: {$namaKategoriText})",
+                            'dicatat_oleh' => $user->id_user,
+                            'created_at' => $tanggalIzin . ' 07:00:00',
+                        ]
+                    );
                 }
 
-                // Cari Jurnal Harian hari ini untuk kelas siswa tersebut jika ada
-                $jurnal = \App\Models\JurnalHarian::where('tanggal', $tanggalIzin)
-                    ->whereHas('jadwal', function ($q) use ($siswa) {
-                        $q->where('id_kelas', $siswa->id_kelas);
-                    })
-                    ->first();
+                // Notifikasi ke Guru Piket
+                Notifikasi::kirimKeRole(
+                    'piket',
+                    'Pemberitahuan ' . $namaKategoriText . ' Siswa (Langsung Disetujui)',
+                    'Siswa ' . $namaSiswa . ' (' . ($siswa?->kelas->nama_kelas ?? '-') . ') telah dicatat ' . $namaKategoriText . ' pada tanggal ' . $pengajuan->tanggal . ' dan telah disetujui otomatis.',
+                    route('pengajuan.show', $pengajuan->id_pengajuan),
+                    'izin'
+                );
 
-                // Jika belum ada jurnal harian, cari jadwal kelas pertama jika ada
-                if (!$jurnal && $siswa->id_kelas) {
-                    $jadwalFirst = \App\Models\Jadwal::where('id_kelas', $siswa->id_kelas)->where('aktif', 1)->first();
-                    if ($jadwalFirst) {
-                        $jurnal = \App\Models\JurnalHarian::firstOrCreate(
-                            [
-                                'id_jadwal' => $jadwalFirst->id_jadwal,
-                                'tanggal' => $tanggalIzin,
-                            ],
-                            [
-                                'id_guru' => $jadwalFirst->id_guru ?? \App\Models\Guru::first()?->id_guru,
-                                'materi' => 'Presensi Kelas (' . $namaKategoriText . ')',
-                                'jam_ke' => $jadwalFirst->jam_ke ?? 1,
-                            ]
+                // Notifikasi ke Wali Kelas jika ada
+                if ($siswa && $siswa->kelas && $siswa->kelas->id_guru_walikelas) {
+                    $guruWali = Guru::find($siswa->kelas->id_guru_walikelas);
+                    if ($guruWali && $guruWali->id_user) {
+                        Notifikasi::kirim(
+                            $guruWali->id_user,
+                            'Pemberitahuan ' . $namaKategoriText . ' Siswa Kelas',
+                            'Siswa ' . $namaSiswa . ' tercatat ' . $namaKategoriText . ' pada tanggal ' . $pengajuan->tanggal . ' dan langsung masuk ke data kelas.',
+                            route('walikelas.data-kelas'),
+                            'izin'
                         );
                     }
                 }
 
-                $idJurnal = $jurnal ? $jurnal->id_jurnal : null;
-
-                \App\Models\AbsensiSiswa::updateOrCreate(
-                    [
-                        'id_siswa' => $siswa->id_siswa,
-                        'created_at' => $tanggalIzin . ' 07:00:00',
-                    ],
-                    [
-                        'id_jurnal' => $idJurnal,
-                        'status' => $statusAbsensi,
-                        'jam_masuk' => $pengajuan->jam_mulai,
-                        'keterangan' => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . "(Tercatat: {$namaKategoriText})",
-                        'dicatat_oleh' => $user->id_user,
-                        'created_at' => $tanggalIzin . ' 07:00:00',
-                    ]
-                );
+                $flashMessage = "Pengajuan {$namaKategoriText} berhasil dibuat dan otomatis tercatat di data kehadiran siswa.";
             }
-
-            // Notifikasi ke Guru Piket
-            Notifikasi::kirimKeRole(
-                'piket',
-                'Pemberitahuan ' . $namaKategoriText . ' Siswa (Langsung Disetujui)',
-                'Siswa ' . $namaSiswa . ' (' . ($siswa?->kelas->nama_kelas ?? '-') . ') telah dicatat ' . $namaKategoriText . ' pada tanggal ' . $pengajuan->tanggal . ' dan telah disetujui otomatis.',
-                route('pengajuan.show', $pengajuan->id_pengajuan),
-                'izin'
-            );
-
-            // Notifikasi ke Wali Kelas jika ada
-            if ($siswa && $siswa->kelas && $siswa->kelas->id_guru_walikelas) {
-                $guruWali = Guru::find($siswa->kelas->id_guru_walikelas);
-                if ($guruWali && $guruWali->id_user) {
-                    Notifikasi::kirim(
-                        $guruWali->id_user,
-                        'Pemberitahuan ' . $namaKategoriText . ' Siswa Kelas',
-                        'Siswa ' . $namaSiswa . ' tercatat ' . $namaKategoriText . ' pada tanggal ' . $pengajuan->tanggal . ' dan langsung masuk ke data kelas.',
-                        route('walikelas.data-kelas'),
-                        'izin'
-                    );
-                }
-            }
-
-            $flashMessage = "Pengajuan {$namaKategoriText} berhasil dibuat dan otomatis tercatat di data kehadiran siswa.";
         } else {
             // Kirim WhatsApp ke Waka Bertugas
             $waResult = $this->waService->kirimNotifDispenKeWaka($pengajuan->load(['siswa.kelas', 'guru', 'pengaju', 'wakaTujuan']));

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Persetujuan Dispen Guru — Kepala Sekolah')
-@section('page-title', 'Pusat Persetujuan Dispen Guru')
+@section('title', 'Daftar Izin Guru — Kepala Sekolah')
+@section('page-title', 'Pusat Data Izin Guru')
 
 @section('content')
 <div class="page-header">
     <div>
-        <h1 class="page-title">Pusat Persetujuan Dispen Guru</h1>
-        <p class="page-subtitle">Daftar dispensasi guru yang memerlukan verifikasi dan persetujuan final Kepala Sekolah</p>
+        <h1 class="page-title">Pusat Data Izin Guru</h1>
+        <p class="page-subtitle">Daftar izin guru KBM terdata di sistem</p>
     </div>
     <div class="page-actions">
         <a href="{{ route('kepala.dashboard') }}" class="btn btn-secondary">&larr; Kembali ke Dashboard</a>
@@ -55,7 +55,7 @@
                                 <span class="text-muted" style="font-size:11px;">(s/d {{ $p->perkiraan_kembali }})</span>
                             @endif
                         </td>
-                        <td><strong>{{ $p->jenis_izin ?? 'Dispen Guru' }}</strong></td>
+                        <td><strong>{{ $p->jenis_izin ?? 'Izin Guru' }}</strong></td>
                         <td>{{ Str::limit($p->alasan, 35) }}</td>
                         <td>
                             <span class="badge badge-navy" style="font-size:11px;">Acc Waka SDM</span>
@@ -71,7 +71,7 @@
         </div>
         @else
         <div class="empty-state">
-            <div class="empty-state-text">Tidak ada antrean dispen guru yang menunggu persetujuan Kepala Sekolah saat ini.</div>
+            <div class="empty-state-text">Tidak ada antrean izin guru yang menunggu persetujuan saat ini.</div>
         </div>
         @endif
     </div>
@@ -82,7 +82,7 @@
     <div class="card-header header-green">
         <h3 class="card-title text-green">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            Dispensasi Guru Telah Disetujui ({{ $disetujuiList->count() }})
+            Izin Guru Telah Disetujui ({{ $disetujuiList->count() }})
         </h3>
     </div>
     <div class="card-body" style="padding:0;">
@@ -93,7 +93,7 @@
                     <tr>
                         <th class="no-col">No</th>
                         <th>Nama Guru</th>
-                        <th>Tanggal Dispen</th>
+                        <th>Tanggal Izin</th>
                         <th>Keperluan</th>
                         <th>Catatan Kepala Sekolah</th>
                         <th>Waktu Acc Kepsek</th>
@@ -106,7 +106,7 @@
                         <td class="no-col">{{ $index + 1 }}</td>
                         <td class="fw-bold text-navy">{{ $p->guru?->nama ?? $p->pengaju?->nama ?? 'Guru' }}</td>
                         <td>{{ $p->tanggal }}</td>
-                        <td>{{ $p->jenis_izin ?? 'Dispen Guru' }}</td>
+                        <td>{{ $p->jenis_izin ?? 'Izin Guru' }}</td>
                         <td>{{ $p->catatan_kepala ?? '-' }}</td>
                         <td><span class="text-muted" style="font-size:12px;">{{ $p->tgl_kepala ? date('d M Y H:i', strtotime($p->tgl_kepala)) : '-' }}</span></td>
                         <td class="action-col">
@@ -119,7 +119,7 @@
         </div>
         @else
         <div class="empty-state">
-            <div class="empty-state-text">Belum ada pengajuan dispen guru yang disetujui.</div>
+            <div class="empty-state-text">Belum ada pengajuan izin guru yang disetujui.</div>
         </div>
         @endif
     </div>
@@ -131,7 +131,7 @@
     <div class="card-header header-red">
         <h3 class="card-title text-red">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            Dispensasi Guru Ditolak ({{ $ditolakList->count() }})
+            Izin Guru Ditolak ({{ $ditolakList->count() }})
         </h3>
     </div>
     <div class="card-body" style="padding:0;">
@@ -141,7 +141,7 @@
                     <tr>
                         <th class="no-col">No</th>
                         <th>Nama Guru</th>
-                        <th>Tanggal Dispen</th>
+                        <th>Tanggal Izin</th>
                         <th>Alasan Penolakan</th>
                         <th class="action-col">Aksi</th>
                     </tr>

@@ -51,7 +51,10 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="password">Password <span class="req">*</span></label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password akun" required>
+                    <div style="position:relative;">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Password akun" required style="padding-right:48px;">
+                        <button type="button" onclick="const input = document.getElementById('password'); if(input.type==='password'){input.type='text';this.textContent='Hide';}else{input.type='password';this.textContent='Show';}" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text-secondary); font-size:12px; font-weight:600;">Show</button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="no_hp">No WhatsApp / HP</label>

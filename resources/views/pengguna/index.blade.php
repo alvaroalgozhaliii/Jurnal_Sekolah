@@ -471,8 +471,6 @@ document.getElementById('inputConfPw').addEventListener('input', function() {
     const msg = document.getElementById('pwMatchMsg');
     msg.style.display = (this.value && this.value !== pw) ? 'block' : 'none';
 });
-
-});
 </script>
 @endpush
 
