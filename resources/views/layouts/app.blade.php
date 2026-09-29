@@ -235,11 +235,6 @@
         font-size: 15px;
         min-width: 0;
     }
-    /* Pertahankan tampilan desktop persis sama */
-    .topbar-title {
-        max-width: none;
-        font-size: 15px;
-    }
     .btn-ganti-akses span {
         display: inline !important;
     }
@@ -247,10 +242,7 @@
         padding: 6px 12px !important;
     }
 
-    /* Layout desktop tetap terlihat dengan horizontal scroll */
-    body, .app-shell, .main-area {
-        /* max-width dihapus agar bisa scroll horizontal seperti desktop */
-    }
+    /* Content area box-sizing */
     .content-area {
         box-sizing: border-box;
     }

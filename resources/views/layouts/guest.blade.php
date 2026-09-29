@@ -270,23 +270,27 @@ function togglePasswordVisibility(inputId, btn) {
         buildStars();
     }
 
+    var isMobile = window.innerWidth <= 860;
+
     function buildStars() {
         stars = [];
-        /* Kurangi density sedikit agar tidak berat saat load awal */
-        var total = Math.floor((W * H) / 3400);
+        /* Mobile: kurangi density 60% agar lebih ringan */
+        var densityDiv = isMobile ? 6000 : 3400;
+        var total = Math.floor((W * H) / densityDiv);
         for (var i = 0; i < total; i++) {
             stars.push({
                 x: Math.random() * W,
                 y: Math.random() * H,
-                r: Math.random() * 1.4 + 0.2,
+                r: Math.random() * (isMobile ? 1.0 : 1.4) + 0.2,
                 a: Math.random(),
-                da: (Math.random() * 0.005 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+                /* Mobile: twinkle lebih lambat agar hemat CPU */
+                da: (Math.random() * (isMobile ? 0.003 : 0.005) + 0.001) * (Math.random() < 0.5 ? 1 : -1),
                 c: ['255,255,255','200,220,255','255,240,180','180,210,255'][Math.floor(Math.random()*4)]
             });
         }
     }
 
-    // ===== METEOR VERTIKAL KE SAMPING (DIAGONAL FALLING SHOOTING STARS) =====
+    // ===== METEOR VERTIKAL KE SAMPING (DESKTOP ONLY) =====
     var meteors = [];
     var lastMeteorTime = 0;
 
@@ -316,6 +320,9 @@ function togglePasswordVisibility(inputId, btn) {
     }
 
     function updateAndDrawMeteors() {
+        /* Matikan meteor di mobile — terlalu berat */
+        if (isMobile) return;
+
         var now = Date.now();
         if (now - lastMeteorTime > (Math.random() * 1400 + 900) && meteors.length < 4) {
             meteors.push(createMeteor());
@@ -342,7 +349,6 @@ function togglePasswordVisibility(inputId, btn) {
             grad.addColorStop(0.65, 'rgba(' + m.colorRgb + ', ' + (m.opacity * 0.5) + ')');
             grad.addColorStop(1, 'rgba(255, 255, 255, ' + m.opacity + ')');
 
-            /* ── Ekor meteor (tanpa shadowBlur agar tidak berat setiap frame) ── */
             ctx.beginPath();
             ctx.moveTo(tailX, tailY);
             ctx.lineTo(m.x, m.y);
@@ -351,13 +357,11 @@ function togglePasswordVisibility(inputId, btn) {
             ctx.lineCap = 'round';
             ctx.stroke();
 
-            /* ── Kepala meteor: glow simulasi dengan dua lingkaran (hemat vs shadowBlur) ── */
-            /* Lingkaran luar transparan (efek glow ringan) */
             ctx.beginPath();
             ctx.arc(m.x, m.y, m.thickness * 2.8, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(' + m.colorRgb + ', ' + (m.opacity * 0.18) + ')';
             ctx.fill();
-            /* Lingkaran inti terang */
+
             ctx.beginPath();
             ctx.arc(m.x, m.y, m.thickness * 1.2, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(255, 255, 255, ' + m.opacity + ')';
@@ -367,7 +371,17 @@ function togglePasswordVisibility(inputId, btn) {
         }
     }
 
-    function draw() {
+    /* Mobile: throttle frame rate ke ~30fps agar baterai & CPU hemat */
+    var lastFrameTime = 0;
+    var frameBudget = isMobile ? 33 : 0; /* 33ms = ~30fps di mobile */
+
+    function draw(timestamp) {
+        if (isMobile && timestamp - lastFrameTime < frameBudget) {
+            rafId = requestAnimationFrame(draw);
+            return;
+        }
+        lastFrameTime = timestamp || 0;
+
         ctx.clearRect(0, 0, W, H);
         for (var i = 0; i < stars.length; i++) {
             var s = stars[i];
@@ -386,23 +400,24 @@ function togglePasswordVisibility(inputId, btn) {
     function startAnimation() {
         if (animationStarted) return;
         animationStarted = true;
+        isMobile = window.innerWidth <= 860;
         resize();
-        draw();
+        draw(0);
     }
 
     window.addEventListener('resize', function() {
+        isMobile = window.innerWidth <= 860;
         if (animationStarted) resize();
     });
 
     /*
      * DEFER START: Tunda animasi canvas sampai browser selesai render halaman.
-     * Ini menghilangkan lag/freeze saat navigasi masuk ke halaman login.
-     * requestIdleCallback → tunggu browser idle. Fallback: setTimeout 150ms.
+     * Mobile: tunda lebih lama (300ms) agar tidak lag saat load awal.
      */
     if ('requestIdleCallback' in window) {
-        requestIdleCallback(startAnimation, { timeout: 800 });
+        requestIdleCallback(startAnimation, { timeout: isMobile ? 1200 : 800 });
     } else {
-        setTimeout(startAnimation, 150);
+        setTimeout(startAnimation, isMobile ? 300 : 150);
     }
 })();
 </script>
