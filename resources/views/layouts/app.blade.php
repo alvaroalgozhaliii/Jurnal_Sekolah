@@ -235,11 +235,6 @@
         font-size: 15px;
         min-width: 0;
     }
-    /* Pertahankan tampilan desktop persis sama */
-    .topbar-title {
-        max-width: none;
-        font-size: 15px;
-    }
     .btn-ganti-akses span {
         display: inline !important;
     }
@@ -247,10 +242,7 @@
         padding: 6px 12px !important;
     }
 
-    /* Layout desktop tetap terlihat dengan horizontal scroll */
-    body, .app-shell, .main-area {
-        /* max-width dihapus agar bisa scroll horizontal seperti desktop */
-    }
+    /* Content area box-sizing */
     .content-area {
         box-sizing: border-box;
     }
@@ -346,7 +338,11 @@
                 </a>
                 @php
                     $pendingResetCount = \App\Models\ResetPasswordRequest::where('status', 'pending')->count();
-                    $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
+                    try {
+                        $pendingDeviceCount = \App\Models\DeviceRequest::where('status', 'pending')->count();
+                    } catch (\Exception $e) {
+                        $pendingDeviceCount = 0;
+                    }
                 @endphp
                 <a href="{{ route('admin.reset-password.index') }}" class="nav-item {{ request()->routeIs('admin.reset-password.*') ? 'active' : '' }}" style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="display: flex; align-items: center; gap: 10px;">
