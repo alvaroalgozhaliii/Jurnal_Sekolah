@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', Auth::user()->isOrtu() ? 'Buat Pengajuan Izin Anak — Jurnal Sekolah' : 'Buat Pengajuan Dispen / Izin — Jurnal Sekolah')
-@section('page-title', Auth::user()->isOrtu() ? 'Form Pengajuan Izin Anak' : 'Form Pengajuan Dispen / Izin')
+@section('title', Auth::user()->isOrtu() ? 'Buat Pengajuan Izin Anak — Jurnal Sekolah' : 'Buat Pengajuan Izin — Jurnal Sekolah')
+@section('page-title', Auth::user()->isOrtu() ? 'Form Pengajuan Izin Anak' : 'Form Pengajuan Izin')
 
 @section('content')
 <div class="page-header">
@@ -10,18 +10,18 @@
             @if(Auth::user()->isOrtu())
                 Form Pengajuan Izin Siswa
             @elseif(Auth::user()->isPiket())
-                Form Pengajuan Dispen (Piket)
+                Form Pengajuan Izin (Piket)
             @elseif(Auth::user()->isGuru())
-                Form Pengajuan Dispen / Izin Guru
+                Form Pengajuan Izin Guru
             @else
-                Form Pengajuan Izin / Dispensasi
+                Form Pengajuan Izin
             @endif
         </h1>
         <p class="page-subtitle">
             @if(Auth::user()->isOrtu())
                 Pengajuan izin siswa (sakit, acara keluarga, dll) oleh orang tua untuk perizinan ke sekolah
             @else
-                Pencatatan pengajuan dispensasi siswa atau guru yang diteruskan secara otomatis untuk verifikasi & persetujuan
+                Pencatatan pengajuan izin siswa atau izin guru yang diteruskan secara otomatis untuk verifikasi & persetujuan
             @endif
         </p>
     </div>
@@ -66,7 +66,7 @@
         @endphp
         <div style="display:flex; gap:12px; margin-bottom:20px; background:var(--clr-bg-subtle); padding:6px; border-radius:8px;">
             <button type="button" id="btn-tab-siswa" onclick="setSubjekType('siswa')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'siswa' ? 'background:#1e3a8a; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
-                 Pengajuan Dispensasi Siswa
+                 Pengajuan Izin Siswa
             </button>
             <button type="button" id="btn-tab-guru" onclick="setSubjekType('guru')" class="btn" style="flex:1; justify-content:center; font-weight:600; padding:10px 14px; border-radius:6px; {{ $initialType === 'guru' ? 'background:#d97706; color:#fff;' : 'background:transparent; color:#334155; border:none;' }}">
                  Izin Guru (Langsung Disetujui Otomatis)
@@ -82,13 +82,13 @@
 
             <!-- Kategori Pengajuan (Siswa / Guru) -->
             <div class="form-group mb-16" id="group-kategori-siswa">
-                <label class="form-label" for="kategori_siswa">{{ Auth::user()->isOrtu() ? 'Kategori Izin Siswa' : 'Kategori Dispensasi Siswa' }} <span class="req">*</span></label>
+                <label class="form-label" for="kategori_siswa">{{ Auth::user()->isOrtu() ? 'Kategori Izin Siswa' : 'Kategori Izin Siswa' }} <span class="req">*</span></label>
                 <select id="kategori_siswa" class="form-control" onchange="syncKategori()">
                     @if(Auth::user()->isOrtu())
                         <option value="sakit" {{ old('kategori', 'sakit') == 'sakit' ? 'selected' : '' }}>Izin Sakit</option>
                         <option value="izin" {{ old('kategori') == 'izin' ? 'selected' : '' }}>Izin Umum</option>
                     @else
-                        <optgroup label="Dispensasi Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)">
+                        <optgroup label="Izin Siswa (Alur: Piket &rarr; Waka &rarr; Satpam)">
                             <option value="dispen_masuk" {{ old('kategori', 'dispen_masuk') == 'dispen_masuk' ? 'selected' : '' }}>Dispensasi Masuk (Izin Masuk Sekolah)</option>
                             <option value="dispen_keluar" {{ old('kategori') == 'dispen_keluar' ? 'selected' : '' }}>Dispensasi Keluar (Meninggalkan Sekolah Sementara/Pulang)</option>
                             <option value="dispen_lomba" {{ old('kategori') == 'dispen_lomba' ? 'selected' : '' }}>Dispensasi Lomba / Kegiatan / OSIS</option>

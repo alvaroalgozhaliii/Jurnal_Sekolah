@@ -324,17 +324,81 @@
 
 
 {{-- ============================================================
+     FORM KEPUTUSAN PIKET (Hanya Piket / Admin saat pending_piket)
+     ============================================================ --}}
+@if((Auth::user()->isPiket() || Auth::user()->isAdmin()) && $pengajuan->status === 'pending_piket')
+<div class="card mb-24" style="border: 2px solid #d97706;">
+    <div class="card-header" style="background: #fffbeb;">
+        <h3 class="card-title" style="color: #d97706;">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Keputusan Guru Piket
+        </h3>
+    </div>
+    <div class="card-body">
+        <p class="mb-16" style="font-size:13px; color:#78350f;">Pengajuan izin siswa ini menunggu verifikasi dari Guru Piket. Setelah disetujui, pengajuan akan diteruskan ke <strong>Waka yang bertugas hari ini</strong> untuk persetujuan akhir.</p>
+        <form action="{{ route('pengajuan.approve.piket', $pengajuan->id_pengajuan) }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label class="form-label" for="catatan_piket">Catatan Guru Piket (Opsional)</label>
+                <textarea id="catatan_piket" name="catatan" class="form-control" rows="3" placeholder="Masukkan catatan atau alasan penolakan..."></textarea>
+            </div>
+            <div class="d-flex gap-12 mt-16">
+                <button type="submit" name="keputusan" value="setujui" class="btn btn-success btn-lg">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    SETUJUI & TERUSKAN KE WAKA
+                </button>
+                <button type="submit" name="keputusan" value="tolak" class="btn btn-danger btn-lg" onclick="return confirm('Yakin ingin menolak pengajuan ini?')">
+                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    TOLAK PENGAJUAN
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endif
+
+{{-- ============================================================
      FORM KEPUTUSAN WAKA (Hanya Waka / Admin saat pending_waka)
      ============================================================ --}}
 @if((Auth::user()->isWaka() || Auth::user()->isAdmin()) && $pengajuan->status === 'pending_waka')
+@php
+    // Cari Waka yang berwenang: berdasarkan JadwalWaka pada tanggal pengajuan
+    $tanggalPengajuanWaka = $pengajuan->tanggal ?? $pengajuan->created_at?->toDateString() ?? now()->toDateString();
+    $jadwalWakaBerhak     = \App\Models\JadwalWaka::wakaBertugasPada($tanggalPengajuanWaka);
+    $wakaYangBerhak       = $jadwalWakaBerhak?->waka;
+
+    // Fallback ke id_waka_tujuan jika tidak ada jadwal
+    if (!$wakaYangBerhak && $pengajuan->id_waka_tujuan) {
+        $wakaYangBerhak = \App\Models\User::find($pengajuan->id_waka_tujuan);
+    }
+
+    $isWakaYangBerhak = Auth::user()->isAdmin()
+        || !$wakaYangBerhak
+        || (int) $wakaYangBerhak->id_user === (int) Auth::user()->id_user;
+@endphp
 <div class="card card-amber mb-24">
     <div class="card-header">
         <h3 class="card-title">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            Keputusan Persetujuan Waka
+            Keputusan Persetujuan Waka Piket
         </h3>
     </div>
     <div class="card-body">
+        {{-- Info Waka yang berwenang --}}
+        @if($wakaYangBerhak)
+        <div style="background:{{ $isWakaYangBerhak ? '#ecfdf5' : '#fefce8' }}; border:1px solid {{ $isWakaYangBerhak ? '#6ee7b7' : '#fde047' }}; border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:13px; color:{{ $isWakaYangBerhak ? '#065f46' : '#854d0e' }}; display:flex; align-items:center; gap:8px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>
+                <strong>Waka Piket Berwenang ({{ \Carbon\Carbon::parse($tanggalPengajuanWaka)->isoFormat('dddd, D MMM Y') }}):</strong>
+                {{ $wakaYangBerhak->nama }} <span style="font-weight:400;">({{ strtoupper(str_replace('_',' ',$wakaYangBerhak->role)) }})</span>
+                @if(!$isWakaYangBerhak)
+                    &mdash; <em>Anda tidak berwenang menyetujui pengajuan ini. Silakan teruskan ke Waka yang bertugas.</em>
+                @endif
+            </span>
+        </div>
+        @endif
+
+        @if($isWakaYangBerhak)
         <form action="{{ route('pengajuan.approve.waka', $pengajuan->id_pengajuan) }}" method="POST">
             @csrf
             <div class="form-group">
@@ -344,7 +408,7 @@
             <div class="d-flex gap-12 mt-16">
                 <button type="submit" name="keputusan" value="setujui" class="btn btn-success btn-lg">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    SETUJUI PENGAJUAN (KIRIM NOTIFIKASI SATPAM)
+                    SETUJUI PENGAJUAN
                 </button>
                 <button type="submit" name="keputusan" value="tolak" class="btn btn-danger btn-lg" onclick="return confirm('Yakin ingin menolak pengajuan ini?')">
                     <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -352,6 +416,12 @@
                 </button>
             </div>
         </form>
+        @else
+        <div style="text-align:center; padding:16px 0; color:#92400e;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:32px;height:32px;margin:0 auto 8px;display:block;opacity:0.5;"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+            Persetujuan ini hanya bisa dilakukan oleh <strong>{{ $wakaYangBerhak?->nama ?? 'Waka Piket' }}</strong> yang bertugas pada tanggal tersebut.
+        </div>
+        @endif
     </div>
 </div>
 @endif

@@ -127,9 +127,21 @@ class PengajuanIzinController extends Controller
         // Jika dibuat oleh Orang Tua atau kategori izin (sakit, izin, acara_keluarga, terlambat, izin_guru): langsung sah/DISETUJUI tanpa proses approval
         $isOrtuFlow = $user->isOrtu() || in_array($request->kategori, ['sakit', 'izin', 'acara_keluarga', 'terlambat', 'izin_guru']);
 
-        $statusAwal = $isOrtuFlow ? 'completed' : 'pending_waka';
-        $butuhSatpam = !$isGuruDispen && !$isOrtuFlow && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk', 'dispen_masuk', 'dispen_keluar', 'dispen_lomba']);
+        // Untuk Dispen Siswa (dispensasi, dispen_masuk, dispen_keluar, dispen_lomba, izin_masuk, izin_keluar):
+        // Wajib ada persetujuan dari Guru Piket DAN Waka Piket Hari Ini.
+        // Jika dibuat oleh Guru Piket/Admin: Guru Piket otomatis menyetujui sebagai pembuat (status: pending_waka)
+        // Jika dibuat oleh Siswa/Ortu: Menunggu Guru Piket lebih dulu (status: pending_piket)
+        $isStudentDispen = !$isOrtuFlow && in_array($request->kategori, ['dispensasi', 'izin_keluar', 'izin_masuk', 'dispen_masuk', 'dispen_keluar', 'dispen_lomba']);
+
+        $statusAwal = $isOrtuFlow ? 'completed' : (($user->isPiket() || $user->isAdmin()) ? 'pending_waka' : 'pending_piket');
+        $butuhSatpam = $isStudentDispen;
         $idWakaTujuan = $isOrtuFlow ? null : $wakaTujuanUser?->id_user;
+
+        $idPiketApprover = ($isStudentDispen && ($user->isPiket() || $user->isAdmin())) ? $user->id_user : null;
+        $tglPiket = ($isOrtuFlow || ($isStudentDispen && ($user->isPiket() || $user->isAdmin()))) ? now() : null;
+        $catatanPiket = $isOrtuFlow
+            ? 'Disetujui otomatis oleh sistem (' . \App\Helpers\DispenHelper::kategoriLabel($request->kategori) . ').'
+            : (($isStudentDispen && ($user->isPiket() || $user->isAdmin())) ? 'Diajukan & disetujui oleh Guru Piket (Diteruskan ke Waka Piket Hari Ini)' : null);
 
         $pengajuan = PengajuanIzin::create([
             'kategori' => $request->kategori,
@@ -147,8 +159,9 @@ class PengajuanIzinController extends Controller
             'status' => $statusAwal,
             'butuh_satpam' => $butuhSatpam,
             'id_waka_tujuan' => $idWakaTujuan,
-            'catatan_piket' => $isOrtuFlow ? 'Disetujui otomatis oleh sistem (' . \App\Helpers\DispenHelper::kategoriLabel($request->kategori) . ').' : null,
-            'tgl_piket' => $isOrtuFlow ? now() : null,
+            'id_piket_approver' => $idPiketApprover,
+            'catatan_piket' => $catatanPiket,
+            'tgl_piket' => $tglPiket,
         ]);
 
         // Catat Log Riwayat
@@ -315,12 +328,24 @@ class PengajuanIzinController extends Controller
         };
 
         if ($request->keputusan === 'setujui') {
-            $statusSesudah = 'completed';
+            // Piket menyetujui → teruskan ke Waka yang bertugas hari ini untuk persetujuan akhir
+            $statusSesudah = 'pending_waka';
+
+            // Cari Waka yang bertugas pada tanggal pengajuan
+            $jadwalWakaPiket = JadwalWaka::wakaBertugasPada($pengajuan->tanggal ?? now()->toDateString());
+            $wakaTujuanPiket = $jadwalWakaPiket?->waka;
+            if (!$wakaTujuanPiket) {
+                $wakaTujuanPiket = User::where('role', 'waka_kesiswaan')->where('aktif', 1)->first()
+                               ?? User::where('role', 'waka_sdm')->where('aktif', 1)->first();
+            }
+            $idWakaTujuan = $wakaTujuanPiket?->id_user ?? $pengajuan->id_waka_tujuan;
+
             $pengajuan->update([
-                'status' => $statusSesudah,
+                'status'            => $statusSesudah,
                 'id_piket_approver' => $user->id_user,
-                'catatan_piket' => $request->catatan,
-                'tgl_piket' => now(),
+                'catatan_piket'     => $request->catatan ?? 'Disetujui oleh Guru Piket, diteruskan ke Waka Piket Hari Ini.',
+                'tgl_piket'         => now(),
+                'id_waka_tujuan'    => $idWakaTujuan,
             ]);
 
             // Catat Log
@@ -330,83 +355,35 @@ class PengajuanIzinController extends Controller
                 $user->role,
                 $statusSebelum,
                 $statusSesudah,
-                $request->catatan ?? 'Disetujui dan diverifikasi oleh Guru Piket'
+                $request->catatan ?? 'Disetujui oleh Guru Piket — menunggu persetujuan Waka'
             );
 
-            // ==========================================
-            // SINKRONISASI KE DATA KELAS / ABSENSI SISWA
-            // ==========================================
-            if ($siswa) {
-                $tanggalIzin = $pengajuan->tanggal;
-                $statusAbsensi = ($pengajuan->kategori === 'sakit') ? 'sakit' : 'izin';
-
-                // Cari Jurnal Harian hari ini untuk kelas siswa tersebut
-                $jurnal = \App\Models\JurnalHarian::where('tanggal', $tanggalIzin)
-                    ->whereHas('jadwal', function ($q) use ($siswa) {
-                        $q->where('id_kelas', $siswa->id_kelas);
-                    })
-                    ->first();
-
-                // Jika belum ada jurnal harian dibuat oleh guru mapel, cari jadwal pertama kelas tersebut
-                if (!$jurnal) {
-                    $jadwalFirst = \App\Models\Jadwal::where('id_kelas', $siswa->id_kelas)->where('aktif', 1)->first();
-                    if ($jadwalFirst) {
-                        $jurnal = \App\Models\JurnalHarian::firstOrCreate(
-                            [
-                                'id_jadwal' => $jadwalFirst->id_jadwal,
-                                'tanggal' => $tanggalIzin,
-                            ],
-                            [
-                                'id_guru' => $jadwalFirst->id_guru ?? Guru::first()?->id_guru,
-                                'materi' => 'Presensi Kelas (Disetujui Piket)',
-                                'jam_ke' => $jadwalFirst->jam_ke ?? 1,
-                            ]
-                        );
-                    }
-                }
-
-                if ($jurnal) {
-                    \App\Models\AbsensiSiswa::updateOrCreate(
-                        [
-                            'id_jurnal' => $jurnal->id_jurnal,
-                            'id_siswa' => $siswa->id_siswa,
-                        ],
-                        [
-                            'status' => $statusAbsensi,
-                            'keterangan' => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . ($request->catatan ? '(Piket: ' . $request->catatan . ')' : '(Diverifikasi Guru Piket)'),
-                            'dicatat_oleh' => $user->id_user,
-                            'created_at' => now(),
-                        ]
-                    );
-                }
+            // Notifikasi ke Waka yang bertugas
+            if ($wakaTujuanPiket) {
+                Notifikasi::kirim(
+                    $wakaTujuanPiket->id_user,
+                    'Pengajuan Izin Siswa Menunggu Persetujuan Anda',
+                    'Pengajuan izin siswa ' . $namaSiswa . ' telah disetujui Guru Piket dan menunggu persetujuan Waka.',
+                    route('pengajuan.show', $pengajuan->id_pengajuan),
+                    'dispen'
+                );
             }
 
-            // Notifikasi ke Orang Tua
+            // Notifikasi ke Pengaju
             if ($pengajuan->id_user_pengaju) {
                 Notifikasi::kirim(
                     $pengajuan->id_user_pengaju,
-                    'Pengajuan ' . $namaKategori . ' Disetujui',
-                    'Pengajuan ' . $namaKategori . ' anak Anda (' . $namaSiswa . ') telah diverifikasi & disetujui oleh Guru Piket dan telah dicatat ke data presensi kelas.',
+                    'Pengajuan ' . $namaKategori . ' Disetujui Piket',
+                    'Pengajuan ' . $namaKategori . ' anak Anda (' . $namaSiswa . ') telah disetujui Guru Piket dan kini menunggu persetujuan Waka.',
                     route('pengajuan.show', $pengajuan->id_pengajuan),
                     'izin'
                 );
             }
 
-            // Notifikasi ke Wali Kelas jika ada
-            if ($siswa && $siswa->kelas && $siswa->kelas->id_guru_walikelas) {
-                $guruWali = Guru::find($siswa->kelas->id_guru_walikelas);
-                if ($guruWali && $guruWali->id_user) {
-                    Notifikasi::kirim(
-                        $guruWali->id_user,
-                        'Pemberitahuan Izin Siswa Kelas',
-                        'Siswa ' . $namaSiswa . ' tercatat ' . strtoupper($pengajuan->kategori) . ' pada tanggal ' . $pengajuan->tanggal . ' (Diverifikasi oleh Guru Piket).',
-                        route('walikelas.dashboard'),
-                        'izin'
-                    );
-                }
-            }
+            // Kirim WhatsApp ke Waka
+            $this->waService->kirimNotifDispenKeWaka($pengajuan->load(['siswa.kelas', 'guru', 'pengaju', 'wakaTujuan']));
 
-            return redirect()->route('pengajuan.show', $pengajuan->id_pengajuan)->with('success', "Pengajuan {$namaKategori} untuk {$namaSiswa} berhasil DISETUJUI dan langsung dicatat ke data presensi kelas.");
+            return redirect()->route('pengajuan.show', $pengajuan->id_pengajuan)->with('success', "Pengajuan {$namaKategori} untuk {$namaSiswa} telah DISETUJUI oleh Piket dan diteruskan ke Waka untuk persetujuan akhir.");
         } else {
             $statusSesudah = 'ditolak_piket';
             $pengajuan->update([
@@ -465,19 +442,39 @@ class PengajuanIzinController extends Controller
         }
 
         $pengajuan = PengajuanIzin::findOrFail($id);
-        if ($pengajuan->id_waka_tujuan && (int) $pengajuan->id_waka_tujuan !== (int) $user->id_user && !$user->isAdmin()) {
-            return redirect()->back()->with('error', 'Pengajuan ini ditujukan kepada Waka yang bertugas pada tanggal pengajuan.');
+
+        // Tentukan Waka yang berwenang menyetujui berdasarkan JadwalWaka pada tanggal pengajuan
+        if (!$user->isAdmin()) {
+            $tanggalPengajuan = $pengajuan->tanggal ?? $pengajuan->created_at?->toDateString() ?? now()->toDateString();
+            $jadwalHariItu    = JadwalWaka::wakaBertugasPada($tanggalPengajuan);
+            $wakaYangBerhak   = $jadwalHariItu?->waka;
+
+            // Fallback: jika tidak ada jadwal, gunakan id_waka_tujuan yang tersimpan di pengajuan
+            if (!$wakaYangBerhak && $pengajuan->id_waka_tujuan) {
+                $wakaYangBerhak = User::find($pengajuan->id_waka_tujuan);
+            }
+
+            // Validasi: user yang login harus cocok dengan waka yang berwenang
+            if ($wakaYangBerhak && (int) $wakaYangBerhak->id_user !== (int) $user->id_user) {
+                $namaWakaBerhak = $wakaYangBerhak->nama ?? 'Waka Piket';
+                return redirect()->back()->with('error',
+                    "Pengajuan ini hanya bisa disetujui oleh Waka Piket pada tanggal tersebut: {$namaWakaBerhak}. " .
+                    "Silakan hubungi Waka yang sedang bertugas."
+                );
+            }
         }
+
         $request->validate([
-            'catatan' => 'nullable|string|required_if:keputusan,tolak',
+            'catatan'   => 'nullable|string|required_if:keputusan,tolak',
             'keputusan' => 'required|in:setujui,tolak'
         ]);
 
         $statusSebelum = $pengajuan->status;
-        $isPiketFlow = (bool) $pengajuan->id_waka_tujuan;
+        $isPiketFlow   = (bool) $pengajuan->id_waka_tujuan;
 
         if ($request->keputusan === 'setujui') {
-            $statusSesudah = $isPiketFlow ? 'menunggu_satpam' : 'disetujui_waka';
+            // Jika perlu verifikasi satpam → menunggu_satpam, jika tidak → completed langsung
+            $statusSesudah = $pengajuan->butuh_satpam ? 'menunggu_satpam' : 'completed';
             $pengajuan->update([
                 'status' => $statusSesudah,
                 'id_waka_approver' => $user->id_user,
@@ -496,39 +493,78 @@ class PengajuanIzinController extends Controller
                 $request->catatan ?? 'Disetujui oleh Waka'
             );
 
+            // ==========================================
+            // SINKRONISASI KE DATA KELAS / ABSENSI SISWA
+            // ==========================================
+            $siswaWaka = $pengajuan->load('siswa.kelas')->siswa;
+            if ($siswaWaka) {
+                $tanggalIzin = $pengajuan->tanggal;
+                $statusAbsensi = ($pengajuan->kategori === 'sakit') ? 'sakit' : 'izin';
+
+                $jurnal = \App\Models\JurnalHarian::where('tanggal', $tanggalIzin)
+                    ->whereHas('jadwal', function ($q) use ($siswaWaka) {
+                        $q->where('id_kelas', $siswaWaka->id_kelas);
+                    })->first();
+
+                if (!$jurnal) {
+                    $jadwalFirst = \App\Models\Jadwal::where('id_kelas', $siswaWaka->id_kelas)->where('aktif', 1)->first();
+                    if ($jadwalFirst) {
+                        $jurnal = \App\Models\JurnalHarian::firstOrCreate(
+                            ['id_jadwal' => $jadwalFirst->id_jadwal, 'tanggal' => $tanggalIzin],
+                            [
+                                'id_guru' => $jadwalFirst->id_guru ?? Guru::first()?->id_guru,
+                                'materi'  => 'Presensi Kelas (Disetujui Waka)',
+                                'jam_ke'  => $jadwalFirst->jam_ke ?? 1,
+                            ]
+                        );
+                    }
+                }
+
+                if ($jurnal) {
+                    \App\Models\AbsensiSiswa::updateOrCreate(
+                        ['id_jurnal' => $jurnal->id_jurnal, 'id_siswa' => $siswaWaka->id_siswa],
+                        [
+                            'status'      => $statusAbsensi,
+                            'keterangan'  => ($pengajuan->alasan ? $pengajuan->alasan . ' ' : '') . ($request->catatan ? '(Waka: ' . $request->catatan . ')' : '(Disetujui Waka)'),
+                            'dicatat_oleh' => $user->id_user,
+                            'created_at'  => now(),
+                        ]
+                    );
+                }
+            }
+
             // Notifikasi in-app ke Piket
             Notifikasi::kirimKeRole(
                 'piket',
-                'Dispen Disetujui Waka',
-                'Pengajuan dispen ' . ($pengajuan->siswa?->nama ?? $pengajuan->guru?->nama ?? 'Siswa/Guru') . ' telah disetujui Waka dan menunggu verifikasi Satpam.',
+                'Izin Siswa Disetujui Waka',
+                'Pengajuan izin ' . ($pengajuan->siswa?->nama ?? $pengajuan->guru?->nama ?? 'Siswa/Guru') . ' telah disetujui Waka' . ($pengajuan->butuh_satpam ? ' dan menunggu verifikasi Satpam.' : ' dan selesai.'),
                 route('pengajuan.show', $pengajuan->id_pengajuan),
                 'dispen'
             );
 
             // Notifikasi in-app ke Pengaju
-            Notifikasi::kirim(
-                $pengajuan->id_user_pengaju,
-                'Pengajuan Dispen Disetujui Waka',
-                'Pengajuan dispen Anda telah disetujui oleh Waka. Silakan verifikasi identitas ke Satpam saat keluar gerbang.',
-                route('pengajuan.show', $pengajuan->id_pengajuan),
-                'dispen'
-            );
+            if ($pengajuan->id_user_pengaju) {
+                Notifikasi::kirim(
+                    $pengajuan->id_user_pengaju,
+                    'Pengajuan Izin Disetujui Waka',
+                    $pengajuan->butuh_satpam
+                        ? 'Pengajuan izin Anda telah disetujui oleh Waka. Silakan verifikasi identitas ke Satpam saat keluar gerbang.'
+                        : 'Pengajuan izin Anda telah disetujui oleh Waka dan telah dicatat ke data presensi.',
+                    route('pengajuan.show', $pengajuan->id_pengajuan),
+                    'izin'
+                );
+            }
 
             // Notifikasi in-app ke Satpam jika butuh satpam
-            if ($pengajuan->butuh_satpam && !$isPiketFlow) {
+            if ($pengajuan->butuh_satpam) {
                 Notifikasi::kirimKeRole(
                     'satpam',
-                    'Verifikasi Dispen Baru (Acc Waka)',
-                    'Pengajuan dispen ' . ($pengajuan->siswa?->nama ?? $pengajuan->guru?->nama ?? '') . ' telah disetujui Waka. Menunggu verifikasi gerbang.',
+                    'Verifikasi Izin Baru (Acc Waka)',
+                    'Pengajuan izin ' . ($pengajuan->siswa?->nama ?? $pengajuan->guru?->nama ?? '') . ' telah disetujui Waka. Menunggu verifikasi gerbang.',
                     route('satpam.show', $pengajuan->id_pengajuan),
                     'satpam'
                 );
-
                 // Kirim WhatsApp ke Satpam
-                $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan);
-            }
-
-            if ($pengajuan->butuh_satpam && $isPiketFlow) {
                 $waResult = $this->waService->kirimNotifDispenKeSatpam($pengajuan->load(['siswa.kelas', 'guru', 'pengaju']));
             }
 
