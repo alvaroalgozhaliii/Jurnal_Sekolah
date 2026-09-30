@@ -82,19 +82,28 @@ class AbsensiSiswaController extends Controller
                     ->first();
 
                 if ($jadwalAktif) {
-                    $jurnalSelected = JurnalHarian::firstOrCreate(
-                        [
-                            'id_jadwal' => $jadwalAktif->id_jadwal,
-                            'tanggal' => $todayDate,
-                        ],
-                        [
-                            'id_guru' => $guru->id_guru,
-                            'mapel' => $jadwalAktif->mapel,
-                            'materi' => 'KBM Jam Ke-' . $jadwalAktif->jam_ke,
+                    $companionJadwalIds = \App\Models\Jadwal::where('id_kelas', $jadwalAktif->id_kelas)
+                        ->where('id_guru', $jadwalAktif->id_guru)
+                        ->where('hari', $jadwalAktif->hari)
+                        ->where('mapel', $jadwalAktif->mapel)
+                        ->where('aktif', 1)
+                        ->pluck('id_jadwal');
+
+                    $jurnalSelected = JurnalHarian::whereIn('id_jadwal', $companionJadwalIds)
+                        ->where('tanggal', $todayDate)
+                        ->first();
+
+                    if (!$jurnalSelected) {
+                        $jurnalSelected = JurnalHarian::create([
+                            'id_jadwal'             => $jadwalAktif->id_jadwal,
+                            'tanggal'               => $todayDate,
+                            'id_guru'               => $guru->id_guru,
+                            'mapel'                 => $jadwalAktif->mapel,
+                            'materi'                => 'KBM ' . $jadwalAktif->mapel,
                             'status_keterlaksanaan' => 'terlaksana',
-                            'created_by' => $user->id_user,
-                        ]
-                    );
+                            'created_by'            => $user->id_user,
+                        ]);
+                    }
                     $siswaList = Siswa::where('id_kelas', $jadwalAktif->id_kelas)->orderBy('nama', 'asc')->get();
                 }
             }
@@ -132,20 +141,41 @@ class AbsensiSiswaController extends Controller
         $idJurnal = $request->id_jurnal;
         $jurnal = JurnalHarian::with('jadwal')->findOrFail($idJurnal);
 
-        if ($user->isGuru() && !$user->isAdmin()) {
-            $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
-            $days = [
-                'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
-                'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
-            ];
-            $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+        $companionJurnals = collect([$jurnal]);
 
-            if ($guru && $jurnal->id_guru != $guru->id_guru) {
-                return back()->with('error', 'Anda hanya dapat menginput absensi untuk kelas mengajar Anda sendiri.');
+        if ($jurnal->jadwal) {
+            $companionJadwals = \App\Models\Jadwal::where('id_kelas', $jurnal->jadwal->id_kelas)
+                ->where('id_guru', $jurnal->jadwal->id_guru)
+                ->where('hari', $jurnal->jadwal->hari)
+                ->where('mapel', $jurnal->jadwal->mapel)
+                ->where('aktif', 1)
+                ->get();
+
+            $blockJamKes = $companionJadwals->pluck('jam_ke')->map(fn($v) => (int)$v)->toArray();
+
+            if ($user->isGuru() && !$user->isAdmin()) {
+                $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
+                $days = [
+                    'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+                    'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+                ];
+                $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
+
+                if ($guru && $jurnal->id_guru != $guru->id_guru) {
+                    return back()->with('error', 'Anda hanya dapat menginput absensi untuk kelas mengajar Anda sendiri.');
+                }
+
+                if ($jurnal->jadwal->hari !== $currentDayIndo || !in_array((int)$currentSlot['jam_ke'], $blockJamKes)) {
+                    return back()->with('error', 'Tidak dapat menginput absensi siswa: saat ini bukan jam mengajar untuk kelas ini.');
+                }
             }
 
-            if ($jurnal->jadwal && ($jurnal->jadwal->hari !== $currentDayIndo || (int)$jurnal->jadwal->jam_ke !== (int)$currentSlot['jam_ke'])) {
-                return back()->with('error', 'Tidak dapat menginput absensi siswa: saat ini bukan jam mengajar untuk kelas ini.');
+            $companionJurnals = JurnalHarian::whereIn('id_jadwal', $companionJadwals->pluck('id_jadwal'))
+                ->where('tanggal', $jurnal->tanggal)
+                ->get();
+
+            if ($companionJurnals->isEmpty()) {
+                $companionJurnals = collect([$jurnal]);
             }
         }
 
@@ -158,20 +188,22 @@ class AbsensiSiswaController extends Controller
                 $jamMasuk = Carbon::now()->format('H:i');
             }
 
-            $record = AbsensiSiswa::updateOrCreate(
-                [
-                    'id_jurnal' => $idJurnal,
-                    'id_siswa' => $idSiswa,
-                ],
-                [
-                    'status' => $status,
-                    'jam_masuk' => $jamMasuk,
-                    'menit_terlambat' => $menitTerlambat,
-                    'keterangan' => $keterangan,
-                    'dicatat_oleh' => Auth::id(),
-                    'created_at' => now(),
-                ]
-            );
+            foreach ($companionJurnals as $cj) {
+                AbsensiSiswa::updateOrCreate(
+                    [
+                        'id_jurnal' => $cj->id_jurnal,
+                        'id_siswa'  => $idSiswa,
+                    ],
+                    [
+                        'status'          => $status,
+                        'jam_masuk'       => $jamMasuk,
+                        'menit_terlambat' => $menitTerlambat,
+                        'keterangan'      => $keterangan,
+                        'dicatat_oleh'    => Auth::id(),
+                        'created_at'      => now(),
+                    ]
+                );
+            }
 
             // Send notification to Ortu if ALPA
             if ($status === 'alpa') {

@@ -67,6 +67,7 @@ class GuruDashboardController extends Controller
             ->where('id_guru', $guru->id_guru)
             ->where('hari', $currentDayIndo)
             ->where('aktif', 1)
+            ->orderBy('jam_ke', 'asc')
             ->get();
 
         // Jurnal hari ini yang sudah diisi
@@ -87,12 +88,30 @@ class GuruDashboardController extends Controller
         $jurnalTidakTerlaksana = $allJurnalGuru->whereIn('status_keterlaksanaan', ['tidak_terlaksana', 'kosong'])->count();
         $totalJurnalGuru = $allJurnalGuru->count();
 
-        // Pengingat Jurnal
-        $pengingatJurnal = [];
+        // Cek status pengisian per jadwal & pengelompokan blok sesi mengajar
+        // Jika salah satu jam dalam blok kelas & mapel yang sama sudah diisi, semua jam dalam blok itu dianggap sudah diisi
+        $blockFilledStatus = [];
+        $blockJurnalMap = [];
         foreach ($jadwalHariIni as $j) {
-            if (!$jurnalHariIni->has($j->id_jadwal)) {
+            $blockKey = $j->id_kelas . '_' . $j->mapel;
+            if ($jurnalHariIni->has($j->id_jadwal)) {
+                $blockFilledStatus[$blockKey] = true;
+                $blockJurnalMap[$blockKey] = $jurnalHariIni->get($j->id_jadwal);
+            }
+        }
+
+        // Pengingat Jurnal (dikelompokkan per sesi kelas & mapel)
+        $pengingatJurnal = [];
+        $checkedBlocks = [];
+        foreach ($jadwalHariIni as $j) {
+            $blockKey = $j->id_kelas . '_' . $j->mapel;
+            $isFilled = !empty($blockFilledStatus[$blockKey]);
+
+            if (!$isFilled && !in_array($blockKey, $checkedBlocks)) {
+                $checkedBlocks[] = $blockKey;
+                $companionJams = $jadwalHariIni->where('id_kelas', $j->id_kelas)->where('mapel', $j->mapel)->pluck('jam_ke')->sort()->implode(', ');
                 $namaKelas = $j->kelas?->nama_kelas ?? 'Kelas -';
-                $pengingatJurnal[] = "Anda belum mengisi jurnal untuk kelas {$namaKelas} (Mapel: {$j->mapel}, Jam ke-{$j->jam_ke}).";
+                $pengingatJurnal[] = "Anda belum mengisi jurnal untuk kelas {$namaKelas} (Mapel: {$j->mapel}, Jam ke-{$companionJams}).";
             }
         }
 
@@ -130,6 +149,8 @@ class GuruDashboardController extends Controller
             'guru',
             'jadwalHariIni',
             'jurnalHariIni',
+            'blockFilledStatus',
+            'blockJurnalMap',
             'presensiHariIni',
             'pengingatJurnal',
             'jurnalTerlaksana',

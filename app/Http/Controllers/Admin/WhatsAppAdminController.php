@@ -41,9 +41,10 @@ class WhatsAppAdminController extends Controller
 
         // Gateway Settings
         $gateway = [
-            'api_url' => Pengaturan::getVal('wa_api_url', config('services.whatsapp.api_url', env('WHATSAPP_API_URL'))),
-            'api_key' => Pengaturan::getVal('wa_api_key', config('services.whatsapp.api_key', env('WHATSAPP_API_KEY'))),
-            'sender'  => Pengaturan::getVal('wa_sender', config('services.whatsapp.sender', env('WHATSAPP_SENDER'))),
+            'api_url'        => Pengaturan::getVal('wa_api_url', config('services.whatsapp.api_url', env('WHATSAPP_API_URL'))),
+            'api_key'        => Pengaturan::getVal('wa_api_key', config('services.whatsapp.api_key', env('WHATSAPP_API_KEY'))),
+            'sender'         => Pengaturan::getVal('wa_sender', config('services.whatsapp.sender', env('WHATSAPP_SENDER'))),
+            'public_app_url' => Pengaturan::getVal('public_app_url', config('app.url')),
         ];
 
         // Query pengguna untuk pencarian cepat penggantian nomor WA
@@ -108,16 +109,18 @@ class WhatsAppAdminController extends Controller
     public function updateGateway(Request $request)
     {
         $request->validate([
-            'api_url' => 'nullable|string|max:255',
-            'api_key' => 'nullable|string|max:255',
-            'sender'  => 'nullable|string|max:50',
+            'api_url'        => 'nullable|string|max:255',
+            'api_key'        => 'nullable|string|max:255',
+            'sender'         => 'nullable|string|max:50',
+            'public_app_url' => 'nullable|string|max:255',
         ]);
 
         Pengaturan::setVal('wa_api_url', $request->api_url, 'admin');
         Pengaturan::setVal('wa_api_key', $request->api_key, 'admin');
         Pengaturan::setVal('wa_sender', $request->sender, 'admin');
+        Pengaturan::setVal('public_app_url', $request->public_app_url ? rtrim($request->public_app_url, '/') : null, 'admin');
 
-        return back()->with('success', 'Pengaturan WhatsApp Gateway API (Fonnte) berhasil disimpan.');
+        return back()->with('success', 'Pengaturan WhatsApp Gateway API (Fonnte) & URL Publik berhasil disimpan.');
     }
 
     public function testKirim(Request $request)

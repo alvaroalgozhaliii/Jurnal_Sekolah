@@ -123,13 +123,39 @@ class JurnalHarianController extends Controller
 
         // Automatic schedule detection strictly based on current KBM slot
         $jadwalSelected = null;
+        $blockJadwals = collect();
+        $existingJurnalBlock = null;
+
         if ($slotStatus === 'kbm' && !empty($currentSlot['jam_ke'])) {
             $jadwalSelected = $jadwalList->first(function ($j) use ($currentDayIndo, $currentSlot) {
                 return $j->hari === $currentDayIndo && (int)$j->jam_ke === (int)$currentSlot['jam_ke'];
             });
         }
 
-        return view('jurnal_harian.create', compact('jadwalList', 'jadwalSelected', 'currentSlot', 'slotStatus', 'bannerColor', 'currentDayIndo', 'now'));
+        if ($jadwalSelected) {
+            $blockJadwals = Jadwal::with('kelas')
+                ->where('id_kelas', $jadwalSelected->id_kelas)
+                ->where('id_guru', $jadwalSelected->id_guru)
+                ->where('hari', $jadwalSelected->hari)
+                ->where('mapel', $jadwalSelected->mapel)
+                ->where('aktif', 1)
+                ->orderBy('jam_ke', 'asc')
+                ->get();
+
+            if ($blockJadwals->isEmpty()) {
+                $blockJadwals = collect([$jadwalSelected]);
+            }
+
+            // Cek apakah jurnal untuk blok sesi mengajar ini sudah diisi hari ini
+            $existingJurnalBlock = JurnalHarian::whereIn('id_jadwal', $blockJadwals->pluck('id_jadwal'))
+                ->where('tanggal', $todayDate)
+                ->first();
+        }
+
+        return view('jurnal_harian.create', compact(
+            'jadwalList', 'jadwalSelected', 'blockJadwals', 'existingJurnalBlock',
+            'currentSlot', 'slotStatus', 'bannerColor', 'currentDayIndo', 'now'
+        ));
     }
 
     public function store(Request $request)
@@ -156,32 +182,62 @@ class JurnalHarianController extends Controller
         ];
         $currentDayIndo = $days[$now->format('l')] ?? 'Senin';
 
+        // Cari seluruh jadwal dalam satu blok sesi mengajar (kelas, mapel, guru, hari sama)
+        $blockJadwals = Jadwal::where('id_kelas', $jadwal->id_kelas)
+            ->where('id_guru', $jadwal->id_guru)
+            ->where('hari', $jadwal->hari)
+            ->where('mapel', $jadwal->mapel)
+            ->where('aktif', 1)
+            ->orderBy('jam_ke', 'asc')
+            ->get();
+
+        if ($blockJadwals->isEmpty()) {
+            $blockJadwals = collect([$jadwal]);
+        }
+
+        $allowedJamKes = $blockJadwals->pluck('jam_ke')->map(fn($v) => (int)$v)->toArray();
+
         // Check ownership & current schedule time if guru
+        $guru = null;
         if ($user->isGuru() && !$user->isAdmin()) {
             $guru = $user->guru ?: \App\Models\Guru::where('nama', $user->nama)->orWhere('nip', $user->nip)->first();
             if ($guru && $jadwal->id_guru != $guru->id_guru) {
                 return back()->with('error', 'Anda hanya dapat mengisi jurnal untuk jadwal mengajar Anda sendiri.');
             }
 
-            if ($jadwal->hari !== $currentDayIndo || (int)$jadwal->jam_ke !== (int)$currentSlot['jam_ke']) {
+            if ($jadwal->hari !== $currentDayIndo || !in_array((int)$currentSlot['jam_ke'], $allowedJamKes)) {
                 return back()->with('error', 'Tidak dapat mengisi jurnal: saat ini bukan jam mengajar untuk jadwal kelas ' . ($jadwal->kelas->nama_kelas ?? '') . ' — ' . $jadwal->mapel . '.');
             }
         }
         $idGuru = $guru ? $guru->id_guru : $jadwal->id_guru;
 
-        $jurnal = JurnalHarian::create([
-            'id_jadwal' => $jadwal->id_jadwal,
-            'tanggal' => $request->tanggal,
-            'id_guru' => $idGuru,
-            'mapel' => $jadwal->mapel,
-            'materi' => $request->materi,
-            'sub_materi' => $request->sub_materi,
-            'catatan_pengajaran' => $request->catatan_pengajaran,
-            'status_keterlaksanaan' => 'terlaksana',
-            'created_by' => $user->id_user,
-        ]);
+        // Simpan / update jurnal untuk SEMUA jam pelajaran dalam satu blok sesi mengajar tersebut
+        foreach ($blockJadwals as $bj) {
+            JurnalHarian::updateOrCreate(
+                [
+                    'id_jadwal' => $bj->id_jadwal,
+                    'tanggal'   => $request->tanggal,
+                ],
+                [
+                    'id_guru'               => $idGuru,
+                    'mapel'                 => $bj->mapel,
+                    'materi'                => $request->materi,
+                    'sub_materi'            => $request->sub_materi,
+                    'catatan_pengajaran'    => $request->catatan_pengajaran,
+                    'status_keterlaksanaan' => 'terlaksana',
+                    'created_by'            => $user->id_user,
+                ]
+            );
+        }
 
-        return redirect()->route('jurnal-harian.index')->with('success', 'Jurnal harian mengajar berhasil disimpan.');
+        $jamText = $blockJadwals->pluck('jam_ke')->sort()->implode(', ');
+        $totalJp = $blockJadwals->count();
+        $namaKelas = $jadwal->kelas->nama_kelas ?? 'Kelas';
+
+        return redirect()->route('jurnal-harian.index')->with(
+            'success', 
+            "Jurnal harian mengajar kelas {$namaKelas} ({$jadwal->mapel}) berhasil disimpan untuk {$totalJp} jam pelajaran sekaligus (Jam Ke-{$jamText})."
+        );
     }
 
     public function show($id)
@@ -215,26 +271,60 @@ class JurnalHarianController extends Controller
             'materi' => 'required|string',
         ]);
 
-        $jurnal_harian->update([
-            'materi' => $request->materi,
-            'sub_materi' => $request->sub_materi,
-            'catatan_pengajaran' => $request->catatan_pengajaran,
-            'status_keterlaksanaan' => $request->input('status_keterlaksanaan', $jurnal_harian->status_keterlaksanaan),
-        ]);
+        $jadwal = $jurnal_harian->jadwal;
+        if ($jadwal) {
+            // Update seluruh jurnal dalam blok sesi mengajar yang sama pada tanggal tersebut
+            $companionJadwalIds = Jadwal::where('id_kelas', $jadwal->id_kelas)
+                ->where('id_guru', $jadwal->id_guru)
+                ->where('hari', $jadwal->hari)
+                ->where('mapel', $jadwal->mapel)
+                ->where('aktif', 1)
+                ->pluck('id_jadwal');
 
-        return redirect()->route('jurnal-harian.index')->with('success', 'Jurnal harian berhasil diperbarui.');
+            JurnalHarian::whereIn('id_jadwal', $companionJadwalIds)
+                ->where('tanggal', $jurnal_harian->tanggal)
+                ->update([
+                    'materi'                => $request->materi,
+                    'sub_materi'            => $request->sub_materi,
+                    'catatan_pengajaran'    => $request->catatan_pengajaran,
+                    'status_keterlaksanaan' => $request->input('status_keterlaksanaan', $jurnal_harian->status_keterlaksanaan),
+                ]);
+        } else {
+            $jurnal_harian->update([
+                'materi'                => $request->materi,
+                'sub_materi'            => $request->sub_materi,
+                'catatan_pengajaran'    => $request->catatan_pengajaran,
+                'status_keterlaksanaan' => $request->input('status_keterlaksanaan', $jurnal_harian->status_keterlaksanaan),
+            ]);
+        }
+
+        return redirect()->route('jurnal-harian.index')->with('success', 'Jurnal harian berhasil diperbarui untuk seluruh jam sesi pembelajaran ini.');
     }
 
     public function destroy($id)
     {
-        $jurnal_harian = JurnalHarian::findOrFail($id);
+        $jurnal_harian = JurnalHarian::with('jadwal')->findOrFail($id);
         $user = Auth::user();
 
         if ($user->isGuru() && !$user->isAdmin() && $jurnal_harian->id_guru !== $user->guru?->id_guru) {
             abort(403, 'Anda hanya dapat menghapus jurnal milik Anda sendiri.');
         }
 
-        $jurnal_harian->delete();
+        $jadwal = $jurnal_harian->jadwal;
+        if ($jadwal) {
+            $companionJadwalIds = Jadwal::where('id_kelas', $jadwal->id_kelas)
+                ->where('id_guru', $jadwal->id_guru)
+                ->where('hari', $jadwal->hari)
+                ->where('mapel', $jadwal->mapel)
+                ->pluck('id_jadwal');
+
+            JurnalHarian::whereIn('id_jadwal', $companionJadwalIds)
+                ->where('tanggal', $jurnal_harian->tanggal)
+                ->delete();
+        } else {
+            $jurnal_harian->delete();
+        }
+
         return redirect()->route('jurnal-harian.index')->with('success', 'Jurnal harian dipindahkan ke trash.');
     }
 

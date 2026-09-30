@@ -385,9 +385,16 @@
                     <input type="text" name="sender" value="{{ old('sender', $gateway['sender']) }}" class="form-control" placeholder="081234567890">
                 </div>
 
+                <div class="form-group mb-20">
+                    <label class="form-label">URL Publik Aplikasi <span style="color:#888;font-weight:400;font-size:12px;">(untuk link di notifikasi WA)</span></label>
+                    <input type="text" name="public_app_url" value="{{ old('public_app_url', \App\Models\Pengaturan::getVal('public_app_url', config('app.url'))) }}" class="form-control" placeholder="https://your-tunnel.trycloudflare.com">
+                    <div class="form-hint">Isi dengan URL Cloudflare Tunnel / ngrok Anda agar link di pesan WA dapat diakses dari luar. Kosongkan untuk menggunakan <code>APP_URL</code> dari <code>.env</code> (<code>{{ config('app.url') }}</code>).</div>
+                </div>
+
                 <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Simpan Konfigurasi Gateway</button>
             </form>
         </div>
+
 
         {{-- TEST KIRIM WA --}}
         <div class="wa-card">

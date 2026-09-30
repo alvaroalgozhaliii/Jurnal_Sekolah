@@ -36,6 +36,57 @@ class WhatsAppService
     }
 
     /**
+     * Ambil base URL publik (otomatis deteksi tunnel ngrok yang aktif)
+     */
+    public static function getBaseUrl(): string
+    {
+        // 1. Deteksi otomatis jika request saat ini diakses via tunnel (trycloudflare / ngrok / loca.lt)
+        $host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? null;
+        if ($host && (str_contains($host, 'trycloudflare.com') || str_contains($host, 'ngrok') || str_contains($host, 'loca.lt'))) {
+            $proto = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
+                     (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+                     ? 'https' : 'http';
+            $tunnelUrl = $proto . '://' . $host;
+
+            // Auto-update ke pengaturan DB agar sinkron jika URL tunnel berganti setelah restart
+            try {
+                \App\Models\Pengaturan::setVal('public_app_url', $tunnelUrl);
+            } catch (\Throwable $e) {}
+
+            return rtrim($tunnelUrl, '/');
+        }
+
+        // 2. URL publik custom dari pengaturan DB
+        try {
+            $customUrl = \App\Models\Pengaturan::getVal('public_app_url');
+            if (!empty($customUrl)) {
+                return rtrim($customUrl, '/');
+            }
+        } catch (\Throwable $e) {}
+
+        // 3. Gunakan APP_URL dari config (dari .env)
+        $appUrl = config('app.url');
+        if (!empty($appUrl) && $appUrl !== 'http://localhost') {
+            return rtrim($appUrl, '/');
+        }
+
+        // 4. Cek apakah ngrok aktif di port 4040
+        try {
+            $ctx = stream_context_create(['http' => ['timeout' => 0.6]]);
+            $res = @file_get_contents('http://127.0.0.1:4040/api/tunnels', false, $ctx);
+            if ($res) {
+                $json = json_decode($res, true);
+                if (!empty($json['tunnels'][0]['public_url'])) {
+                    return rtrim($json['tunnels'][0]['public_url'], '/');
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        // 5. Fallback akhir ke url('/') dari request
+        return rtrim(url('/'), '/');
+    }
+
+    /**
      * Kirim pesan WhatsApp otomatis ke nomor tujuan via Gateway API (Fonnte / Gateway)
      * 
      * @param string $nomorHp
@@ -112,7 +163,7 @@ class WhatsAppService
         $tanggal = $pengajuan->tanggal;
         $jam = $pengajuan->jam_mulai ? ($pengajuan->jam_mulai . ($pengajuan->perkiraan_kembali ? ' s/d ' . $pengajuan->perkiraan_kembali : '')) : 'Hari ini';
         $alasan = $pengajuan->alasan;
-        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $baseUrl = self::getBaseUrl();
         $linkApproval = $baseUrl . '/waka-area/persetujuan/' . $pengajuan->id_pengajuan;
 
         $judul = $isGuru ? "*[JURNAL SEKOLAH - DISPEN GURU]*" : "*[JURNAL SEKOLAH - DISPEN SISWA]*";
@@ -143,7 +194,7 @@ class WhatsAppService
         $jam = $pengajuan->jam_mulai ? ($pengajuan->jam_mulai . ($pengajuan->perkiraan_kembali ? ' s/d ' . $pengajuan->perkiraan_kembali : '')) : 'Hari ini';
         $alasan = $pengajuan->alasan;
         $catatanWaka = $pengajuan->catatan_waka ? $pengajuan->catatan_waka : 'Telah disetujui Waka SDM';
-        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $baseUrl = self::getBaseUrl();
         $linkApproval = $baseUrl . '/kepala-area/persetujuan/' . $pengajuan->id_pengajuan;
 
         return "*[JURNAL SEKOLAH - PERSETUJUAN FINAL KEPALA SEKOLAH]*\n\n"
@@ -173,7 +224,7 @@ class WhatsAppService
         $jenis = $pengajuan->jenis_izin ?? strtoupper(str_replace('_', ' ', $pengajuan->kategori));
         $tanggal = $pengajuan->tanggal;
         $jam = $pengajuan->jam_mulai ? $pengajuan->jam_mulai . ($pengajuan->perkiraan_kembali ? ' (Kembali: '.$pengajuan->perkiraan_kembali.')' : '') : 'Hari ini';
-        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $baseUrl = self::getBaseUrl();
         $linkSatpam = $baseUrl . '/satpam-area/periksa/' . $pengajuan->id_pengajuan;
 
         return "*[JURNAL SEKOLAH - VERIFIKASI GERBANG SATPAM]*\n\n"
@@ -197,7 +248,7 @@ class WhatsAppService
         $jenis = $pengajuan->jenis_izin ?? 'Dispensasi Guru';
         $tanggal = $pengajuan->tanggal;
         $catatanKepala = $pengajuan->catatan_kepala ? $pengajuan->catatan_kepala : '-';
-        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $baseUrl = self::getBaseUrl();
         $linkDetail = $baseUrl . '/pengajuan-izin/' . $pengajuan->id_pengajuan;
 
         return "*[JURNAL SEKOLAH - STATUS DISPEN RESMI DISETUJUI]*\n\n"
@@ -214,7 +265,7 @@ class WhatsAppService
     {
         $nama = $pengajuan->siswa?->nama ?? $pengajuan->guru?->nama ?? $pengajuan->pengaju?->nama ?? 'Pemohon';
         $alasan = $pengajuan->alasan_penolakan ?: $pengajuan->catatan_waka ?: '-';
-        $baseUrl = rtrim(config('app.url', url('/')), '/');
+        $baseUrl = self::getBaseUrl();
         $linkDetail = $baseUrl . '/pengajuan-izin/' . $pengajuan->id_pengajuan;
 
         return "*[JURNAL SEKOLAH - PENGAJUAN DITOLAK]*\n\n"

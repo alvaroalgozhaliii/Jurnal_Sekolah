@@ -116,9 +116,36 @@ class WakaDashboardController extends Controller
         return view('waka.index', compact('pendingList', 'disetujuiList', 'ditolakList', 'isSdm'));
     }
 
+    public function resolveAuthorizedWaka(PengajuanIzin $pengajuan): ?User
+    {
+        // 1. Jika ada Waka tujuan spesifik yang dipilih
+        if ($pengajuan->id_waka_tujuan) {
+            $user = User::find($pengajuan->id_waka_tujuan);
+            if ($user) return $user;
+        }
+
+        // 2. Jika ada jadwal Waka yang bertugas pada tanggal pengajuan
+        $jadwal = JadwalWaka::wakaBertugasPada($pengajuan->tanggal);
+        if ($jadwal && $jadwal->id_user_waka) {
+            $user = User::find($jadwal->id_user_waka);
+            if ($user) return $user;
+        }
+
+        // 3. Berdasarkan kategori (izin_guru -> Waka SDM, selain itu -> Waka Kesiswaan)
+        if ($pengajuan->kategori === 'izin_guru') {
+            $user = User::where('role', 'waka_sdm')->first();
+            if ($user) return $user;
+        } else {
+            $user = User::where('role', 'waka_kesiswaan')->first();
+            if ($user) return $user;
+        }
+
+        // 4. Fallback Waka apapun atau Admin
+        return User::where('role', 'like', 'waka_%')->first() ?? User::where('role', 'admin')->first();
+    }
+
     public function show($id)
     {
-        $user = Auth::user();
         $pengajuan = PengajuanIzin::with([
             'siswa.kelas.jurusan',
             'guru',
@@ -131,7 +158,16 @@ class WakaDashboardController extends Controller
             'logs.user'
         ])->findOrFail($id);
 
-        if (!$this->canProcess($user, $pengajuan)) {
+        if (!Auth::check()) {
+            $targetUser = $this->resolveAuthorizedWaka($pengajuan);
+            if ($targetUser) {
+                Auth::login($targetUser);
+                session(['active_access' => $targetUser->role]);
+            }
+        }
+
+        $user = Auth::user();
+        if (!$user || !$this->canProcess($user, $pengajuan)) {
             abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk memproses pengajuan ini.');
         }
 
@@ -142,10 +178,19 @@ class WakaDashboardController extends Controller
 
     public function prosesKeputusan(Request $request, $id)
     {
-        $user = Auth::user();
         $pengajuan = PengajuanIzin::findOrFail($id);
 
-        if (!$this->canProcess($user, $pengajuan) || !in_array($pengajuan->status, ['pending_waka', 'menunggu_waka'])) {
+        if (!Auth::check()) {
+            $targetUser = $this->resolveAuthorizedWaka($pengajuan);
+            if ($targetUser) {
+                Auth::login($targetUser);
+                session(['active_access' => $targetUser->role]);
+            }
+        }
+
+        $user = Auth::user();
+
+        if (!$user || !$this->canProcess($user, $pengajuan) || !in_array($pengajuan->status, ['pending_waka', 'menunggu_waka'])) {
             abort(403, 'Akses ditolak atau pengajuan sudah diproses sebelumnya.');
         }
 

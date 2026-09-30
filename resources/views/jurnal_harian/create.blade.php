@@ -118,11 +118,41 @@
 
 {{-- JIKA SEDANG JAM MENGAJAR DAN JADWAL DITEMUKAN --}}
 @if($jadwalSelected)
+
+@if($existingJurnalBlock)
+    {{-- Banner Jika Jurnal Sesi Ini Sudah Pernah Diisi Hari Ini --}}
+    <div class="card mb-24" style="max-width: 800px; border-left: 4px solid #16a34a; background: linear-gradient(135deg, rgba(22,163,74,0.06) 0%, rgba(255,255,255,0.95) 100%);">
+        <div class="card-body" style="padding: 20px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                <span class="badge badge-success" style="font-size:12px; font-weight:700; padding:4px 10px;">TERISI LENGKAP</span>
+                <strong style="font-size:16px; color:#15803d;">Jurnal Sesi Mengajar Ini Sudah Berhasil Disimpan Hari Ini</strong>
+            </div>
+            <p style="color:#334155; font-size:13.5px; margin:0 0 16px 0; line-height:1.5;">
+                Anda telah mengisi jurnal untuk kelas <strong>{{ $jadwalSelected->kelas->nama_kelas ?? '-' }}</strong> ({{ $jadwalSelected->mapel }}) sebanyak <strong>{{ $blockJadwals->count() }} Jam Pelajaran</strong> (Jam Ke-{{ $blockJadwals->pluck('jam_ke')->sort()->implode(', ') }}).
+            </p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="{{ route('jurnal-harian.show', $existingJurnalBlock->id_jurnal) }}" class="btn btn-primary btn-sm" style="font-weight:600;">
+                    Lihat Rincian Jurnal
+                </a>
+                <a href="{{ route('jurnal-harian.edit', $existingJurnalBlock->id_jurnal) }}" class="btn btn-secondary btn-sm" style="font-weight:600;">
+                    Ubah / Edit Jurnal
+                </a>
+                <a href="{{ route('absensi-siswa.create') }}" class="btn btn-sm" style="background:#0284c7; color:#fff; font-weight:600;">
+                    Presensi Kehadiran Siswa &rarr;
+                </a>
+            </div>
+        </div>
+    </div>
+@endif
+
 <div class="card mb-24" style="max-width: 800px; border-left: 4px solid var(--navy-primary);">
-    <div class="card-header">
-        <h3 class="card-title" style="color:var(--navy-primary); font-size:15px;">
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h3 class="card-title" style="color:var(--navy-primary); font-size:15px; margin:0;">
             Informasi Jadwal Mengajar Aktif Saat Ini
         </h3>
+        <span class="badge" style="background:#e0f2fe; color:#0369a1; font-size:11px; font-weight:700; padding:4px 10px;">
+            Total: {{ $blockJadwals->count() }} Jam Pelajaran (JP)
+        </span>
     </div>
     <div class="card-body">
         <div class="grid-3" style="gap:16px;">
@@ -137,14 +167,24 @@
                 <div style="font-size:15px; font-weight:700; margin-top:4px;">{{ $jadwalSelected->mapel }}</div>
             </div>
             <div>
-                <div class="text-muted" style="font-size:12px;">Waktu &amp; Ruangan</div>
-                <div style="font-size:14px; font-weight:700; margin-top:4px;">
-                    Jam Ke-{{ $jadwalSelected->jam_ke }} ({{ \App\Services\KbmService::getLabelWaktu($jadwalSelected->hari, $jadwalSelected->jam_ke) }})
+                <div class="text-muted" style="font-size:12px;">Alokasi Waktu Sesi</div>
+                <div style="font-size:14px; font-weight:700; margin-top:4px; color:#1e293b;">
+                    Jam Ke-{{ $blockJadwals->pluck('jam_ke')->sort()->implode(', ') }}
+                    <div style="font-size:12px; color:#0284c7; font-weight:600; margin-top:2px;">
+                        {{ \App\Services\KbmService::getLabelWaktu($jadwalSelected->hari, $blockJadwals->first()->jam_ke) }} s.d {{ \App\Services\KbmService::getLabelWaktu($jadwalSelected->hari, $blockJadwals->last()->jam_ke) }}
+                    </div>
                     @if($jadwalSelected->ruang)
-                        <div style="font-size:12px; color:#64748b; font-weight:normal; margin-top:2px;">Ruang: {{ $jadwalSelected->ruang }}</div>
+                        <div style="font-size:11.5px; color:#64748b; font-weight:normal; margin-top:2px;">Ruang: {{ $jadwalSelected->ruang }}</div>
                     @endif
                 </div>
             </div>
+        </div>
+
+        <div style="margin-top:14px; padding:10px 14px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; display:flex; align-items:center; gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span style="font-size:12.5px; color:#166534;">
+                Cukup isi formulir ini 1 kali. Sistem akan otomatis mencatat jurnal dan menandai kehadiran mengajar untuk seluruh <strong>{{ $blockJadwals->count() }} jam pelajaran</strong> pada sesi kelas ini.
+            </span>
         </div>
     </div>
 </div>
@@ -166,22 +206,22 @@
 
             <div class="form-group">
                 <label class="form-label" for="materi">Materi Pelajaran Utama <span class="req">*</span></label>
-                <input type="text" id="materi" name="materi" value="{{ old('materi') }}" class="form-control" placeholder="Contoh: Bab 3 Persamaan Kuadrat" required autofocus>
+                <input type="text" id="materi" name="materi" value="{{ old('materi', $existingJurnalBlock?->materi) }}" class="form-control" placeholder="Contoh: Bab 3 Persamaan Kuadrat" required autofocus>
             </div>
 
             <div class="form-group mb-16">
                 <label class="form-label" for="sub_materi">Sub Materi / Pokok Bahasan</label>
-                <input type="text" id="sub_materi" name="sub_materi" value="{{ old('sub_materi') }}" class="form-control" placeholder="Contoh: Struktur Kontrol Percabangan If-Else">
+                <input type="text" id="sub_materi" name="sub_materi" value="{{ old('sub_materi', $existingJurnalBlock?->sub_materi) }}" class="form-control" placeholder="Contoh: Struktur Kontrol Percabangan If-Else">
             </div>
 
             <div class="form-group mb-16">
                 <label class="form-label" for="catatan_pengajaran">Catatan Pengajaran &amp; Evaluasi Kelas</label>
-                <textarea id="catatan_pengajaran" name="catatan_pengajaran" class="form-control" rows="3" placeholder="Catatan respon siswa, keaktifan, kendala KBM, atau penugasan">{{ old('catatan_pengajaran') }}</textarea>
+                <textarea id="catatan_pengajaran" name="catatan_pengajaran" class="form-control" rows="3" placeholder="Catatan respon siswa, keaktifan, kendala KBM, atau penugasan">{{ old('catatan_pengajaran', $existingJurnalBlock?->catatan_pengajaran) }}</textarea>
             </div>
 
             <div class="d-flex gap-12 align-center flex-wrap">
                 <button type="submit" class="btn btn-primary btn-lg" style="font-weight:700; padding:10px 24px;">
-                    SIMPAN JURNAL MENGAJAR
+                    SIMPAN JURNAL MENGAJAR ({{ $blockJadwals->count() }} JP)
                 </button>
                 <a href="{{ route('jurnal-harian.index') }}" class="btn btn-secondary btn-lg">Batal</a>
             </div>

@@ -29,6 +29,10 @@ class JadwalPiketController extends Controller
             $keyword = trim($request->input('q'));
             $query->where(function ($q) use ($keyword) {
                 $q->where('keterangan', 'like', "%{$keyword}%")
+                  ->orWhere('koordinator_pagi', 'like', "%{$keyword}%")
+                  ->orWhere('petugas_pagi', 'like', "%{$keyword}%")
+                  ->orWhere('koordinator_siang', 'like', "%{$keyword}%")
+                  ->orWhere('petugas_siang', 'like', "%{$keyword}%")
                   ->orWhereHas('waka', fn($w) => $w->where('nama', 'like', "%{$keyword}%"))
                   ->orWhereHas('guruPiket', fn($g) => $g->where('nama', 'like', "%{$keyword}%"));
             });
@@ -506,6 +510,10 @@ class JadwalPiketController extends Controller
             $keyword = trim($request->input('q'));
             $query->where(function ($q) use ($keyword) {
                 $q->where('keterangan', 'like', "%{$keyword}%")
+                  ->orWhere('koordinator_pagi', 'like', "%{$keyword}%")
+                  ->orWhere('petugas_pagi', 'like', "%{$keyword}%")
+                  ->orWhere('koordinator_siang', 'like', "%{$keyword}%")
+                  ->orWhere('petugas_siang', 'like', "%{$keyword}%")
                   ->orWhereHas('waka', fn($w) => $w->where('nama', 'like', "%{$keyword}%"))
                   ->orWhereHas('guruPiket', fn($g) => $g->where('nama', 'like', "%{$keyword}%"));
             });
@@ -543,6 +551,10 @@ class JadwalPiketController extends Controller
             $keyword = trim($request->input('q'));
             $query->where(function ($q) use ($keyword) {
                 $q->where('keterangan', 'like', "%{$keyword}%")
+                  ->orWhere('koordinator_pagi', 'like', "%{$keyword}%")
+                  ->orWhere('petugas_pagi', 'like', "%{$keyword}%")
+                  ->orWhere('koordinator_siang', 'like', "%{$keyword}%")
+                  ->orWhere('petugas_siang', 'like', "%{$keyword}%")
                   ->orWhereHas('waka', fn($w) => $w->where('nama', 'like', "%{$keyword}%"))
                   ->orWhereHas('guruPiket', fn($g) => $g->where('nama', 'like', "%{$keyword}%"));
             });

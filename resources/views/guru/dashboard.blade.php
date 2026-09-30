@@ -315,7 +315,11 @@
                 </thead>
                 <tbody>
                     @foreach($jadwalHariIni as $j)
-                    @php $sudahIsi = $jurnalHariIni->has($j->id_jadwal); @endphp
+                    @php 
+                        $blockKey = $j->id_kelas . '_' . $j->mapel;
+                        $sudahIsi = $jurnalHariIni->has($j->id_jadwal) || !empty($blockFilledStatus[$blockKey]);
+                        $jurnalTerkait = $jurnalHariIni->get($j->id_jadwal) ?? ($blockJurnalMap[$blockKey] ?? null);
+                    @endphp
                     <tr>
                         <td class="fw-bold text-center">Jam {{ $j->jam_ke }}</td>
                         <td class="fw-bold" style="color:#1e3a8a;">
@@ -332,8 +336,8 @@
                             @endif
                         </td>
                         <td class="action-col">
-                            @if($sudahIsi)
-                                <a href="{{ route('jurnal-harian.show', $jurnalHariIni[$j->id_jadwal]->id_jurnal) }}" class="btn btn-secondary btn-sm">Lihat Jurnal</a>
+                            @if($sudahIsi && $jurnalTerkait)
+                                <a href="{{ route('jurnal-harian.show', $jurnalTerkait->id_jurnal) }}" class="btn btn-secondary btn-sm">Lihat Jurnal</a>
                             @else
                                 <a href="{{ route('jurnal-harian.create', ['id_jadwal' => $j->id_jadwal]) }}" class="btn btn-primary btn-sm">Isi Jurnal</a>
                             @endif

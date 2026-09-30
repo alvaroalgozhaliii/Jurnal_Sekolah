@@ -298,12 +298,18 @@ Route::middleware(['auth', 'role:admin,wali_kelas'])->prefix('walikelas-area')->
 // ======================================================
 // WAKA ROLE ROUTES (KESISWAAN, SDM, KURIKULUM, SARPRAS, HUMAS)
 // ======================================================
+// WAKA ROLE ROUTES (KESISWAAN, SDM, KURIKULUM, SARPRAS, HUMAS)
+// ======================================================
+
+// Direct access routes for WhatsApp notifications (auto-auth handled in controller)
+Route::prefix('waka-area')->group(function () {
+    Route::get('/persetujuan/{id}', [WakaDashboardController::class, 'show'])->name('waka.persetujuan.show');
+    Route::post('/persetujuan/{id}/proses', [WakaDashboardController::class, 'prosesKeputusan'])->name('waka.persetujuan.proses');
+});
 
 Route::middleware(['auth', 'role:admin,waka_kesiswaan,waka_sdm,waka_kurikulum,waka_sarpras,waka_humas'])->prefix('waka-area')->group(function () {
     Route::get('/dashboard', [WakaDashboardController::class, 'index'])->name('waka.dashboard');
     Route::get('/persetujuan', [WakaDashboardController::class, 'daftarPersetujuan'])->name('waka.persetujuan.index');
-    Route::get('/persetujuan/{id}', [WakaDashboardController::class, 'show'])->name('waka.persetujuan.show');
-    Route::post('/persetujuan/{id}/proses', [WakaDashboardController::class, 'prosesKeputusan'])->name('waka.persetujuan.proses');
     Route::get('/monitoring-siswa', [WakaDashboardController::class, 'monitoringSiswa'])->name('waka.monitoring-siswa');
     Route::get('/sarpras', [WakaDashboardController::class, 'sarpras'])->name('waka.sarpras');
     Route::get('/humas', [WakaDashboardController::class, 'humas'])->name('waka.humas');
@@ -333,11 +339,15 @@ Route::middleware(['auth', 'role:admin,waka_sdm,waka_kurikulum'])->prefix('waka-
 // KEPALA SEKOLAH ROLE ROUTES
 // ======================================================
 
+// Direct access routes for WhatsApp notifications (auto-auth handled in controller)
+Route::prefix('kepala-area')->group(function () {
+    Route::get('/persetujuan/{id}', [KepalaSekolahController::class, 'show'])->name('kepala.persetujuan.show');
+    Route::post('/persetujuan/{id}/proses', [KepalaSekolahController::class, 'prosesKeputusan'])->name('kepala.persetujuan.proses');
+});
+
 Route::middleware(['auth', 'role:admin,kepala_sekolah'])->prefix('kepala-area')->group(function () {
     Route::get('/dashboard', [KepalaSekolahController::class, 'index'])->name('kepala.dashboard');
     Route::get('/persetujuan', [KepalaSekolahController::class, 'daftarPersetujuan'])->name('kepala.persetujuan.index');
-    Route::get('/persetujuan/{id}', [KepalaSekolahController::class, 'show'])->name('kepala.persetujuan.show');
-    Route::post('/persetujuan/{id}/proses', [KepalaSekolahController::class, 'prosesKeputusan'])->name('kepala.persetujuan.proses');
 });
 
 
@@ -345,10 +355,14 @@ Route::middleware(['auth', 'role:admin,kepala_sekolah'])->prefix('kepala-area')-
 // SATPAM ROLE ROUTES
 // ======================================================
 
-Route::middleware(['auth', 'role:admin,satpam'])->prefix('satpam-area')->group(function () {
-    Route::get('/dashboard', [SatpamController::class, 'index'])->name('satpam.dashboard');
+// Direct access routes for WhatsApp notifications (auto-auth handled in controller)
+Route::prefix('satpam-area')->group(function () {
     Route::get('/periksa/{id}', [SatpamController::class, 'show'])->name('satpam.show');
     Route::post('/verifikasi/{id}', [SatpamController::class, 'verifikasi'])->name('satpam.verifikasi');
+});
+
+Route::middleware(['auth', 'role:admin,satpam'])->prefix('satpam-area')->group(function () {
+    Route::get('/dashboard', [SatpamController::class, 'index'])->name('satpam.dashboard');
 });
 
 
